@@ -14,6 +14,10 @@ const DelinquencyRateByDemographic = ({ msa }) => {
   }
 
   const getSomeData = async () => {
+    if(!queryParams.msaCode){
+      // TODO: use an alert like the one I built for RedBalloon
+      alert("pick an msa")
+    }
     const JSONdata = JSON.stringify({
       startDate: queryParams.startDate,
       endDate: queryParams.endDate,
@@ -46,13 +50,15 @@ const DelinquencyRateByDemographic = ({ msa }) => {
       <h1 className="my-6 text-7xl">Delinquency Rate By Demographic</h1>
       <p className="mx-12">Demographics would be at the aggregate level to what we have. Say, if users select  have People with less than HS, in certain industry, etc. within a certain time period, we should show then the deliquency rate for that subset.</p>
       <form action="#">
-        <label htmlFor="startDate">Select a start date</label>
-        <input type="date" id="startDate" name="startDate" min="2019-01-01" max="2021-03-01" defaultValue="2019-01-01" onChange={handleChange}/>
-        <label htmlFor="endDate">Select an end date</label>
-        <input type="date" id="endDate" name="endDate" min="2019-01-01" max="2021-03-01" defaultValue="2021-03-01" onChange={handleChange}/>
-        <label htmlFor="msaCode">Enter an MSA Code</label>
-        <select type="text" id="msaCode" name="msaCode" onChange={handleChange}>
-          <option disabled selected value></option>
+        <label htmlFor="startDate">Enter a start date: </label>
+        {/* TODO: format the entered date - can I enforce a format? */}
+        {/* TODO: show an alert if date is outside range */}
+        <input type="text" id="startDate" name="startDate" min="2019-01-01" max="2021-03-01" defaultValue="2019-01-01" onChange={handleChange}/>
+        <label htmlFor="endDate">Enter an end date: </label>
+        <input type="text" id="endDate" name="endDate" min="2019-01-01" max="2021-03-01" defaultValue="2021-03-01" onChange={handleChange}/>
+        <label htmlFor="msaCode">Enter an MSA Code: </label>
+        <select type="text" id="msaCode" name="msaCode" defaultValue="" onChange={handleChange}>
+          <option disabled></option>
           {msa && msa.map(singleMsa => {
             return (
               <option key={singleMsa.msa} value={singleMsa.msa}>{singleMsa.msa} - {singleMsa.name}</option>
@@ -86,7 +92,8 @@ export const getStaticProps = async () => {
     password: String(process.env.PGPASSWORD)
   })
 
-  const response = await pool.query(`select distinct msa, name from data_refined.clean_data_19_21_v2`)
+  // TODO: find a better way to populate the msa options - this takes too long
+  const response = await pool.query(`select distinct msa, name from data_refined.clean_data_19_21_v2 order by msa`)
   const msa = response.rows
   console.log(msa)
 
