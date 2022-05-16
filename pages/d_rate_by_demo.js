@@ -1,23 +1,43 @@
 import { useState } from "react"
 import { useEffect } from "react"
 
-const DelinquencyRateByDemographic = ({ msa }) => {
-  const [queryParams, setQueryParams] = useState({
-    startDate: "2019-01-01",
-    endDate: "2021-03-01"
-  })
+const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
+  const [queryParams, setQueryParams] = useState({})
   const [msaDemographicData, setMsaDemographicData] = useState()
+  const [unemploymentRate, setUnemploymentRate] = useState()
 
   const handleChange = e => {
     e.preventDefault()
     setQueryParams({...queryParams, [e.target.name]: e.target.value})
   }
 
-  const getSomeData = async () => {
-    if(!queryParams.msaCode){
-      // TODO: use an alert like the one I built for RedBalloon
-      alert("pick an msa")
+  const getUnemploymentRate = async () => {
+    const JSONdata = JSON.stringify({
+      startDate: queryParams.startDate,
+      endDate: queryParams.endDate,
+      msaCode: queryParams.msaCode
+    })
+
+    const endpoint = `/api/get_unemployment_rate`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
     }
+    const response = await fetch(endpoint, options)
+    let status = response.status
+    let data = await response.json()
+
+    if(status === 404){
+      console.log("There was an error getting the unemployment rate")
+    } else if(status === 200){
+      setUnemploymentRate(data.response.rows)
+    }
+  }
+
+  const getDemographicData = async () => {
     const JSONdata = JSON.stringify({
       startDate: queryParams.startDate,
       endDate: queryParams.endDate,
@@ -45,36 +65,77 @@ const DelinquencyRateByDemographic = ({ msa }) => {
     }
   }
 
+  const getData = async () => {
+    console.log(queryParams)
+    if(!queryParams.msaCode ){
+      // TODO: use an alert like the one I built for RedBalloon
+      alert("pick an msa")
+    }
+
+    getUnemploymentRate()
+    getDemographicData()
+  }
+
   return (
     <div className="flex flex-col items-center h-screen">
       <h1 className="my-6 text-7xl">Delinquency Rate By Demographic</h1>
       <p className="mx-12">Demographics would be at the aggregate level to what we have. Say, if users select  have People with less than HS, in certain industry, etc. within a certain time period, we should show then the deliquency rate for that subset.</p>
       <form action="#">
-        <label htmlFor="startDate">Enter a start date: </label>
+        <label htmlFor="startDate">Select a start date: </label>
         {/* TODO: format the entered date - can I enforce a format? */}
         {/* TODO: show an alert if date is outside range */}
-        <input type="text" id="startDate" name="startDate" min="2019-01-01" max="2021-03-01" defaultValue="2019-01-01" onChange={handleChange}/>
-        <label htmlFor="endDate">Enter an end date: </label>
-        <input type="text" id="endDate" name="endDate" min="2019-01-01" max="2021-03-01" defaultValue="2021-03-01" onChange={handleChange}/>
-        <label htmlFor="msaCode">Enter an MSA Code: </label>
-        <select type="text" id="msaCode" name="msaCode" defaultValue="" onChange={handleChange}>
+        <select id="startDate" name="startDate" defaultValue="" onChange={handleChange}>
           <option disabled></option>
-          {msa && msa.map(singleMsa => {
+          {monthOptions && monthOptions.map(month => {
+            return (
+              <option key={month.origination_date} value={month.origination_date}>{month.origination_date}</option>
+            )
+          })}
+        </select>
+        <label htmlFor="endDate">Select an end date: </label>
+        <select id="endDate" name="endDate" defaultValue="" onChange={handleChange}>
+          <option disabled></option>
+          {monthOptions && monthOptions.map(month => {
+            return (
+              <option key={month.origination_date} value={month.origination_date}>{month.origination_date}</option>
+            )
+          })}
+        </select>
+        <label htmlFor="msaCode">Select an MSA: </label>
+        <select id="msaCode" name="msaCode" defaultValue="" onChange={handleChange}>
+          <option disabled></option>
+          {msaOptions && msaOptions.map(singleMsa => {
             return (
               <option key={singleMsa.msa} value={singleMsa.msa}>{singleMsa.msa} - {singleMsa.name}</option>
             )
           })}
         </select>
       </form>
-      <button onClick={getSomeData}>Get Some Data</button>
-      {msaDemographicData &&
-        <div>
-          <p>Selected MSA: {msaDemographicData.name}</p>
-          <p>Total Population: {(msaDemographicData.total_population).toLocaleString()}</p>
-          <p>Median Home Income: ${(msaDemographicData.median_home_income).toLocaleString()}</p>
-          <p>Median Home Value: ${(msaDemographicData.median_home_value).toLocaleString()}</p>
-        </div>
-      }
+      <button onClick={getData}>Get Some Data</button>
+      {/* TODO: pull data that changes over time and show the start/finish points, e.g. start unemployment rate - end unemployment rate */}
+      <div>
+        {unemploymentRate &&
+          <div>
+            {console.log(unemploymentRate)}
+            <p>Unemployment Rate Graph Goes Here</p>
+          </div>
+        }
+        {msaDemographicData &&
+          <div>
+          {console.log(msaDemographicData)}
+          {msaDemographicData.length > 1
+            ? <p>MSA Demographic Length = {msaDemographicData.length}</p>
+            : <div>
+                <p>MSA Demographic Length is 1</p>
+                <p>Selected MSA: {msaDemographicData.name}</p>
+                <p>Total Population: {(msaDemographicData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</p>
+                <p>Median Home Income: ${(msaDemographicData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p>
+                <p>Median Home Value: ${(msaDemographicData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p> 
+              </div>
+          }
+          </div>
+        }
+      </div>
     </div>
   )
 }
@@ -93,13 +154,16 @@ export const getStaticProps = async () => {
   })
 
   // TODO: find a better way to populate the msa options - this takes too long
-  const response = await pool.query(`select distinct msa, name from data_refined.clean_data_19_21_v2 order by msa`)
-  const msa = response.rows
-  console.log(msa)
+  const msaResponse = await pool.query(`select distinct msa, name from data_refined.clean_data_19_21_v2 order by msa`)
+  const monthResponse = await pool.query(`select distinct origination_date from data_refined.clean_data_19_21_v2 order by origination_date`)
+  for(const month of monthResponse.rows){
+    month.origination_date = month.origination_date.toISOString().split('T')[0]
+  }
 
   return {
     props: {
-      msa,
+      msaOptions: msaResponse.rows,
+      monthOptions: monthResponse.rows,
     },
   }
 }
