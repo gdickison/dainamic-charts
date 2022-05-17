@@ -1,10 +1,61 @@
 import { useState } from "react"
-import { useEffect } from "react"
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+} from "chart.js"
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Title,
+  Tooltip,
+  Legend
+)
+
+import { Line } from "react-chartjs-2"
 
 const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   const [queryParams, setQueryParams] = useState({})
   const [msaDemographicData, setMsaDemographicData] = useState()
-  const [unemploymentRate, setUnemploymentRate] = useState()
+  const [unemploymentRateData, setUnemploymentRateData] = useState()
+  const unemploymentChartOptions = {
+    plugins: {
+      legend: {
+        display: false
+      }
+    },
+    elements: {
+      line: {
+        tension: 0,
+        borderWidth: 2,
+        borderColor: "red",
+        // fill: "start",
+        // backgroundColor: "rgba(47,97,68,0.3)"
+      },
+      point: {
+        radius: 0,
+        hitRadius: 0
+      }
+    },
+    // scales: {
+    //   xAxis: {
+    //     display: false
+    //   },
+    //   yAxis: {
+    //     display: false
+    //   }
+    // }
+  }
 
   const handleChange = e => {
     e.preventDefault()
@@ -33,7 +84,26 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error getting the unemployment rate")
     } else if(status === 200){
-      setUnemploymentRate(data.response.rows)
+      const unemploymentRateLabels = []
+      data.response.rows.map(row => {
+        unemploymentRateLabels.push(row.origination_date.split('T')[0])
+      })
+
+      const unemploymentRates = []
+      data.response.rows.map(row => {
+        unemploymentRates.push(row.unemployment_rate)
+      })
+      console.log(unemploymentRates)
+      setUnemploymentRateData({
+        labels: unemploymentRateLabels,
+        datasets: [
+          {
+            label: "Unemployment Rate",
+            data: unemploymentRates
+          }
+        ]
+      })
+      // setUnemploymentRate(data.response.rows)
     }
   }
 
@@ -65,6 +135,62 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     }
   }
 
+  const getTotalLoansPerPeriod = async () => {
+    const JSONdata = JSON.stringify({
+      startDate: queryParams.startDate,
+      endDate: queryParams.endDate,
+      msaCode: queryParams.msaCode
+    })
+
+    const endpoint = `/api/get_total_loans_per_period`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    let status = response.status
+    let totalLoans = await response.json()
+
+    if(status === 404){
+      console.log("There was an error")
+    } else if(status === 200){
+      console.log(totalLoans)
+    }
+  }
+
+  const getDelinquentLoansPerPeriod = async () => {
+    const JSONdata = JSON.stringify({
+      startDate: queryParams.startDate,
+      endDate: queryParams.endDate,
+      msaCode: queryParams.msaCode
+    })
+
+    const endpoint = `/api/get_delinquent_loans_per_period`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    let status = response.status
+    let delinquentLoans = await response.json()
+
+    if(status === 404){
+      console.log("There was an error")
+    } else if(status === 200){
+      console.log(delinquentLoans)
+    }
+  }
+
   const getData = async () => {
     console.log(queryParams)
     if(!queryParams.msaCode ){
@@ -74,6 +200,8 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
 
     getUnemploymentRate()
     getDemographicData()
+    getTotalLoansPerPeriod()
+    getDelinquentLoansPerPeriod()
   }
 
   return (
@@ -114,10 +242,11 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
       <button onClick={getData}>Get Some Data</button>
       {/* TODO: pull data that changes over time and show the start/finish points, e.g. start unemployment rate - end unemployment rate */}
       <div>
-        {unemploymentRate &&
+        {unemploymentRateData && msaDemographicData &&
           <div>
-            {console.log(unemploymentRate)}
-            <p>Unemployment Rate Graph Goes Here</p>
+            {console.log(unemploymentRateData)}
+            <p>The unemployment rate in {msaDemographicData.name} </p>
+            <Line data={unemploymentRateData} width={500} height={250} options={unemploymentChartOptions} />
           </div>
         }
         {msaDemographicData &&
@@ -129,8 +258,8 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
                 <p>MSA Demographic Length is 1</p>
                 <p>Selected MSA: {msaDemographicData.name}</p>
                 <p>Total Population: {(msaDemographicData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</p>
-                <p>Median Home Income: ${(msaDemographicData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p>
-                <p>Median Home Value: ${(msaDemographicData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p> 
+                <p>Median Home Income: {(msaDemographicData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p>
+                <p>Median Home Value: {(msaDemographicData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p> 
               </div>
           }
           </div>
