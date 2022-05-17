@@ -334,8 +334,8 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
         </form>
         <button onClick={getData}>Get Some Data</button>
       </div>
-      <div className="flex">
-        <div className="flex">
+      <div>
+        <div className="flex flex-col md:flex-row">
           {unemploymentRateData &&
             <div className="m-6 border-4 border-red-400 rounded-md p-6 shadow-lg h-max">
               {console.log(unemploymentRateData)}
