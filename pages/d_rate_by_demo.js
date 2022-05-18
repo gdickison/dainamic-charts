@@ -29,73 +29,18 @@ import { Line, Doughnut } from "react-chartjs-2"
 const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   const [queryParams, setQueryParams] = useState({})
   const [msaDemographicData, setMsaDemographicData] = useState()
+  const [totalLoans, setTotalLoans] = useState()
+  const [delinquentLoans, setDelinquentLoans] = useState()
   const [unemploymentRateData, setUnemploymentRateData] = useState()
   const [populationByAgeData, setPopulationByAgeData] = useState()
-
-
-  const unemploymentChartOptions = {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: 'Unemployment Rate',
-        align: 'start',
-        font: {
-          size: 20
-        }
-      },
-      legend: {
-        display: false
-      }
-    },
-    elements: {
-      line: {
-        tension: 0,
-        borderWidth: 2,
-        borderColor: "red",
-        fill: "start",
-        backgroundColor: "pink"
-      },
-      point: {
-        radius: 5,
-        hitRadius: 5
-      }
-    }
-  }
-
-  const populationByAgeChartOptions = {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: "Population % by Age",
-        align: "start",
-        font: {
-          size: 20
-        }
-      },
-      legend: {
-        labels: {
-          font: {
-            size: 20
-          }
-        }
-      }
-    },
-    elements: {
-      arc: {
-        weight: 0.5,
-        borderWidth: 3
-      }
-    },
-    cutout: 0
-  }
+  const [populationByIncomeData, setPopulationByIncomeData] = useState()
 
   const handleChange = e => {
     e.preventDefault()
     setQueryParams({...queryParams, [e.target.name]: e.target.value})
   }
 
+  // Unemployment Rate Chart
   const getUnemploymentRate = async () => {
     const JSONdata = JSON.stringify({
       startDate: queryParams.startDate,
@@ -140,6 +85,37 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     }
   }
 
+  const unemploymentChartOptions = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Unemployment Rate',
+        align: 'start',
+        font: {
+          size: 20
+        }
+      },
+      legend: {
+        display: false
+      }
+    },
+    elements: {
+      line: {
+        tension: 0,
+        borderWidth: 2,
+        borderColor: "red",
+        fill: "start",
+        backgroundColor: "pink"
+      },
+      point: {
+        radius: 5,
+        hitRadius: 5
+      }
+    }
+  }
+
+  // Population by Age Chart
   const getPopulationByAgeData = async () => {
     const JSONdata = JSON.stringify({
       startDate: queryParams.startDate,
@@ -160,7 +136,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     let data = await response.json()
 
     if(status === 404){
-      console.log("There was an error getting the unemployment rate")
+      console.log("There was an error getting the population by age")
     } else if(status === 200) {
       console.log(data.response.rows[0])
       const populationByAgeLabels = []
@@ -198,6 +174,127 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     }
   }
 
+  const populationByAgeChartOptions = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: "Population % by Age",
+        align: "start",
+        font: {
+          size: 20
+        }
+      },
+      legend: {
+        labels: {
+          font: {
+            size: 20
+          }
+        }
+      }
+    },
+    elements: {
+      arc: {
+        weight: 0.5,
+        borderWidth: 3
+      }
+    },
+    cutout: 0
+  }
+
+  // Population by Income Chart
+  const getPopulationByIncome = async () => {
+    const JSONdata = JSON.stringify({
+      startDate: queryParams.startDate,
+      endDate: queryParams.endDate,
+      msaCode: queryParams.msaCode
+    })
+
+    const endpoint = `/api/get_population_by_income`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+    const response = await fetch(endpoint, options)
+    let status = response.status
+    let data = await response.json()
+
+    if(status === 404){
+      console.log("There was an error getting the population by income")
+    } else if(status === 200) {
+      console.log(data.response.rows[0])
+      const populationByIncomeLabels = []
+      const populationByIncome = []
+      for(const [key, value] of Object.entries(data.response.rows[0])){
+        populationByIncomeLabels.push(key)
+        populationByIncome.push(parseFloat(value * 100).toFixed(2))
+      }
+      console.log('populationByIncomeLabels', populationByIncomeLabels)
+      console.log('populationByIncome', populationByIncome)
+      setPopulationByIncomeData({
+        backgroundColor: [
+          "red",
+          "blue",
+          "green",
+          "orange",
+          "purple",
+          "yellow",
+          "lightblue",
+          "teal"
+        ],
+        labels: populationByIncomeLabels,
+        datasets: [
+          {
+            label: "Population by Age",
+            data: populationByIncome,
+            backgroundColor: [
+              "red",
+              "blue",
+              "green",
+              "orange",
+              "purple",
+              "yellow",
+              "lightblue",
+              "teal"
+            ],
+            hoverOffset: 4
+          }
+        ]
+      })
+    }
+  }
+
+  const populationByIncomeChartOptions = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: "Population % by Income",
+        align: "start",
+        font: {
+          size: 20
+        }
+      },
+      legend: {
+        labels: {
+          font: {
+            size: 20
+          }
+        }
+      }
+    },
+    elements: {
+      arc: {
+        weight: 0.5,
+        borderWidth: 3
+      }
+    },
+    cutout: 0
+  }
+
   const getDemographicData = async () => {
     const JSONdata = JSON.stringify({
       startDate: queryParams.startDate,
@@ -226,14 +323,14 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     }
   }
 
-  const getTotalLoansPerPeriod = async () => {
+  const getTotalLoans = async () => {
     const JSONdata = JSON.stringify({
       startDate: queryParams.startDate,
       endDate: queryParams.endDate,
       msaCode: queryParams.msaCode
     })
 
-    const endpoint = `/api/get_total_loans_per_period`
+    const endpoint = `/api/get_total_loans`
 
     const options = {
       method: 'POST',
@@ -250,18 +347,19 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      console.log(totalLoans)
+      console.log('Total loans', totalLoans.response.rows[0].count)
+      setTotalLoans(totalLoans.response.rows[0].count)
     }
   }
 
-  const getDelinquentLoansPerPeriod = async () => {
+  const getDelinquentLoans = async () => {
     const JSONdata = JSON.stringify({
       startDate: queryParams.startDate,
       endDate: queryParams.endDate,
       msaCode: queryParams.msaCode
     })
 
-    const endpoint = `/api/get_delinquent_loans_per_period`
+    const endpoint = `/api/get_delinquent_loans`
 
     const options = {
       method: 'POST',
@@ -278,7 +376,8 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      console.log(delinquentLoans)
+      console.log('Delinquent loans', delinquentLoans.response.rows[0].count)
+      setDelinquentLoans(delinquentLoans.response.rows[0].count)
     }
   }
 
@@ -289,20 +388,24 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
       alert("pick an msa")
     }
 
+    // setMsaDemographicData()
+    // setUnemploymentRateData()
+    // setPopulationByAgeData()
+    // setPopulationByIncomeData()
+
     getUnemploymentRate()
     getDemographicData()
-    getTotalLoansPerPeriod()
-    getDelinquentLoansPerPeriod()
+    getTotalLoans()
+    getDelinquentLoans()
     getPopulationByAgeData()
+    getPopulationByIncome()
   }
 
   return (
     <div className="h-screen">
-      <div className="flex flex-col items-center">
-        <h1 className="my-6 text-7xl">Delinquency Rate By Demographic</h1>
-        <p className="mx-12">Demographics would be at the aggregate level to what we have. Say, if users select  have People with less than HS, in certain industry, etc. within a certain time period, we should show then the deliquency rate for that subset.</p>
-        <form action="#">
-          <label htmlFor="startDate">Select a start date: </label>
+      <div className="flex flex-col items-center pt-20 px-20">
+        <form className="flex flex-col md:flex-row" action="#">
+          <label className="text-3xl px-4" htmlFor="startDate">Select a start date: </label>
           {/* TODO: format the entered date - can I enforce a format? */}
           {/* TODO: show an alert if date is outside range */}
           <select id="startDate" name="startDate" defaultValue="" onChange={handleChange}>
@@ -313,7 +416,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
               )
             })}
           </select>
-          <label htmlFor="endDate">Select an end date: </label>
+          <label className="text-3xl px-4"  htmlFor="endDate">Select an end date: </label>
           <select id="endDate" name="endDate" defaultValue="" onChange={handleChange}>
             <option disabled></option>
             {monthOptions && monthOptions.map(month => {
@@ -322,7 +425,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
               )
             })}
           </select>
-          <label htmlFor="msaCode">Select an MSA: </label>
+          <label className="text-3xl px-4" htmlFor="msaCode">Select an MSA: </label>
           <select id="msaCode" name="msaCode" defaultValue="" onChange={handleChange}>
             <option disabled></option>
             {msaOptions && msaOptions.map(singleMsa => {
@@ -332,10 +435,50 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
             })}
           </select>
         </form>
-        <button onClick={getData}>Get Some Data</button>
+        <button className="flex items-center justify-center w-40 h-12 my-8 rounded-md p-4 bg-blue-400 hover:bg-blue-600 text-gray-100" onClick={getData}>See Results</button>
+        {msaDemographicData &&
+          <h1 className="my-6 text-7xl">Demographic Makeup for {msaDemographicData.name}</h1>
+        }
       </div>
       <div>
-        <div className="flex flex-col md:flex-row">
+        <div className="mx-auto px-0 md:px-24">
+          <h1 className="my-6 text-5xl">At-A-Glance</h1>
+          <div className="flex flex-col md:flex-row justify-between">
+            <div className="w-full md:w-[23%] border-2 border-blue-400 rounded-md p-4">
+              <h1 className="w-full text-xl">
+                Total Population
+              </h1>
+              {msaDemographicData &&
+                <span className="text-3xl">{(msaDemographicData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</span>
+              }
+            </div>
+            <div className="w-full md:w-[23%] border-2 border-blue-400 rounded-md p-4">
+              <h1 className="w-full text-xl">
+                Median Household Income
+              </h1>
+              {msaDemographicData &&
+                <span className="text-3xl">{(msaDemographicData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
+              }
+            </div>
+            <div className="w-full md:w-[23%] border-2 border-blue-400 rounded-md p-4">
+              <h1 className="w-full text-xl">
+                Median Home Value
+              </h1>
+              {msaDemographicData &&
+                <span className="text-3xl">{(msaDemographicData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
+              }
+            </div>
+            <div className="w-full md:w-[23%] border-2 border-blue-400 rounded-md p-4">
+              <h1 className="w-full text-xl">
+                Delinquency Rate
+              </h1>
+              {totalLoans && delinquentLoans &&
+                <span className="text-3xl">{parseFloat(totalLoans / delinquentLoans).toFixed(2)+"%"}</span>
+              }
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row md:flex-wrap justify-center">
           {unemploymentRateData &&
             <div className="m-6 border-4 border-red-400 rounded-md p-6 shadow-lg h-max">
               {console.log(unemploymentRateData)}
@@ -348,19 +491,10 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
               <Doughnut data={populationByAgeData} width={500} height={500} options={populationByAgeChartOptions} />
             </div>
           }
-          {msaDemographicData &&
-            <div>
-            {console.log(msaDemographicData)}
-            {msaDemographicData.length > 1
-              ? <p>MSA Demographic Length = {msaDemographicData.length}</p>
-              : <div>
-                  <p>MSA Demographic Length is 1</p>
-                  <p>Selected MSA: {msaDemographicData.name}</p>
-                  <p>Total Population: {(msaDemographicData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</p>
-                  <p>Median Home Income: {(msaDemographicData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p>
-                  <p>Median Home Value: {(msaDemographicData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p>
-                </div>
-            }
+          {populationByIncomeData &&
+            <div className="m-6 border-4 border-red-400 rounded-md p-6 shadow-lg">
+              {console.log('populationByIncomeData', populationByIncomeData)}
+              <Doughnut data={populationByIncomeData} width={500} height={500} options={populationByIncomeChartOptions} />
             </div>
           }
         </div>
