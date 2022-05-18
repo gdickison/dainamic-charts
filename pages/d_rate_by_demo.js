@@ -35,6 +35,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   const [unemploymentRateData, setUnemploymentRateData] = useState()
   const [populationByAgeData, setPopulationByAgeData] = useState()
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
+  const [populationBySex, setPopulationBySex] = useState()
 
   const handleChange = e => {
     e.preventDefault()
@@ -73,7 +74,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
       data.response.rows.map(row => {
         unemploymentRates.push(row.unemployment_rate)
       })
-      console.log(unemploymentRates)
+      // console.log(unemploymentRates)
       setUnemploymentRateData({
         labels: unemploymentRateLabels,
         datasets: [
@@ -139,15 +140,15 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error getting the population by age")
     } else if(status === 200) {
-      console.log(data.response.rows[0])
+      // console.log(data.response.rows[0])
       const populationByAgeLabels = []
       const populationByAge = []
       for(const [key, value] of Object.entries(data.response.rows[0])){
         populationByAgeLabels.push(key)
         populationByAge.push(parseFloat(value * 100).toFixed(2))
       }
-      console.log('populationByAgeLabels', populationByAgeLabels)
-      console.log('populationByAge', populationByAge)
+      // console.log('populationByAgeLabels', populationByAgeLabels)
+      // console.log('populationByAge', populationByAge)
       setPopulationByAgeData({
         backgroundColor: [
           "red",
@@ -226,15 +227,15 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error getting the population by income")
     } else if(status === 200) {
-      console.log(data.response.rows[0])
+      // console.log(data.response.rows[0])
       const populationByIncomeLabels = []
       const populationByIncome = []
       for(const [key, value] of Object.entries(data.response.rows[0])){
         populationByIncomeLabels.push(key)
         populationByIncome.push(parseFloat(value * 100).toFixed(2))
       }
-      console.log('populationByIncomeLabels', populationByIncomeLabels)
-      console.log('populationByIncome', populationByIncome)
+      // console.log('populationByIncomeLabels', populationByIncomeLabels)
+      // console.log('populationByIncome', populationByIncome)
       setPopulationByIncomeData({
         backgroundColor: [
           "red",
@@ -350,7 +351,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      console.log('Total loans', totalLoans.response.rows[0].count)
+      // console.log('Total loans', totalLoans.response.rows[0].count)
       setTotalLoans(totalLoans.response.rows[0].count)
     }
   }
@@ -379,7 +380,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      console.log('Delinquent loans', delinquentLoans.response.rows[0].count)
+      // console.log('Delinquent loans', delinquentLoans.response.rows[0].count)
       setDelinquentLoans(delinquentLoans.response.rows[0].count)
     }
   }
@@ -449,8 +450,8 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     const totalLoans = await getTotalLoansPerPeriod()
     const delinquentLoans = await getDelinquentLoansPerPeriod()
 
-    console.log('totalLoans', totalLoans)
-    console.log('delinquentLoans', delinquentLoans)
+    // console.log('totalLoans', totalLoans)
+    // console.log('delinquentLoans', delinquentLoans)
 
     const delinquencyRateLabels = []
     for(let i = 0; i < totalLoans.length; i++){
@@ -472,8 +473,8 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
       ]
     })
 
-    console.log('delinquencyRateLabels', delinquencyRateLabels)
-    console.log('delinquencyRateData', delinquencyRateData)
+    // console.log('delinquencyRateLabels', delinquencyRateLabels)
+    // console.log('delinquencyRateData', delinquencyRateData)
   }
 
   const delinquecyRateChartOptions = {
@@ -506,6 +507,77 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     }
   }
 
+  // Population by Sex
+  const getPopulationBySex = async () => {
+    const JSONdata = JSON.stringify({
+      startDate: queryParams.startDate,
+      endDate: queryParams.endDate,
+      msaCode: queryParams.msaCode
+    })
+
+    const endpoint = `/api/get_population_by_sex`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    const data = await response.json()
+
+    if(status === 404){
+      console.log("There was an error")
+    } else if(status === 200){
+      console.log('Male population', data.response.rows[0].male_percent)
+      setPopulationBySex({
+        labels: ["Male", "Female"],
+        datasets: [
+          {
+            label: "Population % by Sex",
+            data: [parseFloat(Number(data.response.rows[0].male_percent) * 100).toFixed(2), parseFloat(100 - (Number(data.response.rows[0].male_percent) * 100)).toFixed(2)],
+            backgroundColor: [
+              "lightblue",
+              "pink"
+            ],
+            hoverOffset: 4
+          }
+        ]
+      })
+    }
+  }
+
+  const populationBySexChartOptions = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: "Population % by Sex",
+        align: "start",
+        font: {
+          size: 20
+        }
+      },
+      legend: {
+        labels: {
+          font: {
+            size: 20
+          }
+        }
+      }
+    },
+    elements: {
+      arc: {
+        weight: 0.5,
+        borderWidth: 3
+      }
+    },
+    cutout: 0
+  }
+
   const getData = async () => {
     console.log(queryParams)
     if(!queryParams.msaCode ){
@@ -525,6 +597,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     getDelinquencyRatePerPeriod()
     getPopulationByAgeData()
     getPopulationByIncome()
+    getPopulationBySex()
   }
 
   return (
@@ -612,20 +685,22 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
           }
           {unemploymentRateData &&
             <div className="m-6 border-4 border-red-400 rounded-md p-6 shadow-lg h-max">
-              {console.log(unemploymentRateData)}
               <Line data={unemploymentRateData} width={500} height={250} options={unemploymentChartOptions} />
             </div>
           }
           {populationByAgeData &&
             <div className="m-6 border-4 border-red-400 rounded-md p-6 shadow-lg">
-              {console.log('populationByAgeData', populationByAgeData)}
               <Doughnut data={populationByAgeData} width={500} height={500} options={populationByAgeChartOptions} />
             </div>
           }
           {populationByIncomeData &&
             <div className="m-6 border-4 border-red-400 rounded-md p-6 shadow-lg">
-              {console.log('populationByIncomeData', populationByIncomeData)}
               <Doughnut data={populationByIncomeData} width={500} height={500} options={populationByIncomeChartOptions} />
+            </div>
+          }
+          {populationBySex &&
+            <div className="m-6 border-4 border-red-400 rounded-md p-6 shadow-lg">
+              <Doughnut data={populationBySex} width={500} height={500} options={populationBySexChartOptions} />
             </div>
           }
         </div>
