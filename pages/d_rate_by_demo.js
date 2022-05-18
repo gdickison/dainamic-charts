@@ -6,6 +6,7 @@ import {
   PointElement,
   LineElement,
   ArcElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
@@ -18,13 +19,14 @@ ChartJS.register(
   PointElement,
   LineElement,
   ArcElement,
+  BarElement,
   Filler,
   Title,
   Tooltip,
   Legend
 )
 
-import { Line, Doughnut } from "react-chartjs-2"
+import { Line, Doughnut, Bar } from "react-chartjs-2"
 
 const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   const [queryParams, setQueryParams] = useState({})
@@ -79,7 +81,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
         labels: unemploymentRateLabels,
         datasets: [
           {
-            label: "Unemployment Rate",
+            label: "Monthly Unemployment Rate",
             data: unemploymentRates
           }
         ]
@@ -92,7 +94,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     plugins: {
       title: {
         display: true,
-        text: 'Unemployment Rate',
+        text: 'Monthly Unemployment Rate',
         align: 'start',
         font: {
           size: 20
@@ -237,32 +239,22 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
       // console.log('populationByIncomeLabels', populationByIncomeLabels)
       // console.log('populationByIncome', populationByIncome)
       setPopulationByIncomeData({
-        backgroundColor: [
-          "red",
-          "blue",
-          "green",
-          "orange",
-          "purple",
-          "yellow",
-          "lightblue",
-          "teal"
-        ],
         labels: populationByIncomeLabels,
         datasets: [
           {
-            label: "Population by Age",
+            label: "Population by Income",
             data: populationByIncome,
             backgroundColor: [
-              "red",
-              "blue",
-              "green",
-              "orange",
-              "purple",
-              "yellow",
-              "lightblue",
-              "teal"
+              '#e5f6ff',
+              '#bae6ff',
+              '#82cfff',
+              '#33b1ff',
+              '#1192e8',
+              '#0072c3',
+              '#00539a',
+              '#003a6d'
             ],
-            hoverOffset: 4
+            barThickness: 50
           }
         ]
       })
@@ -281,20 +273,15 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
         }
       },
       legend: {
+        position: "top",
+        align: "start",
         labels: {
-          font: {
-            size: 20
-          }
+          boxWidth: 7,
+          usePointStyle: true,
+          pointStyle: "circle"
         }
       }
-    },
-    elements: {
-      arc: {
-        weight: 0.5,
-        borderWidth: 3
-      }
-    },
-    cutout: 0
+    }
   }
 
   // General Demographic Data
@@ -482,7 +469,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     plugins: {
       title: {
         display: true,
-        text: 'Delinquency Rate',
+        text: 'Monthly Delinquency Rate',
         align: 'start',
         font: {
           size: 20
@@ -540,8 +527,8 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
             label: "Population % by Sex",
             data: [parseFloat(Number(data.response.rows[0].male_percent) * 100).toFixed(2), parseFloat(100 - (Number(data.response.rows[0].male_percent) * 100)).toFixed(2)],
             backgroundColor: [
-              "lightblue",
-              "pink"
+              "#0072c3",
+              "#ff8389"
             ],
             hoverOffset: 4
           }
@@ -695,7 +682,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
           }
           {populationByIncomeData &&
             <div className="m-6 border-4 border-red-400 rounded-md p-6 shadow-lg">
-              <Doughnut data={populationByIncomeData} width={500} height={500} options={populationByIncomeChartOptions} />
+              <Bar data={populationByIncomeData} width={500} height={500} options={populationByIncomeChartOptions} />
             </div>
           }
           {populationBySex &&
