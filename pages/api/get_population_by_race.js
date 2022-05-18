@@ -6,13 +6,14 @@ export default function handler(req, res) {
 
   pool
     .query(`select distinct
-        age_under18_percent as "Under 18",
-        age_18_24_percent as "18-24",
-        age_25_44_percent as "25-44",
-        age_45_64_percent as "45-64",
-        age_65pl_percent as "65 and Over"
+        race_white as "White",
+        race_black as "Black",
+        race_native as "Native American",
+        race_asian as "Asian",
+        race_hawaiian as "Pacific Islander",
+        race_otherormore as "Other/Mixed"
       from data_refined.clean_data_19_21_v2
       where msa = ${req.body.msaCode} and origination_date >= '${req.body.startDate}'::date and origination_date <= '${req.body.endDate}'::date`)
     .then(response => res.status(200).json({response}))
-    .catch(error => console.log("There is an error getting population by age data: ", error))
+    .catch(error => console.log("There is an error getting population by race data: ", error))
 }

@@ -38,6 +38,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   const [populationByAgeData, setPopulationByAgeData] = useState()
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
   const [populationBySex, setPopulationBySex] = useState()
+  const [populationByRace, setPopulationByRace] = useState()
 
   const handleChange = e => {
     e.preventDefault()
@@ -519,7 +520,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      console.log('Male population', data.response.rows[0].male_percent)
+      // console.log('Male population', data.response.rows[0].male_percent)
       setPopulationBySex({
         labels: ["Male", "Female"],
         datasets: [
@@ -527,8 +528,8 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
             label: "Population % by Sex",
             data: [parseFloat(Number(data.response.rows[0].male_percent) * 100).toFixed(2), parseFloat(100 - (Number(data.response.rows[0].male_percent) * 100)).toFixed(2)],
             backgroundColor: [
-              "#0072c3",
-              "#ff8389"
+              "rgba(0,0,255,0.6)",
+              "rgba(255,0,0,0.6)"
             ],
             hoverOffset: 4
           }
@@ -565,6 +566,89 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     cutout: 0
   }
 
+  // Population by Race
+  const getPopulationByRace = async () => {
+    const JSONdata = JSON.stringify({
+      startDate: queryParams.startDate,
+      endDate: queryParams.endDate,
+      msaCode: queryParams.msaCode
+    })
+
+    const endpoint = `/api/get_population_by_race`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    const data = await response.json()
+
+    if(status === 404){
+      console.log("There was an error")
+    } else if(status === 200){
+      // console.log('population by race', data.response.rows[0])
+      const populationByRaceLabels = []
+      const populationByRaceData = []
+      for(const [key, value] of Object.entries(data.response.rows[0])){
+        populationByRaceLabels.push(key)
+        populationByRaceData.push(parseFloat(value * 100).toFixed(2))
+      }
+      // console.log('Population by race labels', populationByRaceLabels)
+      // console.log('population by race data', populationByRaceData)
+      setPopulationByRace({
+        labels: populationByRaceLabels,
+        datasets: [
+          {
+            label: "Population % by Race",
+            data: populationByRaceData,
+            backgroundColor: [
+             "red",
+             "green",
+             "blue",
+             "yellow",
+             "orange",
+             "purple"
+            ],
+            hoverOffset: 4
+          }
+        ]
+      })
+    }
+  }
+
+  const populationByRaceChartOptions = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: "Population % by Race",
+        align: "start",
+        font: {
+          size: 20
+        }
+      },
+      legend: {
+        labels: {
+          font: {
+            size: 20
+          }
+        }
+      }
+    },
+    elements: {
+      arc: {
+        weight: 0.5,
+        borderWidth: 3
+      }
+    },
+    cutout: 100
+  }
+
   const getData = async () => {
     console.log(queryParams)
     if(!queryParams.msaCode ){
@@ -585,6 +669,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     getPopulationByAgeData()
     getPopulationByIncome()
     getPopulationBySex()
+    getPopulationByRace()
   }
 
   return (
@@ -688,6 +773,11 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
           {populationBySex &&
             <div className="m-6 border-4 border-red-400 rounded-md p-6 shadow-lg">
               <Doughnut data={populationBySex} width={500} height={500} options={populationBySexChartOptions} />
+            </div>
+          }
+          {populationByRace &&
+            <div className="m-6 border-4 border-red-400 rounded-md p-6 shadow-lg">
+              <Doughnut data={populationByRace} width={500} height={500} options={populationByRaceChartOptions} />
             </div>
           }
         </div>
