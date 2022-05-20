@@ -5,17 +5,17 @@ export default function handler(req, res) {
   pool.connect()
 
   return pool
-    .query(`select distinct
-        income_less15k as "Below $15K",
-        income_15k29k as "$15K-$29K",
-        income_30k39k as "$30K-$39K",
-        income_40k49k as "$40K-$49K",
-        income_50k59k as "$50K-$59K",
-        income_60k99k as "$60K-$99K",
-        income_100k149k as "$100K-$149K",
-        income_over150k as "$150K & Above"
-      from data_refined.clean_data_19_21_v2
-      where msa = ${req.body.msaCode} and origination_date >= '${req.body.startDate}'::date and origination_date <= '${req.body.endDate}'::date`)
-    .then(response => res.status(200).json({response}))
+    .query(`SELECT
+        income_less15k AS "Below $15K",
+        income_15k29k AS "$15K-$29K",
+        income_30k39k AS "$30K-$39K",
+        income_40k49k AS "$40K-$49K",
+        income_50k59k AS "$50K-$59K",
+        income_60k99k AS "$60K-$99K",
+        income_100k149k AS "$100K-$149K",
+        income_over150k AS "$150K & Above"
+      FROM banking_app.population_by_income
+      WHERE msa = ${req.body.msaCode};`)
+    .then(response => res.status(200).json({response: response.rows[0]}))
     .catch(error => console.log("There is an error getting data: ", error))
 }

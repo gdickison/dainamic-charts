@@ -4,6 +4,7 @@ const DelinquencyByCreditScore = ({params}) => {
   const [msaName, setMsaName] = useState()
   const [chartData, setChartData] = useState()
 
+  // TODO: create smaller table to get loan status by credit score
   const getLoanStatusByCreditScore = async () => {
     const JSONdata = JSON.stringify({
       msaCode: params.msaCode,

@@ -126,8 +126,6 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   // Population by Age Chart
   const getPopulationByAgeData = async () => {
     const JSONdata = JSON.stringify({
-      startDate: queryParams.startDate,
-      endDate: queryParams.endDate,
       msaCode: queryParams.msaCode
     })
 
@@ -140,15 +138,16 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
       body: JSONdata
     }
     const response = await fetch(endpoint, options)
-    let status = response.status
+    const status = response.status
     let data = await response.json()
+    data = data.response
 
     if(status === 404){
       console.log("There was an error getting the population by age")
     } else if(status === 200) {
       const populationByAgeLabels = []
       const populationByAge = []
-      for(const [key, value] of Object.entries(data.response.rows[0])){
+      for(const [key, value] of Object.entries(data)){
         populationByAgeLabels.push(key)
         populationByAge.push(parseFloat(value * 100).toFixed(2))
       }
@@ -211,8 +210,6 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   // Population by Income Chart
   const getPopulationByIncome = async () => {
     const JSONdata = JSON.stringify({
-      startDate: queryParams.startDate,
-      endDate: queryParams.endDate,
       msaCode: queryParams.msaCode
     })
 
@@ -225,15 +222,16 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
       body: JSONdata
     }
     const response = await fetch(endpoint, options)
-    let status = response.status
+    const status = response.status
     let data = await response.json()
+    data = data.response
 
     if(status === 404){
       console.log("There was an error getting the population by income")
     } else if(status === 200) {
       const populationByIncomeLabels = []
       const populationByIncome = []
-      for(const [key, value] of Object.entries(data.response.rows[0])){
+      for(const [key, value] of Object.entries(data)){
         populationByIncomeLabels.push(key)
         populationByIncome.push(parseFloat(value * 100).toFixed(2))
       }
@@ -423,8 +421,6 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   // Population by Sex
   const getPopulationBySex = async () => {
     const JSONdata = JSON.stringify({
-      startDate: queryParams.startDate,
-      endDate: queryParams.endDate,
       msaCode: queryParams.msaCode
     })
 
@@ -440,7 +436,8 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
 
     const response = await fetch(endpoint, options)
     const status = response.status
-    const data = await response.json()
+    let data = await response.json()
+    data = data.response
 
     if(status === 404){
       console.log("There was an error")
@@ -450,7 +447,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
         datasets: [
           {
             label: "Population % by Sex",
-            data: [parseFloat(Number(data.response.rows[0].male_percent) * 100).toFixed(2), parseFloat(100 - (Number(data.response.rows[0].male_percent) * 100)).toFixed(2)],
+            data: [parseFloat(Number(data) * 100).toFixed(2), parseFloat(100 - (Number(data) * 100)).toFixed(2)],
             backgroundColor: [
               "rgba(0,0,255,0.6)",
               "rgba(255,0,0,0.6)"
@@ -493,8 +490,6 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   // Population by Race
   const getPopulationByRace = async () => {
     const JSONdata = JSON.stringify({
-      startDate: queryParams.startDate,
-      endDate: queryParams.endDate,
       msaCode: queryParams.msaCode
     })
 
@@ -510,14 +505,15 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
 
     const response = await fetch(endpoint, options)
     const status = response.status
-    const data = await response.json()
+    let data = await response.json()
+    data = data.response
 
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
       const populationByRaceLabels = []
       const populationByRaceData = []
-      for(const [key, value] of Object.entries(data.response.rows[0])){
+      for(const [key, value] of Object.entries(data)){
         populationByRaceLabels.push(key)
         populationByRaceData.push(parseFloat(value * 100).toFixed(2))
       }
