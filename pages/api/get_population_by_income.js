@@ -4,7 +4,7 @@ import pool from '../../src/client'
 export default function handler(req, res) {
   pool.connect()
 
-  pool
+  return pool
     .query(`select distinct
         income_less15k as "Below $15K",
         income_15k29k as "$15K-$29K",

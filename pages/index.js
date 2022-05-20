@@ -71,7 +71,6 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error getting the unemployment rate")
     } else if(status === 200){
-      console.log(data)
       const unemploymentRateLabels = []
       data.map(row => {
         unemploymentRateLabels.push(row.origination_date.split('T')[0])
@@ -81,6 +80,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
       data.map(row => {
         unemploymentRates.push(row.unemployment_rate)
       })
+
       setUnemploymentRateData({
         labels: unemploymentRateLabels,
         datasets: [
@@ -146,15 +146,13 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error getting the population by age")
     } else if(status === 200) {
-      // console.log(data.response.rows[0])
       const populationByAgeLabels = []
       const populationByAge = []
       for(const [key, value] of Object.entries(data.response.rows[0])){
         populationByAgeLabels.push(key)
         populationByAge.push(parseFloat(value * 100).toFixed(2))
       }
-      // console.log('populationByAgeLabels', populationByAgeLabels)
-      // console.log('populationByAge', populationByAge)
+
       setPopulationByAgeData({
         backgroundColor: [
           "red",
@@ -233,15 +231,13 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error getting the population by income")
     } else if(status === 200) {
-      // console.log(data.response.rows[0])
       const populationByIncomeLabels = []
       const populationByIncome = []
       for(const [key, value] of Object.entries(data.response.rows[0])){
         populationByIncomeLabels.push(key)
         populationByIncome.push(parseFloat(value * 100).toFixed(2))
       }
-      // console.log('populationByIncomeLabels', populationByIncomeLabels)
-      // console.log('populationByIncome', populationByIncome)
+
       setPopulationByIncomeData({
         labels: populationByIncomeLabels,
         datasets: [
@@ -347,14 +343,14 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   }
 
   // Delinqueny Rate Per Period
-  const getTotalLoansPerPeriod = async () => {
+  const getDelinquencyRatePerPeriod = async () => {
     const JSONdata = JSON.stringify({
       startDate: queryParams.startDate,
       endDate: queryParams.endDate,
       msaCode: queryParams.msaCode
     })
 
-    const endpoint = `/api/get_total_loans_per_period`
+    const endpoint = `/api/get_delinquency_data_per_period`
 
     const options = {
       method: 'POST',
@@ -372,61 +368,26 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      return data.response.rows
+      const delinquencyRateLabels = []
+      for(let i = 0; i < data.length; i++){
+        delinquencyRateLabels.push(data[i].origination_date.split('T')[0])
+      }
+
+      const delinquencyRateData = []
+      for(let i = 0; i < data.length; i++){
+        delinquencyRateData.push(parseFloat((Number(data[i].delinquent_loans) / Number(data[i].total_loans)) * 100).toFixed(2))
+      }
+
+      setDelinquencyRatePerPeriod({
+        labels: delinquencyRateLabels,
+        datasets: [
+          {
+            label: "Delinquency Rate",
+            data: delinquencyRateData
+          }
+        ]
+      })
     }
-  }
-
-  const getDelinquentLoansPerPeriod = async () => {
-    const JSONdata = JSON.stringify({
-      startDate: queryParams.startDate,
-      endDate: queryParams.endDate,
-      msaCode: queryParams.msaCode
-    })
-
-    const endpoint = `/api/get_delinquent_loans_per_period`
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSONdata
-    }
-
-    const response = await fetch(endpoint, options)
-    const status = response.status
-    const data = await response.json()
-
-    if(status === 404){
-      console.log("There was an error")
-    } else if(status === 200){
-      return data.response.rows
-    }
-  }
-
-  const getDelinquencyRatePerPeriod = async () => {
-    const totalLoans = await getTotalLoansPerPeriod()
-    const delinquentLoans = await getDelinquentLoansPerPeriod()
-
-    const delinquencyRateLabels = []
-    for(let i = 0; i < totalLoans.length; i++){
-      delinquencyRateLabels.push(totalLoans[i].origination_date.split('T')[0])
-    }
-
-    const delinquencyRateData = []
-    for(let i = 0; i < delinquentLoans.length; i++){
-      delinquencyRateData.push(parseFloat((Number(delinquentLoans[i].count) / Number(totalLoans[i].count)) * 100).toFixed(2))
-    }
-
-    setDelinquencyRatePerPeriod({
-      labels: delinquencyRateLabels,
-      datasets: [
-        {
-          label: "Delinquency Rate",
-          data: delinquencyRateData
-        }
-      ]
-    })
   }
 
   const delinquecyRateChartOptions = {
@@ -560,6 +521,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
         populationByRaceLabels.push(key)
         populationByRaceData.push(parseFloat(value * 100).toFixed(2))
       }
+
       setPopulationByRace({
         labels: populationByRaceLabels,
         datasets: [
@@ -610,7 +572,6 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   }
 
   const getData = async () => {
-    console.log(queryParams)
     if(!queryParams.msaCode ){
       // TODO: use an alert like the one I built for RedBalloon
       alert("pick an msa")
@@ -624,7 +585,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     getUnemploymentRate()
     getMsaSummaryData()
     getDelinquencyRateForRange()
-    // getDelinquencyRatePerPeriod()
+    getDelinquencyRatePerPeriod()
     getPopulationByAgeData()
     getPopulationByIncome()
     getPopulationBySex()

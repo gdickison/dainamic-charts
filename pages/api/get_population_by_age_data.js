@@ -4,7 +4,7 @@ import pool from '../../src/client'
 export default function handler(req, res) {
   pool.connect()
 
-  pool
+  return pool
     .query(`select distinct
         age_under18_percent as "Under 18",
         age_18_24_percent as "18-24",

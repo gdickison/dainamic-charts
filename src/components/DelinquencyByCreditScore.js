@@ -27,12 +27,10 @@ const DelinquencyByCreditScore = ({params}) => {
     if(status === 404){
       console.log("There was an error getting the loan status by credit score")
     } else if(status === 200){
-      console.log(data)
       const labels = []
       for(let i = 0; i < data.length; i++){
         labels.push(data[i].origination_date.split('T')[0])
       }
-      console.log(labels)
     }
   }
 
