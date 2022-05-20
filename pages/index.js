@@ -33,7 +33,7 @@ import TopFeatures from "../src/components/TopFeatures"
 
 const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   const [queryParams, setQueryParams] = useState({})
-  const [msaDemographicData, setMsaDemographicData] = useState()
+  const [msaSummaryData, setMsaSummaryData] = useState()
   const [totalLoans, setTotalLoans] = useState()
   const [delinquentLoans, setDelinquentLoans] = useState()
   const [delinquencyRatePerPeriod, setDelinquencyRatePerPeriod] = useState()
@@ -67,19 +67,21 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
       body: JSONdata
     }
     const response = await fetch(endpoint, options)
-    let status = response.status
+    const status = response.status
     let data = await response.json()
+    data = data.response
 
     if(status === 404){
       console.log("There was an error getting the unemployment rate")
     } else if(status === 200){
+      console.log(data)
       const unemploymentRateLabels = []
-      data.response.rows.map(row => {
+      data.map(row => {
         unemploymentRateLabels.push(row.origination_date.split('T')[0])
       })
 
       const unemploymentRates = []
-      data.response.rows.map(row => {
+      data.map(row => {
         unemploymentRates.push(row.unemployment_rate)
       })
       // console.log(unemploymentRates)
@@ -291,14 +293,12 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   }
 
   // General Demographic Data
-  const getDemographicData = async () => {
+  const getMsaSummaryData = async () => {
     const JSONdata = JSON.stringify({
-      startDate: queryParams.startDate,
-      endDate: queryParams.endDate,
       msaCode: queryParams.msaCode
     })
 
-    const endpoint = `/api/demographic_data`
+    const endpoint = `/api/get_msa_summary_data`
 
     const options = {
       method: 'POST',
@@ -309,13 +309,14 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     }
 
     const response = await fetch(endpoint, options)
-    let status = response.status
-    let demographicData = await response.json()
+    const status = response.status
+    let data = await response.json()
+    data = data.response
 
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      setMsaDemographicData(demographicData.response.rows[0])
+      setMsaSummaryData(data)
     }
   }
 
@@ -661,13 +662,13 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
       alert("pick an msa")
     }
 
-    // setMsaDemographicData()
+    // setMsaSummaryData()
     // setUnemploymentRateData()
     // setPopulationByAgeData()
     // setPopulationByIncomeData()
 
     getUnemploymentRate()
-    getDemographicData()
+    getMsaSummaryData()
     getTotalLoans()
     getDelinquentLoans()
     getDelinquencyRatePerPeriod()
@@ -721,9 +722,9 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
             </select>
           </form>
           <button className="flex items-center justify-center w-40 h-12 my-8 rounded-md p-4 bg-blue-400 hover:bg-blue-600 text-gray-100" onClick={getData}>See Results</button>
-          {msaDemographicData &&
+          {msaSummaryData &&
           <>
-            <h1 className="text-6xl">Demographic Makeup for {msaDemographicData.name}</h1>
+            <h1 className="text-6xl">Demographic Makeup for {msaSummaryData.name}</h1>
             <h1 className="my-6 text-4xl">{new Date(queryParams.startDate).toLocaleDateString()} - {new Date(queryParams.endDate).toLocaleDateString()}</h1>
           </>
           }
@@ -736,24 +737,24 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
                 <h1 className="w-full text-xl">
                   Total Population
                 </h1>
-                {msaDemographicData &&
-                  <span className="text-3xl">{(msaDemographicData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</span>
+                {msaSummaryData &&
+                  <span className="text-3xl">{(msaSummaryData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</span>
                 }
               </div>
               <div className="w-full md:w-[23%] border-2 border-blue-400 rounded-md p-4">
                 <h1 className="w-full text-xl">
                   Median Household Income
                 </h1>
-                {msaDemographicData &&
-                  <span className="text-3xl">{(msaDemographicData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
+                {msaSummaryData &&
+                  <span className="text-3xl">{(msaSummaryData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
                 }
               </div>
               <div className="w-full md:w-[23%] border-2 border-blue-400 rounded-md p-4">
                 <h1 className="w-full text-xl">
                   Median Home Value
                 </h1>
-                {msaDemographicData &&
-                  <span className="text-3xl">{(msaDemographicData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
+                {msaSummaryData &&
+                  <span className="text-3xl">{(msaSummaryData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
                 }
               </div>
               <div className="w-full md:w-[23%] border-2 border-blue-400 rounded-md p-4">

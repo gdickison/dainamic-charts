@@ -4,13 +4,13 @@ import pool from '../../src/client'
 export default function handler(req, res) {
   pool.connect()
 
-  pool
-    .query(`select distinct
+  return pool
+    .query(`SELECT DISTINCT
         origination_date,
         unemployment_rate
-      from data_refined.clean_data_19_21_v2
-      where msa = ${req.body.msaCode} and origination_date >= '${req.body.startDate}'::date and origination_date <= '${req.body.endDate}'::date`)
-    // .then(response => console.log(response))
-    .then(response => res.status(200).json({response}))
+      FROM banking_app.unemployment_rate
+      WHERE msa = ${req.body.msaCode} and origination_date >= '${req.body.startDate}'::date and origination_date <= '${req.body.endDate}'::date`)
+    // .then(response => console.log(response.rows))
+    .then(response => res.status(200).json({response: response.rows}))
     .catch(error => console.log("There is an error getting data: ", error))
 }
