@@ -4,7 +4,7 @@ import pool from '../../src/client'
 export default function handler(req, res) {
   pool.connect()
 
-  pool
+  return pool
     .query(`select distinct
         race_white as "White",
         race_black as "Black",
