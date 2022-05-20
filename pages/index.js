@@ -34,16 +34,13 @@ import TopFeatures from "../src/components/TopFeatures"
 const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   const [queryParams, setQueryParams] = useState({})
   const [msaSummaryData, setMsaSummaryData] = useState()
-  const [totalLoans, setTotalLoans] = useState()
-  const [delinquentLoans, setDelinquentLoans] = useState()
+  const [delinquencyRateForRange, setDelinquencyRateForRange] = useState()
   const [delinquencyRatePerPeriod, setDelinquencyRatePerPeriod] = useState()
   const [unemploymentRateData, setUnemploymentRateData] = useState()
   const [populationByAgeData, setPopulationByAgeData] = useState()
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
   const [populationBySex, setPopulationBySex] = useState()
   const [populationByRace, setPopulationByRace] = useState()
-
-  const userContext = createContext()
 
   const handleChange = e => {
     e.preventDefault()
@@ -84,7 +81,6 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
       data.map(row => {
         unemploymentRates.push(row.unemployment_rate)
       })
-      // console.log(unemploymentRates)
       setUnemploymentRateData({
         labels: unemploymentRateLabels,
         datasets: [
@@ -321,14 +317,14 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   }
 
   // Delinquency Rate for Entire Period
-  const getTotalLoans = async () => {
+  const getDelinquencyRateForRange = async () => {
     const JSONdata = JSON.stringify({
       startDate: queryParams.startDate,
       endDate: queryParams.endDate,
       msaCode: queryParams.msaCode
     })
 
-    const endpoint = `/api/get_total_loans`
+    const endpoint = `/api/get_delinquency_data_for_date_range`
 
     const options = {
       method: 'POST',
@@ -339,43 +335,14 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     }
 
     const response = await fetch(endpoint, options)
-    let status = response.status
-    let totalLoans = await response.json()
+    const status = response.status
+    let data = await response.json()
+    data = data.response
 
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      // console.log('Total loans', totalLoans.response.rows[0].count)
-      setTotalLoans(totalLoans.response.rows[0].count)
-    }
-  }
-
-  const getDelinquentLoans = async () => {
-    const JSONdata = JSON.stringify({
-      startDate: queryParams.startDate,
-      endDate: queryParams.endDate,
-      msaCode: queryParams.msaCode
-    })
-
-    const endpoint = `/api/get_delinquent_loans`
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSONdata
-    }
-
-    const response = await fetch(endpoint, options)
-    let status = response.status
-    let delinquentLoans = await response.json()
-
-    if(status === 404){
-      console.log("There was an error")
-    } else if(status === 200){
-      // console.log('Delinquent loans', delinquentLoans.response.rows[0].count)
-      setDelinquentLoans(delinquentLoans.response.rows[0].count)
+      setDelinquencyRateForRange(((data.delinquent_loans / data.all_loans) * 100).toFixed(2))
     }
   }
 
@@ -399,14 +366,13 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
 
     const response = await fetch(endpoint, options)
     const status = response.status
-    const data = await response.json()
+    let data = await response.json()
+    data = data.response
 
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      // console.log('Total loans per period', data.response.rows)
       return data.response.rows
-      // setTotalLoans(totalLoans.response.rows[0].count)
     }
   }
 
@@ -434,18 +400,13 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      // console.log('Delinquent loans per period', data.response.rows)
       return data.response.rows
-      // setTotalLoans(totalLoans.response.rows[0].count)
     }
   }
 
   const getDelinquencyRatePerPeriod = async () => {
     const totalLoans = await getTotalLoansPerPeriod()
     const delinquentLoans = await getDelinquentLoansPerPeriod()
-
-    // console.log('totalLoans', totalLoans)
-    // console.log('delinquentLoans', delinquentLoans)
 
     const delinquencyRateLabels = []
     for(let i = 0; i < totalLoans.length; i++){
@@ -466,9 +427,6 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
         }
       ]
     })
-
-    // console.log('delinquencyRateLabels', delinquencyRateLabels)
-    // console.log('delinquencyRateData', delinquencyRateData)
   }
 
   const delinquecyRateChartOptions = {
@@ -526,7 +484,6 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      // console.log('Male population', data.response.rows[0].male_percent)
       setPopulationBySex({
         labels: ["Male", "Female"],
         datasets: [
@@ -597,15 +554,12 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      // console.log('population by race', data.response.rows[0])
       const populationByRaceLabels = []
       const populationByRaceData = []
       for(const [key, value] of Object.entries(data.response.rows[0])){
         populationByRaceLabels.push(key)
         populationByRaceData.push(parseFloat(value * 100).toFixed(2))
       }
-      // console.log('Population by race labels', populationByRaceLabels)
-      // console.log('population by race data', populationByRaceData)
       setPopulationByRace({
         labels: populationByRaceLabels,
         datasets: [
@@ -669,9 +623,8 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
 
     getUnemploymentRate()
     getMsaSummaryData()
-    getTotalLoans()
-    getDelinquentLoans()
-    getDelinquencyRatePerPeriod()
+    getDelinquencyRateForRange()
+    // getDelinquencyRatePerPeriod()
     getPopulationByAgeData()
     getPopulationByIncome()
     getPopulationBySex()
@@ -761,8 +714,8 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
                 <h1 className="w-full text-xl">
                   Delinquency Rate
                 </h1>
-                {totalLoans && delinquentLoans &&
-                  <span className="text-3xl">{parseFloat((delinquentLoans / totalLoans) * 100).toFixed(2)+"%"}</span>
+                {delinquencyRateForRange &&
+                  <span className="text-3xl">{delinquencyRateForRange+"%"}</span>
                 }
               </div>
             </div>
