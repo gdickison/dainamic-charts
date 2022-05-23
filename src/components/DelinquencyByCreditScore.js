@@ -12,7 +12,7 @@ const DelinquencyByCreditScore = ({params}) => {
       endDate: params.endDate
     })
 
-    const endpoint = `/api/get_loan_status_by_credit_score`
+    const endpoint = `/api/get_loan_status_by_credit_score_for_date_range`
     const options = {
       method: 'POST',
       headers: {
@@ -28,10 +28,12 @@ const DelinquencyByCreditScore = ({params}) => {
     if(status === 404){
       console.log("There was an error getting the loan status by credit score")
     } else if(status === 200){
-      const labels = []
-      for(let i = 0; i < data.length; i++){
-        labels.push(data[i].origination_date.split('T')[0])
-      }
+      console.log('data', data)
+      // TODO: create a grouped bar chart for the big picture (delinquency rate by credit score per period)
+      // const labels = []
+      // for(let i = 0; i < data.length; i++){
+      //   labels.push(data[i].origination_date.split('T')[0])
+      // }
     }
   }
 

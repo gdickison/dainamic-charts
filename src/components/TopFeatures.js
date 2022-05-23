@@ -35,7 +35,7 @@ const TopFeatures = ({params}) => {
 
   return (
     <div className="mx-auto px-0 md:px-24">
-      <h1 className="my-6 text-5xl">Top Five Delinquency Factors</h1>
+      <h1 className="my-6 text-4xl">Top Five Delinquency Factors</h1>
       <div className="flex flex-col md:flex-row justify-between">
         {topFeatures &&
           topFeatures.map((feature, i) => {
