@@ -243,6 +243,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
       }
 
       setPopulationByIncomeData({
+        maintainAspectRation: false,
         labels: populationByIncomeLabels,
         datasets: [
           {
@@ -257,8 +258,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
               '#0072c3',
               '#00539a',
               '#003a6d'
-            ],
-            barThickness: 50
+            ]
           }
         ]
       })
@@ -267,6 +267,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
 
   const populationByIncomeChartOptions = {
     responsive: true,
+    indexAxis: 'y',
     plugins: {
       title: {
         display: true,
