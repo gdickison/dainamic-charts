@@ -203,10 +203,6 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
       }
     },
     elements: {
-      // arc: {
-      //   weight: 0.5,
-      //   borderWidth: 3
-      // }
       bar: {
         borderWidth: 1
       }
@@ -673,37 +669,43 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row md:flex-wrap justify-center">
-            {delinquencyRatePerPeriod &&
-              <div className="flex items-center w-[30%] h-96 relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                <Line data={delinquencyRatePerPeriod} options={delinquecyRateChartOptions} />
-              </div>
-            }
-            {unemploymentRateData &&
-              <div className="flex items-center w-[30%] h-96 relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                <Line data={unemploymentRateData} options={unemploymentChartOptions} />
-              </div>
-            }
-            {populationByAgeData &&
-              <div className="flex items-center w-[30%] h-96 relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                <Bar data={populationByAgeData} options={populationByAgeChartOptions} />
-              </div>
-            }
-            {populationByIncomeData &&
-              <div className="flex items-center w-[30%] h-96 relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                <Bar data={populationByIncomeData} options={populationByIncomeChartOptions} />
-              </div>
-            }
-            {populationBySex &&
-              <div className="flex items-center w-96 h-96 relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                <Doughnut data={populationBySex} options={populationBySexChartOptions} />
-              </div>
-            }
-            {populationByRace &&
-              <div className="flex items-center w-96 h-96 relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                <Doughnut data={populationByRace} options={populationByRaceChartOptions} />
-              </div>
-            }
+          <div>
+            <div className="flex w-full justify-center items-center">
+              {populationByAgeData &&
+                <div className="flex items-center w-4/12 h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
+                  <Bar data={populationByAgeData} options={populationByAgeChartOptions} />
+                </div>
+              }
+              {populationByIncomeData &&
+                <div className="flex items-center w-4/12 h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
+                  <Bar data={populationByIncomeData} options={populationByIncomeChartOptions} />
+                </div>
+              }
+              {populationBySex &&
+                <div className="flex items-center w-1/5 h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
+                  <Doughnut data={populationBySex} options={populationBySexChartOptions} />
+                </div>
+              }
+            </div>
+          </div>
+          <div>
+            <div className="flex w-full justify-center items-center">
+              {populationByRace &&
+                <div className="flex items-center w-1/5 h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
+                  <Doughnut data={populationByRace} options={populationByRaceChartOptions} />
+                </div>
+              }
+              {delinquencyRatePerPeriod &&
+                <div className="flex items-center w-4/12 h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
+                  <Line data={delinquencyRatePerPeriod} options={delinquecyRateChartOptions} />
+                </div>
+              }
+              {unemploymentRateData &&
+                <div className="flex items-center w-4/12 h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
+                  <Line data={unemploymentRateData} options={unemploymentChartOptions} />
+                </div>
+              }
+            </div>
           </div>
           {queryParams.msaCode &&
               <TopFeatures

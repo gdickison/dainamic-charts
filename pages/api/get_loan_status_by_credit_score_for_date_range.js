@@ -9,7 +9,13 @@ export default function handler(req, res) {
     .query(`SELECT
         origination_date,
         SUM("580_669_total_for_period") AS "580_669_total_for_period",
-        SUM("580_669_delinquent_for_period") AS "580_669_delinquent_for_period"
+        SUM("580_669_delinquent_for_period") AS "580_669_delinquent_for_period",
+        SUM("670_739_total_for_period") AS "670_739_total_for_period",
+        SUM("670_739_delinquent_for_period") AS "670_739_delinquent_for_period",
+        SUM("740_799_total_for_period") AS "740_799_total_for_period",
+        SUM("740_799_delinquent_for_period") AS "740_799_delinquent_for_period",
+        SUM("800_and_above_total_for_period") AS "800_and_above_total_for_period",
+        SUM("800_and_above_delinquent_for_period") AS "800_and_above_delinquent_for_period"
       FROM banking_app.delinquency_by_credit_score
       WHERE msa = ${req.body.msaCode}
         AND origination_date >= '${req.body.startDate}'::date
