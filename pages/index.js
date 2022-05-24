@@ -634,10 +634,10 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
           }
         </div>
         <div>
-          <div className="mx-auto px-0 md:px-24">
-            <h1 className="my-6 text-4xl">Regional Summary</h1>
-            <div className="flex flex-col md:flex-row justify-between">
-              <div className="w-full md:w-[23%] border-2 border-blue-400 rounded-md p-4">
+          <div className="mx-auto px-0">
+            <h1 className="my-6 px-16 text-4xl">Regional Summary</h1>
+            <div className="flex flex-col md:flex-row w-full justify-center items-center space-x-2">
+              <div className="w-full md:w-[22.5%] border-2 border-blue-400 rounded-md p-4">
                 <h1 className="w-full text-xl">
                   Total Population
                 </h1>
@@ -645,7 +645,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
                   <span className="text-3xl">{(msaSummaryData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</span>
                 }
               </div>
-              <div className="w-full md:w-[23%] border-2 border-blue-400 rounded-md p-4">
+              <div className="w-full md:w-[22.5%] border-2 border-blue-400 rounded-md p-4">
                 <h1 className="w-full text-xl">
                   Median Household Income
                 </h1>
@@ -653,7 +653,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
                   <span className="text-3xl">{(msaSummaryData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
                 }
               </div>
-              <div className="w-full md:w-[23%] border-2 border-blue-400 rounded-md p-4">
+              <div className="w-full md:w-[22.5%] border-2 border-blue-400 rounded-md p-4">
                 <h1 className="w-full text-xl">
                   Median Home Value
                 </h1>
@@ -661,7 +661,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
                   <span className="text-3xl">{(msaSummaryData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
                 }
               </div>
-              <div className="w-full md:w-[23%] border-2 border-blue-400 rounded-md p-4">
+              <div className="w-full md:w-[22.5%] border-2 border-blue-400 rounded-md p-4">
                 <h1 className="w-full text-xl">
                   Delinquency Rate
                 </h1>
