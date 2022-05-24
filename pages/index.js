@@ -41,6 +41,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
   const [populationBySex, setPopulationBySex] = useState()
   const [populationByRace, setPopulationByRace] = useState()
+  const [showTopFeatures, setShowTopFeatures] = useState(false)
 
   const handleChange = e => {
     e.preventDefault()
@@ -54,7 +55,6 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
       endDate: queryParams.endDate,
       msaCode: queryParams.msaCode
     })
-
     const endpoint = `/api/get_unemployment_rate`
     const options = {
       method: 'POST',
@@ -199,7 +199,8 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
           boxWidth: 7,
           usePointStyle: true,
           pointStyle: "circle"
-        }
+        },
+        font: 16
       }
     },
     elements: {
@@ -563,7 +564,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     hoverOffset: 25
   }
 
-  const getData = async () => {
+  const getData = () => {
     if(!queryParams.msaCode ){
       // TODO: use an alert like the one I built for RedBalloon
       alert("pick an msa")
@@ -582,6 +583,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     getPopulationByIncome()
     getPopulationBySex()
     getPopulationByRace()
+    setShowTopFeatures(true)
   }
 
   return (
@@ -615,7 +617,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
               })}
             </select>
             <label className="text-2xl 2xl:px-4" htmlFor="msaCode">Select an MSA: </label>
-            <select className="pl-6 border-2 border-blue-400 bg-white rounded-md text-xl" id="msaCode" name="msaCode" defaultValue="" onChange={handleChange}>
+            <select className="w-96 pl-6 border-2 border-blue-400 bg-white rounded-md text-xl" id="msaCode" name="msaCode" defaultValue="" onChange={handleChange}>
               <option disabled></option>
               {msaOptions && msaOptions.map(singleMsa => {
                 return (
@@ -707,7 +709,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
               }
             </div>
           </div>
-          {queryParams.msaCode &&
+          {showTopFeatures &&
               <TopFeatures
                 params={queryParams}
               />

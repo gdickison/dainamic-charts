@@ -1,10 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import pool from '../../src/client'
 
-export default function handler(req, res) {
-  pool.connect()
+export default async function handler(req, res) {
+  const client = await pool.connect()
 
-  return pool
+  await client
     .query(`SELECT
         income_less15k AS "Below $15K",
         income_15k29k AS "$15K-$29K",
@@ -17,5 +17,6 @@ export default function handler(req, res) {
       FROM banking_app.population_by_income
       WHERE msa = ${req.body.msaCode};`)
     .then(response => res.status(200).json({response: response.rows[0]}))
+    .then(client.release())
     .catch(error => console.log("There is an error getting data: ", error))
 }

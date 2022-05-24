@@ -24,7 +24,7 @@ const TopFeatures = ({params}) => {
     if(status === 404){
       console.log("There was an error getting the top features")
     } else if(status === 200){
-
+      console.log('top features data', data)
       setTopFeatures(Object.values(data.response))
     }
   }
