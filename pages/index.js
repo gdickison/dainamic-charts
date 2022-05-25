@@ -486,8 +486,8 @@ export default Home
 
 export const getStaticProps = async () => {
   // get the MSAs to generate the MSA select input options
-  const pg = require('pg')
-  const pool = new pg.Pool({
+  const { Pool } = require('pg')
+  const pool = new Pool({
     user: process.env.PGUSER,
     database: process.env.PGDATABASE,
     port: process.env.PGPORT,
