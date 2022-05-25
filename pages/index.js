@@ -29,9 +29,11 @@ ChartJS.register(
 
 import { Bar } from "react-chartjs-2"
 
+import TempLogin from "../src/components/TempLogin"
 import TopFeatures from "../src/components/TopFeatures"
 
 const Home = ({ msaOptions, monthOptions }) => {
+  const [isLoggedIn, setLoggedIn] = useState(false)
   const [queryParams, setQueryParams] = useState({})
   const [msaSummaryData, setMsaSummaryData] = useState()
   const [delinquencyRateForRange, setDelinquencyRateForRange] = useState()
@@ -365,7 +367,7 @@ const Home = ({ msaOptions, monthOptions }) => {
           Welcome to D<span className='text-yellow-300'>AI</span>NAMIC
         </h1>
       </header>
-      <main className="h-screen">
+      {isLoggedIn ? <main className="h-screen">
         <section className="flex flex-col items-center px-20">
           <form className="flex flex-col 2xl:flex-row" action="#">
             <label className="text-2xl 2xl:px-4" htmlFor="startDate">Select a start date: </label>
@@ -472,6 +474,10 @@ const Home = ({ msaOptions, monthOptions }) => {
         }
         {/* TODO: pull data that changes over time and show the start/finish points, e.g. start unemployment rate - end unemployment rate */}
       </main>
+      : <TempLogin
+        setLoggedIn={setLoggedIn}
+      />
+      }
     </>
   )
 }
