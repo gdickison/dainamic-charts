@@ -79,15 +79,12 @@ const DelinquencyByCreditScore = ({params, msaName}) => {
             ]
         }
 
-        for(let i = 0; i < data.length; i++){
-          delinquencyRateFeatureData.labels.push(data[i].origination_date.split('T')[0])
-        }
-
-        for(let i = 0; i < data.length; i++){
-          delinquencyRateFeatureData.datasets[0].data.push(((data[i].fair_delinquent_for_period / data[i].fair_total_for_period) * 100).toFixed(2))
-          delinquencyRateFeatureData.datasets[1].data.push(((data[i].good_delinquent_for_period / data[i].good_total_for_period) * 100).toFixed(2))
-          delinquencyRateFeatureData.datasets[2].data.push(((data[i].very_good_delinquent_for_period / data[i].very_good_total_for_period) * 100).toFixed(2))
-          delinquencyRateFeatureData.datasets[3].data.push(((data[i].exceptional_delinquent_for_period / data[i].exceptional_total_for_period) * 100).toFixed(2))
+        for(const row of data){
+          delinquencyRateFeatureData.labels.push(row.origination_date.split('T')[0])
+          delinquencyRateFeatureData.datasets[0].data.push(((row.fair_delinquent_for_period / row.fair_total_for_period) * 100).toFixed(2))
+          delinquencyRateFeatureData.datasets[1].data.push(((row.good_delinquent_for_period / row.good_total_for_period) * 100).toFixed(2))
+          delinquencyRateFeatureData.datasets[2].data.push(((row.very_good_delinquent_for_period / row.very_good_total_for_period) * 100).toFixed(2))
+          delinquencyRateFeatureData.datasets[3].data.push(((row.exceptional_delinquent_for_period / row.exceptional_total_for_period) * 100).toFixed(2))
         }
 
         console.log(delinquencyRateFeatureData)

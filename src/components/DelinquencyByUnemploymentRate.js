@@ -73,8 +73,8 @@ const DelinquencyByUnemploymentRate = ({params, msaName}) => {
 
     // set up delinquency rate dataset
     const delinquencyRates = []
-    for(let i = 0; i < delinquencyData.length; i++){
-      delinquencyRates.push(parseFloat((Number(delinquencyData[i].delinquent_loans) / Number(delinquencyData[i].total_loans)) * 100).toFixed(2))
+    for(const row of delinquencyData){
+      delinquencyRates.push(parseFloat((Number(row.delinquent_loans) / Number(row.total_loans)) * 100).toFixed(2))
     }
 
     setChartData({

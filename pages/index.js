@@ -360,11 +360,13 @@ const Home = ({ msaOptions, monthOptions }) => {
       <Head>
         <title>Dainamic</title>
       </Head>
-      <div className="h-screen">
+      <header>
         <h1 className='p-10 text-7xl'>
           Welcome to D<span className='text-yellow-300'>AI</span>NAMIC
         </h1>
-        <div className="flex flex-col items-center px-20">
+      </header>
+      <main className="h-screen">
+        <section className="flex flex-col items-center px-20">
           <form className="flex flex-col 2xl:flex-row" action="#">
             <label className="text-2xl 2xl:px-4" htmlFor="startDate">Select a start date: </label>
             {/* TODO: show an alert if date is outside range */}
@@ -396,12 +398,16 @@ const Home = ({ msaOptions, monthOptions }) => {
             </select>
           </form>
           <button className="flex items-center justify-center w-40 h-12 my-8 rounded-md p-4 bg-blue-400 hover:bg-blue-600 text-gray-100" onClick={getData}>See Results</button>
-        </div>
+        </section>
         {msaSummaryData &&
-          <div className="mb-10">
-            <h1 className="my-6 px-10 text-3xl">{msaSummaryData.name} {new Date(queryParams.startDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})} - {new Date(queryParams.endDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})}</h1>
-            <div className="mx-auto px-0">
-              <h1 className="my-6 px-10 text-3xl">Regional Summary</h1>
+          <section className="mb-10">
+            <header>
+              <h1 className="my-6 px-10 text-3xl">{msaSummaryData.name} {new Date(queryParams.startDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})} - {new Date(queryParams.endDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})}</h1>
+            </header>
+            <section className="mx-auto px-0">
+              <header>
+                <h1 className="my-6 px-10 text-3xl">Regional Summary</h1>
+              </header>
               <div className="flex flex-col md:flex-row w-full justify-center items-center space-x-2">
                 <div className="w-full md:w-[22.5%] border-2 border-blue-400 rounded-md p-4">
                   <h1 className="w-full text-xl">
@@ -436,36 +442,36 @@ const Home = ({ msaOptions, monthOptions }) => {
                   }
                 </div>
               </div>
-            </div>
-            <div>
-              <div className="flex w-full justify-center items-center">
-                {populationByAgeData &&
-                  <div className="flex items-center w-[30%] h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                    <Bar data={populationByAgeData} options={populationByAgeChartOptions} />
-                  </div>
-                }
-                {populationByIncomeData &&
-                  <div className="flex items-center w-[30%] h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                    <Bar data={populationByIncomeData} options={populationByIncomeChartOptions} />
-                  </div>
-                }
-                {populationByRace &&
-                  <div className="flex items-center w-[30%] h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                    <Bar data={populationByRace} options={populationByRaceChartOptions} />
-                  </div>
-                }
+              <div>
+                <div className="flex w-full justify-center items-center">
+                  {populationByAgeData &&
+                    <div className="flex items-center w-[30%] h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
+                      <Bar data={populationByAgeData} options={populationByAgeChartOptions} />
+                    </div>
+                  }
+                  {populationByIncomeData &&
+                    <div className="flex items-center w-[30%] h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
+                      <Bar data={populationByIncomeData} options={populationByIncomeChartOptions} />
+                    </div>
+                  }
+                  {populationByRace &&
+                    <div className="flex items-center w-[30%] h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
+                      <Bar data={populationByRace} options={populationByRaceChartOptions} />
+                    </div>
+                  }
+                </div>
               </div>
-            </div>
+            </section>
             {msaSummaryData && showTopFeatures &&
                 <TopFeatures
                   params={queryParams}
                   msaName={msaSummaryData.name}
                 />
             }
-          </div>
+          </section>
         }
         {/* TODO: pull data that changes over time and show the start/finish points, e.g. start unemployment rate - end unemployment rate */}
-      </div>
+      </main>
     </>
   )
 }
