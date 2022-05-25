@@ -66,7 +66,7 @@ const TopFeatures = ({params, msaName}) => {
           switch(feature) {
             case "Credit Score":
               return (
-                <div key="dbcs" className="border-2 border-slate-400 rounded-md p-4">
+                <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByCreditScore
                     params={params}
                     msaName={msaName}
@@ -75,7 +75,7 @@ const TopFeatures = ({params, msaName}) => {
               );
             case "Debt-to-Income":
               return (
-                <div key="dbdti" className="border-2 border-slate-400 rounded-md p-4">
+                <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByDTI
                     params={params}
                     msaName={msaName}
@@ -84,7 +84,7 @@ const TopFeatures = ({params, msaName}) => {
               );
             case "Education":
               return (
-                <div key="dbe" className="border-2 border-slate-400 rounded-md p-4">
+                <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByEducation
                     params={params}
                     msaName={msaName}
@@ -93,7 +93,7 @@ const TopFeatures = ({params, msaName}) => {
               );
             case "First Time Buyer Status":
               return (
-                <div key="dbftbs" className="border-2 border-slate-400 rounded-md p-4">
+                <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByFTBStatus
                     params={params}
                     msaName={msaName}
@@ -102,7 +102,7 @@ const TopFeatures = ({params, msaName}) => {
               );
             case "High Balance":
               return (
-                <div key="dbb" className="border-2 border-slate-400 rounded-md p-4">
+                <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByBalance
                     params={params}
                     msaName={msaName}
@@ -111,7 +111,7 @@ const TopFeatures = ({params, msaName}) => {
               );
             case "Interest Rate":
               return (
-                <div key="dbir" className="border-2 border-slate-400 rounded-md p-4">
+                <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByInterestRate
                     params={params}
                     msaName={msaName}
@@ -120,7 +120,7 @@ const TopFeatures = ({params, msaName}) => {
               );
             case "Loan Balance":
               return (
-                <div key="dblb" className="border-2 border-slate-400 rounded-md p-4">
+                <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByLoanBalance
                     params={params}
                     msaName={msaName}
@@ -129,7 +129,7 @@ const TopFeatures = ({params, msaName}) => {
               );
             case "Loan Term":
               return (
-                <div key="dblt" className="border-2 border-slate-400 rounded-md p-4">
+                <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByLoanTerm
                     params={params}
                     msaName={msaName}
@@ -138,7 +138,7 @@ const TopFeatures = ({params, msaName}) => {
               );
             case "Loan-to-Value":
               return (
-                <div key="dbltv" className="border-2 border-slate-400 rounded-md p-4">
+                <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByLTV
                     params={params}
                     msaName={msaName}
@@ -147,7 +147,7 @@ const TopFeatures = ({params, msaName}) => {
               );
             case "Number of Borrowers":
               return (
-                <div key="dbnob" className="border-2 border-slate-400 rounded-md p-4">
+                <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByNumberOfBorrowers
                     params={params}
                     msaName={msaName}
@@ -156,7 +156,7 @@ const TopFeatures = ({params, msaName}) => {
               );
             case "Race":
               return (
-                <div key="dbr" className="border-2 border-slate-400 rounded-md p-4">
+                <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByRace
                     params={params}
                     msaName={msaName}
@@ -165,7 +165,7 @@ const TopFeatures = ({params, msaName}) => {
               );
             case "Unemployment Rate":
               return (
-                <div key="dbur" className="border-2 border-slate-400 rounded-md p-4">
+                <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByUnemploymentRate
                     params={params}
                     msaName={msaName}
