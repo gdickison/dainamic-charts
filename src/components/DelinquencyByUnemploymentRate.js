@@ -140,7 +140,8 @@ const DelinquencyByUnemploymentRate = ({params, msaName}) => {
     setLoading(true)
     getDelinquencyByUnemploymentChartData()
     setLoading(false)
-  }, [getDelinquencyByUnemploymentChartData, params])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params])
 
   if(isLoading) return <p>The data is loading....</p>
   return (
