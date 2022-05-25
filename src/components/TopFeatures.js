@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react"
 import DelinquencyByCreditScore from "./DelinquencyByCreditScore"
+import DelinquencyByUnemploymentRate from "./DelinquencyByUnemploymentRate"
 
-const TopFeatures = ({params}) => {
+const TopFeatures = ({params, msaName}) => {
+  const [isLoading, setLoading] = useState(false)
   const [topFeatures, setTopFeatures] = useState()
 
-  const getTopFeatures = async () => {
+  useEffect(() => {
+    setLoading(true)
     const JSONdata = JSON.stringify({
       msaCode: params.msaCode
     })
@@ -17,25 +20,22 @@ const TopFeatures = ({params}) => {
       },
       body: JSONdata
     }
-    const response = await fetch(endpoint, options)
-    let status = response.status
-    let data = await response.json()
 
-    if(status === 404){
-      console.log("There was an error getting the top features")
-    } else if(status === 200){
-      console.log('top features data', data)
-      setTopFeatures(Object.values(data.response))
-    }
-  }
-
-  useEffect(() => {
-    getTopFeatures()
+    fetch(endpoint, options)
+      .then(res => res.json())
+      .then(data => {
+        setTopFeatures(Object.values(data.response))
+        setLoading(false)
+      })
   }, [params.msaCode])
+
+  if (isLoading){
+    return <p>Loading top feature data...</p>
+  }
 
   return (
     <div className="mx-auto px-0 md:px-24">
-      <h1 className="my-6 text-4xl">Top Five Delinquency Factors</h1>
+      <h1 className="my-6 text-3xl">Top Five Delinquency Factors</h1>
       <div className="flex flex-col md:flex-row justify-between">
         {topFeatures &&
           topFeatures.map((feature, i) => {
@@ -53,6 +53,15 @@ const TopFeatures = ({params}) => {
         {topFeatures && topFeatures.includes("Credit Score") &&
           <DelinquencyByCreditScore
             params={params}
+            msaName={msaName}
+          />
+        }
+      </div>
+      <div>
+        {!isLoading && topFeatures && topFeatures.includes("Unemployment Rate") &&
+          <DelinquencyByUnemploymentRate
+            params={params}
+            msaName={msaName}
           />
         }
       </div>

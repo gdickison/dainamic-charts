@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useState, createContext, useContext } from "react"
+import { useState } from "react"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -27,100 +27,22 @@ ChartJS.register(
   Legend
 )
 
-import { Line, Doughnut, Bar } from "react-chartjs-2"
+import { Bar } from "react-chartjs-2"
 
 import TopFeatures from "../src/components/TopFeatures"
 
-const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
+const Home = ({ msaOptions, monthOptions }) => {
   const [queryParams, setQueryParams] = useState({})
   const [msaSummaryData, setMsaSummaryData] = useState()
   const [delinquencyRateForRange, setDelinquencyRateForRange] = useState()
-  const [delinquencyRatePerPeriod, setDelinquencyRatePerPeriod] = useState()
-  const [unemploymentRateData, setUnemploymentRateData] = useState()
   const [populationByAgeData, setPopulationByAgeData] = useState()
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
-  const [populationBySex, setPopulationBySex] = useState()
   const [populationByRace, setPopulationByRace] = useState()
   const [showTopFeatures, setShowTopFeatures] = useState(false)
 
   const handleChange = e => {
     e.preventDefault()
     setQueryParams({...queryParams, [e.target.name]: e.target.value})
-  }
-
-  // Unemployment Rate Chart
-  const getUnemploymentRate = async () => {
-    const JSONdata = JSON.stringify({
-      startDate: queryParams.startDate,
-      endDate: queryParams.endDate,
-      msaCode: queryParams.msaCode
-    })
-    const endpoint = `/api/get_unemployment_rate`
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSONdata
-    }
-    const response = await fetch(endpoint, options)
-    const status = response.status
-    let data = await response.json()
-    data = data.response
-
-    if(status === 404){
-      console.log("There was an error getting the unemployment rate")
-    } else if(status === 200){
-      const unemploymentRateLabels = []
-      data.map(row => {
-        unemploymentRateLabels.push(row.origination_date.split('T')[0])
-      })
-
-      const unemploymentRates = []
-      data.map(row => {
-        unemploymentRates.push(row.unemployment_rate)
-      })
-
-      setUnemploymentRateData({
-        labels: unemploymentRateLabels,
-        datasets: [
-          {
-            label: "Monthly Unemployment Rate",
-            data: unemploymentRates
-          }
-        ]
-      })
-    }
-  }
-
-  const unemploymentChartOptions = {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: 'Monthly Unemployment Rate',
-        align: 'start',
-        font: {
-          size: 20
-        }
-      },
-      legend: {
-        display: false
-      }
-    },
-    elements: {
-      line: {
-        tension: 0,
-        borderWidth: 2,
-        borderColor: '#1192e8',
-        fill: "start",
-        backgroundColor: '#bae6ff',
-      },
-      point: {
-        radius: 5,
-        hitRadius: 5
-      }
-    }
   }
 
   // Population by Age Chart
@@ -172,7 +94,6 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
               '#00539a',
               '#003a6d'
             ],
-            // barThickness: 50,
             hoverOffset: 4
           }
         ]
@@ -344,149 +265,6 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
     }
   }
 
-  // Delinqueny Rate Per Period
-  const getDelinquencyRatePerPeriod = async () => {
-    const JSONdata = JSON.stringify({
-      startDate: queryParams.startDate,
-      endDate: queryParams.endDate,
-      msaCode: queryParams.msaCode
-    })
-
-    const endpoint = `/api/get_delinquency_data_per_period`
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSONdata
-    }
-
-    const response = await fetch(endpoint, options)
-    const status = response.status
-    let data = await response.json()
-    data = data.response
-
-    if(status === 404){
-      console.log("There was an error")
-    } else if(status === 200){
-      const delinquencyRateLabels = []
-      for(let i = 0; i < data.length; i++){
-        delinquencyRateLabels.push(data[i].origination_date.split('T')[0])
-      }
-
-      const delinquencyRateData = []
-      for(let i = 0; i < data.length; i++){
-        delinquencyRateData.push(parseFloat((Number(data[i].delinquent_loans) / Number(data[i].total_loans)) * 100).toFixed(2))
-      }
-
-      setDelinquencyRatePerPeriod({
-        labels: delinquencyRateLabels,
-        datasets: [
-          {
-            label: "Delinquency Rate",
-            data: delinquencyRateData
-          }
-        ]
-      })
-    }
-  }
-
-  const delinquecyRateChartOptions = {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: 'Monthly Delinquency Rate',
-        align: 'start',
-        font: {
-          size: 20
-        }
-      },
-      legend: {
-        display: false
-      }
-    },
-    elements: {
-      line: {
-        tension: 0,
-        borderWidth: 2,
-        borderColor: "#1192e8",
-        fill: "start",
-        backgroundColor: "#bae6ff"
-      },
-      point: {
-        radius: 5,
-        hitRadius: 5
-      }
-    }
-  }
-
-  // Population by Sex
-  const getPopulationBySex = async () => {
-    const JSONdata = JSON.stringify({
-      msaCode: queryParams.msaCode
-    })
-
-    const endpoint = `/api/get_population_by_sex`
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSONdata
-    }
-
-    const response = await fetch(endpoint, options)
-    const status = response.status
-    let data = await response.json()
-    data = data.response
-
-    if(status === 404){
-      console.log("There was an error")
-    } else if(status === 200){
-      setPopulationBySex({
-        labels: ["Male", "Female"],
-        datasets: [
-          {
-            label: "Population % by Sex",
-            data: [parseFloat(Number(data) * 100).toFixed(2), parseFloat(100 - (Number(data) * 100)).toFixed(2)],
-            backgroundColor: [
-              '#bae6ff',
-              '#0072c3'
-            ],
-            hoverOffset: 4
-          }
-        ]
-      })
-    }
-  }
-
-  const populationBySexChartOptions = {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: "Population % by Sex",
-        align: "start",
-        font: {
-          size: 20
-        }
-      },
-      legend: {
-        position: "bottom",
-        align: "middle",
-        labels: {
-          boxWidth: 7,
-          usePointStyle: true,
-          pointStyle: "circle"
-        }
-      }
-    },
-    cutout: 0
-  }
-
   // Population by Race
   const getPopulationByRace = async () => {
     const JSONdata = JSON.stringify({
@@ -525,12 +303,12 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
             label: "Population % by Race",
             data: populationByRaceData,
             backgroundColor: [
-             "red",
-             "green",
-             "blue",
-             "yellow",
-             "orange",
-             "purple"
+              '#bae6ff',
+              '#82cfff',
+              '#33b1ff',
+              '#1192e8',
+              '#0072c3',
+              '#00539a'
             ],
             hoverOffset: 25
           }
@@ -541,6 +319,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
 
   const populationByRaceChartOptions = {
     responsive: true,
+    indexAxis: 'y',
     plugins: {
       title: {
         display: true,
@@ -551,17 +330,15 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
         }
       },
       legend: {
-        position: "bottom",
-        align: "middle",
+        position: "top",
+        align: "start",
         labels: {
           boxWidth: 7,
           usePointStyle: true,
           pointStyle: "circle"
         }
       }
-    },
-    cutout: 25,
-    hoverOffset: 25
+    }
   }
 
   const getData = () => {
@@ -570,18 +347,10 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
       alert("pick an msa")
     }
 
-    // setMsaSummaryData()
-    // setUnemploymentRateData()
-    // setPopulationByAgeData()
-    // setPopulationByIncomeData()
-
-    getUnemploymentRate()
     getMsaSummaryData()
     getDelinquencyRateForRange()
-    getDelinquencyRatePerPeriod()
     getPopulationByAgeData()
     getPopulationByIncome()
-    getPopulationBySex()
     getPopulationByRace()
     setShowTopFeatures(true)
   }
@@ -629,13 +398,13 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
           <button className="flex items-center justify-center w-40 h-12 my-8 rounded-md p-4 bg-blue-400 hover:bg-blue-600 text-gray-100" onClick={getData}>See Results</button>
           {msaSummaryData &&
           <>
-            <h1 className="my-6 text-5xl">{msaSummaryData.name} {new Date(queryParams.startDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})} - {new Date(queryParams.endDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})}</h1>
+            <h1 className="my-6 text-3xl">{msaSummaryData.name} {new Date(queryParams.startDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})} - {new Date(queryParams.endDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})}</h1>
           </>
           }
         </div>
         <div>
           <div className="mx-auto px-0">
-            <h1 className="my-6 px-16 text-4xl">Regional Summary</h1>
+            <h1 className="my-6 px-16 text-3xl">Regional Summary</h1>
             <div className="flex flex-col md:flex-row w-full justify-center items-center space-x-2">
               <div className="w-full md:w-[22.5%] border-2 border-blue-400 rounded-md p-4">
                 <h1 className="w-full text-xl">
@@ -674,44 +443,26 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
           <div>
             <div className="flex w-full justify-center items-center">
               {populationByAgeData &&
-                <div className="flex items-center w-4/12 h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
+                <div className="flex items-center w-[30%] h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
                   <Bar data={populationByAgeData} options={populationByAgeChartOptions} />
                 </div>
               }
               {populationByIncomeData &&
-                <div className="flex items-center w-4/12 h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
+                <div className="flex items-center w-[30%] h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
                   <Bar data={populationByIncomeData} options={populationByIncomeChartOptions} />
                 </div>
               }
-              {populationBySex &&
-                <div className="flex items-center w-1/5 h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                  <Doughnut data={populationBySex} options={populationBySexChartOptions} />
-                </div>
-              }
-            </div>
-          </div>
-          <div>
-            <div className="flex w-full justify-center items-center">
               {populationByRace &&
-                <div className="flex items-center w-1/5 h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                  <Doughnut data={populationByRace} options={populationByRaceChartOptions} />
-                </div>
-              }
-              {delinquencyRatePerPeriod &&
-                <div className="flex items-center w-4/12 h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                  <Line data={delinquencyRatePerPeriod} options={delinquecyRateChartOptions} />
-                </div>
-              }
-              {unemploymentRateData &&
-                <div className="flex items-center w-4/12 h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                  <Line data={unemploymentRateData} options={unemploymentChartOptions} />
+                <div className="flex items-center w-[30%] h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
+                  <Bar data={populationByRace} options={populationByRaceChartOptions} />
                 </div>
               }
             </div>
           </div>
-          {showTopFeatures &&
+          {msaSummaryData && showTopFeatures &&
               <TopFeatures
                 params={queryParams}
+                msaName={msaSummaryData.name}
               />
           }
         </div>
@@ -721,7 +472,7 @@ const DelinquencyRateByDemographic = ({ msaOptions, monthOptions }) => {
   )
 }
 
-export default DelinquencyRateByDemographic
+export default Home
 
 export const getStaticProps = async () => {
   // get the MSAs to generate the MSA select input options
