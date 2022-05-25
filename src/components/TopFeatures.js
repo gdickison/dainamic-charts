@@ -1,5 +1,15 @@
 import { useState, useEffect } from "react"
+import DelinquencyByBalance from "./DelinquencyByBalance"
 import DelinquencyByCreditScore from "./DelinquencyByCreditScore"
+import DelinquencyByDTI from "./DelinquencyByDTI"
+import DelinquencyByEducation from "./DelinquencyByEducation"
+import DelinquencyByFTBStatus from "./DelinquencyByFTBStatus"
+import DelinquencyByInterestRate from "./DelinquencyByInterestRate"
+import DelinquencyByLoanBalance from "./DelinquencyByLoanBalance"
+import DelinquencyByLoanTerm from "./DelinquencyByLoanTerm"
+import DelinquencyByLTV from "./DelinquencyByLTV"
+import DelinquencyByNumberOfBorrowers from "./DelinquencyByNumberOfBorrowers"
+import DelinquencyByRace from "./DelinquencyByRace"
 import DelinquencyByUnemploymentRate from "./DelinquencyByUnemploymentRate"
 
 const TopFeatures = ({params, msaName}) => {
@@ -49,21 +59,119 @@ const TopFeatures = ({params, msaName}) => {
           })
         }
       </div>
-      <div>
-        {topFeatures && topFeatures.includes("Credit Score") &&
-          <DelinquencyByCreditScore
-            params={params}
-            msaName={msaName}
-          />
-        }
-      </div>
-      <div>
-        {!isLoading && topFeatures && topFeatures.includes("Unemployment Rate") &&
-          <DelinquencyByUnemploymentRate
-            params={params}
-            msaName={msaName}
-          />
-        }
+      <div className="space-y-6">
+        {topFeatures && topFeatures.map((feature, i) => {
+          switch(feature) {
+            case "Credit Score":
+              return (
+                <div className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByCreditScore
+                    params={params}
+                    msaName={msaName}
+                  />
+                </div>
+              );
+            case "Debt-to-Income":
+              return (
+                <div className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByDTI
+                    params={params}
+                    msaName={msaName}
+                  />
+                </div>
+              );
+            case "Education":
+              return (
+                <div className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByEducation
+                    params={params}
+                    msaName={msaName}
+                  />
+                </div>
+              );
+            case "First Time Buyer Status":
+              return (
+                <div className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByFTBStatus
+                    params={params}
+                    msaName={msaName}
+                  />
+                </div>
+              );
+            case "High Balance":
+              return (
+                <div className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByBalance
+                    params={params}
+                    msaName={msaName}
+                  />
+                </div>
+              );
+            case "Interest Rate":
+              return (
+                <div className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByInterestRate
+                    params={params}
+                    msaName={msaName}
+                  />
+                </div>
+              );
+            case "Loan Balance":
+              return (
+                <div className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByLoanBalance
+                    params={params}
+                    msaName={msaName}
+                  />
+                </div>
+              );
+            case "Loan Term":
+              return (
+                <div className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByLoanTerm
+                    params={params}
+                    msaName={msaName}
+                  />
+                </div>
+              );
+            case "Loan-to-Value":
+              return (
+                <div className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByLTV
+                    params={params}
+                    msaName={msaName}
+                  />
+                </div>
+              );
+            case "Number of Borrowers":
+              return (
+                <div className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByNumberOfBorrowers
+                    params={params}
+                    msaName={msaName}
+                  />
+                </div>
+              );
+            case "Race":
+              return (
+                <div className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByRace
+                    params={params}
+                    msaName={msaName}
+                  />
+                </div>
+              );
+            case "Unemployment Rate":
+              return (
+                <div className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByUnemploymentRate
+                    params={params}
+                    msaName={msaName}
+                  />
+                </div>
+              );
+          }
+        })}
       </div>
     </div>
   )
