@@ -140,7 +140,7 @@ const DelinquencyByUnemploymentRate = ({params, msaName}) => {
     setLoading(true)
     getDelinquencyByUnemploymentChartData()
     setLoading(false)
-  }, [params])
+  }, [getDelinquencyByUnemploymentChartData, params])
 
   if(isLoading) return <p>The data is loading....</p>
   return (
