@@ -50,7 +50,6 @@ const DelinquencyByUnemploymentRate = ({params, msaName}) => {
     const unemploymentResponse = await fetch(unemploymentEndpoint, options)
     let unemploymentData = await unemploymentResponse.json()
     unemploymentData = unemploymentData.response
-    console.log('unemploymentData', unemploymentData)
 
     // set up labels
     const chartLabels = []
@@ -63,13 +62,11 @@ const DelinquencyByUnemploymentRate = ({params, msaName}) => {
     unemploymentData.map(row => {
       unemploymentRates.push(row.unemployment_rate)
     })
-    console.log('unemploymentRates', unemploymentRates)
 
     const delinquencyEndpoint = `/api/get_delinquency_data_per_period`
     const delinquencyResponse = await fetch(delinquencyEndpoint, options)
     let delinquencyData = await delinquencyResponse.json()
     delinquencyData = delinquencyData.response
-    console.log('delinquencyData', delinquencyData)
 
     // set up delinquency rate dataset
     const delinquencyRates = []

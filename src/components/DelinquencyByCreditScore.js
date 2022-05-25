@@ -44,7 +44,6 @@ const DelinquencyByCreditScore = ({params, msaName}) => {
       .then(res => res.json())
       .then(data => data.response)
       .then(data => {
-        console.log('data', data)
         const delinquencyRateFeatureData = {
           labels: [],
           datasets: [
@@ -86,8 +85,6 @@ const DelinquencyByCreditScore = ({params, msaName}) => {
           delinquencyRateFeatureData.datasets[2].data.push(((row.very_good_delinquent_for_period / row.very_good_total_for_period) * 100).toFixed(2))
           delinquencyRateFeatureData.datasets[3].data.push(((row.exceptional_delinquent_for_period / row.exceptional_total_for_period) * 100).toFixed(2))
         }
-
-        console.log(delinquencyRateFeatureData)
 
         const delinquencyRateFeatureOptions = {
           responsive: true,
