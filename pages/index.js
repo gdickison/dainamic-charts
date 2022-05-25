@@ -495,8 +495,11 @@ export const getStaticProps = async () => {
     password: String(process.env.PGPASSWORD)
   })
 
-  const msaResponse = await pool.query(`select msa_code, msa_name from banking_app.msa_names order by msa_code`)
-  const monthResponse = await pool.query(`select * from banking_app.available_dates order by date`)
+  const client = await pool.connect()
+
+  const msaResponse = await client.query(`select msa_code, msa_name from banking_app.msa_names order by msa_code`)
+  const monthResponse = await client.query(`select * from banking_app.available_dates order by date`)
+  client.release()
   for(const month of monthResponse.rows){
     month.date = month.date.toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})
   }
