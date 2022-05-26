@@ -33,7 +33,7 @@ import TempLogin from "../src/components/TempLogin"
 import TopFeatures from "../src/components/TopFeatures"
 
 const Home = ({ msaOptions, monthOptions }) => {
-  const [isLoggedIn, setLoggedIn] = useState(false)
+  const [isLoggedIn, setLoggedIn] = useState(true)
   const [queryParams, setQueryParams] = useState({})
   const [msaSummaryData, setMsaSummaryData] = useState()
   const [delinquencyRateForRange, setDelinquencyRateForRange] = useState()
