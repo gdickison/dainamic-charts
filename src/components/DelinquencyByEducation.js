@@ -23,7 +23,6 @@ const DelinquencyByEducation = ({params, msaName}) => {
   const [chartData, setChartData] = useState()
 
   useEffect(() => {
-    console.log("bang")
     setLoading(true)
     const JSONdata = JSON.stringify({
       msaCode: params.msaCode

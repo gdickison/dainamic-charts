@@ -39,7 +39,6 @@ const Home = ({ msaOptions, monthOptions }) => {
   const [delinquencyRateForRange, setDelinquencyRateForRange] = useState()
   const [populationByAgeData, setPopulationByAgeData] = useState()
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
-  const [populationByRace, setPopulationByRace] = useState()
   const [showTopFeatures, setShowTopFeatures] = useState(false)
 
   const handleChange = e => {
@@ -267,82 +266,6 @@ const Home = ({ msaOptions, monthOptions }) => {
     }
   }
 
-  // Population by Race
-  const getPopulationByRace = async () => {
-    const JSONdata = JSON.stringify({
-      msaCode: queryParams.msaCode
-    })
-
-    const endpoint = `/api/get_population_by_race`
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSONdata
-    }
-
-    const response = await fetch(endpoint, options)
-    const status = response.status
-    let data = await response.json()
-    data = data.response
-
-    if(status === 404){
-      console.log("There was an error")
-    } else if(status === 200){
-      const populationByRaceLabels = []
-      const populationByRaceData = []
-      for(const [key, value] of Object.entries(data)){
-        populationByRaceLabels.push(key)
-        populationByRaceData.push(parseFloat(value * 100).toFixed(2))
-      }
-
-      setPopulationByRace({
-        labels: populationByRaceLabels,
-        datasets: [
-          {
-            label: "Population % by Race",
-            data: populationByRaceData,
-            backgroundColor: [
-              '#bae6ff',
-              '#82cfff',
-              '#33b1ff',
-              '#1192e8',
-              '#0072c3',
-              '#00539a'
-            ],
-            hoverOffset: 25
-          }
-        ]
-      })
-    }
-  }
-
-  const populationByRaceChartOptions = {
-    responsive: true,
-    indexAxis: 'y',
-    plugins: {
-      title: {
-        display: true,
-        text: "Population % by Race",
-        align: "start",
-        font: {
-          size: 20
-        }
-      },
-      legend: {
-        position: "top",
-        align: "start",
-        labels: {
-          boxWidth: 7,
-          usePointStyle: true,
-          pointStyle: "circle"
-        }
-      }
-    }
-  }
-
   const getData = () => {
     if(!queryParams.msaCode ){
       // TODO: use an alert like the one I built for RedBalloon
@@ -353,7 +276,6 @@ const Home = ({ msaOptions, monthOptions }) => {
     getDelinquencyRateForRange()
     getPopulationByAgeData()
     getPopulationByIncome()
-    getPopulationByRace()
     setShowTopFeatures(true)
   }
 
@@ -454,11 +376,6 @@ const Home = ({ msaOptions, monthOptions }) => {
                   {populationByIncomeData &&
                     <div className="flex items-center w-[30%] h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
                       <Bar data={populationByIncomeData} options={populationByIncomeChartOptions} />
-                    </div>
-                  }
-                  {populationByRace &&
-                    <div className="flex items-center w-[30%] h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                      <Bar data={populationByRace} options={populationByRaceChartOptions} />
                     </div>
                   }
                 </div>
