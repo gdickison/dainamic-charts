@@ -76,7 +76,9 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
           if(delinquencyRate > 0 && delinquencyRate < 100){
             dataset.push({
               x: row.interest_rate,
-              y: delinquencyRate
+              y: delinquencyRate,
+              totalAtRate: row.total_at_rate,
+              delinquentAtRate: row.delinquent_at_rate
             })
           }
         }
@@ -101,6 +103,23 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
     plugins: {
       legend: {
         display: true
+      },
+      tooltip: {
+        callbacks: {
+          beforeTitle: function(context) {
+            return `Interest Rate: ${context[0].raw.x}%`
+          },
+          title: function(context) {
+            console.log(context[0])
+            return `Total Loans at Rate: ${context[0].raw.totalAtRate}`
+          },
+          afterTitle: function(context) {
+            return `Delinquent Loans at Rate: ${context[0].raw.delinquentAtRate}`
+          },
+          beforeBody: function(context) {
+            return `Delinquency Rate: ${context[0].raw.y}%`
+          }
+        }
       }
     },
     scales: {
@@ -121,7 +140,7 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
       },
       point: {
         radius: 5,
-        hitRadius: 5
+        hitRadius: 20
       }
     }
   }
