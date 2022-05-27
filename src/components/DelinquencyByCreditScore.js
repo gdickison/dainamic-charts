@@ -15,6 +15,7 @@ ChartJS.register(
   Legend
 )
 
+import Loader from "./Loader"
 import { Bar } from "react-chartjs-2"
 import { useState, useEffect } from "react"
 
@@ -103,7 +104,10 @@ const DelinquencyByCreditScore = ({params, msaName}) => {
       })
   }, [params])
 
-  if(isLoading) return <p>Waiting for data....</p>
+  if(isLoading) {
+    return <Loader/>
+  }
+
   return (
     <>
       {msaName &&

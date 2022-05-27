@@ -15,6 +15,7 @@ ChartJS.register(
   Legend
 )
 
+import Loader from "./Loader"
 import { useState, useEffect } from "react"
 import { Bar } from "react-chartjs-2"
 
@@ -73,6 +74,10 @@ const DelinquencyByEducation = ({params, msaName}) => {
     legend: {
       position: 'top'
     }
+  }
+
+  if(isLoading) {
+    return <Loader/>
   }
 
   return (

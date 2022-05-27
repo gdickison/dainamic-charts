@@ -27,6 +27,7 @@ ChartJS.register(
   Legend
 )
 
+import Loader from "./Loader"
 import { Line } from "react-chartjs-2"
 
 const DelinquencyByUnemploymentRate = ({params, msaName}) => {
@@ -140,7 +141,10 @@ const DelinquencyByUnemploymentRate = ({params, msaName}) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params])
 
-  if(isLoading) return <p>The data is loading....</p>
+  if(isLoading) {
+    return <Loader/>
+  }
+
   return (
     <div>
       <h1 className="my-6 text-3xl">Delinquency By Unemployment Rate for {msaName}</h1>

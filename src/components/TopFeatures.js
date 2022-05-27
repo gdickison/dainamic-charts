@@ -11,6 +11,7 @@ import DelinquencyByLTV from "./DelinquencyByLTV"
 import DelinquencyByNumberOfBorrowers from "./DelinquencyByNumberOfBorrowers"
 import DelinquencyByRace from "./DelinquencyByRace"
 import DelinquencyByUnemploymentRate from "./DelinquencyByUnemploymentRate"
+import Loader from "./Loader"
 
 const TopFeatures = ({params, msaName}) => {
   const [isLoading, setLoading] = useState(false)
@@ -39,8 +40,8 @@ const TopFeatures = ({params, msaName}) => {
       })
   }, [params.msaCode])
 
-  if (isLoading){
-    return <p>Loading top feature data...</p>
+  if(isLoading) {
+    return <Loader/>
   }
 
   return (

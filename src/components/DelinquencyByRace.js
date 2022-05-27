@@ -15,6 +15,7 @@ ChartJS.register(
   Legend
 )
 
+import Loader from "./Loader"
 import { useState, useEffect } from "react"
 import { Bar } from "react-chartjs-2"
 
@@ -65,6 +66,7 @@ const DelinquencyByRace = ({params, msaName}) => {
             }
           ]
         })
+        setLoading(false)
       })
   }, [params.msaCode])
 
@@ -90,6 +92,10 @@ const DelinquencyByRace = ({params, msaName}) => {
         }
       }
     }
+  }
+
+  if(isLoading) {
+    return <Loader/>
   }
 
   return(
