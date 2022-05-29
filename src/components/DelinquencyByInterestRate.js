@@ -110,14 +110,14 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
             return `Interest Rate: ${context[0].raw.x}%`
           },
           title: function(context) {
-            console.log(context[0])
             return `Total Loans at Rate: ${context[0].raw.totalAtRate}`
           },
           afterTitle: function(context) {
             return `Delinquent Loans at Rate: ${context[0].raw.delinquentAtRate}`
           },
-          beforeBody: function(context) {
-            return `Delinquency Rate: ${context[0].raw.y}%`
+          label: function(context) {
+            let label = `Delinquency Rate: ${context.raw.y}%`
+            return label
           }
         }
       }

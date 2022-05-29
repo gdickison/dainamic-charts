@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import DelinquencyByBalance from "./DelinquencyByBalance"
 import DelinquencyByCreditScore from "./DelinquencyByCreditScore"
 import DelinquencyByDTI from "./DelinquencyByDTI"
 import DelinquencyByEducation from "./DelinquencyByEducation"
@@ -101,15 +100,15 @@ const TopFeatures = ({params, msaName}) => {
                   />
                 </div>
               );
-            case "High Balance":
+            {/* case "High Balance":
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
-                  <DelinquencyByBalance
+                  <DelinquencyByHighBalance
                     params={params}
                     msaName={msaName}
                   />
                 </div>
-              );
+              ); */}
             case "Interest Rate":
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
