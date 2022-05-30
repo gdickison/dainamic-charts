@@ -135,7 +135,7 @@ const DelinquencyByLTV = ({params, msaName}) => {
             },
             point: {
               radius: 5,
-              hitRadius: 5
+              hitRadius: 15
             }
           }
         })
