@@ -25,6 +25,7 @@ ChartJS.register(
   Legend
 )
 
+import Loader from "./Loader"
 import { Bar, Scatter } from "react-chartjs-2"
 
 import { useEffect, useState } from "react"
@@ -55,7 +56,6 @@ const DelinquencyByLoanBalance = ({params, msaName}) => {
       .then(res => res.json())
       .then(data => data.response)
       .then(data => {
-        console.log('data', data)
 
         // Set up the data for a bar chart divided into increments
 
@@ -88,8 +88,6 @@ const DelinquencyByLoanBalance = ({params, msaName}) => {
           return a
         }, {})
 
-        console.log('filteredData', filteredData)
-
         const labels = []
         const dataset = []
         for(const row of Object.values(filteredData)){
@@ -104,7 +102,7 @@ const DelinquencyByLoanBalance = ({params, msaName}) => {
             })
           }
         }
-console.log('dataset', dataset)
+
         setChartData({
           labels: labels,
           datasets: [
@@ -142,6 +140,10 @@ console.log('dataset', dataset)
         setLoading(false)
       })
   }, [params.endDate, params.msaCode, params.startDate, divisor])
+
+  if(isLoading){
+    return <Loader/>
+  }
 
   return (
     <div>
