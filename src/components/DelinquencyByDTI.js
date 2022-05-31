@@ -55,8 +55,6 @@ const DelinquencyByDTI = ({params, msaName}) => {
       .then(res => res.json())
       .then(data => data.response)
       .then(data => {
-        console.log('data', data)
-
         const labels = []
         const dataset = []
         for(const row of data){
@@ -139,9 +137,6 @@ const DelinquencyByDTI = ({params, msaName}) => {
             }
           }
         })
-
-        console.log('labels', labels)
-        console.log('dataset', dataset)
       })
     setLoading(false)
   }, [params.startDate, params.endDate, params.msaCode])

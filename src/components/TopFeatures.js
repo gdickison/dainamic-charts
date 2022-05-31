@@ -47,7 +47,7 @@ const TopFeatures = ({params, msaName}) => {
     <section className="mx-auto px-0 md:px-24">
       <header>
         <h1 className="my-6 text-3xl">Top Five Delinquency Factors</h1>
-        <div className="flex flex-col md:flex-row justify-between">
+        <div className="flex flex-col md:flex-row justify-between pb-6">
           {topFeatures &&
             topFeatures.map((feature, i) => {
               return (
