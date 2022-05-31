@@ -45,70 +45,71 @@ const DelinquencyByFTBStatus = ({params, msaName}) => {
       .then(res => res.json())
       .then(data => data.response)
       .then(data => {
-        console.log('data', data)
-        // const delinquencyRateFeatureData = {
-        //   labels: [],
-        //   datasets: [
-        //       {
-        //         label: "580-669",
-        //         backgroundColor: "#bae6ff",
-        //         borderColor: "#bae6ff",
-        //         borderWidth: 1,
-        //         data: []
-        //       },
-        //       {
-        //         label: "670-739",
-        //         backgroundColor: "#33b1ff",
-        //         borderColor: "#33b1ff",
-        //         borderWidth: 1,
-        //         data: []
-        //       },
-        //       {
-        //         label: "740-799",
-        //         backgroundColor: "#0072c3",
-        //         borderColor: "#0072c3",
-        //         borderWidth: 1,
-        //         data: []
-        //       },
-        //       {
-        //         label: "800+",
-        //         backgroundColor: "#003a6d",
-        //         borderColor: "#003a6d",
-        //         borderWidth: 1,
-        //         data: []
-        //       }
-        //     ]
-        // }
+        const ftbsData = {
+          labels: [],
+          datasets: [
+              {
+                label: "1st Time Buyer",
+                backgroundColor: "#33b1ff",
+                borderColor: "#33b1ff",
+                borderWidth: 1,
+                data: []
+              },
+              {
+                label: "Not 1st Time Buyer",
+                backgroundColor: "#003a6d",
+                borderColor: "#003a6d",
+                borderWidth: 1,
+                data: []
+              }
+            ]
+        }
 
-        // for(const row of data){
-        //   delinquencyRateFeatureData.labels.push(row.origination_date.split('T')[0])
-        //   delinquencyRateFeatureData.datasets[0].data.push(((row.fair_delinquent_for_period / row.fair_total_for_period) * 100).toFixed(2))
-        //   delinquencyRateFeatureData.datasets[1].data.push(((row.good_delinquent_for_period / row.good_total_for_period) * 100).toFixed(2))
-        //   delinquencyRateFeatureData.datasets[2].data.push(((row.very_good_delinquent_for_period / row.very_good_total_for_period) * 100).toFixed(2))
-        //   delinquencyRateFeatureData.datasets[3].data.push(((row.exceptional_delinquent_for_period / row.exceptional_total_for_period) * 100).toFixed(2))
-        // }
+        data.map((row, i) => {
+          if(i % 2 === 0){
+            ftbsData.labels.push(row.origination_date.split('T')[0])
+          }
+          if(row.first_time_buyer_indicator === true){
+            ftbsData.datasets[0].data.push(((row.delinquent / row.total_loans) * 100).toFixed(2))
+          } else {
+            ftbsData.datasets[1].data.push(((row.delinquent / row.total_loans) * 100).toFixed(2))
+          }
+        })
 
-        // const delinquencyRateFeatureOptions = {
-        //   responsive: true,
-        //   legend: {
-        //     position: 'top'
-        //   },
-        //   title: {
-        //     display: true,
-        //     text: "Something Goes Here"
-        //   }
-        // }
+        const ftbsChartOptions = {
+          responsive: true,
+          legend: {
+            position: 'top'
+          },
+          title: {
+            display: true,
+            text: "Something Goes Here"
+          }
+        }
 
-        // setChartData(delinquencyRateFeatureData)
-        // setChartOptions(delinquencyRateFeatureOptions)
-        // setLoading(false)
+        setChartData(ftbsData)
+        setChartOptions(ftbsChartOptions)
+        setLoading(false)
       })
   }, [params])
 
+  if(isLoading){
+    return <Loader/>
+  }
+
   return (
-    <div>
-      <h1>Delinquency by First Time Buyer Status goes here</h1>
-    </div>
+    <>
+      {msaName &&
+      <>
+        <h1 className="my-6 text-3xl">Delinquency By 1st Time Buyer Status for {msaName}</h1>
+        <div>
+          {chartData &&
+            <Bar data={chartData} options={chartOptions} />
+          }
+        </div>
+        </>
+      }
+    </>
   )
 }
 
