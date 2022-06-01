@@ -53,8 +53,6 @@ const DelinquencyByLoanTerm = ({params, msaName}) => {
       .then(res => res.json())
       .then(data => data.response)
       .then(data => {
-        console.log('data', data)
-
         const labels = []
         const dataset = []
         for(const row of data){
