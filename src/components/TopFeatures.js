@@ -4,7 +4,7 @@ import DelinquencyByDTI from "./DelinquencyByDTI"
 import DelinquencyByEducation from "./DelinquencyByEducation"
 import DelinquencyByFTBStatus from "./DelinquencyByFTBStatus"
 import DelinquencyByInterestRate from "./DelinquencyByInterestRate"
-import DelinquencyByLoanBalance from "./DelinquencyByLoanBalance"
+import DelinquencyByOriginalLoanBalance from "./DelinquencyByOriginalLoanBalance"
 import DelinquencyByLoanTerm from "./DelinquencyByLoanTerm"
 import DelinquencyByLTV from "./DelinquencyByLTV"
 import DelinquencyByNumberOfBorrowers from "./DelinquencyByNumberOfBorrowers"
@@ -121,7 +121,7 @@ const TopFeatures = ({params, msaName}) => {
             case "Loan Balance":
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
-                  <DelinquencyByLoanBalance
+                  <DelinquencyByOriginalLoanBalance
                     params={params}
                     msaName={msaName}
                   />

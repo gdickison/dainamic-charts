@@ -53,28 +53,32 @@ const DelinquencyByCreditScore = ({params, msaName}) => {
               backgroundColor: "#bae6ff",
               borderColor: "#bae6ff",
               borderWidth: 1,
-              data: []
+              data: [],
+              tooltip: []
             },
             {
               label: "670-739",
               backgroundColor: "#33b1ff",
               borderColor: "#33b1ff",
               borderWidth: 1,
-              data: []
+              data: [],
+              tooltip: []
             },
             {
               label: "740-799",
               backgroundColor: "#0072c3",
               borderColor: "#0072c3",
               borderWidth: 1,
-              data: []
+              data: [],
+              tooltip: []
             },
             {
               label: "800+",
               backgroundColor: "#003a6d",
               borderColor: "#003a6d",
               borderWidth: 1,
-              data: []
+              data: [],
+              tooltip: []
             }
           ]
         }
@@ -82,15 +86,46 @@ const DelinquencyByCreditScore = ({params, msaName}) => {
         for(const row of data){
           delinquencyRateFeatureData.labels.push(row.origination_date.split('T')[0])
           delinquencyRateFeatureData.datasets[0].data.push(((row.fair_delinquent_for_period / row.fair_total_for_period) * 100).toFixed(2))
+          delinquencyRateFeatureData.datasets[0].tooltip.push({
+            totalAtPoint: row.fair_total_for_period,
+            delinquentAtPoint: row.fair_delinquent_for_period
+          })
           delinquencyRateFeatureData.datasets[1].data.push(((row.good_delinquent_for_period / row.good_total_for_period) * 100).toFixed(2))
+          delinquencyRateFeatureData.datasets[1].tooltip.push({
+            totalAtPoint: row.good_total_for_period,
+            delinquentAtPoint: row.good_delinquent_for_period
+          })
           delinquencyRateFeatureData.datasets[2].data.push(((row.very_good_delinquent_for_period / row.very_good_total_for_period) * 100).toFixed(2))
+          delinquencyRateFeatureData.datasets[2].tooltip.push({
+            totalAtPoint: row.very_good_total_for_period,
+            delinquentAtPoint: row.very_good_delinquent_for_period
+          })
           delinquencyRateFeatureData.datasets[3].data.push(((row.exceptional_delinquent_for_period / row.exceptional_total_for_period) * 100).toFixed(2))
+          delinquencyRateFeatureData.datasets[3].tooltip.push({
+            totalAtPoint: row.exceptional_total_for_period,
+            delinquentAtPoint: row.exceptional_delinquent_for_period
+          })
         }
 
         const delinquencyRateFeatureOptions = {
           responsive: true,
-          legend: {
-            position: 'top'
+          plugins: {
+            legend: {
+              position: 'top'
+            },
+            tooltip: {
+              callbacks: {
+                beforeTitle: function(context){
+                  return `Total loans: ${context[0].dataset.tooltip[context[0].dataIndex].totalAtPoint}`
+                },
+                title: function(context){
+                  return `Delinquent loans: ${context[0].dataset.tooltip[context[0].dataIndex].delinquentAtPoint}`
+                },
+                label: function(context){
+                  return(`Delinquency rate: ${context.raw}%`)
+                }
+              }
+            }
           },
           title: {
             display: true,

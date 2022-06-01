@@ -30,7 +30,7 @@ import { Bar, Scatter } from "react-chartjs-2"
 
 import { useEffect, useState } from "react"
 
-const DelinquencyByLoanBalance = ({params, msaName}) => {
+const DelinquencyByOriginalLoanBalance = ({params, msaName}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
@@ -169,4 +169,4 @@ const DelinquencyByLoanBalance = ({params, msaName}) => {
   )
 }
 
-export default DelinquencyByLoanBalance
+export default DelinquencyByOriginalLoanBalance
