@@ -32,7 +32,7 @@ const DelinquencyByCreditScore = ({params, msaName}) => {
       endDate: params.endDate
     })
 
-    const endpoint = `/api/get_loan_status_by_credit_score_for_date_range`
+    const endpoint = `/api/get_loan_status_by_credit_score`
     const options = {
       method: 'POST',
       headers: {
@@ -48,35 +48,35 @@ const DelinquencyByCreditScore = ({params, msaName}) => {
         const delinquencyRateFeatureData = {
           labels: [],
           datasets: [
-              {
-                label: "580-669",
-                backgroundColor: "#bae6ff",
-                borderColor: "#bae6ff",
-                borderWidth: 1,
-                data: []
-              },
-              {
-                label: "670-739",
-                backgroundColor: "#33b1ff",
-                borderColor: "#33b1ff",
-                borderWidth: 1,
-                data: []
-              },
-              {
-                label: "740-799",
-                backgroundColor: "#0072c3",
-                borderColor: "#0072c3",
-                borderWidth: 1,
-                data: []
-              },
-              {
-                label: "800+",
-                backgroundColor: "#003a6d",
-                borderColor: "#003a6d",
-                borderWidth: 1,
-                data: []
-              }
-            ]
+            {
+              label: "580-669",
+              backgroundColor: "#bae6ff",
+              borderColor: "#bae6ff",
+              borderWidth: 1,
+              data: []
+            },
+            {
+              label: "670-739",
+              backgroundColor: "#33b1ff",
+              borderColor: "#33b1ff",
+              borderWidth: 1,
+              data: []
+            },
+            {
+              label: "740-799",
+              backgroundColor: "#0072c3",
+              borderColor: "#0072c3",
+              borderWidth: 1,
+              data: []
+            },
+            {
+              label: "800+",
+              backgroundColor: "#003a6d",
+              borderColor: "#003a6d",
+              borderWidth: 1,
+              data: []
+            }
+          ]
         }
 
         for(const row of data){
