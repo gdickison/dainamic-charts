@@ -65,10 +65,10 @@ const DelinquencyByOriginalLoanBalance = ({params, msaName}) => {
           return o.original_upb; }));
 
         const numBrackets = Math.floor(Number((maxupb / divisor) + 1))
-        const bracketsArray = []
+        // const bracketsArray = []
         for(let i = 0; i < numBrackets; i++){
-          bracketsArray.push(`${Math.ceil(Number((minupb + (i * divisor)) / divisor) - 1) * divisor} - ${(Math.ceil(Number((minupb + (i * divisor)) / divisor)) * divisor) - 1}`)
-          const bracket = `${Math.ceil(Number((minupb + (i * divisor)) / divisor) - 1) * divisor} - ${((Math.ceil(Number((minupb + (i * divisor)) / divisor)) * divisor) - 1)}`
+          // bracketsArray.push(`${(Math.ceil(Number((minupb + (i * divisor)) / divisor) - 1) * divisor).toLocaleString()} - ${((Math.ceil(Number((minupb + (i * divisor)) / divisor)) * divisor) - 1).toLocaleString()}`)
+          const bracket = `$${(Math.ceil(Number((minupb + (i * divisor)) / divisor) - 1) * divisor).toLocaleString()} - $${((Math.ceil(Number((minupb + (i * divisor)) / divisor)) * divisor) - 1).toLocaleString()}`
           data.map(row => {
             if(row.original_upb >= (Math.ceil(Number((minupb + (i * divisor)) / divisor) - 1) * divisor) && row.original_upb <= ((Math.ceil(Number((minupb + (i * divisor)) / divisor)) * divisor) - 1)){
               row.bracket = bracket
@@ -97,8 +97,8 @@ const DelinquencyByOriginalLoanBalance = ({params, msaName}) => {
             dataset.push({
               x: row.original_upb,
               y: delinquencyRate,
-              totalAtRate: row.total_at_upb,
-              delinquentAtRate: row.delinquent_at_upb
+              totalAtUpb: row.total_at_upb,
+              delinquentAtUpb: row.delinquent_at_upb
             })
           }
         }
@@ -132,6 +132,22 @@ const DelinquencyByOriginalLoanBalance = ({params, msaName}) => {
               },
               legend: {
                 display: false
+              },
+              tooltip: {
+                callbacks: {
+                  beforeTitle: function(context){
+                    return `Range: ${context[0].label}`
+                  },
+                  title: function(context){
+                    return `Total in range: ${context[0].raw.totalAtUpb}`
+                  },
+                  afterTitle: function(context){
+                    return `Delinquent in range: ${context[0].raw.delinquentAtUpb}`
+                  },
+                  label: function(context){
+                    return `Delinquecy rate for range: ${context.raw.y}%`
+                  }
+                }
               }
             }
           }
