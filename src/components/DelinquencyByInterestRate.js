@@ -40,7 +40,7 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
       endDate: params.endDate,
       msaCode: params.msaCode
     })
-    const endpoint = `/api/get_delinquency_by_interest_rate_data`
+    const endpoint = `/api/get_delinquency_by_interest_rate`
     const options = {
       method: 'POST',
       headers: {
@@ -59,9 +59,8 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
 
         const filteredData = data.reduce((a, v) => {
           if(a[v.interest_rate]){
-            a[v.interest_rate].current_at_rate = Number(a[v.interest_rate].current_at_rate) + Number(v.current_at_rate)
-            a[v.interest_rate].delinquent_at_rate = Number(a[v.interest_rate].delinquent_at_rate) + Number(v.delinquent_at_rate)
-            a[v.interest_rate].total_at_rate = Number(a[v.interest_rate].total_at_rate) + Number(v.total_at_rate)
+            a[v.interest_rate].current = Number(a[v.interest_rate].current) + Number(v.current)
+            a[v.interest_rate].delinquent = Number(a[v.interest_rate].delinquent) + Number(v.delinquent)
             a[v.interest_rate].total_loans = Number(a[v.interest_rate].total_loans) + Number(v.total_loans)
           } else {
             a[v.interest_rate] = v
@@ -72,13 +71,13 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
         const labels = []
         const dataset = []
         for(const row of Object.values(filteredData)){
-          let delinquencyRate = parseFloat((Number(row.delinquent_at_rate) / Number(row.total_loans)) * 100).toFixed(2)
+          let delinquencyRate = parseFloat((Number(row.delinquent) / Number(row.total_loans)) * 100).toFixed(2)
           if(delinquencyRate > 0 && delinquencyRate < 100){
             dataset.push({
               x: row.interest_rate,
               y: delinquencyRate,
-              totalAtRate: row.total_at_rate,
-              delinquentAtRate: row.delinquent_at_rate
+              totalAtRate: row.total_loans,
+              delinquentAtRate: row.delinquent
             })
           }
         }
@@ -140,7 +139,7 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
       },
       point: {
         radius: 5,
-        hitRadius: 20
+        hitRadius: 15
       }
     }
   }
