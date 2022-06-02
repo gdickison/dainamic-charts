@@ -26,6 +26,7 @@ ChartJS.register(
 )
 
 import Loader from "./Loader"
+import { linearRegression } from "../../public/utils"
 import { useState, useEffect } from "react"
 import { Line, Scatter } from "react-chartjs-2"
 
@@ -70,6 +71,8 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
 
         const labels = []
         const dataset = []
+        const regressionX = []
+        const regressionY = []
         for(const row of Object.values(filteredData)){
           let delinquencyRate = parseFloat((Number(row.delinquent) / Number(row.total_loans)) * 100).toFixed(2)
           if(delinquencyRate > 0 && delinquencyRate < 100){
@@ -79,20 +82,46 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
               totalAtRate: row.total_loans,
               delinquentAtRate: row.delinquent
             })
+            regressionX.push(Number(row.interest_rate))
+            regressionY.push(Number(delinquencyRate))
           }
         }
 
-        setChartData({
-          labels: labels,
-          datasets: [
-            {
-              label: "Delinquency Rate",
-              data: dataset,
-              borderColor: '#1192e8',
-              backgroundColor: '#1192e8'
-            }
-          ]
-        })
+        const lr = linearRegression(regressionY, regressionX)
+
+        const regressionData = []
+        for(const row of dataset){
+          regressionData.push({
+            x: Number(row.x),
+            y: lr.intercept + (lr.slope * Number(row.x))
+          })
+        }
+
+        setChartData(
+          {
+            labels: labels,
+            type: 'scatter',
+            datasets: [
+              {
+                label: "Delinquency Rate",
+                data: dataset,
+                borderColor: '#1192e8',
+                backgroundColor: '#1192e8',
+                pointRadius: 5,
+                pointHitRadius: 15,
+                pointHoverRadius: 15
+              },
+              {
+                label: "Regression",
+                data: regressionData,
+                borderColor: '#94A3B8',
+                showLine: true,
+                pointRadius: 0,
+                pointHitRadius: 0
+              }
+            ]
+          }
+        )
         setLoading(false)
       })
   }, [params.endDate, params.msaCode, params.startDate])
@@ -101,7 +130,7 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
     responsive: true,
     plugins: {
       legend: {
-        display: true
+        display: false
       },
       tooltip: {
         callbacks: {
@@ -123,23 +152,45 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
     },
     scales: {
       y: {
-        type: 'linear',
-        display: true,
-        position: 'left',
+        title: {
+          display: true,
+          text: "Delinquency Rate",
+          padding: 20,
+          font: {
+            size: 16
+          }
+        },
+        ticks: {
+          callback: function(value, index, ticks){
+            return value + "%"
+          },
+          font: {
+            size: 16
+          }
+        },
+        grace: 5,
+        beginAtZero: true,
         grid: {
           drawnOnChartArea: false
         }
-      }
-    },
-    elements: {
-      line: {
-        tension: 0.25,
-        borderWidth: 2,
-        borderColor: '#1192e8'
       },
-      point: {
-        radius: 5,
-        hitRadius: 15
+      x: {
+        title: {
+          display: true,
+          text: "Interest Rate (grouped by .125%)",
+          padding: 20,
+          font: {
+            size: 16
+          }
+        },
+        ticks: {
+          callback: function(value, index, ticks){
+            return value + "%"
+          },
+          font: {
+            size: 16
+          }
+        }
       }
     }
   }
