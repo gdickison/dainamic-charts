@@ -126,10 +126,6 @@ const DelinquencyByCreditScore = ({params, msaName}) => {
                 }
               }
             }
-          },
-          title: {
-            display: true,
-            text: "Something Goes Here"
           }
         }
 

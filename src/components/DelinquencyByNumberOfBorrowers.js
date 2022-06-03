@@ -45,51 +45,116 @@ const DelinquencyByNumberOfBorrowers = ({params, msaName}) => {
       .then(res => res.json())
       .then(data => data.response)
       .then(data => {
-        console.log(data)
-        const borrowersData = {
+        const structuredData = {
           labels: [],
           datasets: [
-              {
-                label: "1 Borrower",
-                backgroundColor: "#33b1ff",
-                borderColor: "#33b1ff",
-                borderWidth: 1,
-                data: []
-              },
-              {
-                label: "2 Borrowers",
-                backgroundColor: "#003a6d",
-                borderColor: "#003a6d",
-                borderWidth: 1,
-                data: []
-              }
-            ]
+            {
+              label: "1 Borrower",
+              backgroundColor: "#33b1ff",
+              borderColor: "#33b1ff",
+              borderWidth: 1,
+              data: [],
+              tooltip: []
+            },
+            {
+              label: "2 Borrowers",
+              backgroundColor: "#003a6d",
+              borderColor: "#003a6d",
+              borderWidth: 1,
+              data: [],
+              tooltip: []
+            }
+          ]
         }
 
         data.map((row, i) => {
           if(i % 2 === 0){
-            borrowersData.labels.push(row.origination_date.split('T')[0])
+            structuredData.labels.push(row.origination_date.split('T')[0])
           }
           if(row.num_borrowers === 1){
-            borrowersData.datasets[0].data.push(((row.delinquent / row.total_loans) * 100).toFixed(2))
+            structuredData.datasets[0].data.push(((row.delinquent / row.total_loans) * 100).toFixed(2))
+            structuredData.datasets[0].tooltip.push({
+              totalAtPoint: row.total_loans,
+              delinquentAtPoint: row.delinquent
+            })
           } else {
-            borrowersData.datasets[1].data.push(((row.delinquent / row.total_loans) * 100).toFixed(2))
+            structuredData.datasets[1].data.push(((row.delinquent / row.total_loans) * 100).toFixed(2))
+            structuredData.datasets[1].tooltip.push({
+              totalAtPoint: row.total_loans,
+              delinquentAtPoint: row.delinquent
+            })
           }
         })
 
-        const ftbsChartOptions = {
+        const options = {
           responsive: true,
-          legend: {
-            position: 'top'
+          aspectRatio: 3,
+          plugins: {
+            legend: {
+              position: 'top'
+            },
+            tooltip: {
+              callbacks: {
+                beforeTitle: function(context){
+                  return `${context[0].dataset.label}`
+                },
+                title: function(context){
+                  return `Total loans: ${context[0].dataset.tooltip[context[0].dataIndex].totalAtPoint}`
+                },
+                afterTitle: function(context){
+                  return `Delinquent loans: ${context[0].dataset.tooltip[context[0].dataIndex].delinquentAtPoint}`
+                },
+                label: function(context){
+                  return(`Delinquency rate: ${context.raw}%`)
+                }
+              }
+            }
           },
-          title: {
-            display: true,
-            text: "Something Goes Here"
+          scales: {
+            y: {
+              title: {
+                display: true,
+                text: "Delinquency Rate",
+                padding: 20,
+                font: {
+                  size: 16
+                }
+              },
+              ticks: {
+                callback: function(value, index, ticks){
+                  return value + "%"
+                },
+                font: {
+                  size: 16
+                }
+              },
+              grace: 5,
+              beginAtZero: true
+            },
+            x: {
+              title: {
+                display: true,
+                text: "Month",
+                padding: 20,
+                font: {
+                  size: 16
+                }
+              },
+              ticks: {
+                callback: function(value){
+                  let date = new Date(this.getLabelForValue(value))
+                  return `${date.toLocaleString('en-us', {month: 'long'})} ${date.getFullYear()}`
+                },
+                font: {
+                  size: 16
+                }
+              }
+            }
           }
         }
 
-        setChartData(borrowersData)
-        setChartOptions(ftbsChartOptions)
+        setChartData(structuredData)
+        setChartOptions(options)
         setLoading(false)
       })
   }, [params])
@@ -99,18 +164,19 @@ const DelinquencyByNumberOfBorrowers = ({params, msaName}) => {
   }
 
   return (
-    <>
-      {msaName &&
-      <>
-        <h1 className="my-6 text-3xl">Delinquency By Number of Borrowers for {msaName}</h1>
-        <div>
-          {chartData &&
+    <div>
+      <h1 className="my-2 text-2xl">Delinquency By Number of Borrowers for {msaName}</h1>
+      <div className="space-y-2 text-sm">
+        <p>All loans for each month are grouped by number of borrowers (1 or 2). Delinquent loans are divided by the total loans to show the delinquency rate. Loans with 3+ borrowers are rare and are excluded. Hover over the bars to see details</p>
+      </div>
+      <div>
+        {chartData &&
+          <div className="relative flex items-center">
             <Bar data={chartData} options={chartOptions} />
-          }
-        </div>
-        </>
-      }
-    </>
+          </div>
+        }
+      </div>
+    </div>
   )
 }
 
