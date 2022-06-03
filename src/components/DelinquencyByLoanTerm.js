@@ -26,6 +26,8 @@ ChartJS.register(
 )
 
 import Loader from "./Loader"
+import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
+import { linearRegression } from "../../public/utils"
 import { useState, useEffect } from "react"
 import { Line, Scatter } from "react-chartjs-2"
 
@@ -55,6 +57,8 @@ const DelinquencyByLoanTerm = ({params, msaName}) => {
       .then(data => {
         const labels = []
         const dataset = []
+        const regressionX = []
+        const regressionY = []
         for(const row of data){
           if(row.total_loans >= 10){
             labels.push(row.loan_term)
@@ -66,7 +70,21 @@ const DelinquencyByLoanTerm = ({params, msaName}) => {
                 totalAtTerm: row.total_loans,
                 delinquentAtTerm: row.delinquent
               })
+              regressionX.push(Number(row.loan_term))
+              regressionY.push(Number(delinquencyRate))
             }
+          }
+        }
+
+        const lr = linearRegression(regressionY, regressionX)
+
+        const regressionData = []
+        for(const row of dataset){
+          if(lr.intercept + (lr.slope * Number(row.x)) > 0){
+            regressionData.push({
+              x: Number(row.x),
+              y: lr.intercept + (lr.slope * Number(row.x))
+            })
           }
         }
 
@@ -77,7 +95,18 @@ const DelinquencyByLoanTerm = ({params, msaName}) => {
               label: "Delinquency Rate",
               data: dataset,
               borderColor: "#1192e8",
-              backgroundColor: "#1192e8"
+              backgroundColor: "#1192e8",
+              pointRadius: 5,
+              pointHitRadius: 15,
+              pointHoverRadius: 15
+            },
+            {
+              label: "Regression",
+              data: regressionData,
+              borderColor: '#94A3B8',
+              showLine: true,
+              pointRadius: 0,
+              pointHitRadius: 0
             }
           ]
         })
@@ -87,6 +116,7 @@ const DelinquencyByLoanTerm = ({params, msaName}) => {
 
   const chartOptions = {
     responsive: true,
+    aspectRatio: 3,
     plugins: {
       legend: {
         display: true
@@ -111,23 +141,45 @@ const DelinquencyByLoanTerm = ({params, msaName}) => {
     },
     scales: {
       y: {
-        type: 'linear',
-        display: true,
-        position: 'left',
+        title: {
+          display: true,
+          text: "Delinquency Rate",
+          padding: 20,
+          font: {
+            size: 16
+          }
+        },
+        ticks: {
+          callback: function(value, index, ticks){
+            return value + "%"
+          },
+          font: {
+            size: 16
+          }
+        },
+        grace: 5,
+        beginAtZero: true,
         grid: {
           drawnOnChartArea: false
         }
-      }
-    },
-    elements: {
-      line: {
-        tension: 0.25,
-        borderWidth: 2,
-        borderColor: '#1192e8'
       },
-      point: {
-        radius: 5,
-        hitRadius: 20
+      x: {
+        title: {
+          display: true,
+          text: "Loan Term (months)",
+          padding: 20,
+          font: {
+            size: 16
+          }
+        },
+        ticks: {
+          font: {
+            size: 16
+          }
+        },
+        grid: {
+          display: false
+        }
       }
     }
   }
@@ -140,7 +192,11 @@ const DelinquencyByLoanTerm = ({params, msaName}) => {
 
   return (
     <div>
-      <h1 className="my-6 text-3xl">Delinquency By Loan Term for {msaName}</h1>
+      <ChartHeaderWithTooltip
+        chartName={"Delinquency by Loan Term"}
+        msa={msaName}
+        tooltip={"Delinquent loans at the given term are divided by the total loans at that term to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
+      />
       {chartData &&
         <Scatter data={chartData} options={chartOptions}/>
       }

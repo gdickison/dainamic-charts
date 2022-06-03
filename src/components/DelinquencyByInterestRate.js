@@ -134,7 +134,7 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
     aspectRatio: 3,
     plugins: {
       legend: {
-        display: false
+        display: true
       },
       tooltip: {
         callbacks: {
@@ -194,6 +194,9 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
           font: {
             size: 16
           }
+        },
+        grid: {
+          display: false
         }
       }
     }
@@ -210,7 +213,7 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
       <ChartHeaderWithTooltip
         chartName={"Delinquency by Interest Rate"}
         msa={msaName}
-        tooltip={"All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. The gray line shows the regression. Hover over the data points to see details"}
+        tooltip={"All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
       />
       {chartData &&
       <div className="relative flex items-center">
