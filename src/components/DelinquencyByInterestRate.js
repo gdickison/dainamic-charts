@@ -130,6 +130,7 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
 
   const chartOptions = {
     responsive: true,
+    aspectRatio: 3,
     plugins: {
       legend: {
         display: false
@@ -210,7 +211,7 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
         <p>All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. The gray line shows the regression. Hover over the data points to see details</p>
       </div>
       {chartData &&
-      <div className="relative flex items-center h-[80vh]">
+      <div className="relative flex items-center">
         <Scatter className="my-6" data={chartData} options={chartOptions}/>
       </div>
       }
