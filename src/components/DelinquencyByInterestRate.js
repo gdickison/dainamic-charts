@@ -131,7 +131,7 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
 
   const chartOptions = {
     responsive: true,
-    aspectRatio: 3,
+    aspectRatio: 2.5,
     plugins: {
       legend: {
         display: true
@@ -173,10 +173,7 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
           }
         },
         grace: 5,
-        beginAtZero: true,
-        grid: {
-          drawnOnChartArea: false
-        }
+        beginAtZero: true
       },
       x: {
         title: {

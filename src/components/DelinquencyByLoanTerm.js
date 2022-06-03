@@ -116,7 +116,7 @@ const DelinquencyByLoanTerm = ({params, msaName}) => {
 
   const chartOptions = {
     responsive: true,
-    aspectRatio: 3,
+    aspectRatio: 2.5,
     plugins: {
       legend: {
         display: true

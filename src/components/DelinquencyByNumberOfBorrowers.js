@@ -88,7 +88,7 @@ const DelinquencyByNumberOfBorrowers = ({params, msaName}) => {
 
         const options = {
           responsive: true,
-          aspectRatio: 3,
+          aspectRatio: 2.5,
           plugins: {
             legend: {
               position: 'top'
