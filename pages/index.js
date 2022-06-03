@@ -285,41 +285,47 @@ const Home = ({ msaOptions, monthOptions }) => {
         <title>Dainamic</title>
       </Head>
       <header>
-        <h1 className='p-10 text-7xl'>
+        <h1 className='p-10 text-7xl text-center lg:text-left'>
           Welcome to D<span className='text-yellow-300'>AI</span>NAMIC
         </h1>
       </header>
       {isLoggedIn ? <main className="h-screen">
-        <section className="flex flex-col items-center px-20">
-          <form className="flex flex-col 2xl:flex-row" action="#">
-            <label className="text-2xl 2xl:px-4" htmlFor="startDate">Select a start date: </label>
-            {/* TODO: show an alert if date is outside range */}
-            <select className="pl-6 border-2 border-blue-400 bg-white rounded-md text-xl" id="startDate" name="startDate" defaultValue="" onChange={handleChange}>
-              <option disabled></option>
-              {monthOptions && monthOptions.map(month => {
-                return (
-                  <option key={month.date} value={month.date}>{month.date}</option>
-                )
-              })}
-            </select>
-            <label className="text-2xl 2xl:px-4"  htmlFor="endDate">Select an end date: </label>
-            <select className="pl-6 border-2 border-blue-400 bg-white rounded-md text-xl" id="endDate" name="endDate" defaultValue="" onChange={handleChange}>
-              <option disabled></option>
-              {monthOptions && monthOptions.map(month => {
-                return (
-                  <option key={month.date} value={month.date}>{month.date}</option>
-                )
-              })}
-            </select>
-            <label className="text-2xl 2xl:px-4" htmlFor="msaCode">Select an MSA: </label>
-            <select className="w-96 pl-6 border-2 border-blue-400 bg-white rounded-md text-xl" id="msaCode" name="msaCode" defaultValue="" onChange={handleChange}>
-              <option disabled></option>
-              {msaOptions && msaOptions.map(singleMsa => {
-                return (
-                  <option key={singleMsa.msa_code} value={singleMsa.msa_code}>{singleMsa.msa_name} ({singleMsa.msa_code})</option>
-                )
-              })}
-            </select>
+        <section className="flex flex-col items-center justify-center px-20">
+          <form className="flex flex-col xl:flex-row items-center" action="#">
+            <div className="flex flex-col md:space-y-4">
+              <label className="text-2xl mx-2" htmlFor="startDate">Select a start date: </label>
+              {/* TODO: show an alert if date is outside range */}
+              <select className="mx-2 w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="startDate" name="startDate" defaultValue="" onChange={handleChange}>
+                <option disabled></option>
+                {monthOptions && monthOptions.map(month => {
+                  return (
+                    <option key={month.date} value={month.date}>{month.date}</option>
+                  )
+                })}
+              </select>
+            </div>
+            <div className="flex flex-col md:space-y-4">
+              <label className="text-2xl mx-2"  htmlFor="endDate">Select an end date: </label>
+              <select className="mx-2 w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="endDate" name="endDate" defaultValue="" onChange={handleChange}>
+                <option disabled></option>
+                {monthOptions && monthOptions.map(month => {
+                  return (
+                    <option key={month.date} value={month.date}>{month.date}</option>
+                  )
+                })}
+              </select>
+            </div>
+            <div className="flex flex-col md:space-y-4">
+              <label className="text-2xl mx-2" htmlFor="msaCode">Select an MSA: </label>
+              <select className="mx-2 w-80 md:w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="msaCode" name="msaCode" defaultValue="" onChange={handleChange}>
+                <option disabled></option>
+                {msaOptions && msaOptions.map(singleMsa => {
+                  return (
+                    <option key={singleMsa.msa_code} value={singleMsa.msa_code}>{singleMsa.msa_name} ({singleMsa.msa_code})</option>
+                  )
+                })}
+              </select>
+            </div>
           </form>
           <button className="flex items-center justify-center w-40 h-12 my-8 rounded-md p-4 bg-blue-400 hover:bg-blue-600 text-gray-100" onClick={getData}>See Results</button>
         </section>

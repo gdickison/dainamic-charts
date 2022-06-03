@@ -91,10 +91,12 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
 
         const regressionData = []
         for(const row of dataset){
-          regressionData.push({
-            x: Number(row.x),
-            y: lr.intercept + (lr.slope * Number(row.x))
-          })
+          if(lr.intercept + (lr.slope * Number(row.x)) > 0){
+            regressionData.push({
+              x: Number(row.x),
+              y: lr.intercept + (lr.slope * Number(row.x))
+            })
+          }
         }
 
         setChartData(
@@ -203,9 +205,14 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
 
   return (
     <div>
-      <h1 className="my-6 text-3xl">Delinquency By Interest Rate for {msaName}</h1>
+      <h1 className="my-2 text-2xl">Delinquency By Interest Rate for {msaName}</h1>
+      <div className="space-y-2 text-sm">
+        <p>All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. The gray line shows the regression. Hover over the data points to see details</p>
+      </div>
       {chartData &&
-        <Scatter data={chartData} options={chartOptions}/>
+      <div className="relative flex items-center h-[80vh]">
+        <Scatter className="my-6" data={chartData} options={chartOptions}/>
+      </div>
       }
       {/* {chartData &&
         <Line data={chartData} options={chartOptions}/>
