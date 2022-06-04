@@ -28,7 +28,7 @@ ChartJS.register(
 )
 
 import Loader from "./Loader"
-import { Line } from "react-chartjs-2"
+import { Line, Scatter } from "react-chartjs-2"
 
 const DelinquencyByDTI = ({params, msaName}) => {
   const [isLoading, setLoading] = useState(false)
@@ -149,7 +149,7 @@ const DelinquencyByDTI = ({params, msaName}) => {
     <div>
       <h1 className="my-6 text-3xl">Delinquency By DTI for {msaName}</h1>
       {chartData &&
-        <Line data={chartData} options={chartOptions}/>
+        <Scatter data={chartData} options={chartOptions}/>
       }
     </div>
   )
