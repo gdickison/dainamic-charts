@@ -225,8 +225,8 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
         tooltip={"All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
       />
       <section className="-mt-2 mb-8">
-        <label htmlFor="toggle-example" className="flex items-center cursor-pointer relative mb-4">
-          <input type="checkbox" id="toggle-example" className="sr-only" checked={isChecked} onChange={handleLineToggle}/>
+        <label htmlFor="int-dataline-toggle" className="flex items-center cursor-pointer relative mb-4">
+          <input type="checkbox" id="int-dataline-toggle" className="sr-only" checked={isChecked} onChange={handleLineToggle}/>
           <div className="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
           <span className="ml-3 text-gray-900 text-sm font-medium">Show Data Line</span>
         </label>
