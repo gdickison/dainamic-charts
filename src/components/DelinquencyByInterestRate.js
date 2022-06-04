@@ -34,6 +34,20 @@ import { Scatter } from "react-chartjs-2"
 const DelinquencyByInterestRate = ({params, msaName}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
+  const [chartOptions, setChartOptions] = useState()
+  const [showDataLine, setShowDataLine] = useState(false)
+  const [isChecked, setIsChecked] = useState(false)
+
+  const handleLineToggle = e => {
+    setIsChecked(!isChecked)
+    setShowDataLine(!showDataLine)
+    const tempDatasets = [...chartData.datasets]
+    tempDatasets[0] = {
+      ...tempDatasets[0],
+      showLine: !showDataLine
+    }
+    setChartData({...chartData, datasets: tempDatasets})
+  }
 
   useEffect(() => {
     setLoading(true)
@@ -99,103 +113,103 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
           }
         }
 
-        setChartData(
-          {
-            datasets: [
-              {
-                label: "Delinquency Rate",
-                data: dataset,
-                borderColor: '#1192e8',
-                backgroundColor: '#1192e8',
-                pointRadius: 5,
-                pointHitRadius: 15,
-                pointHoverRadius: 15,
-                showLine: false
-              },
-              {
-                label: "Regression",
-                data: regressionData,
-                borderColor: '#94A3B8',
-                showLine: true,
-                pointRadius: 0,
-                pointHitRadius: 0
+        setChartData({
+          datasets: [
+            {
+              label: "Delinquency Rate",
+              data: dataset,
+              borderColor: '#1192e8',
+              backgroundColor: '#1192e8',
+              pointRadius: 5,
+              pointHitRadius: 15,
+              pointHoverRadius: 15,
+              showLine: false
+            },
+            {
+              label: "Regression",
+              data: regressionData,
+              borderColor: '#94A3B8',
+              showLine: true,
+              pointRadius: 0,
+              pointHitRadius: 0
+            }
+          ]
+        })
+
+        setChartOptions({
+          responsive: true,
+          aspectRatio: 2.5,
+          plugins: {
+            legend: {
+              display: true
+            },
+            tooltip: {
+              callbacks: {
+                beforeTitle: function(context) {
+                  return `Interest Rate: ${context[0].raw.x}%`
+                },
+                title: function(context) {
+                  return `Total Loans at Rate: ${context[0].raw.totalAtRate}`
+                },
+                afterTitle: function(context) {
+                  return `Delinquent Loans at Rate: ${context[0].raw.delinquentAtRate}`
+                },
+                label: function(context) {
+                  let label = `Delinquency Rate: ${context.raw.y}%`
+                  return label
+                }
               }
-            ]
+            }
+          },
+          scales: {
+            y: {
+              title: {
+                display: true,
+                text: "Delinquency Rate",
+                padding: 20,
+                font: {
+                  size: 16
+                }
+              },
+              ticks: {
+                callback: function(value, index, ticks){
+                  return value + "%"
+                },
+                font: {
+                  size: 16
+                }
+              },
+              grace: 5,
+              beginAtZero: true
+            },
+            x: {
+              title: {
+                display: true,
+                text: "Interest Rate (grouped by .125%)",
+                padding: 20,
+                font: {
+                  size: 16
+                }
+              },
+              ticks: {
+                callback: function(value, index, ticks){
+                  return value + "%"
+                },
+                font: {
+                  size: 16
+                }
+              },
+              grid: {
+                display: false
+              }
+            }
           }
-        )
+        })
         setLoading(false)
+        setIsChecked(false)
+        setShowDataLine(false)
       })
   }, [params.endDate, params.msaCode, params.startDate])
-
-  const chartOptions = {
-    responsive: true,
-    aspectRatio: 2.5,
-    plugins: {
-      legend: {
-        display: true
-      },
-      tooltip: {
-        callbacks: {
-          beforeTitle: function(context) {
-            return `Interest Rate: ${context[0].raw.x}%`
-          },
-          title: function(context) {
-            return `Total Loans at Rate: ${context[0].raw.totalAtRate}`
-          },
-          afterTitle: function(context) {
-            return `Delinquent Loans at Rate: ${context[0].raw.delinquentAtRate}`
-          },
-          label: function(context) {
-            let label = `Delinquency Rate: ${context.raw.y}%`
-            return label
-          }
-        }
-      }
-    },
-    scales: {
-      y: {
-        title: {
-          display: true,
-          text: "Delinquency Rate",
-          padding: 20,
-          font: {
-            size: 16
-          }
-        },
-        ticks: {
-          callback: function(value, index, ticks){
-            return value + "%"
-          },
-          font: {
-            size: 16
-          }
-        },
-        grace: 5,
-        beginAtZero: true
-      },
-      x: {
-        title: {
-          display: true,
-          text: "Interest Rate (grouped by .125%)",
-          padding: 20,
-          font: {
-            size: 16
-          }
-        },
-        ticks: {
-          callback: function(value, index, ticks){
-            return value + "%"
-          },
-          font: {
-            size: 16
-          }
-        },
-        grid: {
-          display: false
-        }
-      }
-    }
-  }
 
   if(isLoading) {
     return (
@@ -210,6 +224,13 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
         msa={msaName}
         tooltip={"All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
       />
+      <section className="-mt-2 mb-8">
+        <label htmlFor="toggle-example" className="flex items-center cursor-pointer relative mb-4">
+          <input type="checkbox" id="toggle-example" className="sr-only" checked={isChecked} onChange={handleLineToggle}/>
+          <div className="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+          <span className="ml-3 text-gray-900 text-sm font-medium">Show Data Line</span>
+        </label>
+      </section>
       {chartData &&
         <div className="relative flex items-center">
           <Scatter className="my-6" data={chartData} options={chartOptions}/>
