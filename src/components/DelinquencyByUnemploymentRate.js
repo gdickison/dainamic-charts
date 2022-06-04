@@ -28,13 +28,16 @@ ChartJS.register(
 )
 
 import Loader from "./Loader"
+import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Line } from "react-chartjs-2"
 
 const DelinquencyByUnemploymentRate = ({params, msaName}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
+  const [chartOptions, setChartOptions] = useState()
 
   const getDelinquencyByUnemploymentChartData = async () => {
+    setLoading(true)
     const JSONdata = JSON.stringify({
       startDate: params.startDate,
       endDate: params.endDate,
@@ -79,67 +82,91 @@ const DelinquencyByUnemploymentRate = ({params, msaName}) => {
       labels: chartLabels,
       datasets: [
         {
-          label: "Monthly Unemployment Rate",
-          data: unemploymentRates,
-          borderColor: "blue",
-          backgroundColor: "blue",
-          yAxisID: 'y'
+          label: "Delinquency Rate",
+          data: delinquencyRates,
+          borderColor: "#003aff",
+          backgroundColor: "#003aff",
+          pointRadius: 5,
+          pointHitRadius: 15,
+          pointHoverRadius: 12
         },
         {
-          label: "Monthly Delinquency Rate",
-          data: delinquencyRates,
-          borderColor: "red",
-          backgroundColor: "red",
-          yAxisID: 'y1'
+          label: "Unemployment Rate",
+          data: unemploymentRates,
+          borderColor: "#33b1ff",
+          backgroundColor: "#33b1ff",
+          pointRadius: 5,
+          pointHitRadius: 15,
+          pointHoverRadius: 12
         }
       ]
     })
-  }
 
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: true
-      }
-    },
-    scales: {
-      y: {
-        type: 'linear',
-        display: true,
-        position: 'left',
-        grid: {
-          drawnOnChartArea: false
+    setChartOptions({
+      responsive: true,
+      aspectRatio: 2.5,
+      interaction: {
+        mode: 'index'
+      },
+      plugins: {
+        legend: {
+          display: true
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context){
+              return `${context.dataset.label} ${context.raw}%`
+            }
+          }
         }
       },
-      y1: {
-        type: 'linear',
-        display: true,
-        position: 'right',
-        grid: {
-          drawnOnChartArea: false
+      scales: {
+        y: {
+          title: {
+            display: true,
+            text: "Rate",
+            padding: 20,
+            font: {
+              size: 20
+            }
+          },
+          ticks: {
+            callback: function(value, index, ticks){
+              return `${value}%`
+            },
+            font: {
+              size: 16
+            }
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: "Month",
+            padding: 20,
+            font: {
+              size: 16
+            }
+          },
+          ticks: {
+            callback: function(value){
+              console.log(this.getLabelForValue(value))
+              let date = new Date(this.getLabelForValue(value))
+              return `${date.toLocaleString('en-us', {month: 'long'})} ${date.getFullYear()}`
+            },
+            font: {
+              size: 16
+            }
+          }
         }
       }
-    },
-    elements: {
-      line: {
-        tension: 0.25,
-        borderWidth: 2,
-        borderColor: '#1192e8'
-      },
-      point: {
-        radius: 5,
-        hitRadius: 5
-      }
-    }
+    })
+    setLoading(false)
   }
 
   useEffect(() => {
-    setLoading(true)
     getDelinquencyByUnemploymentChartData()
-    setLoading(false)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params])
+  }, [params.startDate, params.endDate, params.msaCode])
 
   if(isLoading) {
     return <Loader/>
@@ -147,7 +174,11 @@ const DelinquencyByUnemploymentRate = ({params, msaName}) => {
 
   return (
     <div>
-      <h1 className="my-6 text-3xl">Delinquency By Unemployment Rate for {msaName}</h1>
+      <ChartHeaderWithTooltip
+        chartName={"Delinquency by Unemployment Rate"}
+        msa={msaName}
+        tooltip={"This chart shows the delinquency rate and the unemployment rate side-by-side for the selected months."}
+      />
       {chartData &&
         <Line data={chartData} options={chartOptions}/>
       }
