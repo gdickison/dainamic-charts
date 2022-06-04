@@ -129,7 +129,9 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
               label: "Regression",
               data: regressionData,
               borderColor: '#94A3B8',
+              backgroundColor: '#94A3B8',
               showLine: true,
+              borderWidth: 3,
               pointRadius: 0,
               pointHitRadius: 0
             }

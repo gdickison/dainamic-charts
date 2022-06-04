@@ -74,7 +74,7 @@ const DelinquencyByLTV = ({params, msaName}) => {
         const regressionX = []
         const regressionY = []
         for(const row of data){
-          if(row.total_loans > 10){
+          // if(row.total_loans > 10){
             const delinquencyRate = parseFloat((Number(row.delinquent) / Number(row.total_loans)) * 100).toFixed(2)
             if(delinquencyRate > 0 && delinquencyRate < 100){
               dataset.push({
@@ -86,7 +86,7 @@ const DelinquencyByLTV = ({params, msaName}) => {
               regressionX.push(Number(row.ltv))
               regressionY.push(Number(delinquencyRate))
             }
-          }
+          // }
         }
 
         const lr = linearRegression(regressionY, regressionX)
@@ -111,8 +111,7 @@ const DelinquencyByLTV = ({params, msaName}) => {
               showLine: false,
               pointRadius: 5,
               pointHitRadius: 15,
-              pointHoverRadius: 12,
-              yAxisID: 'y'
+              pointHoverRadius: 12
             },
             {
               label: "Regression",
@@ -122,8 +121,7 @@ const DelinquencyByLTV = ({params, msaName}) => {
               showLine: true,
               borderWidth: 3,
               pointRadius: 0,
-              pointHitRadius: 0,
-              yAxisID: 'y1'
+              pointHitRadius: 0
             }
           ]
         })
@@ -169,10 +167,9 @@ const DelinquencyByLTV = ({params, msaName}) => {
                 font: {
                   size: 16
                 }
-              }
-            },
-            y1: {
-              display: false
+              },
+              grace: 5,
+              beginAtZero: true
             },
             x: {
               title: {
@@ -190,6 +187,10 @@ const DelinquencyByLTV = ({params, msaName}) => {
                 font: {
                   size: 16
                 }
+              },
+              beginAtZero: true,
+              grid: {
+                display: false
               }
             }
           }
@@ -208,7 +209,7 @@ const DelinquencyByLTV = ({params, msaName}) => {
   return (
     <div>
       <ChartHeaderWithTooltip
-        chartName={"Delinquency by LTV"}
+        chartName={"Delinquency by Loan-to-Value"}
         msa={msaName}
         tooltip={"Delinquent loans at the given LTV ratio are divided by the total loans at that ratio to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
       />

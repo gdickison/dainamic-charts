@@ -73,7 +73,7 @@ const DelinquencyByLoanTerm = ({params, msaName}) => {
         const regressionX = []
         const regressionY = []
         for(const row of data){
-          if(row.total_loans >= 10){
+          // if(row.total_loans >= 10){
             let delinquencyRate = parseFloat((Number(row.delinquent) / Number(row.total_loans)) * 100).toFixed(2)
             if(delinquencyRate > 0 && delinquencyRate < 100){
               dataset.push({
@@ -85,7 +85,7 @@ const DelinquencyByLoanTerm = ({params, msaName}) => {
               regressionX.push(Number(row.loan_term))
               regressionY.push(Number(delinquencyRate))
             }
-          }
+          // }
         }
 
         const lr = linearRegression(regressionY, regressionX)
