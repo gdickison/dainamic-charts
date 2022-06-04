@@ -7,10 +7,13 @@ export default async function handler(req, res) {
   await client
     .query(`SELECT
       ltv,
-      COUNT(loanid) AS "total_loans",
-      COUNT(loanid) FILTER (WHERE delinquency_status !='00') AS "delinquent",
-      COUNT(loanid) FILTER (WHERE delinquency_status = '00') AS "current"
-    FROM banking_app.delinquency_by_ltv_dti
+      COUNT(loan.loanid) AS "total_loans",
+      COUNT(loan.loanid) FILTER (WHERE delinquency_status !='00') AS "delinquent",
+      COUNT(loan.loanid) FILTER (WHERE delinquency_status = '00') AS "current"
+    FROM
+      banking_app.loan_basic AS "loan"
+      INNER JOIN banking_app.loan_ltv AS "ltv"
+        ON loan.loanid = ltv.loanid
     WHERE msa = ${req.body.msaCode}
       AND origination_date >= '${req.body.startDate}'::date
       AND origination_date <= '${req.body.endDate}'::date

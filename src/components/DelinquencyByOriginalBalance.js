@@ -197,6 +197,10 @@ const DelinquencyByOriginalBalance = ({params, msaName}) => {
       })
   }, [params.endDate, params.msaCode, params.startDate, divisor])
 
+  if(isLoading){
+    return <Loader/>
+  }
+
   return (
     <div>
       <ChartHeaderWithTooltip
@@ -216,13 +220,8 @@ const DelinquencyByOriginalBalance = ({params, msaName}) => {
           </select>
         </form>
       </section>
-      {isLoading
-        ? <Loader/>
-        : <div>
-          {chartData &&
-            <Bar data={chartData} options={chartOptions} />
-          }
-        </div>
+      {chartData &&
+        <Bar data={chartData} options={chartOptions} />
       }
     </div>
   )

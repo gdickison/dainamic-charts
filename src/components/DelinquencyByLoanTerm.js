@@ -29,11 +29,12 @@ import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { linearRegression } from "../../public/utils"
 import { useState, useEffect } from "react"
-import { Line, Scatter } from "react-chartjs-2"
+import { Scatter } from "react-chartjs-2"
 
 const DelinquencyByLoanTerm = ({params, msaName}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
+  const [chartOptions, setChartOptions] = useState()
 
   useEffect(() => {
     setLoading(true)
@@ -55,13 +56,11 @@ const DelinquencyByLoanTerm = ({params, msaName}) => {
       .then(res => res.json())
       .then(data => data.response)
       .then(data => {
-        const labels = []
         const dataset = []
         const regressionX = []
         const regressionY = []
         for(const row of data){
           if(row.total_loans >= 10){
-            labels.push(row.loan_term)
             let delinquencyRate = parseFloat((Number(row.delinquent) / Number(row.total_loans)) * 100).toFixed(2)
             if(delinquencyRate > 0 && delinquencyRate < 100){
               dataset.push({
@@ -89,7 +88,6 @@ const DelinquencyByLoanTerm = ({params, msaName}) => {
         }
 
         setChartData({
-          labels: labels,
           datasets: [
             {
               label: "Delinquency Rate",
@@ -110,79 +108,76 @@ const DelinquencyByLoanTerm = ({params, msaName}) => {
             }
           ]
         })
+
+        setChartOptions({
+          responsive: true,
+          aspectRatio: 2.5,
+          plugins: {
+            legend: {
+              display: true
+            },
+            tooltip: {
+              callbacks: {
+                beforeTitle: function(context) {
+                  return `Loan Term: ${context[0].raw.x} Months`
+                },
+                title: function(context) {
+                  return `Total Loans at Term: ${(Number(context[0].raw.totalAtTerm)).toLocaleString()}`
+                },
+                afterTitle: function(context) {
+                  return `Delinquent Loans at Term: ${(Number(context[0].raw.delinquentAtTerm)).toLocaleString()}`
+                },
+                label: function(context) {
+                  let label = `Delinquency Rate: ${context.raw.y}%`
+                  return label
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              title: {
+                display: true,
+                text: "Delinquency Rate",
+                padding: 20,
+                font: {
+                  size: 16
+                }
+              },
+              ticks: {
+                callback: function(value, index, ticks){
+                  return value + "%"
+                },
+                font: {
+                  size: 16
+                }
+              },
+              grace: 5,
+              beginAtZero: true
+            },
+            x: {
+              title: {
+                display: true,
+                text: "Loan Term (months)",
+                padding: 20,
+                font: {
+                  size: 16
+                }
+              },
+              ticks: {
+                font: {
+                  size: 16
+                }
+              },
+              grid: {
+                display: false
+              }
+            }
+          }
+        })
         setLoading(false)
       })
-  }, [params])
-
-  const chartOptions = {
-    responsive: true,
-    aspectRatio: 2.5,
-    plugins: {
-      legend: {
-        display: true
-      },
-      tooltip: {
-        callbacks: {
-          beforeTitle: function(context) {
-            return `Loan Term: ${context[0].raw.x} Months`
-          },
-          title: function(context) {
-            return `Total Loans at Term: ${(Number(context[0].raw.totalAtTerm)).toLocaleString()}`
-          },
-          afterTitle: function(context) {
-            return `Delinquent Loans at Term: ${(Number(context[0].raw.delinquentAtTerm)).toLocaleString()}`
-          },
-          label: function(context) {
-            let label = `Delinquency Rate: ${context.raw.y}%`
-            return label
-          }
-        }
-      }
-    },
-    scales: {
-      y: {
-        title: {
-          display: true,
-          text: "Delinquency Rate",
-          padding: 20,
-          font: {
-            size: 16
-          }
-        },
-        ticks: {
-          callback: function(value, index, ticks){
-            return value + "%"
-          },
-          font: {
-            size: 16
-          }
-        },
-        grace: 5,
-        beginAtZero: true,
-        grid: {
-          drawnOnChartArea: false
-        }
-      },
-      x: {
-        title: {
-          display: true,
-          text: "Loan Term (months)",
-          padding: 20,
-          font: {
-            size: 16
-          }
-        },
-        ticks: {
-          font: {
-            size: 16
-          }
-        },
-        grid: {
-          display: false
-        }
-      }
-    }
-  }
+  }, [params.endDate, params.msaCode, params.startDate])
 
   if(isLoading) {
     return (
@@ -200,9 +195,6 @@ const DelinquencyByLoanTerm = ({params, msaName}) => {
       {chartData &&
         <Scatter data={chartData} options={chartOptions}/>
       }
-      {/* {chartData &&
-        <Line data={chartData} options={chartOptions}/>
-      } */}
     </div>
   )
 }
