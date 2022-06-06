@@ -163,7 +163,6 @@ const DelinquencyByCreditScore = ({params, msaName}) => {
               },
               ticks: {
                 callback: function(value){
-                  console.log(this.getLabelForValue(value))
                   let date = new Date(this.getLabelForValue(value))
                   return `${date.toLocaleString('en-us', {month: 'long'})} ${date.getFullYear()}`
                 },
