@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -38,7 +38,9 @@ const Home = ({ msaOptions, monthOptions }) => {
   const [msaSummaryData, setMsaSummaryData] = useState()
   const [delinquencyRateForRange, setDelinquencyRateForRange] = useState()
   const [populationByAgeData, setPopulationByAgeData] = useState()
+  const [populationByAgeOptions, setPopulationByAgeOptions] = useState()
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
+  const [populationByIncomeOptions, setPopulationByIncomeOptions] = useState()
   const [showTopFeatures, setShowTopFeatures] = useState(false)
 
   const handleChange = e => {
@@ -99,36 +101,54 @@ const Home = ({ msaOptions, monthOptions }) => {
           }
         ]
       })
-    }
-  }
 
-  const populationByAgeChartOptions = {
-    indexAxis: 'y',
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: "Population % by Age",
-        align: "start",
-        font: {
-          size: 20
-        }
-      },
-      legend: {
-        position: "top",
-        align: "start",
-        labels: {
-          boxWidth: 7,
-          usePointStyle: true,
-          pointStyle: "circle"
+      setPopulationByAgeOptions({
+        indexAxis: 'y',
+        responsive: true,
+        aspectRatio: 2,
+        plugins: {
+          legend: {
+            display: false
+          },
+          title: {
+            display: true,
+            text: "Population % by Age",
+            align: "start",
+            font: {
+              size: 20
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context){
+                return `${context.raw}%`
+              }
+            }
+          }
         },
-        font: 16
-      }
-    },
-    elements: {
-      bar: {
-        borderWidth: 1
-      }
+        scales: {
+          y: {
+            ticks: {
+              font: {
+                size: 16
+              }
+            },
+            grid: {
+              display: false
+            }
+          },
+          x: {
+            ticks: {
+              callback: function(value, index, ticks){
+                return `${value}%`
+              },
+              font: {
+                size: 16
+              }
+            }
+          }
+        }
+      })
     }
   }
 
@@ -181,30 +201,54 @@ const Home = ({ msaOptions, monthOptions }) => {
           }
         ]
       })
-    }
-  }
 
-  const populationByIncomeChartOptions = {
-    responsive: true,
-    indexAxis: 'y',
-    plugins: {
-      title: {
-        display: true,
-        text: "Population % by Income",
-        align: "start",
-        font: {
-          size: 20
+      setPopulationByIncomeOptions({
+        indexAxis: 'y',
+        responsive: true,
+        aspectRatio: 2,
+        plugins: {
+          legend: {
+            display: false
+          },
+          title: {
+            display: true,
+            text: "Population % by Income",
+            align: "start",
+            font: {
+              size: 20
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context){
+                return `${context.raw}%`
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            ticks: {
+              font: {
+                size: 16
+              }
+            },
+            grid: {
+              display: false
+            }
+          },
+          x: {
+            ticks: {
+              callback: function(value, index, ticks){
+                return `${value}%`
+              },
+              font: {
+                size: 16
+              }
+            }
+          }
         }
-      },
-      legend: {
-        position: "top",
-        align: "start",
-        labels: {
-          boxWidth: 7,
-          usePointStyle: true,
-          pointStyle: "circle"
-        }
-      }
+      })
     }
   }
 
@@ -266,18 +310,15 @@ const Home = ({ msaOptions, monthOptions }) => {
     }
   }
 
-  const getData = () => {
-    if(!queryParams.msaCode ){
-      // TODO: use an alert like the one I built for RedBalloon
-      alert("pick an msa")
+  useEffect(() => {
+    if(queryParams.startDate && queryParams.endDate && queryParams.msaCode){
+      getMsaSummaryData()
+      getDelinquencyRateForRange()
+      getPopulationByAgeData()
+      getPopulationByIncome()
+      setShowTopFeatures(true)
     }
-
-    getMsaSummaryData()
-    getDelinquencyRateForRange()
-    getPopulationByAgeData()
-    getPopulationByIncome()
-    setShowTopFeatures(true)
-  }
+  }, [queryParams.startDate, queryParams.endDate, queryParams.msaCode])
 
   return (
     <>
@@ -327,7 +368,9 @@ const Home = ({ msaOptions, monthOptions }) => {
               </select>
             </div>
           </form>
-          <button className="flex items-center justify-center w-40 h-12 my-8 rounded-md p-4 bg-blue-400 hover:bg-blue-600 text-gray-100" onClick={getData}>See Results</button>
+          {(!queryParams.startDate || !queryParams.endDate || !queryParams.msaCode) &&
+            <div className="flex items-center justify-center h-12 my-8 text-2xl">Select a start date, end date, and MSA to see results</div>
+          }
         </section>
         {msaSummaryData &&
           <section className="mb-10">
@@ -376,12 +419,12 @@ const Home = ({ msaOptions, monthOptions }) => {
                 <div className="flex w-full justify-center items-center">
                   {populationByAgeData &&
                     <div className="flex items-center w-[30%] h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                      <Bar data={populationByAgeData} options={populationByAgeChartOptions} />
+                      <Bar data={populationByAgeData} options={populationByAgeOptions} />
                     </div>
                   }
                   {populationByIncomeData &&
                     <div className="flex items-center w-[30%] h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                      <Bar data={populationByIncomeData} options={populationByIncomeChartOptions} />
+                      <Bar data={populationByIncomeData} options={populationByIncomeOptions} />
                     </div>
                   }
                 </div>
@@ -395,7 +438,6 @@ const Home = ({ msaOptions, monthOptions }) => {
             }
           </section>
         }
-        {/* TODO: pull data that changes over time and show the start/finish points, e.g. start unemployment rate - end unemployment rate */}
       </main>
       : <TempLogin
         setLoggedIn={setLoggedIn}
@@ -408,7 +450,6 @@ const Home = ({ msaOptions, monthOptions }) => {
 export default Home
 
 export const getStaticProps = async () => {
-  // get the MSAs to generate the MSA select input options
   const { Pool } = require('pg')
   const pool = new Pool({
     user: process.env.PGUSER,

@@ -74,7 +74,7 @@ const DelinquencyByDTI = ({params, msaName}) => {
         const regressionX = []
         const regressionY = []
         for(const row of data){
-          // if(row.total_loans > 10){
+          if(row.total_loans > 2){
             const delinquencyRate = parseFloat((Number(row.delinquent) / Number(row.total_loans)) * 100).toFixed(2)
             if(delinquencyRate > 0 && delinquencyRate < 100){
               dataset.push({
@@ -86,7 +86,7 @@ const DelinquencyByDTI = ({params, msaName}) => {
               regressionX.push(Number(row.dti))
               regressionY.push(Number(delinquencyRate))
             }
-          // }
+          }
         }
 
         const lr = linearRegression(regressionY, regressionX)
@@ -157,7 +157,7 @@ const DelinquencyByDTI = ({params, msaName}) => {
                 text: "Delinquency Rate",
                 padding: 20,
                 font: {
-                  size: 16
+                  size: 20
                 }
               },
               ticks: {
@@ -174,10 +174,10 @@ const DelinquencyByDTI = ({params, msaName}) => {
             x: {
               title: {
                 display: true,
-                text: "Loan-to-Value (%)",
+                text: "Debt-to-Income (%)",
                 padding: 20,
                 font: {
-                  size: 16
+                  size: 20
                 }
               },
               ticks: {
@@ -188,7 +188,6 @@ const DelinquencyByDTI = ({params, msaName}) => {
                   size: 16
                 }
               },
-              beginAtZero: true,
               grid: {
                 display: false
               }

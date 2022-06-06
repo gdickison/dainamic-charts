@@ -133,7 +133,8 @@ const DelinquencyByFTBStatus = ({params, msaName}) => {
                 font: {
                   size: 16
                 }
-              }
+              },
+              grace: 5
             },
             x: {
               title: {

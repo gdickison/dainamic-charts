@@ -188,7 +188,6 @@ const DelinquencyByLTV = ({params, msaName}) => {
                   size: 16
                 }
               },
-              beginAtZero: true,
               grid: {
                 display: false
               }
