@@ -157,6 +157,9 @@ const DelinquencyByUnemploymentRate = ({params, msaName}) => {
             font: {
               size: 16
             }
+          },
+          grid: {
+            display: false
           }
         }
       }
@@ -177,7 +180,6 @@ const DelinquencyByUnemploymentRate = ({params, msaName}) => {
       <ChartHeaderWithTooltip
         chartName={"Delinquency by Unemployment Rate"}
         msa={msaName}
-        tooltip={"This chart shows the delinquency rate and the unemployment rate side-by-side for the selected months."}
       />
       {chartData &&
         <Line data={chartData} options={chartOptions}/>

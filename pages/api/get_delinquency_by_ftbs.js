@@ -8,10 +8,13 @@ export default async function handler(req, res) {
     .query(`SELECT
       origination_date,
       first_time_buyer_indicator,
-      COUNT(loanid) AS "total_loans",
-      COUNT(loanid) FILTER (WHERE delinquency_status !='00') AS "delinquent",
-      COUNT(loanid) FILTER (WHERE delinquency_status = '00') AS "current"
-    FROM banking_app.delinquency_by_first_time_buyer_status
+      COUNT(loan.loanid) AS "total_loans",
+      COUNT(loan.loanid) FILTER (WHERE delinquency_status !='00') AS "delinquent",
+      COUNT(loan.loanid) FILTER (WHERE delinquency_status = '00') AS "current"
+    FROM
+      banking_app.loan_basic AS "loan"
+      INNER JOIN banking_app.loan_first_time_buyer AS "ftb"
+        ON loan.loanid = ftb.loanid
     WHERE msa = ${req.body.msaCode}
       AND origination_date >= '${req.body.startDate}'::date
       AND origination_date <= '${req.body.endDate}'::date
