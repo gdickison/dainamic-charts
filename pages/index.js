@@ -115,7 +115,9 @@ const Home = ({ msaOptions, monthOptions }) => {
             text: "Population % by Age",
             align: "start",
             font: {
-              size: 20
+              size: function(context){
+                return Math.round(context.chart.width / 20)
+              }
             }
           },
           tooltip: {
@@ -130,7 +132,9 @@ const Home = ({ msaOptions, monthOptions }) => {
           y: {
             ticks: {
               font: {
-                size: 16
+                size: function(context){
+                  return Math.round(context.chart.width / 30)
+                }
               }
             },
             grid: {
@@ -143,7 +147,9 @@ const Home = ({ msaOptions, monthOptions }) => {
                 return `${value}%`
               },
               font: {
-                size: 16
+                size: function(context){
+                  return Math.round(context.chart.width / 30)
+                }
               }
             }
           }
@@ -215,7 +221,9 @@ const Home = ({ msaOptions, monthOptions }) => {
             text: "Population % by Income",
             align: "start",
             font: {
-              size: 20
+              size: function(context){
+                return Math.round(context.chart.width / 20)
+              }
             }
           },
           tooltip: {
@@ -230,7 +238,9 @@ const Home = ({ msaOptions, monthOptions }) => {
           y: {
             ticks: {
               font: {
-                size: 16
+                size: function(context){
+                  return Math.round(context.chart.width / 36)
+                }
               }
             },
             grid: {
@@ -243,7 +253,9 @@ const Home = ({ msaOptions, monthOptions }) => {
                 return `${value}%`
               },
               font: {
-                size: 16
+                size: function(context){
+                  return Math.round(context.chart.width / 30)
+                }
               }
             }
           }
@@ -306,7 +318,10 @@ const Home = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      setDelinquencyRateForRange(((data.delinquent_loans / data.all_loans) * 100).toFixed(2))
+      setDelinquencyRateForRange({
+        msa: ((data.delinquent_msa / data.total_msa) * 100).toFixed(2),
+        national: ((data.delinquent_natl / data.total_natl) * 100).toFixed(2)
+      })
     }
   }
 
@@ -325,7 +340,7 @@ const Home = ({ msaOptions, monthOptions }) => {
       <Head>
         <title>Dainamic</title>
       </Head>
-      <header>
+      <header className="mx-6">
         <h1 className='p-10 text-7xl text-center lg:text-left'>
           Welcome to D<span className='text-yellow-300'>AI</span>NAMIC
         </h1>
@@ -374,57 +389,75 @@ const Home = ({ msaOptions, monthOptions }) => {
         </section>
         {msaSummaryData &&
           <section className="mb-10">
-            <header>
-              <h1 className="my-6 px-10 text-3xl">{msaSummaryData.name} {new Date(queryParams.startDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})} - {new Date(queryParams.endDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})}</h1>
+            <header className="text-center my-10">
+              <h1 className="px-10 text-4xl">{msaSummaryData.name} {new Date(queryParams.startDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})} - {new Date(queryParams.endDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})}</h1>
             </header>
             <section className="mx-auto px-0">
-              <header>
-                <h1 className="my-6 px-10 text-3xl">Regional Summary</h1>
+              <header className="text-center">
+                <h1 className="my-6 px-10 text-4xl">Regional Summary</h1>
               </header>
-              <div className="flex flex-col md:flex-row w-full justify-center items-center space-x-2">
-                <div className="w-full md:w-[22.5%] border-2 border-blue-400 rounded-md p-4">
-                  <h1 className="w-full text-xl">
-                    Total Population
-                  </h1>
-                  {msaSummaryData &&
-                    <span className="text-3xl">{(msaSummaryData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</span>
-                  }
-                </div>
-                <div className="w-full md:w-[22.5%] border-2 border-blue-400 rounded-md p-4">
-                  <h1 className="w-full text-xl">
-                    Median Household Income
-                  </h1>
-                  {msaSummaryData &&
-                    <span className="text-3xl">{(msaSummaryData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
-                  }
-                </div>
-                <div className="w-full md:w-[22.5%] border-2 border-blue-400 rounded-md p-4">
-                  <h1 className="w-full text-xl">
-                    Median Home Value
-                  </h1>
-                  {msaSummaryData &&
-                    <span className="text-3xl">{(msaSummaryData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
-                  }
-                </div>
-                <div className="w-full md:w-[22.5%] border-2 border-blue-400 rounded-md p-4">
-                  <h1 className="w-full text-xl">
-                    Delinquency Rate
-                  </h1>
+              <div className="flex justify-center items-center">
+                <div>
                   {delinquencyRateForRange &&
-                    <span className="text-3xl">{delinquencyRateForRange+"%"}</span>
-                  }
-                </div>
-              </div>
-              <div>
-                <div className="flex w-full justify-center items-center">
-                  {populationByAgeData &&
-                    <div className="flex items-center w-[30%] h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                      <Bar data={populationByAgeData} options={populationByAgeOptions} />
+                    <div className="m-4 border-4 border-blue-400 rounded-md p-6 text-center">
+                      <h1 className="text-[1.5vw] font-bold py-4">
+                        Delinquency Rate
+                      </h1>
+                      <div>
+                        <p className="text-[1.1vw] py-2">
+                          The delinquency rate for the selected regions is
+                        </p>
+                        <p className="text-[3vw]">
+                          {`${delinquencyRateForRange.msa}%`}
+                        </p>
+                        <p className="text-[1.1vw] py-2">
+                          This is {delinquencyRateForRange.msa > delinquencyRateForRange.national ? 'higher' : 'lower'} than the national delinquency rate of
+                        </p>
+                        <p className="text-[3vw]">
+                          {`${delinquencyRateForRange.national}%`}
+                        </p>
+                        <p className="text-[1.1vw] py-2">
+                          for the same period.
+                        </p>
+                      </div>
                     </div>
                   }
-                  {populationByIncomeData &&
-                    <div className="flex items-center w-[30%] h-fit relative m-4 border-4 border-slate-300 rounded-md p-6 shadow-lg">
-                      <Bar data={populationByIncomeData} options={populationByIncomeOptions} />
+                </div>
+                <div className="flex flex-col w-2/3">
+                  <div className="flex flex-col md:flex-row w-full justify-between items-center mt-4">
+                    <div className="w-1/3 mx-4 border-2 border-blue-400 rounded-md p-4">
+                      <h1 className="w-full text-xl">
+                        Total Population
+                      </h1>
+                      {msaSummaryData &&
+                        <span className="text-3xl">{(msaSummaryData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</span>
+                      }
+                    </div>
+                    <div className="w-1/3 mx-4 border-2 border-blue-400 rounded-md p-4">
+                      <h1 className="w-full text-xl">
+                        Median Household Income
+                      </h1>
+                      {msaSummaryData &&
+                        <span className="text-3xl">{(msaSummaryData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
+                      }
+                    </div>
+                    <div className="w-1/3 mx-4 border-2 border-blue-400 rounded-md p-4">
+                      <h1 className="w-full text-xl">
+                        Median Home Value
+                      </h1>
+                      {msaSummaryData &&
+                        <span className="text-3xl">{(msaSummaryData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
+                      }
+                    </div>
+                  </div>
+                  {populationByAgeData  && populationByIncomeData &&
+                    <div className="flex">
+                      <div className="flex items-center w-1/2 h-fit relative m-4 border-4 border-blue-400 rounded-md p-6 shadow-lg">
+                        <Bar data={populationByAgeData} options={populationByAgeOptions} />
+                      </div>
+                      <div className="flex items-center w-1/2 h-fit relative m-4 border-4 border-blue-400 rounded-md p-6 shadow-lg">
+                        <Bar data={populationByIncomeData} options={populationByIncomeOptions} />
+                      </div>
                     </div>
                   }
                 </div>
