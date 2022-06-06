@@ -120,7 +120,7 @@ const DelinquencyByFTBStatus = ({params, msaName}) => {
             y: {
               title: {
                 display: true,
-                text: "Delinquency RageRate",
+                text: "Delinquency Rate",
                 padding: 20,
                 font: {
                   size: 20
@@ -138,7 +138,7 @@ const DelinquencyByFTBStatus = ({params, msaName}) => {
             x: {
               title: {
                 display: true,
-                text: "Month",
+                text: "Origination Month",
                 padding: 20,
                 font: {
                   size: 20

@@ -142,7 +142,7 @@ const DelinquencyByUnemploymentRate = ({params, msaName}) => {
         x: {
           title: {
             display: true,
-            text: "Month",
+            text: "Origination Month",
             padding: 20,
             font: {
               size: 16

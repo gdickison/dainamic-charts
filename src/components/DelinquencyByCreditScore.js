@@ -16,6 +16,7 @@ ChartJS.register(
 )
 
 import Loader from "./Loader"
+import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Bar } from "react-chartjs-2"
 import { useState, useEffect } from "react"
 
@@ -109,21 +110,69 @@ const DelinquencyByCreditScore = ({params, msaName}) => {
 
         const delinquencyRateFeatureOptions = {
           responsive: true,
+          aspectRatio: 2.5,
           plugins: {
             legend: {
-              position: 'top'
+              display: true
             },
             tooltip: {
               callbacks: {
                 beforeTitle: function(context){
-                  return `Total loans: ${context[0].dataset.tooltip[context[0].dataIndex].totalAtPoint}`
+                  return `Credit Score: ${context[0].dataset.label}`
                 },
                 title: function(context){
+                  return `Total loans: ${context[0].dataset.tooltip[context[0].dataIndex].totalAtPoint}`
+                },
+                afterTitle: function(context){
                   return `Delinquent loans: ${context[0].dataset.tooltip[context[0].dataIndex].delinquentAtPoint}`
                 },
                 label: function(context){
                   return(`Delinquency rate: ${context.raw}%`)
                 }
+              }
+            }
+          },
+          scales: {
+            y: {
+              title: {
+                display: true,
+                text: "Delinquency Rate",
+                padding: 20,
+                font: {
+                  size: 20
+                }
+              },
+              ticks: {
+                callback: function(value, index, ticks){
+                  return `${value}%`
+                },
+                font: {
+                  size: 20
+                }
+              },
+              grace: 5
+            },
+            x: {
+              title: {
+                display: true,
+                text: "Origination Month",
+                padding: 20,
+                font: {
+                  size: 20
+                }
+              },
+              ticks: {
+                callback: function(value){
+                  console.log(this.getLabelForValue(value))
+                  let date = new Date(this.getLabelForValue(value))
+                  return `${date.toLocaleString('en-us', {month: 'long'})} ${date.getFullYear()}`
+                },
+                font: {
+                  size: 16
+                }
+              },
+              grid: {
+                display: false
               }
             }
           }
@@ -140,18 +189,16 @@ const DelinquencyByCreditScore = ({params, msaName}) => {
   }
 
   return (
-    <>
-      {msaName &&
-      <>
-        <h1 className="my-6 text-3xl">Delinquency By Credit Score for {msaName}</h1>
-        <div>
-          {chartData &&
-            <Bar data={chartData} options={chartOptions} />
-          }
-        </div>
-        </>
+    <div>
+      <ChartHeaderWithTooltip
+        chartName={"Delinquency Rate by Credit Score"}
+        msa={msaName}
+        tooltip={"Credit scores are grouped into standard ranges corresponding to 'Fair', 'Good', 'Very Good', and 'Exceptional'. The number of delinquent loans for each range in each period is divided by the corresponding total number of loans to get the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given data point and are also excluded. Hover over the data points to see details"}
+      />
+      {chartData &&
+        <Bar data={chartData} options={chartOptions} />
       }
-    </>
+    </div>
   )
 }
 
