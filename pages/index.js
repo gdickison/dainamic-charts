@@ -551,10 +551,12 @@ const Home = ({ msaOptions, monthOptions }) => {
                     msaCode: targetRegionData.msa,
                     msaName: targetRegionData.name
                   }}
-                  // compRegionsParams={{
-                  //   msaCode: compRegionsData.msa,
-                  //   msaName: compRegionsData.name
-                  // }}
+                  compRegionsParams={compRegionsData
+                    ? compRegionsData.map(region => {
+                      return {msa: region.msa, name: region.name}
+                    })
+                    : []
+                  }
                 />
             }
           </section>

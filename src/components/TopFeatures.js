@@ -12,7 +12,7 @@ import DelinquencyByRace from "./DelinquencyByRace"
 import DelinquencyByUnemploymentRate from "./DelinquencyByUnemploymentRate"
 import Loader from "./Loader"
 
-const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams = []}) => {
+const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams}) => {
   const [isLoading, setLoading] = useState(false)
   const [topFeatures, setTopFeatures] = useState()
 
