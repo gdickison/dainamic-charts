@@ -165,7 +165,7 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) 
 
   return (
     <div>
-      <h1 className="my-2 text-2xl">Delinquency By Number of Borrowers for {msaName}</h1>
+      <h1 className="my-2 text-2xl">Delinquency By Number of Borrowers for {targetRegion.msaName}</h1>
       <div className="space-y-2 text-sm">
         <p>All loans for each month are grouped by number of borrowers (1 or 2). Delinquent loans are divided by the total loans to show the delinquency rate. Loans with 3+ borrowers are rare and are excluded. Hover over the bars to see details</p>
       </div>

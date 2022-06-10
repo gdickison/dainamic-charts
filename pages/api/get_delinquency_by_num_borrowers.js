@@ -10,7 +10,7 @@ export default async function handler(req, res) {
       num_borrowers,
       COUNT(loan.loanid) AS "total_loans",
       COUNT(loan.loanid) FILTER(WHERE loan.delinquency_status::INT = 00) AS "current",
-        COUNT(loan.loanid) FILTER(WHERE loan.delinquency_status::INT != 00) AS "delinquent"
+      COUNT(loan.loanid) FILTER(WHERE loan.delinquency_status::INT != 00) AS "delinquent"
     FROM
       banking_app.loan_basic AS loan
       INNER JOIN banking_app.loan_num_borrowers AS borrowers

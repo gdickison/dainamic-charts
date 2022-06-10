@@ -75,7 +75,7 @@ const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) =
     // set up delinquency rate dataset
     const delinquencyRates = []
     for(const row of delinquencyData){
-      delinquencyRates.push(parseFloat((Number(row.delinquent_loans) / Number(row.total_loans)) * 100).toFixed(2))
+      delinquencyRates.push(parseFloat((Number(row.delinquent) / Number(row.total)) * 100).toFixed(2))
     }
 
     setChartData({

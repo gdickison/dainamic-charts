@@ -17,16 +17,17 @@ ChartJS.register(
 
 import Loader from "./Loader"
 import { useState, useEffect } from "react"
-import { Bar } from "react-chartjs-2"
+import { Bar, Doughnut } from "react-chartjs-2"
 
 const DelinquencyByEducation = ({dateRange, targetRegion, compRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
+  const [chartOptions, setChartOptions] = useState()
 
   useEffect(() => {
     setLoading(true)
     const JSONdata = JSON.stringify({
-      msaCode: targetRegion.msaCode
+      msaCodes: targetRegion.msaCode
     })
     const endpoint = `api/get_population_by_education`
     const options = {
@@ -49,7 +50,7 @@ const DelinquencyByEducation = ({dateRange, targetRegion, compRegions}) => {
         }
 
         setChartData({
-          maintainAspectRatio: false,
+          // maintainAspectRatio: false,
           labels: labels,
           datasets: [
             {
@@ -64,35 +65,32 @@ const DelinquencyByEducation = ({dateRange, targetRegion, compRegions}) => {
             }
           ]
         })
+
+        setChartOptions({
+          responsive: true,
+          aspectRatio: 2.5,
+          indexAxis: 'y',
+          legend: {
+            position: 'top'
+          }
+        })
         setLoading(false)
       })
   }, [targetRegion.msaCode])
-
-  const chartOptions = {
-    responsive: true,
-    indexAxis: 'y',
-    legend: {
-      position: 'top'
-    }
-  }
 
   if(isLoading) {
     return <Loader/>
   }
 
   return (
-    <>
-      {msaName &&
-        <>
-          <h1 className="my-6 text-3xl">Population By Education for {msaName}</h1>
-          <div>
-            {chartData &&
-              <Bar data={chartData} options={chartOptions} />
-            }
-          </div>
-        </>
-      }
-    </>
+    <div>
+      <h1 className="my-6 text-3xl">Population By Education for {targetRegion.msaName}</h1>
+      <div>
+        {chartData &&
+          <Doughnut data={chartData} options={chartOptions} />
+        }
+      </div>
+    </div>
   )
 }
 

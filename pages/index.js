@@ -39,7 +39,8 @@ const Home = ({ msaOptions, monthOptions }) => {
   const [targetRegionData, setTargetRegionData] = useState()
   const [compRegions, setCompRegions] = useState([])
   const [compRegionsData, setCompRegionsData] = useState()
-  const [delinquencyRateForRange, setDelinquencyRateForRange] = useState()
+  const [regionalDelinquencyRate, setRegionalDelinquencyRate] = useState()
+  const [nationalDelinquencyRate, setNationalDelinquencyRate] = useState()
   const [populationByAgeData, setPopulationByAgeData] = useState()
   const [populationByAgeOptions, setPopulationByAgeOptions] = useState()
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
@@ -86,7 +87,7 @@ const Home = ({ msaOptions, monthOptions }) => {
       msaCodes: msaCodes
     })
 
-    const endpoint = `/api/get_msa_comp_summary_data`
+    const endpoint = `/api/get_msa_summary_data`
 
     const options = {
       method: 'POST',
@@ -112,14 +113,22 @@ const Home = ({ msaOptions, monthOptions }) => {
   }
 
   // Delinquency Rate for Entire Period
-  const getDelinquencyRateForRange = async () => {
+  const getRegionalDelinquencyRateForRange = async () => {
+    const msaCodes = []
+    msaCodes.push(targetRegion.targetMsaCode)
+    if(compRegions.length){
+      for(const region of compRegions){
+        msaCodes.push(region.compMsaCode)
+      }
+    }
+
     const JSONdata = JSON.stringify({
       startDate: dateRange.startDate,
       endDate: dateRange.endDate,
-      msaCode: targetRegion.targetMsaCode
+      msaCodes: msaCodes
     })
 
-    const endpoint = `/api/get_delinquency_data_for_date_range`
+    const endpoint = `/api/get_regional_delinquency_rate`
 
     const options = {
       method: 'POST',
@@ -137,10 +146,34 @@ const Home = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      setDelinquencyRateForRange({
-        msa: ((data.delinquent_msa / data.total_msa) * 100).toFixed(2),
-        national: ((data.delinquent_natl / data.total_natl) * 100).toFixed(2)
-      })
+      setRegionalDelinquencyRate(((data[0].delinquent_msa / data[0].total_msa) * 100).toFixed(2))
+    }
+  }
+  const getNationalDelinquencyRateForRange = async () => {
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate
+    })
+
+    const endpoint = `/api/get_national_delinquency_rate`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error")
+    } else if(status === 200){
+      setNationalDelinquencyRate(((data.delinquent_natl / data.total_natl) * 100).toFixed(2))
     }
   }
 
@@ -362,7 +395,8 @@ const Home = ({ msaOptions, monthOptions }) => {
 
   const getData = () => {
       getMsaSummaryData()
-      getDelinquencyRateForRange()
+      getRegionalDelinquencyRateForRange()
+      getNationalDelinquencyRateForRange()
       getPopulationByAgeData()
       getPopulationByIncome()
       setShowTopFeatures(true)
@@ -475,7 +509,7 @@ const Home = ({ msaOptions, monthOptions }) => {
               </header>
               <div className="flex justify-center items-center">
                 <div>
-                  {delinquencyRateForRange &&
+                  {regionalDelinquencyRate &&
                     <div className="m-4 border-4 border-blue-400 rounded-md p-6 text-center">
                       <h1 className="text-[1.5vw] font-bold py-4">
                         Delinquency Rate
@@ -485,13 +519,13 @@ const Home = ({ msaOptions, monthOptions }) => {
                           The delinquency rate for the selected regions is
                         </p>
                         <p className="text-[3vw]">
-                          {`${delinquencyRateForRange.msa}%`}
+                          {`${regionalDelinquencyRate}%`}
                         </p>
                         <p className="text-[1.1vw] py-2">
-                          This is {delinquencyRateForRange.msa > delinquencyRateForRange.national ? 'higher' : 'lower'} than the national delinquency rate of
+                          This is {regionalDelinquencyRate > nationalDelinquencyRate ? 'HIGHER' : 'LOWER'} than the national delinquency rate of
                         </p>
                         <p className="text-[3vw]">
-                          {`${delinquencyRateForRange.national}%`}
+                          {`${nationalDelinquencyRate}%`}
                         </p>
                         <p className="text-[1.1vw] py-2">
                           for the same period.
