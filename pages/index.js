@@ -58,7 +58,12 @@ const Home = ({ msaOptions, monthOptions }) => {
 
   const handleCompRegionChange = e => {
     e.preventDefault()
-    setCompRegions([...compRegions, {compMsaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
+    if(compRegions.length < 2){
+      setCompRegions([...compRegions, {compMsaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
+    }
+    if(compRegions.length === 2){
+      alert('You can select up to two comp regions.')
+    }
   }
 
   const removeCompRegion = e => {
@@ -69,10 +74,6 @@ const Home = ({ msaOptions, monthOptions }) => {
 
   // General Demographic Data
   const getMsaSummaryData = async () => {
-    console.log('dateRange', dateRange)
-    console.log('targetRegion', targetRegion)
-    console.log('compRegions', compRegions)
-
     const msaCodes = []
     msaCodes.push(targetRegion.targetMsaCode)
     if(compRegions.length){
@@ -539,14 +540,21 @@ const Home = ({ msaOptions, monthOptions }) => {
                 </div>
               </div>
             </section>
+            {/* TODO: set params to a const, separate date params and msa code params, since dates will always be the same */}
             {targetRegionData && showTopFeatures &&
                 <TopFeatures
-                  targetRegionParams={{
+                  dateRangeParams={{
                     startDate: dateRange.startDate,
-                    endDate: dateRange.endDate,
-                    msaCode: targetRegionData.msa
+                    endDate: dateRange.endDate
                   }}
-                  msaName={targetRegionData.name}
+                  targetRegionParams={{
+                    msaCode: targetRegionData.msa,
+                    msaName: targetRegionData.name
+                  }}
+                  // compRegionsParams={{
+                  //   msaCode: compRegionsData.msa,
+                  //   msaName: compRegionsData.name
+                  // }}
                 />
             }
           </section>

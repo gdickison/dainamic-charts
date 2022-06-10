@@ -31,7 +31,7 @@ import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Line } from "react-chartjs-2"
 
-const DelinquencyByUnemploymentRate = ({params, msaName}) => {
+const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
@@ -39,9 +39,9 @@ const DelinquencyByUnemploymentRate = ({params, msaName}) => {
   const getDelinquencyByUnemploymentChartData = async () => {
     setLoading(true)
     const JSONdata = JSON.stringify({
-      startDate: params.startDate,
-      endDate: params.endDate,
-      msaCode: params.msaCode
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCode: targetRegion.msaCode
     })
     const unemploymentEndpoint = `/api/get_unemployment_rate`
     const options = {
@@ -168,7 +168,7 @@ const DelinquencyByUnemploymentRate = ({params, msaName}) => {
 
   useEffect(() => {
     getDelinquencyByUnemploymentChartData()
-  }, [params.startDate, params.endDate, params.msaCode])
+  }, [dateRange.startDate, dateRange.endDate, targetRegion.msaCode])
 
   if(isLoading) {
     return <Loader/>
@@ -178,7 +178,7 @@ const DelinquencyByUnemploymentRate = ({params, msaName}) => {
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency by Unemployment Rate"}
-        msa={msaName}
+        msa={targetRegion.msaName}
       />
       {chartData &&
         <Line data={chartData} options={chartOptions}/>

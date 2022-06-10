@@ -12,7 +12,7 @@ import DelinquencyByRace from "./DelinquencyByRace"
 import DelinquencyByUnemploymentRate from "./DelinquencyByUnemploymentRate"
 import Loader from "./Loader"
 
-const TopFeatures = ({targetRegionParams, msaName}) => {
+const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams = []}) => {
   const [isLoading, setLoading] = useState(false)
   const [topFeatures, setTopFeatures] = useState()
 
@@ -68,8 +68,9 @@ const TopFeatures = ({targetRegionParams, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByCreditScore
-                    params={targetRegionParams}
-                    msaName={msaName}
+                    dateRange={dateRangeParams}
+                    targetRegion={targetRegionParams}
+                    compRegions={compRegionsParams}
                   />
                 </div>
               );
@@ -77,8 +78,9 @@ const TopFeatures = ({targetRegionParams, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByDTI
-                    params={targetRegionParams}
-                    msaName={msaName}
+                    dateRange={dateRangeParams}
+                    targetRegion={targetRegionParams}
+                    compRegions={compRegionsParams}
                   />
                 </div>
               );
@@ -86,8 +88,9 @@ const TopFeatures = ({targetRegionParams, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByEducation
-                    params={targetRegionParams}
-                    msaName={msaName}
+                    dateRange={dateRangeParams}
+                    targetRegion={targetRegionParams}
+                    compRegions={compRegionsParams}
                   />
                 </div>
               );
@@ -95,8 +98,9 @@ const TopFeatures = ({targetRegionParams, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByFTBStatus
-                    params={targetRegionParams}
-                    msaName={msaName}
+                    dateRange={dateRangeParams}
+                    targetRegion={targetRegionParams}
+                    compRegions={compRegionsParams}
                   />
                 </div>
               );
@@ -104,8 +108,9 @@ const TopFeatures = ({targetRegionParams, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByHighBalance
-                    params={targetRegionParams}
-                    msaName={msaName}
+                    dateRange={dateRangeParams}
+                    targetRegion={targetRegionParams}
+                    compRegions={compRegionsParams}
                   />
                 </div>
               ); */}
@@ -113,8 +118,9 @@ const TopFeatures = ({targetRegionParams, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByInterestRate
-                    params={targetRegionParams}
-                    msaName={msaName}
+                    dateRange={dateRangeParams}
+                    targetRegion={targetRegionParams}
+                    compRegions={compRegionsParams}
                   />
                 </div>
               );
@@ -122,8 +128,9 @@ const TopFeatures = ({targetRegionParams, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByOriginalBalance
-                    params={targetRegionParams}
-                    msaName={msaName}
+                    dateRange={dateRangeParams}
+                    targetRegion={targetRegionParams}
+                    compRegions={compRegionsParams}
                   />
                 </div>
               );
@@ -131,8 +138,9 @@ const TopFeatures = ({targetRegionParams, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByLoanTerm
-                    params={targetRegionParams}
-                    msaName={msaName}
+                    dateRange={dateRangeParams}
+                    targetRegion={targetRegionParams}
+                    compRegions={compRegionsParams}
                   />
                 </div>
               );
@@ -140,8 +148,9 @@ const TopFeatures = ({targetRegionParams, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByLTV
-                    params={targetRegionParams}
-                    msaName={msaName}
+                    dateRange={dateRangeParams}
+                    targetRegion={targetRegionParams}
+                    compRegions={compRegionsParams}
                   />
                 </div>
               );
@@ -149,8 +158,9 @@ const TopFeatures = ({targetRegionParams, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByNumberOfBorrowers
-                    params={targetRegionParams}
-                    msaName={msaName}
+                    dateRange={dateRangeParams}
+                    targetRegion={targetRegionParams}
+                    compRegions={compRegionsParams}
                   />
                 </div>
               );
@@ -158,8 +168,9 @@ const TopFeatures = ({targetRegionParams, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByRace
-                    params={targetRegionParams}
-                    msaName={msaName}
+                    dateRange={dateRangeParams}
+                    targetRegion={targetRegionParams}
+                    compRegions={compRegionsParams}
                   />
                 </div>
               );
@@ -167,8 +178,9 @@ const TopFeatures = ({targetRegionParams, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByUnemploymentRate
-                    params={targetRegionParams}
-                    msaName={msaName}
+                    dateRange={dateRangeParams}
+                    targetRegion={targetRegionParams}
+                    compRegions={compRegionsParams}
                   />
                 </div>
               );

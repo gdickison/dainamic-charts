@@ -31,7 +31,7 @@ import { linearRegression } from "../../public/utils"
 import { useState, useEffect } from "react"
 import { Scatter } from "react-chartjs-2"
 
-const DelinquencyByInterestRate = ({params, msaName}) => {
+const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
@@ -52,9 +52,9 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
   useEffect(() => {
     setLoading(true)
     const JSONdata = JSON.stringify({
-      startDate: params.startDate,
-      endDate: params.endDate,
-      msaCode: params.msaCode
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCode: targetRegion.msaCode
     })
     const endpoint = `/api/get_delinquency_by_interest_rate`
     const options = {
@@ -211,7 +211,7 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
         setIsChecked(false)
         setShowDataLine(false)
       })
-  }, [params.endDate, params.msaCode, params.startDate])
+  }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate])
 
   if(isLoading) {
     return (
@@ -223,7 +223,7 @@ const DelinquencyByInterestRate = ({params, msaName}) => {
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency by Interest Rate"}
-        msa={msaName}
+        msa={targetRegion.msaName}
         tooltip={"All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
       />
       <section className="-mt-2 mb-8">

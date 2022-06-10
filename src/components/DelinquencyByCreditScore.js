@@ -20,7 +20,7 @@ import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Bar } from "react-chartjs-2"
 import { useState, useEffect } from "react"
 
-const DelinquencyByCreditScore = ({params, msaName}) => {
+const DelinquencyByCreditScore = ({dateRange, targetRegion, compRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
@@ -28,9 +28,9 @@ const DelinquencyByCreditScore = ({params, msaName}) => {
   useEffect(() => {
     setLoading(true)
     const JSONdata = JSON.stringify({
-      msaCode: params.msaCode,
-      startDate: params.startDate,
-      endDate: params.endDate
+      msaCode: targetRegion.msaCode,
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate
     })
 
     const endpoint = `/api/get_loan_status_by_credit_score`
@@ -181,7 +181,7 @@ const DelinquencyByCreditScore = ({params, msaName}) => {
         setChartOptions(delinquencyRateFeatureOptions)
         setLoading(false)
       })
-  }, [params])
+  }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate])
 
   if(isLoading) {
     return <Loader/>
@@ -191,7 +191,7 @@ const DelinquencyByCreditScore = ({params, msaName}) => {
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency Rate by Credit Score"}
-        msa={msaName}
+        msa={targetRegion.msaName}
         tooltip={"Credit scores are grouped into standard ranges corresponding to 'Fair', 'Good', 'Very Good', and 'Exceptional'. The number of delinquent loans for each range in each period is divided by the corresponding total number of loans to get the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given data point and are also excluded. Hover over the data points to see details"}
       />
       {chartData &&

@@ -20,7 +20,7 @@ import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Bar } from "react-chartjs-2"
 import { useState, useEffect } from "react"
 
-const DelinquencyByFTBStatus = ({params, msaName}) => {
+const DelinquencyByFTBStatus = ({dateRange, targetRegion, compRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
@@ -28,9 +28,9 @@ const DelinquencyByFTBStatus = ({params, msaName}) => {
   useEffect(() => {
     setLoading(true)
     const JSONdata = JSON.stringify({
-      msaCode: params.msaCode,
-      startDate: params.startDate,
-      endDate: params.endDate
+      msaCode: targetRegion.msaCode,
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate
     })
 
     const endpoint = `/api/get_delinquency_by_ftbs`
@@ -163,7 +163,7 @@ const DelinquencyByFTBStatus = ({params, msaName}) => {
 
         setLoading(false)
       })
-  }, [params])
+  }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate])
 
   if(isLoading){
     return <Loader/>
@@ -173,7 +173,7 @@ const DelinquencyByFTBStatus = ({params, msaName}) => {
     <div>
       <ChartHeaderWithTooltip
         chartName={'Delinquency by First Time Buyer Status'}
-        msa={msaName}
+        msa={targetRegion.msaName}
       />
       {chartData &&
         <Bar data={chartData} options={chartOptions} />

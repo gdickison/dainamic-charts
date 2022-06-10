@@ -19,7 +19,7 @@ import Loader from "./Loader"
 import { Bar } from "react-chartjs-2"
 import { useState, useEffect } from "react"
 
-const DelinquencyByNumberOfBorrowers = ({params, msaName}) => {
+const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
@@ -27,9 +27,9 @@ const DelinquencyByNumberOfBorrowers = ({params, msaName}) => {
   useEffect(() => {
     setLoading(true)
     const JSONdata = JSON.stringify({
-      msaCode: params.msaCode,
-      startDate: params.startDate,
-      endDate: params.endDate
+      msaCode: targetRegion.msaCode,
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate
     })
 
     const endpoint = `/api/get_delinquency_by_num_borrowers`
@@ -157,7 +157,7 @@ const DelinquencyByNumberOfBorrowers = ({params, msaName}) => {
         setChartOptions(options)
         setLoading(false)
       })
-  }, [params])
+  }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate])
 
   if(isLoading){
     return <Loader/>

@@ -19,14 +19,14 @@ import Loader from "./Loader"
 import { useState, useEffect } from "react"
 import { Bar } from "react-chartjs-2"
 
-const DelinquencyByRace = ({params, msaName}) => {
+const DelinquencyByRace = ({dateRange, targetRegion, compRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
 
   useEffect(() => {
     setLoading(true)
     const JSONdata = JSON.stringify({
-      msaCode: params.msaCode
+      msaCode: targetRegion.msaCode
     })
     const endpoint = `/api/get_population_by_race`
     const options = {
@@ -68,7 +68,7 @@ const DelinquencyByRace = ({params, msaName}) => {
         })
         setLoading(false)
       })
-  }, [params.msaCode])
+  }, [targetRegion.msaCode])
 
   const chartOptions = {
     responsive: true,

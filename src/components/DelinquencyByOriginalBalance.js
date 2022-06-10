@@ -31,7 +31,7 @@ import { Bar } from "react-chartjs-2"
 
 import { useEffect, useState } from "react"
 
-const DelinquencyByOriginalBalance = ({params, msaName}) => {
+const DelinquencyByOriginalBalance = ({dateRange, targetRegion, compRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
@@ -45,9 +45,9 @@ const DelinquencyByOriginalBalance = ({params, msaName}) => {
   useEffect(() => {
     setLoading(true)
     const JSONdata = JSON.stringify({
-      startDate: params.startDate,
-      endDate: params.endDate,
-      msaCode: params.msaCode
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCode: targetRegion.msaCode
     })
     const endpoint = `/api/get_delinquency_by_original_balance`
     const options = {
@@ -195,7 +195,7 @@ const DelinquencyByOriginalBalance = ({params, msaName}) => {
 
         setLoading(false)
       })
-  }, [params.endDate, params.msaCode, params.startDate, divisor])
+  }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate, divisor])
 
   if(isLoading){
     return <Loader/>
@@ -205,7 +205,7 @@ const DelinquencyByOriginalBalance = ({params, msaName}) => {
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency By Original Balance"}
-        msa={msaName}
+        msa={targetRegion.msaName}
         tooltip={"Original balances (OUPB) are grouped into the selected increment (default $50,000). Delinquent loans with a given OUPB are divided by the total loans at that OUPB to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given data point and are also excluded. Hover over the bars to see details"}
       />
       <section className="-mt-2 mb-8">

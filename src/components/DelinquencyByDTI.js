@@ -32,7 +32,7 @@ import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { linearRegression } from "../../public/utils"
 import { Scatter } from "react-chartjs-2"
 
-const DelinquencyByDTI = ({params, msaName}) => {
+const DelinquencyByDTI = ({dateRange, targetRegion, compRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
@@ -53,9 +53,9 @@ const DelinquencyByDTI = ({params, msaName}) => {
   useEffect(() => {
     setLoading(true)
     const JSONdata = JSON.stringify({
-      startDate: params.startDate,
-      endDate: params.endDate,
-      msaCode: params.msaCode
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCode: targetRegion.msaCode
     })
     const endpoint = `/api/get_delinquency_by_dti`
     const options = {
@@ -198,7 +198,7 @@ const DelinquencyByDTI = ({params, msaName}) => {
         setIsChecked(false)
         setShowDataLine(false)
       })
-  }, [params.startDate, params.endDate, params.msaCode])
+  }, [dateRange.startDate, dateRange.endDate, targetRegion.msaCode])
 
 
   if(isLoading){
@@ -209,7 +209,7 @@ const DelinquencyByDTI = ({params, msaName}) => {
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency by Debt-to-Income"}
-        msa={msaName}
+        msa={targetRegion.msaName}
         tooltip={"Delinquent loans at the given DTI ratio are divided by the total loans at that ratio to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
       />
       <section className="-mt-2 mb-8">
