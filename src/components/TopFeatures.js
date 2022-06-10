@@ -12,14 +12,14 @@ import DelinquencyByRace from "./DelinquencyByRace"
 import DelinquencyByUnemploymentRate from "./DelinquencyByUnemploymentRate"
 import Loader from "./Loader"
 
-const TopFeatures = ({params, msaName}) => {
+const TopFeatures = ({targetRegionParams, msaName}) => {
   const [isLoading, setLoading] = useState(false)
   const [topFeatures, setTopFeatures] = useState()
 
   useEffect(() => {
     setLoading(true)
     const JSONdata = JSON.stringify({
-      msaCode: params.msaCode
+      msaCode: targetRegionParams.msaCode
     })
 
     const endpoint = `/api/get_top_features`
@@ -37,7 +37,7 @@ const TopFeatures = ({params, msaName}) => {
         setTopFeatures(Object.values(data.response))
         setLoading(false)
       })
-  }, [params.msaCode])
+  }, [targetRegionParams.msaCode])
 
   if(isLoading) {
     return <Loader/>
@@ -47,7 +47,7 @@ const TopFeatures = ({params, msaName}) => {
     <section className="mx-auto px-0 md:px-24">
       <header>
         <h1 className="my-6 text-3xl">Top Five Delinquency Factors</h1>
-        <div className="flex flex-col md:flex-row justify-between pb-6 space-x-4">
+        <div className="flex flex-col md:flex-row justify-between pb-6 space-x-4 h-40">
           {topFeatures &&
             topFeatures.map((feature, i) => {
               return (
@@ -68,7 +68,7 @@ const TopFeatures = ({params, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByCreditScore
-                    params={params}
+                    params={targetRegionParams}
                     msaName={msaName}
                   />
                 </div>
@@ -77,7 +77,7 @@ const TopFeatures = ({params, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByDTI
-                    params={params}
+                    params={targetRegionParams}
                     msaName={msaName}
                   />
                 </div>
@@ -86,7 +86,7 @@ const TopFeatures = ({params, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByEducation
-                    params={params}
+                    params={targetRegionParams}
                     msaName={msaName}
                   />
                 </div>
@@ -95,7 +95,7 @@ const TopFeatures = ({params, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByFTBStatus
-                    params={params}
+                    params={targetRegionParams}
                     msaName={msaName}
                   />
                 </div>
@@ -104,7 +104,7 @@ const TopFeatures = ({params, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByHighBalance
-                    params={params}
+                    params={targetRegionParams}
                     msaName={msaName}
                   />
                 </div>
@@ -113,7 +113,7 @@ const TopFeatures = ({params, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByInterestRate
-                    params={params}
+                    params={targetRegionParams}
                     msaName={msaName}
                   />
                 </div>
@@ -122,7 +122,7 @@ const TopFeatures = ({params, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByOriginalBalance
-                    params={params}
+                    params={targetRegionParams}
                     msaName={msaName}
                   />
                 </div>
@@ -131,7 +131,7 @@ const TopFeatures = ({params, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByLoanTerm
-                    params={params}
+                    params={targetRegionParams}
                     msaName={msaName}
                   />
                 </div>
@@ -140,7 +140,7 @@ const TopFeatures = ({params, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByLTV
-                    params={params}
+                    params={targetRegionParams}
                     msaName={msaName}
                   />
                 </div>
@@ -149,7 +149,7 @@ const TopFeatures = ({params, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByNumberOfBorrowers
-                    params={params}
+                    params={targetRegionParams}
                     msaName={msaName}
                   />
                 </div>
@@ -158,7 +158,7 @@ const TopFeatures = ({params, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByRace
-                    params={params}
+                    params={targetRegionParams}
                     msaName={msaName}
                   />
                 </div>
@@ -167,7 +167,7 @@ const TopFeatures = ({params, msaName}) => {
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByUnemploymentRate
-                    params={params}
+                    params={targetRegionParams}
                     msaName={msaName}
                   />
                 </div>

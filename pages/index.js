@@ -34,8 +34,11 @@ import TopFeatures from "../src/components/TopFeatures"
 
 const Home = ({ msaOptions, monthOptions }) => {
   const [isLoggedIn, setLoggedIn] = useState(true)
-  const [queryParams, setQueryParams] = useState({})
-  const [msaSummaryData, setMsaSummaryData] = useState()
+  const [dateRange, setDateRange] = useState({})
+  const [targetRegion, setTargetRegion] = useState()
+  const [targetRegionData, setTargetRegionData] = useState()
+  const [compRegions, setCompRegions] = useState([])
+  const [compRegionsData, setCompRegionsData] = useState()
   const [delinquencyRateForRange, setDelinquencyRateForRange] = useState()
   const [populationByAgeData, setPopulationByAgeData] = useState()
   const [populationByAgeOptions, setPopulationByAgeOptions] = useState()
@@ -43,15 +46,107 @@ const Home = ({ msaOptions, monthOptions }) => {
   const [populationByIncomeOptions, setPopulationByIncomeOptions] = useState()
   const [showTopFeatures, setShowTopFeatures] = useState(false)
 
-  const handleChange = e => {
+  const handleDateChange = e => {
     e.preventDefault()
-    setQueryParams({...queryParams, [e.target.name]: e.target.value})
+    setDateRange({...dateRange, [e.target.name]: e.target.value})
+  }
+
+  const handleTargetRegionChange = e => {
+    e.preventDefault()
+    setTargetRegion({...targetRegion, [e.target.name]: e.target.value})
+  }
+
+  const handleCompRegionChange = e => {
+    e.preventDefault()
+    setCompRegions([...compRegions, {compMsaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
+  }
+
+  const removeCompRegion = e => {
+    e.preventDefault()
+    const newCompRegions = compRegions.filter(region => region.compMsaCode !== e.target.id)
+    setCompRegions(newCompRegions)
+  }
+
+  // General Demographic Data
+  const getMsaSummaryData = async () => {
+    console.log('dateRange', dateRange)
+    console.log('targetRegion', targetRegion)
+    console.log('compRegions', compRegions)
+
+    const msaCodes = []
+    msaCodes.push(targetRegion.targetMsaCode)
+    if(compRegions.length){
+      for(const region of compRegions){
+        msaCodes.push(region.compMsaCode)
+      }
+    }
+
+    const JSONdata = JSON.stringify({
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_msa_comp_summary_data`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error")
+    } else if(status === 200){
+      setTargetRegionData(data[0])
+      if(data.length > 0){
+        setCompRegionsData(data.slice(1))
+      }
+    }
+  }
+
+  // Delinquency Rate for Entire Period
+  const getDelinquencyRateForRange = async () => {
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCode: targetRegion.targetMsaCode
+    })
+
+    const endpoint = `/api/get_delinquency_data_for_date_range`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error")
+    } else if(status === 200){
+      setDelinquencyRateForRange({
+        msa: ((data.delinquent_msa / data.total_msa) * 100).toFixed(2),
+        national: ((data.delinquent_natl / data.total_natl) * 100).toFixed(2)
+      })
+    }
   }
 
   // Population by Age Chart
   const getPopulationByAgeData = async () => {
     const JSONdata = JSON.stringify({
-      msaCode: queryParams.msaCode
+      msaCode: targetRegion.targetMsaCode
     })
 
     const endpoint = `/api/get_population_by_age_data`
@@ -161,7 +256,7 @@ const Home = ({ msaOptions, monthOptions }) => {
   // Population by Income Chart
   const getPopulationByIncome = async () => {
     const JSONdata = JSON.stringify({
-      msaCode: queryParams.msaCode
+      msaCode: targetRegion.targetMsaCode
     })
 
     const endpoint = `/api/get_population_by_income`
@@ -264,76 +359,13 @@ const Home = ({ msaOptions, monthOptions }) => {
     }
   }
 
-  // General Demographic Data
-  const getMsaSummaryData = async () => {
-    const JSONdata = JSON.stringify({
-      msaCode: queryParams.msaCode
-    })
-
-    const endpoint = `/api/get_msa_summary_data`
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSONdata
-    }
-
-    const response = await fetch(endpoint, options)
-    const status = response.status
-    let data = await response.json()
-    data = data.response
-
-    if(status === 404){
-      console.log("There was an error")
-    } else if(status === 200){
-      setMsaSummaryData(data)
-    }
-  }
-
-  // Delinquency Rate for Entire Period
-  const getDelinquencyRateForRange = async () => {
-    const JSONdata = JSON.stringify({
-      startDate: queryParams.startDate,
-      endDate: queryParams.endDate,
-      msaCode: queryParams.msaCode
-    })
-
-    const endpoint = `/api/get_delinquency_data_for_date_range`
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSONdata
-    }
-
-    const response = await fetch(endpoint, options)
-    const status = response.status
-    let data = await response.json()
-    data = data.response
-
-    if(status === 404){
-      console.log("There was an error")
-    } else if(status === 200){
-      setDelinquencyRateForRange({
-        msa: ((data.delinquent_msa / data.total_msa) * 100).toFixed(2),
-        national: ((data.delinquent_natl / data.total_natl) * 100).toFixed(2)
-      })
-    }
-  }
-
-  useEffect(() => {
-    if(queryParams.startDate && queryParams.endDate && queryParams.msaCode){
+  const getData = () => {
       getMsaSummaryData()
       getDelinquencyRateForRange()
       getPopulationByAgeData()
       getPopulationByIncome()
       setShowTopFeatures(true)
-    }
-  }, [queryParams.startDate, queryParams.endDate, queryParams.msaCode])
+  }
 
   return (
     <>
@@ -347,50 +379,94 @@ const Home = ({ msaOptions, monthOptions }) => {
       </header>
       {isLoggedIn ? <main className="h-screen">
         <section className="flex flex-col items-center justify-center px-20">
-          <form className="flex flex-col xl:flex-row items-center" action="#">
-            <div className="flex flex-col md:space-y-4">
-              <label className="text-2xl mx-2" htmlFor="startDate">Select a start date: </label>
-              {/* TODO: show an alert if date is outside range */}
-              <select className="mx-2 w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="startDate" name="startDate" defaultValue="" onChange={handleChange}>
-                <option disabled></option>
-                {monthOptions && monthOptions.map(month => {
-                  return (
-                    <option key={month.date} value={month.date}>{month.date}</option>
-                  )
-                })}
-              </select>
+          <form className="flex flex-col items-center" action="#">
+            <div className="flex flex-col md:flex-row items-center">
+              <div className="flex flex-col md:space-y-4">
+                <label className="text-2xl mx-2" htmlFor="startDate">Select a start date: </label>
+                <select className="mx-2 w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="startDate" name="startDate" defaultValue="" onChange={handleDateChange}>
+                  <option disabled></option>
+                  {monthOptions && monthOptions.map(month => {
+                    return (
+                      <option key={month.date} value={month.date}>{month.date}</option>
+                    )
+                  })}
+                </select>
+              </div>
+              <div className="flex flex-col md:space-y-4">
+                <label className="text-2xl mx-2"  htmlFor="endDate">Select an end date: </label>
+                <select className="mx-2 w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="endDate" name="endDate" defaultValue="" onChange={handleDateChange}>
+                  <option disabled></option>
+                  {monthOptions && monthOptions.map(month => {
+                    return (
+                      <option key={month.date} value={month.date}>{month.date}</option>
+                    )
+                  })}
+                </select>
+              </div>
+  {/* Select Target Region */}
+              <div className="flex flex-col md:space-y-4">
+                <label className="text-2xl mx-2" htmlFor="targetMsaCode">Select a Target Region: </label>
+                <select className="mx-2 w-80 md:w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="targetMsaCode" name="targetMsaCode" defaultValue="" onChange={handleTargetRegionChange}>
+                  <option disabled></option>
+                  {msaOptions && msaOptions.map(singleMsa => {
+                    return (
+                      <option key={singleMsa.msa_code} value={singleMsa.msa_code} data-display={`${singleMsa.msa_name} (${singleMsa.msa_code})`}>{singleMsa.msa_name} ({singleMsa.msa_code})</option>
+                    )
+                  })}
+                </select>
+              </div>
             </div>
-            <div className="flex flex-col md:space-y-4">
-              <label className="text-2xl mx-2"  htmlFor="endDate">Select an end date: </label>
-              <select className="mx-2 w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="endDate" name="endDate" defaultValue="" onChange={handleChange}>
-                <option disabled></option>
-                {monthOptions && monthOptions.map(month => {
-                  return (
-                    <option key={month.date} value={month.date}>{month.date}</option>
-                  )
-                })}
-              </select>
-            </div>
-            <div className="flex flex-col md:space-y-4">
-              <label className="text-2xl mx-2" htmlFor="msaCode">Select an MSA: </label>
-              <select className="mx-2 w-80 md:w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="msaCode" name="msaCode" defaultValue="" onChange={handleChange}>
-                <option disabled></option>
-                {msaOptions && msaOptions.map(singleMsa => {
-                  return (
-                    <option key={singleMsa.msa_code} value={singleMsa.msa_code}>{singleMsa.msa_name} ({singleMsa.msa_code})</option>
-                  )
-                })}
-              </select>
-            </div>
+{/* Select & display comparison regions */}
+            {targetRegion &&
+              <div className="w-full mt-4 flex flex-col space-y-2">
+
+                <div>
+                  <div className="flex flex-col md:space-y-4 float-right">
+                    <label className="text-2xl mx-2" htmlFor="compMsaCode">Select Up to Two Comparison Regions (optional): </label>
+                    <select className="mx-2 w-80 md:w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="compMsaCode" name="compMsaCode" defaultValue="" onChange={handleCompRegionChange}>
+                      <option disabled></option>
+                      {msaOptions && msaOptions.map(singleMsa => {
+                        return (
+                          <option key={singleMsa.msa_code} value={singleMsa.msa_code} data-display={`${singleMsa.msa_name} (${singleMsa.msa_code})`}>{singleMsa.msa_name} ({singleMsa.msa_code})</option>
+                        )
+                      })}
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <div className="w-1/2 float-right">
+                    <div className="text-2xl mx-2">Comparison Regions</div>
+                    <div className="min-h-[44px] m-2 text-center md:text-left border-2 border-blue-400 p-1 bg-white rounded-md text-xl">
+                      {compRegions.length > 0 &&
+                        compRegions.map(region => {
+                          return (
+                            <p key={region.compMsaCode} className="inline-block w-max text-center md:text-left m-1 border-2 border-gray-300 md:px-2 bg-gray-200 text-xl leading-8 space-x-4">
+                              <span>{region.displayText}</span>
+                              <span className=" h-6 w-6 group hover:cursor-pointer" onClick={removeCompRegion}>
+                                <img id={region.compMsaCode} className="h-6 inline align-text-top" src="/close.svg" alt="remove region" />
+                              </span>
+                            </p>
+                          )
+                        })
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
           </form>
-          {(!queryParams.startDate || !queryParams.endDate || !queryParams.msaCode) &&
+
+          {(!dateRange.startDate || !dateRange.endDate || !targetRegion) &&
             <div className="flex items-center justify-center h-12 my-8 text-2xl">Select a start date, end date, and MSA to see results</div>
           }
+          {dateRange.startDate && dateRange.endDate && targetRegion &&
+            <button className="flex items-center justify-center w-40 h-12 my-8 rounded-md p-4 bg-blue-400 hover:bg-blue-600 text-gray-100" onClick={getData}>See Results</button>
+          }
         </section>
-        {msaSummaryData &&
+        {targetRegionData &&
           <section className="mb-10">
             <header className="text-center my-10">
-              <h1 className="px-10 text-4xl">{msaSummaryData.name} {new Date(queryParams.startDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})} - {new Date(queryParams.endDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})}</h1>
+              <h1 className="px-10 text-4xl">{targetRegionData.name} {new Date(dateRange.startDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})} - {new Date(dateRange.endDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})}</h1>
             </header>
             <section className="mx-auto px-0">
               <header className="text-center">
@@ -429,24 +505,24 @@ const Home = ({ msaOptions, monthOptions }) => {
                       <h1 className="w-full text-xl">
                         Total Population
                       </h1>
-                      {msaSummaryData &&
-                        <span className="text-3xl">{(msaSummaryData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</span>
+                      {targetRegionData &&
+                        <span className="text-3xl">{(targetRegionData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</span>
                       }
                     </div>
                     <div className="w-1/3 mx-4 border-2 border-blue-400 rounded-md p-4">
                       <h1 className="w-full text-xl">
                         Median Household Income
                       </h1>
-                      {msaSummaryData &&
-                        <span className="text-3xl">{(msaSummaryData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
+                      {targetRegionData &&
+                        <span className="text-3xl">{(targetRegionData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
                       }
                     </div>
                     <div className="w-1/3 mx-4 border-2 border-blue-400 rounded-md p-4">
                       <h1 className="w-full text-xl">
                         Median Home Value
                       </h1>
-                      {msaSummaryData &&
-                        <span className="text-3xl">{(msaSummaryData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
+                      {targetRegionData &&
+                        <span className="text-3xl">{(targetRegionData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</span>
                       }
                     </div>
                   </div>
@@ -463,10 +539,14 @@ const Home = ({ msaOptions, monthOptions }) => {
                 </div>
               </div>
             </section>
-            {msaSummaryData && showTopFeatures &&
+            {targetRegionData && showTopFeatures &&
                 <TopFeatures
-                  params={queryParams}
-                  msaName={msaSummaryData.name}
+                  targetRegionParams={{
+                    startDate: dateRange.startDate,
+                    endDate: dateRange.endDate,
+                    msaCode: targetRegionData.msa
+                  }}
+                  msaName={targetRegionData.name}
                 />
             }
           </section>
