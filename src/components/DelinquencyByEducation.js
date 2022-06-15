@@ -16,6 +16,7 @@ ChartJS.register(
 )
 
 import Loader from "./Loader"
+import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { useState, useEffect } from "react"
 import { Bar, Doughnut } from "react-chartjs-2"
 
@@ -81,7 +82,9 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
       return {
         label: i === 0 ? targetRegion.msaName : compRegions[i - 1].name,
         data: newRow,
-        backgroundColor: backgroundColors[i]
+        backgroundColor: backgroundColors[i],
+        hoverBorderColor: "#111827",
+        hoverBorderWidth: 3
       }
     })
 
@@ -96,7 +99,61 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
       aspectRatio: 2.5,
       plugins: {
         legend: {
-          display: true
+          display: true,
+          labels: {
+            fontSize: 16
+          }
+        },
+        tooltip: {
+          callbacks: {
+            beforeTitle: function(context){
+              return `${context[0].dataset.label}`
+            },
+            title: function(context){
+              return `Delinquency Rate for ${context[0].label}: `
+            },
+            label: function(context){
+              return(`${context.raw}%`)
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          title: {
+            display: true,
+            text: "Delinquency Rate",
+            padding: 20,
+            font: {
+              size: 20
+            }
+          },
+          ticks: {
+            callback: function(value, index, title){
+              return `${value}%`
+            },
+            font: {
+              size: 20
+            }
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: "Education Level",
+            padding: 20,
+            font: {
+              size: 20
+            }
+          },
+          ticks: {
+            font: {
+              size: 20
+            }
+          },
+          grid: {
+            display: false
+          }
         }
       }
     })
@@ -113,12 +170,14 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
 
   return (
     <div>
-      <h1 className="my-6 text-3xl">Population By Education for {targetRegion.msaName}</h1>
-      <div>
+      <ChartHeaderWithTooltip
+        chartName={"Delinquency Rate by Education Level"}
+        msa={targetRegion.msaName}
+        tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to education level segments."}
+      />
         {chartData &&
           <Bar data={chartData} options={chartOptions} />
         }
-      </div>
     </div>
   )
 }
