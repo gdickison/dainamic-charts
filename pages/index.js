@@ -627,7 +627,8 @@ export const getStaticProps = async () => {
 
   const msaResponse = await client.query(`select msa_code, msa_name from banking_app.msa_names order by msa_code`)
   const monthResponse = await client.query(`select * from banking_app.available_dates order by date`)
-  client.release()
+  await client.end()
+  // client.release()
   for(const month of monthResponse.rows){
     month.date = month.date.toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})
   }
