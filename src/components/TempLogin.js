@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import Loader from "./Loader"
 
 const TempLogin = ({setLoggedIn, isLoggedIn}) => {
   const [credentials, setCredentials] = useState({})
@@ -35,6 +36,12 @@ const TempLogin = ({setLoggedIn, isLoggedIn}) => {
   useEffect(() => {
     checkLoginCookie("isLoggedIn")
   },[])
+
+  if(isLoading){
+    return (
+      <Loader/>
+    )
+  }
 
   return (
     <>
