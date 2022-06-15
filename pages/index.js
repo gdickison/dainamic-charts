@@ -39,7 +39,7 @@ const Home = ({ msaOptions, monthOptions }) => {
   const [targetRegionData, setTargetRegionData] = useState()
   const [compRegions, setCompRegions] = useState([])
   const [compRegionsData, setCompRegionsData] = useState()
-  const [regionalDelinquencyRate, setRegionalDelinquencyRate] = useState()
+  const [regionalDelinquencyRates, setRegionalDelinquencyRates] = useState()
   const [nationalDelinquencyRate, setNationalDelinquencyRate] = useState()
   const [populationByAgeData, setPopulationByAgeData] = useState()
   const [populationByAgeOptions, setPopulationByAgeOptions] = useState()
@@ -143,10 +143,16 @@ const Home = ({ msaOptions, monthOptions }) => {
     let data = await response.json()
     data = data.response
 
+    data = data.map(row => {
+      return {...row, delinquencyRate: ((row.delinquent_msa / row.total_msa) * 100).toFixed(2)}
+    })
+
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      setRegionalDelinquencyRate(((data[0].delinquent_msa / data[0].total_msa) * 100).toFixed(2))
+      for(const region of data){
+        setRegionalDelinquencyRates(data)
+      }
     }
   }
   const getNationalDelinquencyRateForRange = async () => {
@@ -393,12 +399,13 @@ const Home = ({ msaOptions, monthOptions }) => {
     }
   }
 
-  const getData = () => {
-      getMsaSummaryData()
-      getRegionalDelinquencyRateForRange()
-      getNationalDelinquencyRateForRange()
+  const getData = async () => {
+      setShowTopFeatures(false)
+      await getMsaSummaryData()
       getPopulationByAgeData()
       getPopulationByIncome()
+      await getRegionalDelinquencyRateForRange()
+      await getNationalDelinquencyRateForRange()
       setShowTopFeatures(true)
   }
 
@@ -454,7 +461,6 @@ const Home = ({ msaOptions, monthOptions }) => {
 {/* Select & display comparison regions */}
             {targetRegion &&
               <div className="w-full mt-4 flex flex-col space-y-2">
-
                 <div>
                   <div className="flex flex-col md:space-y-4 float-right">
                     <label className="text-2xl mx-2" htmlFor="compMsaCode">Select Up to Two Comparison Regions (optional): </label>
@@ -509,20 +515,20 @@ const Home = ({ msaOptions, monthOptions }) => {
               </header>
               <div className="flex justify-center items-center">
                 <div>
-                  {regionalDelinquencyRate &&
+                  {regionalDelinquencyRates &&
                     <div className="m-4 border-4 border-blue-400 rounded-md p-6 text-center">
                       <h1 className="text-[1.5vw] font-bold py-4">
                         Delinquency Rate
                       </h1>
                       <div>
                         <p className="text-[1.1vw] py-2">
-                          The delinquency rate for the selected regions is
+                          {`The delinquency rate for ${targetRegionData.name} is `}
                         </p>
                         <p className="text-[3vw]">
-                          {`${regionalDelinquencyRate}%`}
+                          {`${regionalDelinquencyRates[0].delinquencyRate}%`}
                         </p>
                         <p className="text-[1.1vw] py-2">
-                          This is {regionalDelinquencyRate > nationalDelinquencyRate ? 'HIGHER' : 'LOWER'} than the national delinquency rate of
+                          This is {regionalDelinquencyRates[0].delinquencyRate > nationalDelinquencyRate ? 'HIGHER' : 'LOWER'} than the national delinquency rate of
                         </p>
                         <p className="text-[3vw]">
                           {`${nationalDelinquencyRate}%`}
@@ -575,23 +581,24 @@ const Home = ({ msaOptions, monthOptions }) => {
               </div>
             </section>
             {/* TODO: set params to a const, separate date params and msa code params, since dates will always be the same */}
-            {targetRegionData && showTopFeatures &&
-                <TopFeatures
-                  dateRangeParams={{
-                    startDate: dateRange.startDate,
-                    endDate: dateRange.endDate
-                  }}
-                  targetRegionParams={{
-                    msaCode: targetRegionData.msa,
-                    msaName: targetRegionData.name
-                  }}
-                  compRegionsParams={compRegionsData
-                    ? compRegionsData.map(region => {
-                      return {msa: region.msa, name: region.name}
-                    })
-                    : []
-                  }
-                />
+            {showTopFeatures &&
+              <TopFeatures
+                dateRangeParams={{
+                  startDate: dateRange.startDate,
+                  endDate: dateRange.endDate
+                }}
+                targetRegionParams={{
+                  msaCode: targetRegionData.msa,
+                  msaName: targetRegionData.name
+                }}
+                compRegionsParams={compRegionsData
+                  ? compRegionsData.map(region => {
+                    return {msa: region.msa, name: region.name}
+                  })
+                  : []
+                }
+                regionalDelinquencyRates={regionalDelinquencyRates}
+              />
             }
           </section>
         }

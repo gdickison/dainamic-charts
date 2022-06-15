@@ -19,16 +19,25 @@ import Loader from "./Loader"
 import { useState, useEffect } from "react"
 import { Bar, Doughnut } from "react-chartjs-2"
 
-const DelinquencyByEducation = ({dateRange, targetRegion, compRegions}) => {
+const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyRates}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
 
-  useEffect(() => {
+  const getDelinquencyByEducationChartData = async () => {
     setLoading(true)
+    const msaCodes = []
+    msaCodes.push(targetRegion.msaCode)
+    if(compRegions.length > 0){
+      compRegions.map(region => {
+        msaCodes.push(region.msa)
+      })
+    }
+
     const JSONdata = JSON.stringify({
-      msaCodes: targetRegion.msaCode
+      msaCodes: msaCodes
     })
+
     const endpoint = `api/get_population_by_education`
     const options = {
       method: 'POST',
@@ -38,45 +47,65 @@ const DelinquencyByEducation = ({dateRange, targetRegion, compRegions}) => {
       body: JSONdata
     }
 
-    fetch(endpoint, options)
-      .then(res => res.json())
-      .then(data => data.response)
-      .then(data => {
-        const labels = []
-        const dataset = []
-        for(const [key, value] of Object.entries(data)){
+    const educationResponse = await fetch(endpoint, options)
+    let educationData = await educationResponse.json()
+    educationData = educationData.response
+
+    const labels = []
+    const dataset = []
+    educationData.map((row, i) => {
+      const dataGroup = []
+      for(const [key, value] of Object.entries(row)){
+        if(i === 0 && key !== 'msa'){
           labels.push(key)
-          dataset.push(parseFloat(value * 100).toFixed(2))
         }
+        if(key !== 'msa'){
+          dataGroup.push(value)
+        }
+      }
+      dataset.push(dataGroup)
+    })
 
-        setChartData({
-          // maintainAspectRatio: false,
-          labels: labels,
-          datasets: [
-            {
-              label: "Population by Education",
-              data: dataset,
-              backgroundColor: [
-                '#bae6ff',
-                '#33b1ff',
-                '#0072c3',
-                '#003a6d'
-              ]
-            }
-          ]
-        })
+    const backgroundColors = [
+      '#bae6ff',
+      '#33b1ff',
+      '#0072c3',
+      '#003a6d'
+    ]
 
-        setChartOptions({
-          responsive: true,
-          aspectRatio: 2.5,
-          indexAxis: 'y',
-          legend: {
-            position: 'top'
-          }
-        })
-        setLoading(false)
+    const rawChartData = dataset.map((row, i) => {
+      const newRow = row.map(rate => {
+        return parseFloat(rate * Number(regionalDelinquencyRates[i].delinquencyRate)).toFixed(2)
       })
-  }, [targetRegion.msaCode])
+
+      return {
+        label: i === 0 ? targetRegion.msaName : compRegions[i - 1].name,
+        data: newRow,
+        backgroundColor: backgroundColors[i]
+      }
+    })
+
+
+    setChartData({
+      labels: labels,
+      datasets: rawChartData
+    })
+
+    setChartOptions({
+      responsive: true,
+      aspectRatio: 2.5,
+      plugins: {
+        legend: {
+          display: true
+        }
+      }
+    })
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    getDelinquencyByEducationChartData()
+  }, [])
 
   if(isLoading) {
     return <Loader/>
@@ -87,7 +116,7 @@ const DelinquencyByEducation = ({dateRange, targetRegion, compRegions}) => {
       <h1 className="my-6 text-3xl">Population By Education for {targetRegion.msaName}</h1>
       <div>
         {chartData &&
-          <Doughnut data={chartData} options={chartOptions} />
+          <Bar data={chartData} options={chartOptions} />
         }
       </div>
     </div>

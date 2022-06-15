@@ -12,7 +12,7 @@ import DelinquencyByRace from "./DelinquencyByRace"
 import DelinquencyByUnemploymentRate from "./DelinquencyByUnemploymentRate"
 import Loader from "./Loader"
 
-const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams}) => {
+const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, regionalDelinquencyRates}) => {
   const [isLoading, setLoading] = useState(false)
   const [topFeatures, setTopFeatures] = useState()
 
@@ -37,7 +37,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams}) =
         setTopFeatures(Object.values(data.response))
         setLoading(false)
       })
-  }, [targetRegionParams.msaCode])
+  }, [])
 
   if(isLoading) {
     return <Loader/>
@@ -91,6 +91,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams}) =
                     dateRange={dateRangeParams}
                     targetRegion={targetRegionParams}
                     compRegions={compRegionsParams}
+                    regionalDelinquencyRates={regionalDelinquencyRates}
                   />
                 </div>
               );
