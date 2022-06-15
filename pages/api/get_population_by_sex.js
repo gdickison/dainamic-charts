@@ -1,4 +1,4 @@
-import pool from "../../src/client";
+import pool from "../../client";
 
 export default async function handler(req, res) {
   const client = await pool.connect()
