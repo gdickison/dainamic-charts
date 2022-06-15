@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -31,6 +31,34 @@ import { Bar } from "react-chartjs-2"
 
 import TempLogin from "../src/components/TempLogin"
 import TopFeatures from "../src/components/TopFeatures"
+
+export async function getStaticProps() {
+  const { Pool } = require('pg')
+  const pool = new Pool({
+    user: process.env.PGUSER,
+    database: process.env.PGDATABASE,
+    port: process.env.PGPORT,
+    host: process.env.PGHOST,
+    password: String(process.env.PGPASSWORD)
+  })
+
+  const client = await pool.connect()
+
+  const msaResponse = await client.query(`select msa_code, msa_name from banking_app.msa_names order by msa_code`)
+  const monthResponse = await client.query(`select * from banking_app.available_dates order by date`)
+  await client.end()
+  // client.release()
+  for(const month of monthResponse.rows){
+    month.date = month.date.toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})
+  }
+
+  return {
+    props: {
+      msaOptions: msaResponse.rows,
+      monthOptions: monthResponse.rows,
+    },
+  }
+}
 
 const Home = ({ msaOptions, monthOptions }) => {
   const [isLoggedIn, setLoggedIn] = useState(true)
@@ -150,9 +178,7 @@ const Home = ({ msaOptions, monthOptions }) => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      for(const region of data){
-        setRegionalDelinquencyRates(data)
-      }
+      setRegionalDelinquencyRates(data)
     }
   }
   const getNationalDelinquencyRateForRange = async () => {
@@ -612,31 +638,3 @@ const Home = ({ msaOptions, monthOptions }) => {
 }
 
 export default Home
-
-export const getStaticProps = async () => {
-  const { Pool } = require('pg')
-  const pool = new Pool({
-    user: process.env.PGUSER,
-    database: process.env.PGDATABASE,
-    port: process.env.PGPORT,
-    host: process.env.PGHOST,
-    password: String(process.env.PGPASSWORD)
-  })
-
-  const client = await pool.connect()
-
-  const msaResponse = await client.query(`select msa_code, msa_name from banking_app.msa_names order by msa_code`)
-  const monthResponse = await client.query(`select * from banking_app.available_dates order by date`)
-  await client.end()
-  // client.release()
-  for(const month of monthResponse.rows){
-    month.date = month.date.toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})
-  }
-
-  return {
-    props: {
-      msaOptions: msaResponse.rows,
-      monthOptions: monthResponse.rows,
-    },
-  }
-}
