@@ -1,4 +1,5 @@
 module.exports = {
   reactStrictMode: true,
-  concurrentFeatures: true
+  concurrentFeatures: true,
+  staticPageGenerationTimeout: 1000
 }
