@@ -165,7 +165,7 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
   }, [])
 
   if(isLoading) {
-    return <Loader/>
+    return <Loader loadiingText={"Getting education level data..."}/>
   }
 
   return (

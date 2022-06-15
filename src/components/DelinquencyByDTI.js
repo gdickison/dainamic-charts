@@ -202,7 +202,7 @@ const DelinquencyByDTI = ({dateRange, targetRegion, compRegions}) => {
 
 
   if(isLoading){
-    return <Loader/>
+    return <Loader loadiingText={"Getting debt-to-income data..."}/>
   }
 
   return (

@@ -166,7 +166,7 @@ const DelinquencyByFTBStatus = ({dateRange, targetRegion, compRegions}) => {
   }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate])
 
   if(isLoading){
-    return <Loader/>
+    return <Loader loadiingText={"Getting first time buyer data..."}/>
   }
 
   return (

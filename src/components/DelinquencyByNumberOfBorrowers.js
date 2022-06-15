@@ -160,7 +160,7 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) 
   }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate])
 
   if(isLoading){
-    return <Loader/>
+    return <Loader loadiingText={"Getting number of borrowers data..."}/>
   }
 
   return (

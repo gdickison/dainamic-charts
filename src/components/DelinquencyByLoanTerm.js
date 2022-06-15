@@ -196,7 +196,7 @@ const DelinquencyByLoanTerm = ({dateRange, targetRegion, compRegions}) => {
 
   if(isLoading) {
     return (
-      <Loader/>
+      <Loader loadiingText={"Getting loan term data..."}/>
     )
   }
 

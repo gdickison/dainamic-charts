@@ -198,7 +198,7 @@ const DelinquencyByOriginalBalance = ({dateRange, targetRegion, compRegions}) =>
   }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate, divisor])
 
   if(isLoading){
-    return <Loader/>
+    return <Loader loadiingText={"Getting original loan balance data..."}/>
   }
 
   return (

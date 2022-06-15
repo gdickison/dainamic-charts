@@ -40,7 +40,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
   }, [])
 
   if(isLoading) {
-    return <Loader/>
+    return <Loader loadiingText={"Getting the top delinquency predictors..."}/>
   }
 
   return (

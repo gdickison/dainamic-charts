@@ -202,7 +202,7 @@ const DelinquencyByLTV = ({dateRange, targetRegion, compRegions}) => {
 
 
   if(isLoading){
-    return <Loader/>
+    return <Loader loadiingText={"Getting loan-to-value data..."}/>
   }
 
   return (

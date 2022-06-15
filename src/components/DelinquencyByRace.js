@@ -95,7 +95,7 @@ const DelinquencyByRace = ({dateRange, targetRegion, compRegions}) => {
   }
 
   if(isLoading) {
-    return <Loader/>
+    return <Loader loadiingText={"Getting race data..."}/>
   }
 
   return(

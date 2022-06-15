@@ -171,7 +171,7 @@ const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) =
   }, [dateRange.startDate, dateRange.endDate, targetRegion.msaCode])
 
   if(isLoading) {
-    return <Loader/>
+    return <Loader loadiingText={"Getting unemployment data..."}/>
   }
 
   return (
