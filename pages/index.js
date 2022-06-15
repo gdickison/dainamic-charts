@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -32,36 +32,10 @@ import { Bar } from "react-chartjs-2"
 import TempLogin from "../src/components/TempLogin"
 import TopFeatures from "../src/components/TopFeatures"
 
-export async function getStaticProps() {
-  const { Pool } = require('pg')
-  const pool = new Pool({
-    user: process.env.PGUSER,
-    database: process.env.PGDATABASE,
-    port: process.env.PGPORT,
-    host: process.env.PGHOST,
-    password: String(process.env.PGPASSWORD)
-  })
-
-  const client = await pool.connect()
-
-  const msaResponse = await client.query(`select msa_code, msa_name from banking_app.msa_names order by msa_code`)
-  const monthResponse = await client.query(`select * from banking_app.available_dates order by date`)
-  await client.end()
-  // client.release()
-  for(const month of monthResponse.rows){
-    month.date = month.date.toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})
-  }
-
-  return {
-    props: {
-      msaOptions: msaResponse.rows,
-      monthOptions: monthResponse.rows,
-    },
-  }
-}
-
-const Home = ({ msaOptions, monthOptions }) => {
+const Home = () => {
   const [isLoggedIn, setLoggedIn] = useState(true)
+  const [msaOptions, setMsaOptions] = useState()
+  const [monthOptions, setMonthOptions] = useState()
   const [dateRange, setDateRange] = useState({})
   const [targetRegion, setTargetRegion] = useState()
   const [targetRegionData, setTargetRegionData] = useState()
@@ -74,6 +48,60 @@ const Home = ({ msaOptions, monthOptions }) => {
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
   const [populationByIncomeOptions, setPopulationByIncomeOptions] = useState()
   const [showTopFeatures, setShowTopFeatures] = useState(false)
+
+  const getSelectMsaInputOptions = async () => {
+    const endpoint = `/api/get_select_msa_input_options`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error")
+    } else if(status === 200){
+      setMsaOptions(data)
+    }
+  }
+
+  const getSelectDateInputOptions = async () => {
+    const endpoint = `/api/get_select_date_input_options`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    const months = data.map(row => {
+      const readableDate =  new Date(row.date)
+      return readableDate.toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})
+    })
+
+    if(status === 404){
+      console.log("There was an error")
+    } else if(status === 200){
+      setMonthOptions(months)
+    }
+  }
+
+  useEffect(() => {
+    getSelectMsaInputOptions()
+    getSelectDateInputOptions()
+  },[])
 
   const handleDateChange = e => {
     e.preventDefault()
@@ -455,7 +483,7 @@ const Home = ({ msaOptions, monthOptions }) => {
                   <option disabled></option>
                   {monthOptions && monthOptions.map(month => {
                     return (
-                      <option key={month.date} value={month.date}>{month.date}</option>
+                      <option key={month} value={month}>{month}</option>
                     )
                   })}
                 </select>
@@ -466,7 +494,7 @@ const Home = ({ msaOptions, monthOptions }) => {
                   <option disabled></option>
                   {monthOptions && monthOptions.map(month => {
                     return (
-                      <option key={month.date} value={month.date}>{month.date}</option>
+                      <option key={month} value={month}>{month}</option>
                     )
                   })}
                 </select>
