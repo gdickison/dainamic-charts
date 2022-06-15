@@ -33,7 +33,7 @@ import TempLogin from "../src/components/TempLogin"
 import TopFeatures from "../src/components/TopFeatures"
 
 const Home = () => {
-  const [isLoggedIn, setLoggedIn] = useState(true)
+  const [isLoggedIn, setLoggedIn] = useState(false)
   const [msaOptions, setMsaOptions] = useState()
   const [monthOptions, setMonthOptions] = useState()
   const [dateRange, setDateRange] = useState({})
@@ -658,6 +658,7 @@ const Home = () => {
         }
       </main>
       : <TempLogin
+        isLoggedIn={isLoggedIn}
         setLoggedIn={setLoggedIn}
       />
       }
