@@ -51,9 +51,12 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
           {topFeatures &&
             topFeatures.map((feature, i) => {
               return (
-                <div key={i} className="flex items-center md:w-1/5 border-2 border-blue-400 rounded-md p-4">
-                  <h1 className="w-full text-3xl text-center">
-                    {i+1} - {feature}
+                <div key={i} className="flex flex-col md:w-1/5 border-4 border-blue-400 rounded-md py-4 space-y-2">
+                  <h1 className="w-full text-3xl text-center text-blue-500 font-bold">
+                    {i+1}
+                  </h1>
+                  <h1 className="w-full text-2xl text-center">
+                    {feature}
                   </h1>
                 </div>
               )

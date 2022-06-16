@@ -35,6 +35,7 @@ import { Bar } from "react-chartjs-2"
 
 import TempLogin from "../src/components/TempLogin"
 import TopFeatures from "../src/components/TopFeatures"
+import Alert from "../src/components/Alert"
 
 const Home = () => {
   const [isLoading, setLoading] = useState(false)
@@ -53,6 +54,8 @@ const Home = () => {
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
   const [populationByIncomeOptions, setPopulationByIncomeOptions] = useState()
   const [showTopFeatures, setShowTopFeatures] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertMessage, setAlertMessage] = useState("")
 
   const getSelectMsaInputOptions = async () => {
     const endpoint = `/api/get_select_msa_input_options`
@@ -126,14 +129,20 @@ const Home = () => {
       setCompRegions([...compRegions, {compMsaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
     }
     if(compRegions.length === 2){
-      alert('You can select up to two comp regions.')
+      setShowAlert(true)
+      setAlertMessage('You can select up to two comp regions.')
     }
+  }
+
+  const CloseAlert = () => {
+    setShowAlert(false)
   }
 
   const removeCompRegion = e => {
     e.preventDefault()
     const newCompRegions = compRegions.filter(region => region.compMsaCode !== e.target.id)
     setCompRegions(newCompRegions)
+    setShowAlert(false)
   }
 
   // General Demographic Data
@@ -592,6 +601,12 @@ const Home = () => {
         setLoggedIn={setLoggedIn}
       />
       }
+      {showAlert &&
+          <Alert
+            message={alertMessage}
+            closeAlert={CloseAlert}
+          />
+        }
     </>
   )
 }

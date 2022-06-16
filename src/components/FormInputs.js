@@ -81,7 +81,7 @@ const FormInputs = ({handleDateChange, monthOptions, handleTargetRegionChange, t
         <div className="flex items-center justify-center h-12 my-8 text-2xl">Select a start date, end date, and MSA to see results</div>
       }
       {dateRange.startDate && dateRange.endDate && targetRegion &&
-        <button className="flex items-center justify-center w-40 h-12 my-8 rounded-md p-4 bg-blue-400 hover:bg-blue-600 text-gray-100" onClick={getData}>See Results</button>
+        <button className="flex items-center justify-center w-40 h-12 my-8 rounded-md p-4 bg-blue-600 hover:bg-blue-800 text-gray-100" onClick={getData}>See Results</button>
       }
     </section>
   )
