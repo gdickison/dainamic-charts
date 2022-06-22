@@ -88,7 +88,6 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
       }
     })
 
-
     setChartData({
       labels: labels,
       datasets: rawChartData

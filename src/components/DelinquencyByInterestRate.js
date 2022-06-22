@@ -29,7 +29,7 @@ import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { linearRegression } from "../../public/utils"
 import { useState, useEffect } from "react"
-import { Scatter } from "react-chartjs-2"
+import { Scatter, Line, Bar } from "react-chartjs-2"
 
 const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
   const [isLoading, setLoading] = useState(false)
@@ -51,10 +51,18 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
 
   useEffect(() => {
     setLoading(true)
+
+    const msaCodes = []
+    msaCodes.push(targetRegion.msaCode)
+    if(compRegions.length > 0){
+      compRegions.map(region => {
+        msaCodes.push(region.msa)
+      })
+    }
     const JSONdata = JSON.stringify({
       startDate: dateRange.startDate,
       endDate: dateRange.endDate,
-      msaCode: targetRegion.msaCode
+      msaCodes: msaCodes
     })
     const endpoint = `/api/get_delinquency_by_interest_rate`
     const options = {
@@ -69,78 +77,197 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
       .then(res => res.json())
       .then(data => data.response)
       .then(data => {
+console.log('data', data)
         for(const row of data){
           row.interest_rate = (Math.round(row.interest_rate * 8) / 8).toFixed(3)
         }
-
-        const filteredData = data.reduce((a, v) => {
-          if(a[v.interest_rate]){
-            a[v.interest_rate].current = Number(a[v.interest_rate].current) + Number(v.current)
-            a[v.interest_rate].delinquent = Number(a[v.interest_rate].delinquent) + Number(v.delinquent)
-            a[v.interest_rate].total_loans = Number(a[v.interest_rate].total_loans) + Number(v.total_loans)
-          } else {
-            a[v.interest_rate] = v
-          }
-          return a
-        }, {})
-
-        const dataset = []
-        const regressionX = []
-        const regressionY = []
-        for(const row of Object.values(filteredData)){
-          let delinquencyRate = parseFloat((Number(row.delinquent) / Number(row.total_loans)) * 100).toFixed(2)
-          if(delinquencyRate > 0 && delinquencyRate < 100){
-            dataset.push({
-              x: row.interest_rate,
-              y: delinquencyRate,
-              totalAtRate: row.total_loans,
-              delinquentAtRate: row.delinquent
-            })
-            regressionX.push(Number(row.interest_rate))
-            regressionY.push(Number(delinquencyRate))
-          }
+        const groupDataByMsa = (list, key) => {
+          return list.reduce(function(rv, x){
+            (rv[x[key]] = rv[x[key]] || []).push(x)
+            return rv
+          }, {})
         }
 
-        const lr = linearRegression(regressionY, regressionX)
+        const groupedData = groupDataByMsa(data, "msa")
+console.log('groupedData', groupedData)
+// ***********************************************************************//
+// ***********************************************************************//
+// THE GOAL IS TO GET MULTIPLE SETS OF DATA INTO A CHART - EACH SET OF    //
+// DATA NEEDS TO BE ATTACHED TO A DATASET OBJECT...WHICH SHOULD NOT BE    //
+// THAT HARD                                                              //
+//                                                                        //
+// ALSO - SHOULD THERE BE A "TARGET" WITH "COMPARABLES", OR JUST MULTIPLE //
+// DATA LINES LIKE EMSI DOES IT. I'M LEANING TOWARD THE EMSI WAY          //
+// ***********************************************************************//
+// ***********************************************************************//
 
-        const regressionData = []
-        for(const row of dataset){
-          if((lr.intercept + (lr.slope * Number(row.x))) > 0){
-            regressionData.push({
-              x: Number(row.x),
-              y: lr.intercept + (lr.slope * Number(row.x))
-            })
-          }
-        }
-
-        setChartData({
-          datasets: [
-            {
-              label: "Delinquency Rate",
-              data: dataset,
-              borderColor: '#1192e8',
-              backgroundColor: '#1192e8',
-              pointRadius: 5,
-              pointHitRadius: 15,
-              pointHoverRadius: 15,
-              showLine: false
-            },
-            {
-              label: "Regression",
-              data: regressionData,
-              borderColor: '#94A3B8',
-              backgroundColor: '#94A3B8',
-              showLine: true,
-              borderWidth: 3,
-              pointRadius: 0,
-              pointHitRadius: 0
+        const rawChartData = []
+        Object.values(groupedData).map(value => {
+          rawChartData.push(value.reduce((a, v) => {
+            if(a[v.interest_rate]){
+              a[v.interest_rate].current = Number(a[v.interest_rate].current) + Number(v.current)
+              a[v.interest_rate].delinquent = Number(a[v.interest_rate].delinquent) + Number(v.delinquent)
+              a[v.interest_rate].total_loans = Number(a[v.interest_rate].total_loans) + Number(v.total_loans)
+            } else {
+              a[v.interest_rate] = v
             }
-          ]
+            return a
+          }, {}))
         })
+
+        rawChartData.map(region => {
+          Object.values(region).map(value => {
+            value.delinquencyRate =  parseFloat((Number(value.delinquent) / Number(value.total_loans)) * 100).toFixed(2)
+            if(value.msa === targetRegion.msaCode){
+              value.name = targetRegion.msaName
+            } else {
+              value.name = compRegions.find(row => row.msa === value.msa).name
+            }
+          })
+        })
+
+        const dataForChart = rawChartData.map(region => {
+          const dataset = []
+          const regressionX = []
+          const regressionY = []
+          for(const row of Object.values(region)){
+            if(row.delinquencyRate > 0 && row.delinquencyRate < 100){
+              dataset.push({
+                x: row.interest_rate,
+                y: row.delinquencyRate,
+                totalAtRate: row.total_loans,
+                delinquentAtRate: row.delinquent,
+                msa: row.msa,
+                name: row.name
+              })
+              regressionX.push(Number(row.interest_rate))
+              regressionY.push(Number(row.delinquencyRate))
+            }
+          }
+          return {dataset, regressionX, regressionY}
+        })
+
+        const colors = ['red', 'green', 'blue']
+        const hoverColors = ['rgba(255, 0, 0, 0.2)', 'rgba(60, 179, 113, 0.2)', 'rgba(0,0,255,0.2)']
+        const testData = []
+        console.log('dataForChart', dataForChart)
+        dataForChart.map((row, i) => {
+          const datasets = []
+          const lineData = []
+          for(const dataRow of Object.values(row.dataset)){
+            lineData.push({
+              x: dataRow.x,
+              y: dataRow.y,
+              totalAtRate: dataRow.totalAtRate,
+              delinquentAtRate: dataRow.delinquentAtRate,
+              msa: dataRow.msa,
+              name: dataRow.name
+            })
+          }
+
+          datasets.push({
+            label: `${row.dataset[0].name} Data`,
+            data: lineData,
+            borderColor: colors[i],
+            backgroundColor: colors[i],
+            hoverBackgroundColor: hoverColors[i],
+            pointRadius: 5,
+            pointHoverBorderWidth: 3,
+            pointHitRadius: 5,
+            pointHoverRadius: 15,
+            showLine: false,
+            msa: row.dataset[0].msa
+          })
+
+          const regressionData = []
+          Object.keys(row.regressionX).forEach(key => {
+            const lr = linearRegression(row.regressionY, row.regressionX)
+            if((lr.intercept + (lr.slope * Number(row.dataset[key].x))) > 0){
+              regressionData.push({
+                x: Number(row.dataset[key].x),
+                y: lr.intercept + (lr.slope * Number(row.dataset[key].x))
+              })
+            }
+          })
+
+          datasets.push({
+            label: `${row.dataset[0].name} Regression`,
+            data: regressionData,
+            borderColor: '#94A3B8',
+            backgroundColor: '#94A3B8',
+            borderWidth: 3,
+            pointRadius: 0,
+            pointHitRadius: 0,
+            showLine: true
+          })
+console.log('datasets', datasets)
+          testData.push({datasets})
+})
+console.log('testData', testData)
+
+setChartData(testData)
+
+        // const dataset = []
+        // const regressionX = []
+        // const regressionY = []
+        // for(const row of Object.values(filteredData)){
+        //   let delinquencyRate = parseFloat((Number(row.delinquent) / Number(row.total_loans)) * 100).toFixed(2)
+        //   if(delinquencyRate > 0 && delinquencyRate < 100){
+        //     dataset.push({
+        //       x: row.interest_rate,
+        //       y: delinquencyRate,
+        //       totalAtRate: row.total_loans,
+        //       delinquentAtRate: row.delinquent
+        //     })
+        //     regressionX.push(Number(row.interest_rate))
+        //     regressionY.push(Number(delinquencyRate))
+        //   }
+        // }
+
+        // const lr = linearRegression(regressionY, regressionX)
+
+        // const regressionData = []
+        // for(const row of dataset){
+        //   if((lr.intercept + (lr.slope * Number(row.x))) > 0){
+        //     regressionData.push({
+        //       x: Number(row.x),
+        //       y: lr.intercept + (lr.slope * Number(row.x))
+        //     })
+        //   }
+        // }
+
+        // setChartData({
+        //   datasets: [
+        //     {
+        //       label: "Delinquency Rate",
+        //       data: dataset,
+        //       borderColor: '#1192e8',
+        //       backgroundColor: '#1192e8',
+        //       pointRadius: 5,
+        //       pointHitRadius: 15,
+        //       pointHoverRadius: 15,
+        //       showLine: false
+        //     },
+        //     {
+        //       label: "Regression",
+        //       data: regressionData,
+        //       borderColor: '#94A3B8',
+        //       backgroundColor: '#94A3B8',
+        //       showLine: true,
+        //       borderWidth: 3,
+        //       pointRadius: 0,
+        //       pointHitRadius: 0
+        //     }
+        //   ]
+        // })
 
         setChartOptions({
           responsive: true,
           aspectRatio: 2.5,
+          interaction: {
+            intersect: false,
+            mode: 'x'
+          },
           plugins: {
             legend: {
               display: true
@@ -226,18 +353,29 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
         msa={targetRegion.msaName}
         tooltip={"All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
       />
-      <section className="-mt-2 mb-8">
+      {/* <section className="-mt-2 mb-8">
         <label htmlFor="int-dataline-toggle" className="flex items-center cursor-pointer relative mb-4">
           <input type="checkbox" id="int-dataline-toggle" className="sr-only" checked={isChecked} onChange={handleLineToggle}/>
           <div className="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
           <span className="ml-3 text-gray-900 text-sm font-medium">Show Data Line</span>
         </label>
-      </section>
-      {chartData &&
+      </section> */}
+      {/* {chartData &&
         <div className="relative flex items-center">
+        {console.log('chartData', chartData)}
           <Scatter className="my-6" data={chartData} options={chartOptions}/>
         </div>
-      }
+      } */}
+      {chartData && chartData.map((chart) => {
+        const firstChart = chartData.flatMap(cg => cg.datasets[0]).find(c => c.msa === targetRegion.msaCode);
+        console.log('firstChart', firstChart)
+        return (
+          <div className="relative flex items-center">
+            {console.log('chartData', chartData)}
+            <Scatter className="my-6" data={chart} options={chartOptions}/>
+          </div>
+        )
+      })}
     </div>
   )
 }

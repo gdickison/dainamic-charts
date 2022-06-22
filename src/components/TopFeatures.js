@@ -108,7 +108,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
                   />
                 </div>
               );
-            {/* case "High Balance":
+            case "High Balance":
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByHighBalance
@@ -117,7 +117,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
                     compRegions={compRegionsParams}
                   />
                 </div>
-              ); */}
+              );
             case "Interest Rate":
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
