@@ -531,32 +531,47 @@ const Home = () => {
                 </div>
                 <div className="flex flex-col w-2/3">
                   <div className="flex flex-col items-stretch md:flex-row w-full justify-between mt-4 h-auto">
-                    <div className="w-1/3 flex flex-col justify-center mx-4 border-2 border-blue-400 rounded-md p-4 text-center">
-                      <h1 className="w-full text-xl font-semibold">
-                        Total Population
-                      </h1>
-                      {targetRegionData
-                        ? <p className="text-3xl">{(targetRegionData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</p>
-                        : <Loader loadiingText={"Getting population data..."}/>
-                      }
+                  <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
+                      <div>
+                        <img className="h-12" src="/group.svg" alt="" />
+                      </div>
+                      <div className="flex flex-col justify-center text-right">
+                        <h1 className="w-full text-xl font-semibold">
+                          Total Population
+                        </h1>
+                        {targetRegionData
+                          ? <p className="text-4xl">{(targetRegionData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</p>
+                          : <Loader loadiingText={"Getting population data..."}/>
+                        }
+                      </div>
                     </div>
-                    <div className="w-1/3 flex flex-col justify-center mx-4 border-2 border-blue-400 rounded-md p-4 text-center">
-                      <h1 className="w-full text-xl font-semibold">
-                        Median Household Income
-                      </h1>
-                      {targetRegionData
-                        ? <p className="text-3xl">{(targetRegionData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p>
-                        : <Loader loadiingText={"Getting median home income..."}/>
-                      }
+                    <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
+                      <div>
+                        <img className="h-12" src="/dollars.svg" alt="" />
+                      </div>
+                      <div className="flex flex-col justify-center text-right">
+                        <h1 className="w-full text-xl font-semibold">
+                          Median Household Income
+                        </h1>
+                        {targetRegionData
+                          ? <p className="text-4xl">{(targetRegionData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p>
+                          : <Loader loadiingText={"Getting median home income..."}/>
+                        }
+                      </div>
                     </div>
-                    <div className="w-1/3 flex flex-col justify-center mx-4 border-2 border-blue-400 rounded-md p-4 text-center">
-                      <h1 className="w-full text-xl font-semibold">
-                        Median Home Value
-                      </h1>
-                      {targetRegionData
-                        ? <p className="text-3xl">{(targetRegionData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p>
-                        : <Loader loadiingText={"Getting median home value"}/>
-                      }
+                    <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
+                      <div>
+                        <img className="h-12" src="/house.svg" alt="" />
+                      </div>
+                      <div className="flex flex-col justify-center text-right">
+                        <h1 className="w-full text-xl font-semibold">
+                          Median Home Value
+                        </h1>
+                        {targetRegionData
+                          ? <p className="text-4xl">{(targetRegionData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p>
+                          : <Loader loadiingText={"Getting median home value"}/>
+                        }
+                      </div>
                     </div>
                   </div>
                   {populationByAgeData  && populationByIncomeData
