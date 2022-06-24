@@ -29,13 +29,14 @@ import outliers from "outliers"
 import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { linearRegression } from "../../public/utils"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Scatter, Line, Bar } from "react-chartjs-2"
 
 const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
+  const thisChart = useRef(null)
 
   useEffect(() => {
     setLoading(true)
@@ -134,15 +135,20 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
           return {dataset, regressionX, regressionY}
         })
 
-        const colors = [
+        const hoverColors = [
           'rgba(130, 207, 255, 1)',
           'rgba(17, 146, 255, 1)',
           'rgba(0, 83, 255, 1)'
         ]
-        const hoverColors = [
-          'rgba(130, 207, 255, 0.4)',
-          'rgba(17, 146, 255, 0.4)',
-          'rgba(0, 83, 255, 0.4)'
+        const colors = [
+          'rgba(130, 207, 255, 0.3)',
+          'rgba(17, 146, 255, 0.3)',
+          'rgba(0, 83, 255, 0.3)'
+        ]
+        const pointStyles = [
+          'circle',
+          'rect',
+          'triangle'
         ]
 
         const datasets = []
@@ -173,14 +179,17 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
             label: `${row.dataset[0].name}`,
             data: lineData,
             borderColor: colors[i],
+            borderWidth: 0,
+            hoverBorderWidth: 3,
+            hoverBorderColor: hoverColors[i],
             backgroundColor: colors[i],
             hoverBackgroundColor: hoverColors[i],
-            pointRadius: 5,
+            pointRadius: 8,
             pointHoverBorderWidth: 3,
             pointHitRadius: 5,
-            pointHoverRadius: 15,
-            showLine: false,
-            msa: row.dataset[0].msa
+            pointHoverRadius: 8,
+            msa: row.dataset[0].msa,
+            pointStyle: pointStyles[i]
           })
 
           const regressionData = []
@@ -197,12 +206,13 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
           datasets.push({
             label: `${row.dataset[0].name} Regression`,
             data: regressionData,
-            borderColor: colors[i],
-            backgroundColor: colors[i],
+            borderColor: '#9CA3AF',
+            backgroundColor: '#9CA3AF',
             borderWidth: 3,
             pointRadius: 0,
             pointHitRadius: 0,
-            showLine: true
+            showLine: true,
+            hidden: true
           })
         })
 
@@ -215,14 +225,34 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
             intersect: false,
             mode: 'x'
           },
+          hover: {
+            mode: 'dataset',
+            intersect: true,
+          },
           plugins: {
             legend: {
               display: true,
               labels: {
                 filter: function(item, chart) {
-                  // Logic to remove a particular legend item goes here
                   return !item.text.includes('Regression');
-                }
+                },
+                font: {
+                  size: 16
+                },
+                usePointStyle: true
+              },
+              onHover: function(event, legendItem, legend){
+                console.log('legendItem', legendItem)
+                const myChart = legend.chart
+                myChart.show(legendItem.datasetIndex + 1)
+                myChart.update()
+                myChart.setActiveElements([{datasetIndex: legendItem.datasetIndex, index: 0}])
+              },
+              onLeave: function(event, legendItem, legend){
+                console.log('legend', legend.chart)
+                const myChart = legend.chart
+                myChart.hide(legendItem.datasetIndex + 1)
+                myChart.update()
               }
             },
             tooltip: {
@@ -308,7 +338,7 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
       {chartData &&
         <div className="relative flex items-center">
         {console.log('chartData', chartData)}
-          <Scatter className="my-6" data={chartData} options={chartOptions}/>
+          <Scatter id={"intChart"} ref={thisChart} className="my-6" data={chartData} options={chartOptions}/>
         </div>
       }
     </div>

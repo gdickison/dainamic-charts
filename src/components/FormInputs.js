@@ -1,32 +1,35 @@
 const FormInputs = ({handleDateChange, monthOptions, handleTargetRegionChange, targetRegion, msaOptions, handleCompRegionChange, compRegions, removeCompRegion, dateRange, getData}) => {
   return (
     <section className="flex flex-col items-center justify-center px-20">
-      <form className="flex flex-col items-center" action="#">
-        <div className="flex flex-col md:flex-row items-center">
-          <div className="flex flex-col md:space-y-4">
-            <label className="text-2xl mx-2" htmlFor="startDate">Select a start date: </label>
-            <select className="mx-2 w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="startDate" name="startDate" defaultValue="" onChange={handleDateChange}>
-              <option disabled></option>
-              {monthOptions && monthOptions.map(month => {
-                return (
-                  <option key={month} value={month}>{month}</option>
-                )
-              })}
-            </select>
-          </div>
-          <div className="flex flex-col md:space-y-4">
-            <label className="text-2xl mx-2"  htmlFor="endDate">Select an end date: </label>
-            <select className="mx-2 w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="endDate" name="endDate" defaultValue="" onChange={handleDateChange}>
-              <option disabled></option>
-              {monthOptions && monthOptions.map(month => {
-                return (
-                  <option key={month} value={month}>{month}</option>
-                )
-              })}
-            </select>
+      <form className="flex flex-col items-center space-y-4" action="#">
+        {/* <div className="flex flex-col items-center"> */}
+          <div className="flex w-full">
+            <div className="flex flex-col w-1/2 space-y-4">
+              <label className="text-2xl mx-2" htmlFor="startDate">Select a start date: </label>
+              <select className="mx-2 text-center border-2 border-blue-400 bg-white rounded-md text-xl" id="startDate" name="startDate" defaultValue="" onChange={handleDateChange}>
+                <option disabled></option>
+                {monthOptions && monthOptions.map(month => {
+                  return (
+                    <option key={month} value={month}>{month}</option>
+                  )
+                })}
+              </select>
+            </div>
+            <div className="flex flex-col w-1/2 space-y-4">
+              <label className="text-2xl mx-2"  htmlFor="endDate">Select an end date: </label>
+              <select className="mx-2 text-center border-2 border-blue-400 bg-white rounded-md text-xl" id="endDate" name="endDate" defaultValue="" onChange={handleDateChange}>
+                <option disabled></option>
+                {monthOptions && monthOptions.map(month => {
+                  return (
+                    <option key={month} value={month}>{month}</option>
+                  )
+                })}
+              </select>
+            </div>
           </div>
 {/* Select Target Region */}
-          <div className="flex flex-col md:space-y-4">
+<div className="flex flex-col items-center">
+          <div className="flex flex-col space-y-4">
             <label className="text-2xl mx-2" htmlFor="targetMsaCode">Select a Target Region: </label>
             <select className="mx-2 w-80 md:w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="targetMsaCode" name="targetMsaCode" defaultValue="" onChange={handleTargetRegionChange}>
               <option disabled></option>
@@ -42,7 +45,7 @@ const FormInputs = ({handleDateChange, monthOptions, handleTargetRegionChange, t
         {targetRegion &&
           <div className="w-full mt-4 flex flex-col space-y-2">
             <div>
-              <div className="flex flex-col md:space-y-4 float-right">
+              <div className="flex flex-col space-y-4 float-right">
                 <label className="text-2xl mx-2" htmlFor="compMsaCode">Select Up to Two Comparison Regions (optional): </label>
                 <select className="mx-2 w-80 md:w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="compMsaCode" name="compMsaCode" defaultValue="" onChange={handleCompRegionChange}>
                   <option disabled></option>
@@ -55,7 +58,7 @@ const FormInputs = ({handleDateChange, monthOptions, handleTargetRegionChange, t
               </div>
             </div>
             <div>
-              <div className="w-1/2 float-right">
+              <div className="w-full">
                 <div className="text-2xl mx-2">Comparison Regions</div>
                 <div className="min-h-[44px] m-2 text-center md:text-left border-2 border-blue-400 p-1 bg-white rounded-md text-xl">
                   {compRegions.length > 0 &&
