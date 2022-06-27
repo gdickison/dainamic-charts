@@ -28,6 +28,7 @@ ChartJS.register(
 import outliers from "outliers"
 import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
+import ChartDescription from "./ChartDescription"
 import { linearRegression } from "../../public/utils"
 import { useState, useEffect, useRef } from "react"
 import { Scatter, Line, Bar } from "react-chartjs-2"
@@ -135,16 +136,12 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
           return {dataset, regressionX, regressionY}
         })
 
-        const hoverColors = [
+        const colors = [
           'rgba(130, 207, 255, 1)',
           'rgba(17, 146, 255, 1)',
           'rgba(0, 83, 255, 1)'
         ]
-        const colors = [
-          'rgba(130, 207, 255, 0.3)',
-          'rgba(17, 146, 255, 0.3)',
-          'rgba(0, 83, 255, 0.3)'
-        ]
+
         const pointStyles = [
           'circle',
           'rect',
@@ -181,9 +178,9 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
             borderColor: colors[i],
             borderWidth: 0,
             hoverBorderWidth: 3,
-            hoverBorderColor: hoverColors[i],
+            hoverBorderColor: colors[i],
             backgroundColor: colors[i],
-            hoverBackgroundColor: hoverColors[i],
+            hoverBackgroundColor: colors[i],
             pointRadius: 8,
             pointHoverBorderWidth: 3,
             pointHitRadius: 5,
@@ -221,10 +218,6 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
         setChartOptions({
           responsive: true,
           aspectRatio: 2.5,
-          interaction: {
-            intersect: false,
-            mode: 'x'
-          },
           hover: {
             mode: 'dataset',
             intersect: true,
@@ -242,34 +235,35 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
                 usePointStyle: true
               },
               onHover: function(event, legendItem, legend){
-                console.log('legendItem', legendItem)
                 const myChart = legend.chart
                 myChart.show(legendItem.datasetIndex + 1)
                 myChart.update()
                 myChart.setActiveElements([{datasetIndex: legendItem.datasetIndex, index: 0}])
               },
               onLeave: function(event, legendItem, legend){
-                console.log('legend', legend.chart)
                 const myChart = legend.chart
                 myChart.hide(legendItem.datasetIndex + 1)
                 myChart.update()
               }
             },
             tooltip: {
+              usePointStyle: true,
               callbacks: {
                 beforeTitle: function(context) {
-                  console.log('context', context)
-                  return `Interest Rate: ${context[0].raw.x}%`
+                  return `${context[0].dataset.label}`
                 },
-                title: function(context) {
-                  return `Total Loans at Rate: ${context[0].raw.totalAtRate}`
-                },
-                afterTitle: function(context) {
-                  return `Delinquent Loans at Rate: ${context[0].raw.delinquentAtRate}`
+                beforeBody: function(context) {
+                  return [ `Interest Rate: ${context[0].raw.x}%`, `Total Loans at Rate: ${context[0].raw.totalAtRate}`, `Delinquent Loans at Rate: ${context[0].raw.delinquentAtRate}`]
                 },
                 label: function(context) {
                   let label = `Delinquency Rate: ${context.raw.y}%`
                   return label
+                },
+                labelPointStyle: function(context) {
+                  return {
+                    pointStyle: `${context.dataset.pointStyle}`,
+                    rotation: 0
+                  }
                 }
               }
             }
@@ -332,12 +326,14 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency by Interest Rate"}
-        msa={targetRegion.msaName}
+        msa={compRegions.length > 0 ? "selected regions" : targetRegion.msaName}
         tooltip={"All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
+      />
+      <ChartDescription
+        description={`Hover over the legend to see the datapoints and trend line for a region. Hover over a datapoint on the chart for specific details.`}
       />
       {chartData &&
         <div className="relative flex items-center">
-        {console.log('chartData', chartData)}
           <Scatter id={"intChart"} ref={thisChart} className="my-6" data={chartData} options={chartOptions}/>
         </div>
       }
