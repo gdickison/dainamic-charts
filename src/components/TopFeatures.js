@@ -4,6 +4,7 @@ import DelinquencyByDTI from "./DelinquencyByDTI"
 import DelinquencyByEducation from "./DelinquencyByEducation"
 import DelinquencyByFTBStatus from "./DelinquencyByFTBStatus"
 import DelinquencyByInterestRate from "./DelinquencyByInterestRate"
+import DelinquencyByHighBalance from "./DelinquencyByHighBalance"
 import DelinquencyByOriginalBalance from "./DelinquencyByOriginalBalance"
 import DelinquencyByLoanTerm from "./DelinquencyByLoanTerm"
 import DelinquencyByLTV from "./DelinquencyByLTV"
@@ -56,7 +57,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
                     {i+1}
                   </h1>
                   <h1 className="w-full text-2xl text-center">
-                    {feature}
+                    {feature === "Loan Balance" ? "Original Loan Balance" : feature}
                   </h1>
                 </div>
               )

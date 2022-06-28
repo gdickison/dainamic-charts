@@ -100,16 +100,12 @@ const DelinquencyByRace = ({dateRange, targetRegion, compRegions}) => {
 
   return(
     <>
-      {msaName &&
-        <>
-          <h1 className="my-6 text-3xl">Population By Race for {targetRegion.msaName}</h1>
-          <div>
-            {chartData &&
-              <Bar data={chartData} options={chartOptions} />
-            }
-          </div>
-        </>
-      }
+      <h1 className="my-6 text-3xl">Population By Race for {targetRegion.msaName}</h1>
+      <div>
+        {chartData &&
+          <Bar data={chartData} options={chartOptions} />
+        }
+      </div>
     </>
   )
 }

@@ -27,6 +27,7 @@ ChartJS.register(
 
 import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
+import ChartDescription from "./ChartDescription"
 import { Bar } from "react-chartjs-2"
 
 import { useEffect, useState } from "react"
@@ -44,11 +45,20 @@ const DelinquencyByOriginalBalance = ({dateRange, targetRegion, compRegions}) =>
 
   useEffect(() => {
     setLoading(true)
+
+    const msaCodes = []
+    msaCodes.push(targetRegion.msaCode)
+    if(compRegions.length > 0){
+      compRegions.map(region => {
+        msaCodes.push(region.msa)
+      })
+    }
     const JSONdata = JSON.stringify({
       startDate: dateRange.startDate,
       endDate: dateRange.endDate,
-      msaCode: targetRegion.msaCode
+      msaCodes: msaCodes
     })
+
     const endpoint = `/api/get_delinquency_by_original_balance`
     const options = {
       method: 'POST',
@@ -63,68 +73,88 @@ const DelinquencyByOriginalBalance = ({dateRange, targetRegion, compRegions}) =>
       .then(data => data.response)
       .then(data => {
         // Set up the data for a bar chart divided into increments
-        var minupb = Math.min.apply(Math, data.map(function(o) {
+        const minupb = Math.min.apply(Math, data.map(function(o) {
           return o.original_upb; }));
-        var maxupb = Math.max.apply(Math, data.map(function(o) {
+        const maxupb = Math.max.apply(Math, data.map(function(o) {
           return o.original_upb; }));
-
         const numBrackets = Math.floor(Number((maxupb / divisor) + 1))
+
+        const groupDataByMsa = (list, key) => {
+          return list.reduce(function(rv, x){
+            (rv[x[key]] = rv[x[key]] || []).push(x)
+            return rv
+          }, {})
+        }
+        const groupedData = groupDataByMsa(data, "msa")
 
         for(let i = 0; i < numBrackets; i++){
           const bracket = `$${(Math.ceil(Number((minupb + (i * divisor)) / divisor) - 1) * divisor).toLocaleString()} - $${((Math.ceil(Number((minupb + (i * divisor)) / divisor)) * divisor) - 1).toLocaleString()}`
-          data.map(row => {
-            if(row.original_upb >= (Math.ceil(Number((minupb + (i * divisor)) / divisor) - 1) * divisor) && row.original_upb <= ((Math.ceil(Number((minupb + (i * divisor)) / divisor)) * divisor) - 1)){
-              row.bracket = bracket
-            }
+          Object.values(groupedData).map(group => {
+            group.map(row => {
+              if(row.original_upb >= (Math.ceil(Number((minupb + (i * divisor)) / divisor) - 1) * divisor) && row.original_upb <= ((Math.ceil(Number((minupb + (i * divisor)) / divisor)) * divisor) - 1)){
+                row.bracket = bracket
+              }
+            })
           })
         }
 
-        const filteredData = data.reduce((a, v) => {
-          if(a[v.bracket]){
-            a[v.bracket].current = Number(a[v.bracket].current) + Number(v.current)
-            a[v.bracket].delinquent = Number(a[v.bracket].delinquent) + Number(v.delinquent)
-            a[v.bracket].total_loans = Number(a[v.bracket].total_loans) + Number(v.total_loans)
-          } else {
-            a[v.bracket] = v
-          }
-          return a
-        }, {})
+        const filteredData = []
+        Object.values(groupedData).map(value => {
+          filteredData.push(value.reduce((a, v) => {
+            if(a[v.bracket]){
+              a[v.bracket].current = Number(a[v.bracket].current) + Number(v.current)
+              a[v.bracket].delinquent = Number(a[v.bracket].delinquent) + Number(v.delinquent)
+              a[v.bracket].total_loans = Number(a[v.bracket].total_loans) + Number(v.total_loans)
+            } else {
+              a[v.bracket] = v
+            }
+            return a
+          }, {}))
+        })
 
+        const colors = [
+          'rgba(130, 207, 255, 1)',
+          'rgba(17, 146, 255, 1)',
+          'rgba(0, 83, 255, 1)'
+        ]
+
+        const datasets = []
         const labels = []
-        const dataset = []
-        for(const row of Object.values(filteredData)){
-          let delinquencyRate = parseFloat((Number(row.delinquent) / Number(row.total_loans)) * 100).toFixed(2)
-          if(delinquencyRate > 0 && delinquencyRate < 100){
-            labels.push(row.bracket)
-            dataset.push({
-              x: row.original_upb,
-              y: delinquencyRate,
-              totalAtUpb: row.total_loans,
-              delinquentAtUpb: row.delinquent
+        filteredData.map((region, i) => {
+          const dataArray = []
+          const tooltipArray = []
+          for(const [key, value] of Object.entries(region)){
+            value.delinquencyRate =  parseFloat((Number(value.delinquent) / Number(value.total_loans)) * 100).toFixed(2)
+            if(value.msa === targetRegion.msaCode){
+              value.name = targetRegion.msaName
+            } else {
+              value.name = compRegions.find(row => row.msa === value.msa).name
+            }
+            dataArray.push(value.delinquencyRate)
+            tooltipArray.push({
+              totalAtUpb: value.total_loans,
+              delinquentAtUpb: value.delinquent,
+              msa: value.msa,
+              name: value.name
             })
+            if(labels.indexOf(key) === -1){
+              labels.push(key)
+            }
           }
-        }
+          datasets.push({
+            label: region[Object.keys(region)[0]].name,
+            data: dataArray,
+            tooltip: tooltipArray,
+            backgroundColor: colors[i],
+            hoverBorderColor: "#111827",
+            hoverBorderWidth: 3,
+            msa: region[Object.keys(region)[0]].msa
+          })
+        })
 
         setChartData({
           labels: labels,
-          datasets: [
-            {
-              label: "Delinquency by Original UPB",
-              data: dataset,
-              backgroundColor: [
-                '#e5f6ff',
-                '#bae6ff',
-                '#82cfff',
-                '#33b1ff',
-                '#1192ff',
-                '#0072ff',
-                '#0053ff',
-                '#003aff'
-              ],
-              hoverBorderColor: "#111827",
-              hoverBorderWidth: 3
-            }
-          ]
+          datasets: datasets
         })
 
         setChartOptions(
@@ -136,21 +166,22 @@ const DelinquencyByOriginalBalance = ({dateRange, targetRegion, compRegions}) =>
                 display: false
               },
               legend: {
-                display: false
+                display: true
               },
               tooltip: {
                 callbacks: {
-                  beforeTitle: function(context){
-                    return `Range: ${context[0].label}`
-                  },
                   title: function(context){
-                    return `Total in range: ${context[0].raw.totalAtUpb}`
+                    return `${context[0].dataset.label}`
                   },
-                  afterTitle: function(context){
-                    return `Delinquent in range: ${context[0].raw.delinquentAtUpb}`
+                  beforeBody: function(context){
+                    return [
+                      `Range: ${context[0].label}`,
+                      `Total in range: ${context[0].dataset.tooltip[context[0].dataIndex].totalAtUpb}`,
+                      `Delinquent in range: ${context[0].dataset.tooltip[context[0].dataIndex].delinquentAtUpb}`
+                    ]
                   },
                   label: function(context){
-                    return `Delinquecy rate for range: ${context.raw.y}%`
+                    return `Delinquecy rate for range: ${context.raw}%`
                   }
                 }
               }
@@ -205,10 +236,13 @@ const DelinquencyByOriginalBalance = ({dateRange, targetRegion, compRegions}) =>
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency By Original Balance"}
-        msa={targetRegion.msaName}
+        msa={compRegions.length > 0 ? "selected regions" : targetRegion.msaName}
         tooltip={"Original balances (OUPB) are grouped into the selected increment (default $50,000). Delinquent loans with a given OUPB are divided by the total loans at that OUPB to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given data point and are also excluded. Hover over the bars to see details"}
       />
-      <section className="-mt-2 mb-8">
+      <ChartDescription
+        description={`Hover over a bar to see specific details. Click the legend to show and hide datasets.`}
+      />
+      <section className="mt-2 mb-8">
         <form action="#">
           <label className="text-xl mr-2" htmlFor="increment">Select Increment</label>
           <select className="mx-2 w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" name="increment" id="increment" defaultValue={divisor} onChange={handleChange}>

@@ -82,11 +82,10 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
 // ***********************************************************************//
 // ***********************************************************************//
 // THE GOAL IS TO GET MULTIPLE SETS OF DATA INTO A CHART - EACH SET OF    //
-// DATA NEEDS TO BE ATTACHED TO A DATASET OBJECT...WHICH SHOULD NOT BE    //
-// THAT HARD                                                              //
+// DATA NEEDS TO BE ATTACHED TO A DATASET OBJECT                          //
 //                                                                        //
 // ALSO - SHOULD THERE BE A "TARGET" WITH "COMPARABLES", OR JUST MULTIPLE //
-// DATA LINES LIKE EMSI DOES IT. I'M LEANING TOWARD THE EMSI WAY          //
+// DATA LINES LIKE EMSI DOES IT? I'M LEANING TOWARD THE EMSI WAY          //
 // ***********************************************************************//
 // ***********************************************************************//
 
@@ -249,11 +248,15 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
             tooltip: {
               usePointStyle: true,
               callbacks: {
-                beforeTitle: function(context) {
+                title: function(context) {
                   return `${context[0].dataset.label}`
                 },
                 beforeBody: function(context) {
-                  return [ `Interest Rate: ${context[0].raw.x}%`, `Total Loans at Rate: ${context[0].raw.totalAtRate}`, `Delinquent Loans at Rate: ${context[0].raw.delinquentAtRate}`]
+                  return [
+                    `Interest Rate: ${context[0].raw.x}%`,
+                    `Total Loans at Rate: ${context[0].raw.totalAtRate}`,
+                    `Delinquent Loans at Rate: ${context[0].raw.delinquentAtRate}`
+                  ]
                 },
                 label: function(context) {
                   let label = `Delinquency Rate: ${context.raw.y}%`
@@ -330,7 +333,7 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
         tooltip={"All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
       />
       <ChartDescription
-        description={`Hover over the legend to see the datapoints and trend line for a region. Hover over a datapoint on the chart for specific details.`}
+        description={`Hover over the legend to see the datapoints and trend line for a region. Hover over a datapoint on the chart for specific details. Click the legend to show and hide datasets`}
       />
       {chartData &&
         <div className="relative flex items-center">
