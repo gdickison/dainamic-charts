@@ -29,7 +29,7 @@ import outliers from "outliers"
 import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import ChartDescription from "./ChartDescription"
-import { linearRegression } from "../../public/utils"
+import { linearRegression, groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
 import { useState, useEffect, useRef } from "react"
 import { Scatter, Line, Bar } from "react-chartjs-2"
 
@@ -69,12 +69,6 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
       .then(data => {
         for(const row of data){
           row.interest_rate = (Math.round(row.interest_rate * 8) / 8).toFixed(3)
-        }
-        const groupDataByMsa = (list, key) => {
-          return list.reduce(function(rv, x){
-            (rv[x[key]] = rv[x[key]] || []).push(x)
-            return rv
-          }, {})
         }
 
         const groupedData = groupDataByMsa(data, "msa")
@@ -136,9 +130,9 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
         })
 
         const colors = [
-          'rgba(130, 207, 255, 1)',
-          'rgba(17, 146, 255, 1)',
-          'rgba(0, 83, 255, 1)'
+          chartSolidColors[0],
+          chartSolidColors[1],
+          chartSolidColors[2],
         ]
 
         const pointStyles = [

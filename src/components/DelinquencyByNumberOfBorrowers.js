@@ -136,7 +136,6 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) 
             tooltip: {
               callbacks: {
                 beforeTitle: function(context){
-                  console.log('context', context)
                   return [
                     `${context[0].label}`,
                     `Regional Delinquency Rate: ${context[0].dataset.tooltip[context[0].dataIndex].region_delinquency_rate}%`,
@@ -298,8 +297,6 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) 
       />
       <div className="flex justify-around w-full">
         <div className="w-1/3 justify-evenly flex flex-col">
-{console.log('barChartData', barChartData)}
-{console.log('pieChartData', pieChartData)}
           {barChartData && barChartData.labels.map((label, i) => {
             return (
               <div className="flex flex-col">

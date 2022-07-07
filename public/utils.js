@@ -23,4 +23,31 @@ function linearRegression(y,x){
   return lr;
 }
 
-export { linearRegression }
+function groupDataByMsa(list, key){
+  return list.reduce(function(rv, x){
+    (rv[x[key]] = rv[x[key]] || []).push(x)
+    return rv
+  }, {})
+}
+
+const chartFadedColors = [
+  "rgba(255, 0, 0, 0.2)",
+  "rgba(0, 0, 255, 0.2)",
+  "rgba(255, 225, 0, 0.2)",
+  "rgba(0, 180, 0, 0.2)",
+  "rgba(255, 0, 200, 0.2)",
+  "rgba(255, 130, 0, 0.2)",
+  "rgba(0, 0, 0, 0.2)"
+]
+
+const chartSolidColors = [
+  "rgba(255, 0, 0, 0.6)",
+  "rgba(0, 0, 255, 0.6)",
+  "rgba(255, 225, 0, 0.6)",
+  "rgba(0, 180, 0, 0.6)",
+  "rgba(255, 0, 200, 0.6)",
+  "rgba(255, 130, 0, 0.6)",
+  "rgba(0, 0, 0, 0.6)"
+]
+
+export { linearRegression, groupDataByMsa, chartFadedColors, chartSolidColors }

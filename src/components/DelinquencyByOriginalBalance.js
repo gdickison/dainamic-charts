@@ -29,6 +29,7 @@ import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import ChartDescription from "./ChartDescription"
 import { Bar } from "react-chartjs-2"
+import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
 
 import { useEffect, useState } from "react"
 
@@ -79,12 +80,6 @@ const DelinquencyByOriginalBalance = ({dateRange, targetRegion, compRegions}) =>
           return o.original_upb; }));
         const numBrackets = Math.floor(Number((maxupb / divisor) + 1))
 
-        const groupDataByMsa = (list, key) => {
-          return list.reduce(function(rv, x){
-            (rv[x[key]] = rv[x[key]] || []).push(x)
-            return rv
-          }, {})
-        }
         const groupedData = groupDataByMsa(data, "msa")
 
         for(let i = 0; i < numBrackets; i++){
@@ -111,12 +106,6 @@ const DelinquencyByOriginalBalance = ({dateRange, targetRegion, compRegions}) =>
             return a
           }, {}))
         })
-
-        const colors = [
-          'rgba(130, 207, 255, 1)',
-          'rgba(17, 146, 255, 1)',
-          'rgba(0, 83, 255, 1)'
-        ]
 
         const datasets = []
         const labels = []
@@ -145,9 +134,10 @@ const DelinquencyByOriginalBalance = ({dateRange, targetRegion, compRegions}) =>
             label: region[Object.keys(region)[0]].name,
             data: dataArray,
             tooltip: tooltipArray,
-            backgroundColor: colors[i],
-            hoverBorderColor: "#111827",
-            hoverBorderWidth: 3,
+            backgroundColor: chartFadedColors[i],
+            borderColor: chartSolidColors[i],
+            hoverBackgroundColor: chartSolidColors[i],
+            borderWidth: 3,
             msa: region[Object.keys(region)[0]].msa
           })
         })

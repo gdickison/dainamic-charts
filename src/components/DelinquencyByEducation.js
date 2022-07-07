@@ -19,6 +19,7 @@ import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { useState, useEffect } from "react"
 import { Bar, Doughnut } from "react-chartjs-2"
+import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
 const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyRates}) => {
   const [isLoading, setLoading] = useState(false)
@@ -67,13 +68,6 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
       dataset.push(dataGroup)
     })
 
-    const backgroundColors = [
-      '#bae6ff',
-      '#33b1ff',
-      '#0072c3',
-      '#003a6d'
-    ]
-
     const rawChartData = dataset.map((row, i) => {
       const newRow = row.map(rate => {
         return parseFloat(rate * Number(regionalDelinquencyRates[i].delinquencyRate)).toFixed(2)
@@ -82,9 +76,10 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
       return {
         label: i === 0 ? targetRegion.msaName : compRegions[i - 1].name,
         data: newRow,
-        backgroundColor: backgroundColors[i],
-        hoverBorderColor: "#111827",
-        hoverBorderWidth: 3
+        backgroundColor: chartFadedColors[i],
+        borderColor: chartSolidColors[i],
+        hoverBackgroundColor: chartSolidColors[i],
+        borderWidth: 3
       }
     })
 

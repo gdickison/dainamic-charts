@@ -28,7 +28,7 @@ ChartJS.register(
 )
 
 import Loader from "./Loader"
-import { linearRegression } from "../../public/utils"
+import { linearRegression, chartFadedColors, chartSolidColors } from "../../public/utils"
 import { Scatter } from "react-chartjs-2"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 
@@ -106,10 +106,10 @@ const DelinquencyByLTV = ({dateRange, targetRegion, compRegions}) => {
             {
               label: "Delinquency by LTV",
               data: dataset,
-              borderColor: "#1192e8",
-              backgroundColor: "#1192e8",
+              backgroundColor: chartSolidColors[0],
+              borderColor: chartSolidColors[0],
               showLine: false,
-              pointRadius: 5,
+              pointRadius: 8,
               pointHitRadius: 15,
               pointHoverRadius: 12
             },

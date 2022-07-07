@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import DelinquencyByCreditScore from "./DelinquencyByCreditScore"
+import DelinquencyByCreditScoreByPeriod from "./DelinquencyByCreditScoreByPeriod"
 import DelinquencyByDTI from "./DelinquencyByDTI"
 import DelinquencyByEducation from "./DelinquencyByEducation"
 import DelinquencyByFTBStatus from "./DelinquencyByFTBStatus"
@@ -70,12 +71,21 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
           switch(feature) {
             case "Credit Score":
               return (
-                <div key={i} className="border-2 border-slate-400 rounded-md p-4">
-                  <DelinquencyByCreditScore
-                    dateRange={dateRangeParams}
-                    targetRegion={targetRegionParams}
-                    compRegions={compRegionsParams}
-                  />
+                <div key={i} className="border-2 border-slate-400 rounded-md p-4 divide-y-2">
+                  <div key={`credit_score_by_period_${i}`} >
+                    <DelinquencyByCreditScoreByPeriod
+                      dateRange={dateRangeParams}
+                      targetRegion={targetRegionParams}
+                      compRegions={compRegionsParams}
+                    />
+                  </div>
+                  <div key={`credit_score_${i}`} >
+                    <DelinquencyByCreditScore
+                      dateRange={dateRangeParams}
+                      targetRegion={targetRegionParams}
+                      compRegions={compRegionsParams}
+                    />
+                  </div>
                 </div>
               );
             case "Debt-to-Income":
