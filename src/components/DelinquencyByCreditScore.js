@@ -67,7 +67,6 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, targetRegion, compRegions}
         const tooltipGood = []
         const tooltipVeryGood = []
         const tooltipExceptional = []
-
         data.map(region => {
           barLabels.push(region.region_name)
           barFair.push((Number(region.fair_delinquent) / Number(region.fair_total) * 100).toFixed(2))
@@ -348,7 +347,7 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, targetRegion, compRegions}
   }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate])
 
   if(isLoading) {
-    return <Loader loadiingText={"Getting credit score data..."}/>
+    return <Loader loadiingText={"Getting credit score by region data..."}/>
   }
 
   return (

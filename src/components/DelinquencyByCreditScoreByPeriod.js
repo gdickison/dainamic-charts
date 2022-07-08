@@ -56,102 +56,128 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, targetRegion, compRegions}
       .then(res => res.json())
       .then(data => data.response)
       .then(data => {
-        const groupedData = Object.entries(groupDataByMsa(data, "region"))
+        const groupedData = Object.values(groupDataByMsa(data, "msa"))
+        const delinquencyRateFeatureData = {
+          labels: [],
+          datasets: []
+        }
 
-        const delinquencyRateStructuredData = []
-        groupedData.map((group, i) => {
-          const delinquencyRateFeatureData = {
-            labels: [],
-            datasets: [
-              {
-                label: "580-669",
-                backgroundColor: chartFadedColors[0],
-                hoverBackgroundColor: chartSolidColors[0],
-                borderColor: chartSolidColors[0],
-                borderWidth: 1,
-                data: [],
-                tooltip: [],
-                region: {
-                  code: group[1][0].region,
-                  name: group[1][0].region_name
-                }
-              },
-              {
-                label: "670-739",
-                backgroundColor: chartFadedColors[1],
-                hoverBackgroundColor: chartSolidColors[1],
-                borderColor: chartSolidColors[1],
-                borderWidth: 1,
-                data: [],
-                tooltip: [],
-                region: {
-                  code: group[1][0].region,
-                  name: group[1][0].region_name
-                }
-              },
-              {
-                label: "740-799",
-                backgroundColor: chartFadedColors[2],
-                hoverBackgroundColor: chartSolidColors[2],
-                borderColor: chartSolidColors[2],
-                borderWidth: 1,
-                data: [],
-                tooltip: [],
-                region: {
-                  code: group[1][0].region,
-                  name: group[1][0].region_name
-                }
-              },
-              {
-                label: "800+",
-                backgroundColor: chartFadedColors[3],
-                hoverBackgroundColor: chartSolidColors[3],
-                borderColor: chartSolidColors[3],
-                borderWidth: 1,
-                data: [],
-                tooltip: [],
-                region: {
-                  code: group[1][0].region,
-                  name: group[1][0].region_name
-                }
-              }
-            ],
-            misc: []
+        groupedData.map((group, groupIdx) => {
+          if(groupIdx === 0){
+            group.map(row => {
+              delinquencyRateFeatureData.labels.push((row.origination_date.split('T')[0]).toString())
+            })
           }
+          delinquencyRateFeatureData.datasets.push(
+            {
+              label: `580-669 - ${group[0].msa_name.split(',')[0]}`,
+              backgroundColor: null,
+              hoverBackgroundColor: null,
+              borderColor: null,
+              borderWidth: 1,
+              data: [],
+              tooltip: []
+            },
+            {
+              label: `670-739 - ${group[0].msa_name.split(',')[0]}`,
+              backgroundColor: null,
+              hoverBackgroundColor: null,
+              borderColor: null,
+              borderWidth: 1,
+              data: [],
+              tooltip: []
+            },
+            {
+              label: `740-799 - ${group[0].msa_name.split(',')[0]}`,
+              backgroundColor: null,
+              hoverBackgroundColor: null,
+              borderColor: null,
+              borderWidth: 1,
+              data: [],
+              tooltip: []
+            },
+            {
+              label: `800+ - ${group[0].msa_name.split(',')[0]}`,
+              backgroundColor: null,
+              hoverBackgroundColor: null,
+              borderColor: null,
+              borderWidth: 1,
+              data: [],
+              tooltip: []
+            },
+          )
 
-          group[1].map(row => {
-            delinquencyRateFeatureData.labels.push(row.origination_date.split('T')[0])
-            delinquencyRateFeatureData.datasets[0].data.push(((row.fair_delinquent_for_period / row.fair_total_for_period) * 100).toFixed(2))
-            delinquencyRateFeatureData.datasets[0].tooltip.push({
-              totalAtPoint: row.fair_total_for_period,
-              delinquentAtPoint: row.fair_delinquent_for_period
-            })
-            delinquencyRateFeatureData.datasets[1].data.push(((row.good_delinquent_for_period / row.good_total_for_period) * 100).toFixed(2))
-            delinquencyRateFeatureData.datasets[1].tooltip.push({
-              totalAtPoint: row.good_total_for_period,
-              delinquentAtPoint: row.good_delinquent_for_period
-            })
-            delinquencyRateFeatureData.datasets[2].data.push(((row.very_good_delinquent_for_period / row.very_good_total_for_period) * 100).toFixed(2))
-            delinquencyRateFeatureData.datasets[2].tooltip.push({
-              totalAtPoint: row.very_good_total_for_period,
-              delinquentAtPoint: row.very_good_delinquent_for_period
-            })
-            delinquencyRateFeatureData.datasets[3].data.push(((row.exceptional_delinquent_for_period / row.exceptional_total_for_period) * 100).toFixed(2))
-            delinquencyRateFeatureData.datasets[3].tooltip.push({
-              totalAtPoint: row.exceptional_total_for_period,
-              delinquentAtPoint: row.exceptional_delinquent_for_period
+          delinquencyRateFeatureData.datasets.map((dataSet) => {
+            group.map((row) => {
+              if(dataSet.label.indexOf(`580-669 - ${group[0].msa_name.split(',')[0]}`) !== -1){
+                dataSet.data.push(((row.fair_delinquent / row.fair_total) * 100).toFixed(2))
+                dataSet.tooltip.push({
+                  totalAtPoint: row.fair_total,
+                  delinquentAtPoint: row.fair_delinquent
+                })
+                dataSet.backgroundColor = chartFadedColors[0]
+                dataSet.hoverBackgroundColor = chartSolidColors[0]
+                dataSet.borderColor = chartSolidColors[0]
+              }
+              if(dataSet.label.indexOf(`670-739 - ${group[0].msa_name.split(',')[0]}`) !== -1){
+                dataSet.data.push(((row.good_delinquent / row.good_total) * 100).toFixed(2))
+                dataSet.tooltip.push({
+                  totalAtPoint: row.good_total,
+                  delinquentAtPoint: row.good_delinquent
+                })
+                dataSet.backgroundColor = chartFadedColors[1]
+                dataSet.hoverBackgroundColor = chartSolidColors[1]
+                dataSet.borderColor = chartSolidColors[1]
+              }
+              if(dataSet.label.indexOf(`740-799 - ${group[0].msa_name.split(',')[0]}`) !== -1){
+                dataSet.data.push(((row.very_good_delinquent / row.very_good_total) * 100).toFixed(2))
+                dataSet.tooltip.push({
+                  totalAtPoint: row.very_good_total,
+                  delinquentAtPoint: row.very_good_delinquent
+                })
+                dataSet.backgroundColor = chartFadedColors[2]
+                dataSet.hoverBackgroundColor = chartSolidColors[2]
+                dataSet.borderColor = chartSolidColors[2]
+              }
+              if(dataSet.label.indexOf(`800+ - ${group[0].msa_name.split(',')[0]}`) !== -1){
+                dataSet.data.push(((row.exceptional_delinquent / row.exceptional_total) * 100).toFixed(2))
+                dataSet.tooltip.push({
+                  totalAtPoint: row.exceptional_total,
+                  delinquentAtPoint: row.exceptional_delinquent
+                })
+                dataSet.backgroundColor = chartFadedColors[3]
+                dataSet.hoverBackgroundColor = chartSolidColors[3]
+                dataSet.borderColor = chartSolidColors[3]
+              }
             })
           })
-
-          delinquencyRateStructuredData.push(delinquencyRateFeatureData)
         })
 
         const delinquencyRateFeatureOptions = {
+          aspectRatio: 2.5,
           responsive: true,
-          maintainAspectRatio: false,
           plugins: {
             legend: {
-              display: true
+              display: true,
+              onHover: function(event, legendItem, legend){
+                const myChart = legend.chart
+                const indices = []
+                for(let i = 0; i < myChart.getDatasetMeta(0).data.length; i++){
+                  indices.push(
+                    {
+                      datasetIndex: legendItem.datasetIndex,
+                      index: i
+                    }
+                  )
+                }
+                myChart.setActiveElements(indices)
+                myChart.update()
+              },
+              onLeave: function(event, legendItem, legend){
+                const myChart = legend.chart
+                // myChart.hide(legendItem.datasetIndex)
+                myChart.update()
+              }
             },
             tooltip: {
               callbacks: {
@@ -193,9 +219,7 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, targetRegion, compRegions}
             x: {
               title: {
                 display: true,
-                text: function(chart){
-                  return chart.chart.getDatasetMeta(0)._dataset.region.name
-                },
+                text: '',
                 padding: 20,
                 font: {
                   size: 14
@@ -204,7 +228,7 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, targetRegion, compRegions}
               ticks: {
                 callback: function(value){
                   let date = new Date(this.getLabelForValue(value))
-                  return `${date.toLocaleString('en-us', {month: 'long'})} ${date.getFullYear()}`
+                  return `${date.toLocaleString('en-us', {timeZone: 'UTC', month: 'long', year: 'numeric'})}`
                 },
                 font: {
                   size: 12
@@ -217,14 +241,14 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, targetRegion, compRegions}
           }
         }
 
-        setChartData(delinquencyRateStructuredData)
+        setChartData(delinquencyRateFeatureData)
         setChartOptions(delinquencyRateFeatureOptions)
         setLoading(false)
       })
   }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate])
 
   if(isLoading) {
-    return <Loader loadiingText={"Getting credit score data..."}/>
+    return <Loader loadiingText={"Getting credit score by month data..."}/>
   }
 
   return (
@@ -235,15 +259,11 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, targetRegion, compRegions}
         tooltip={"Credit scores are grouped into standard ranges corresponding to 'Fair', 'Good', 'Very Good', and 'Exceptional'. The number of delinquent loans for each range in each period is divided by the corresponding total number of loans to get the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given data point and are also excluded. Hover over the data points to see details"}
       />
       <div className="flex">
-      {/* TODO: lay these out differently - they are too squished when three in a row. Use more space. It won't all go in one view. */}
-      {chartData && chartData.map((dataRow, i) => {
-        return (
-          <div key={`chartData_${i}`} className={chartData.length === 1 ? "w-full h-[80vh]" : chartData.length === 2 ? "w-1/2 h-[80vh]" : "w-1/3 h-[80vh]"}>
-            <Bar data={dataRow} options={chartOptions} />
-          </div>
-        )
-      })}
-
+      {chartData &&
+        <div className="w-full">
+          <Bar data={chartData} options={chartOptions} />
+        </div>
+      }
       </div>
     </div>
   )

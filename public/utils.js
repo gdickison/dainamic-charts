@@ -31,23 +31,23 @@ function groupDataByMsa(list, key){
 }
 
 const chartFadedColors = [
-  "rgba(255, 0, 0, 0.2)",
-  "rgba(0, 0, 255, 0.2)",
-  "rgba(255, 225, 0, 0.2)",
-  "rgba(0, 180, 0, 0.2)",
-  "rgba(255, 0, 200, 0.2)",
-  "rgba(255, 130, 0, 0.2)",
-  "rgba(0, 0, 0, 0.2)"
+  "rgba(255, 0, 0, 0.3)",
+  "rgba(0, 0, 255, 0.3)",
+  "rgba(255, 225, 0, 0.3)",
+  "rgba(0, 180, 0, 0.3)",
+  "rgba(255, 0, 200, 0.3)",
+  "rgba(255, 130, 0, 0.3)",
+  "rgba(0, 0, 0, 0.3)"
 ]
 
 const chartSolidColors = [
-  "rgba(255, 0, 0, 0.6)",
-  "rgba(0, 0, 255, 0.6)",
-  "rgba(255, 225, 0, 0.6)",
-  "rgba(0, 180, 0, 0.6)",
-  "rgba(255, 0, 200, 0.6)",
-  "rgba(255, 130, 0, 0.6)",
-  "rgba(0, 0, 0, 0.6)"
+  "rgba(255, 0, 0, 0.7)",
+  "rgba(0, 0, 255, 0.7)",
+  "rgba(255, 225, 0, 0.7)",
+  "rgba(0, 180, 0, 0.7)",
+  "rgba(255, 0, 200, 0.7)",
+  "rgba(255, 130, 0, 0.7)",
+  "rgba(0, 0, 0, 0.7)"
 ]
 
 export { linearRegression, groupDataByMsa, chartFadedColors, chartSolidColors }
