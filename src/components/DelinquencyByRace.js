@@ -17,16 +17,26 @@ ChartJS.register(
 
 import Loader from "./Loader"
 import { useState, useEffect } from "react"
-import { Bar } from "react-chartjs-2"
+import { Bar, Pie } from "react-chartjs-2"
+import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
+import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
-const DelinquencyByRace = ({dateRange, targetRegion, compRegions}) => {
+const DelinquencyByRace = ({targetRegion, compRegions, regionalDelinquencyRates}) => {
   const [isLoading, setLoading] = useState(false)
-  const [chartData, setChartData] = useState()
+  const [barChartData, setBarChartData] = useState()
+  const [barChartOptions, setBarChartOptions] = useState()
 
-  useEffect(() => {
+  const getDelinquencyByRaceChartData = async () => {
     setLoading(true)
+    const msaCodes = []
+    msaCodes.push(targetRegion.msaCode)
+    if(compRegions.length > 0){
+      compRegions.map(region => {
+        msaCodes.push(region.msa)
+      })
+    }
     const JSONdata = JSON.stringify({
-      msaCode: targetRegion.msaCode
+      msaCodes: msaCodes
     })
     const endpoint = `/api/get_population_by_race`
     const options = {
@@ -37,76 +47,142 @@ const DelinquencyByRace = ({dateRange, targetRegion, compRegions}) => {
       body: JSONdata
     }
 
-    fetch(endpoint, options)
-      .then(res => res.json())
-      .then(data => data.response)
-      .then(data => {
-        const labels = []
-        const dataset = []
-        for(const [key, value] of Object.entries(data)){
-          labels.push(key)
-          dataset.push(parseFloat(value * 100).toFixed(2))
-        }
+    const raceResponse = await fetch(endpoint, options)
+    let raceData = await raceResponse.json()
+    raceData = raceData.response
 
-        setChartData({
-          labels: labels,
-          datasets: [
-            {
-              label: "Population % by Race",
-              data: dataset,
-              backgroundColor: [
-                '#bae6ff',
-                '#82cfff',
-                '#33b1ff',
-                '#1192e8',
-                '#0072c3',
-                '#00539a'
-              ],
-              hoverOffset: 25
-            }
-          ]
-        })
-        setLoading(false)
-      })
-  }, [targetRegion.msaCode])
-
-  const chartOptions = {
-    responsive: true,
-    indexAxis: 'y',
-    plugins: {
-      title: {
-        display: true,
-        text: "Population % by Race",
-        align: "start",
-        font: {
-          size: 20
+    const chartLabels = []
+    const barDataset = []
+    raceData.map((row, i) => {
+      const dataGroup = []
+      for(const [key, value] of Object.entries(row)){
+        if(i === 0 && key !== 'msa'){
+          chartLabels.push(key)
         }
-      },
-      legend: {
-        position: "top",
-        align: "start",
-        labels: {
-          boxWidth: 7,
-          usePointStyle: true,
-          pointStyle: "circle"
+        if(key !== 'msa'){
+          dataGroup.push(value)
         }
       }
-    }
+      barDataset.push(dataGroup)
+    })
+
+    const barChartStructuredData = barDataset.map((row, i) => {
+      const newRow = row.map(rate => {
+        return parseFloat(rate * Number(regionalDelinquencyRates[i].delinquencyRate)).toFixed(2)
+      })
+
+      const tooltipData = {
+        regionDelinquencyRate: regionalDelinquencyRates[i].delinquencyRate,
+        regionDelinquent: regionalDelinquencyRates[i].delinquent_msa,
+        regionTota: regionalDelinquencyRates[i].total_msa
+      }
+
+      return {
+        label: i === 0 ? targetRegion.msaName : compRegions[i - 1].name,
+        data: newRow,
+        backgroundColor: chartFadedColors[i],
+        borderColor: chartSolidColors[i],
+        hoverBackgroundColor: chartSolidColors[i],
+        borderWidth: 3,
+        tooltip: tooltipData,
+        pointHitRadius: 5
+      }
+    })
+
+    setBarChartData({
+      labels: chartLabels,
+      datasets: barChartStructuredData
+    })
+
+    setBarChartOptions({
+      responsive: true,
+      aspectRatio: 2.5,
+      plugins: {
+        legend: {
+          display: true,
+          labels: {
+            fontSize: 16
+          }
+        },
+        tooltip: {
+          callbacks: {
+            title: function(context){
+              return `${context[0].dataset.label}`
+            },
+            // title: function(context){
+            //   return `Delinquency Rate for ${context[0].label}: `
+            // },
+            beforeLabel: function(context){
+              return (`Delinquency Rate for region: ${context.dataset.tooltip.regionDelinquencyRate}%`)
+            },
+            label: function(context){
+              return(`Delinquency Rate for ${context.label}: ${context.raw}%`)
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          title: {
+            display: true,
+            text: "Delinquency Rate",
+            padding: 20,
+            font: {
+              size: 20
+            }
+          },
+          ticks: {
+            callback: function(value, index, title){
+              return `${value}%`
+            },
+            font: {
+              size: 20
+            }
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: "Education Level",
+            padding: 20,
+            font: {
+              size: 20
+            }
+          },
+          ticks: {
+            font: {
+              size: 20
+            }
+          },
+          grid: {
+            display: false
+          }
+        }
+      }
+    })
+
+    setLoading(false)
   }
+
+  useEffect(() => {
+    getDelinquencyByRaceChartData()
+  }, [])
 
   if(isLoading) {
     return <Loader loadiingText={"Getting race data..."}/>
   }
 
   return(
-    <>
-      <h1 className="my-6 text-3xl">Population By Race for {targetRegion.msaName}</h1>
-      <div>
-        {chartData &&
-          <Bar data={chartData} options={chartOptions} />
+    <div>
+      <ChartHeaderWithTooltip
+        chartName={"Delinquency Rate by Race"}
+        msa={compRegions.length > 0 ? "selected regions" : targetRegion.msaName}
+        tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to racial populations."}
+      />
+        {barChartData &&
+          <Bar data={barChartData} options={barChartOptions} />
         }
-      </div>
-    </>
+    </div>
   )
 }
 

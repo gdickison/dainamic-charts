@@ -166,7 +166,7 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency Rate by Education Level"}
-        msa={targetRegion.msaName}
+        msa={compRegions.length > 0 ? "selected regions" : targetRegion.msaName}
         tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to education level segments."}
       />
         {chartData &&

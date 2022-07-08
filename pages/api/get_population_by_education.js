@@ -15,7 +15,6 @@ export default async function handler(req, res) {
       JOIN banking_app.population_by_education a USING (msa)
       ORDER BY b.order_nr;`)
     .then(response => res.status(200).json({response: response.rows}))
-    // .then(response => res.status(200).json({response: response.rows[0]}))
     .then(client.release())
-    .catch(error => console.log("There is an error getting data: ", error))
+    .catch(error => console.log("There is an error getting population by education data: ", error))
 }
