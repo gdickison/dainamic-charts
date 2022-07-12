@@ -59,7 +59,7 @@ const DelinquencyByRace = ({targetRegion, compRegions}) => {
       regionalDelinquencyRate: ((Number(region.delinquent) / Number(region.total)) * 100).toFixed(2)
     }))
 
-    // Get population data
+    // Get race data
     const raceEnpoint = `/api/get_population_by_race`
 
     const raceResponse = await fetch(raceEnpoint, options)
@@ -127,10 +127,10 @@ const DelinquencyByRace = ({targetRegion, compRegions}) => {
               return `${context[0].dataset.label}`
             },
             beforeLabel: function(context){
-              return (`Delinquency Rate for region: ${context.dataset.tooltip.regionDelinquencyRate}%`)
+              return `Delinquency Rate for region: ${context.dataset.tooltip.regionDelinquencyRate}%`
             },
             label: function(context){
-              return(`Delinquency Rate for ${context.label}: ${context.raw}%`)
+              return `Delinquency Rate for ${context.label}: ${context.raw}%`
             }
           }
         }

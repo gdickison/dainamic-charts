@@ -18,7 +18,7 @@ ChartJS.register(
 import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { useState, useEffect } from "react"
-import { Bar, Doughnut } from "react-chartjs-2"
+import { Bar } from "react-chartjs-2"
 import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
 const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyRates}) => {
@@ -40,7 +40,6 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
       msaCodes: msaCodes
     })
 
-    const endpoint = `api/get_population_by_education`
     const options = {
       method: 'POST',
       headers: {
@@ -49,7 +48,21 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
       body: JSONdata
     }
 
-    const educationResponse = await fetch(endpoint, options)
+    // Get regional delinquency rates
+    const delinquencyEndpoint = `api/get_regional_delinquency_rate_for_all_dates`
+    const delinquencyResponse = await fetch(delinquencyEndpoint, options)
+    let delinquencyData = await delinquencyResponse.json()
+    delinquencyData = delinquencyData.response
+
+    delinquencyData = delinquencyData.map(region => ({
+      ...region,
+      regionalDelinquencyRate: ((Number(region.delinquent) / Number(region.total)) * 100).toFixed(2)
+    }))
+
+    // Get education data
+    const educationEndpoint = `api/get_population_by_education`
+
+    const educationResponse = await fetch(educationEndpoint, options)
     let educationData = await educationResponse.json()
     educationData = educationData.response
 
@@ -68,10 +81,18 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
       dataset.push(dataGroup)
     })
 
-    const rawChartData = dataset.map((row, i) => {
+    const barChartStructuredData = dataset.map((row, i) => {
       const newRow = row.map(rate => {
-        return parseFloat(rate * Number(regionalDelinquencyRates[i].delinquencyRate)).toFixed(2)
+        return parseFloat(rate * (delinquencyData[i].regionalDelinquencyRate)).toFixed(2)
       })
+
+      const tooltipData = {
+        regionDelinquencyRate: delinquencyData[i].regionalDelinquencyRate,
+        regionDelinquent: delinquencyData[i].delinquent_msa,
+        regionTotal: delinquencyData[i].total_msa,
+        minDate: delinquencyData[i].min,
+        maxDate: delinquencyData[i].max
+      }
 
       return {
         label: i === 0 ? targetRegion.msaName : compRegions[i - 1].name,
@@ -79,13 +100,14 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
         backgroundColor: chartFadedColors[i],
         borderColor: chartSolidColors[i],
         hoverBackgroundColor: chartSolidColors[i],
-        borderWidth: 3
+        borderWidth: 3,
+        tooltip: tooltipData
       }
     })
 
     setChartData({
       labels: labels,
-      datasets: rawChartData
+      datasets: barChartStructuredData
     })
 
     setChartOptions({
@@ -100,14 +122,14 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
         },
         tooltip: {
           callbacks: {
-            beforeTitle: function(context){
+            title: function(context){
               return `${context[0].dataset.label}`
             },
-            title: function(context){
-              return `Delinquency Rate for ${context[0].label}: `
+            beforeLabel: function(context){
+              return `Delinquency Rate for region: ${context.dataset.tooltip.regionDelinquencyRate}%`
             },
             label: function(context){
-              return(`${context.raw}%`)
+              return `Delinquency Rate for ${context.label}: ${context.raw}%`
             }
           }
         }
@@ -167,7 +189,7 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
       <ChartHeaderWithTooltip
         chartName={"Delinquency Rate by Education Level"}
         msa={compRegions.length > 0 ? "selected regions" : targetRegion.msaName}
-        tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to education level segments."}
+        tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to education level segments. Delinquency is aggragated for all available dates rather than selected start and end dates."}
       />
         {chartData &&
           <Bar data={chartData} options={chartOptions} />
