@@ -17,11 +17,11 @@ ChartJS.register(
 
 import Loader from "./Loader"
 import { useState, useEffect } from "react"
-import { Bar, Pie } from "react-chartjs-2"
+import { Bar } from "react-chartjs-2"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
-const DelinquencyByRace = ({targetRegion, compRegions, regionalDelinquencyRates}) => {
+const DelinquencyByRace = ({targetRegion, compRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [barChartData, setBarChartData] = useState()
   const [barChartOptions, setBarChartOptions] = useState()
@@ -35,10 +35,11 @@ const DelinquencyByRace = ({targetRegion, compRegions, regionalDelinquencyRates}
         msaCodes.push(region.msa)
       })
     }
+
     const JSONdata = JSON.stringify({
       msaCodes: msaCodes
     })
-    const endpoint = `/api/get_population_by_race`
+
     const options = {
       method: 'POST',
       headers: {
@@ -47,7 +48,21 @@ const DelinquencyByRace = ({targetRegion, compRegions, regionalDelinquencyRates}
       body: JSONdata
     }
 
-    const raceResponse = await fetch(endpoint, options)
+    // Get regional delinquency rates
+    const delinquencyEndpoint = `api/get_regional_delinquency_rate_for_all_dates`
+    const delinquencyResponse = await fetch(delinquencyEndpoint, options)
+    let delinquencyData = await delinquencyResponse.json()
+    delinquencyData = delinquencyData.response
+
+    delinquencyData = delinquencyData.map(region => ({
+      ...region,
+      regionalDelinquencyRate: ((Number(region.delinquent) / Number(region.total)) * 100).toFixed(2)
+    }))
+
+    // Get population data
+    const raceEnpoint = `/api/get_population_by_race`
+
+    const raceResponse = await fetch(raceEnpoint, options)
     let raceData = await raceResponse.json()
     raceData = raceData.response
 
@@ -68,13 +83,15 @@ const DelinquencyByRace = ({targetRegion, compRegions, regionalDelinquencyRates}
 
     const barChartStructuredData = barDataset.map((row, i) => {
       const newRow = row.map(rate => {
-        return parseFloat(rate * Number(regionalDelinquencyRates[i].delinquencyRate)).toFixed(2)
+        return parseFloat(rate * (delinquencyData[i].regionalDelinquencyRate)).toFixed(2)
       })
 
       const tooltipData = {
-        regionDelinquencyRate: regionalDelinquencyRates[i].delinquencyRate,
-        regionDelinquent: regionalDelinquencyRates[i].delinquent_msa,
-        regionTota: regionalDelinquencyRates[i].total_msa
+        regionDelinquencyRate: delinquencyData[i].regionalDelinquencyRate,
+        regionDelinquent: delinquencyData[i].delinquent_msa,
+        regionTotal: delinquencyData[i].total_msa,
+        minDate: delinquencyData[i].min,
+        maxDate: delinquencyData[i].max
       }
 
       return {
@@ -109,9 +126,6 @@ const DelinquencyByRace = ({targetRegion, compRegions, regionalDelinquencyRates}
             title: function(context){
               return `${context[0].dataset.label}`
             },
-            // title: function(context){
-            //   return `Delinquency Rate for ${context[0].label}: `
-            // },
             beforeLabel: function(context){
               return (`Delinquency Rate for region: ${context.dataset.tooltip.regionDelinquencyRate}%`)
             },
@@ -143,7 +157,7 @@ const DelinquencyByRace = ({targetRegion, compRegions, regionalDelinquencyRates}
         x: {
           title: {
             display: true,
-            text: "Education Level",
+            text: "Race",
             padding: 20,
             font: {
               size: 20
@@ -177,7 +191,7 @@ const DelinquencyByRace = ({targetRegion, compRegions, regionalDelinquencyRates}
       <ChartHeaderWithTooltip
         chartName={"Delinquency Rate by Race"}
         msa={compRegions.length > 0 ? "selected regions" : targetRegion.msaName}
-        tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to racial populations."}
+        tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to racial populations. Delinquency is aggragated for all available dates rather than selected start and end dates."}
       />
         {barChartData &&
           <Bar data={barChartData} options={barChartOptions} />

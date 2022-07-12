@@ -184,7 +184,6 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
                   <DelinquencyByRace
                     targetRegion={targetRegionParams}
                     compRegions={compRegionsParams}
-                    regionalDelinquencyRates={regionalDelinquencyRates}
                   />
                 </div>
               );

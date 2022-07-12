@@ -200,7 +200,7 @@ const Home = () => {
       msaCodes: msaCodes
     })
 
-    const endpoint = `/api/get_regional_delinquency_rate`
+    const endpoint = `/api/get_regional_delinquency_rate_for_period`
 
     const options = {
       method: 'POST',
