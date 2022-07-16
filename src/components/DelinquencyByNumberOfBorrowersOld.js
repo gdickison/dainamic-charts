@@ -27,12 +27,12 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) 
   useEffect(() => {
     setLoading(true)
     // const JSONdata = JSON.stringify({
-    //   msaCode: targetRegion.msaCode,
+    //   msaCode: targetRegion.msa,
     //   startDate: dateRange.startDate,
     //   endDate: dateRange.endDate
     // })
     const msaCodes = []
-    msaCodes.push(targetRegion.msaCode)
+    msaCodes.push(targetRegion.msa)
     if(compRegions.length > 0){
       compRegions.map(region => {
         msaCodes.push(region.msa)
@@ -169,7 +169,7 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) 
         setChartOptions(options)
         setLoading(false)
       })
-  }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate])
+  }, [dateRange.endDate, targetRegion.msa, dateRange.startDate])
 
   if(isLoading){
     return <Loader loadiingText={"Getting number of borrowers data..."}/>
@@ -177,7 +177,7 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) 
 
   return (
     <div>
-      <h1 className="my-2 text-2xl">Delinquency By Number of Borrowers for {targetRegion.msaName}</h1>
+      <h1 className="my-2 text-2xl">Delinquency By Number of Borrowers for {targetRegion.name}</h1>
       <div className="space-y-2 text-sm">
         <p>All loans for each month are grouped by number of borrowers (1 or 2). Delinquent loans are divided by the total loans to show the delinquency rate. Loans with 3+ borrowers are rare and are excluded. Hover over the bars to see details</p>
       </div>

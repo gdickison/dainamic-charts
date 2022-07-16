@@ -30,7 +30,7 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, targetRegion, compRegions}
     setLoading(true)
 
     const msaCodes = []
-    msaCodes.push(targetRegion.msaCode)
+    msaCodes.push(targetRegion.msa)
     if(compRegions.length > 0){
       compRegions.map(region => {
         msaCodes.push(region.msa)
@@ -245,7 +245,7 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, targetRegion, compRegions}
         setChartOptions(delinquencyRateFeatureOptions)
         setLoading(false)
       })
-  }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate])
+  }, [dateRange.endDate, targetRegion.msa, dateRange.startDate])
 
   if(isLoading) {
     return <Loader loadiingText={"Getting credit score by month data..."}/>
@@ -255,7 +255,7 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, targetRegion, compRegions}
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency Rate by Credit Score and Origination Date"}
-        msa={compRegions.length > 0 ? "selected regions" : targetRegion.msaName}
+        msa={compRegions.length > 0 ? "selected regions" : targetRegion.name}
         tooltip={"Credit scores are grouped into standard ranges corresponding to 'Fair', 'Good', 'Very Good', and 'Exceptional'. The number of delinquent loans for each range in each period is divided by the corresponding total number of loans to get the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given data point and are also excluded. Hover over the data points to see details"}
       />
       <div className="flex">

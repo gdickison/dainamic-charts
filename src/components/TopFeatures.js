@@ -21,7 +21,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
   useEffect(() => {
     setLoading(true)
     const JSONdata = JSON.stringify({
-      msaCode: targetRegionParams.msaCode
+      msaCode: targetRegionParams.msa
     })
 
     const endpoint = `/api/get_top_features`
@@ -48,7 +48,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
   return (
     <section className="mx-auto px-0 md:px-24">
       <header>
-        <h1 className="my-6 text-3xl">{`Top Five Delinquency Predictors for ${targetRegionParams.msaName}`}</h1>
+        <h1 className="my-6 text-3xl">{`Top Five Delinquency Predictors for ${targetRegionParams.name}`}</h1>
         <div className="flex flex-col md:flex-row justify-between pb-6 space-x-4 h-40">
           {topFeatures &&
             topFeatures.map((feature, i) => {

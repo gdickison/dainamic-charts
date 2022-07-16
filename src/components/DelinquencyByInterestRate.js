@@ -29,7 +29,7 @@ import outliers from "outliers"
 import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import ChartDescription from "./ChartDescription"
-import { linearRegression, groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
+import { getLinearRegression, groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
 import { useState, useEffect, useRef } from "react"
 import { Scatter, Line, Bar } from "react-chartjs-2"
 
@@ -43,7 +43,7 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
     setLoading(true)
 
     const msaCodes = []
-    msaCodes.push(targetRegion.msaCode)
+    msaCodes.push(targetRegion.msa)
     if(compRegions.length > 0){
       compRegions.map(region => {
         msaCodes.push(region.msa)
@@ -100,8 +100,8 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
         rawChartData.map(region => {
           Object.values(region).map(value => {
             value.delinquencyRate =  parseFloat((Number(value.delinquent) / Number(value.total_loans)) * 100).toFixed(2)
-            if(value.msa === targetRegion.msaCode){
-              value.name = targetRegion.msaName
+            if(value.msa === targetRegion.msa){
+              value.name = targetRegion.name
             } else {
               value.name = compRegions.find(row => row.msa === value.msa).name
             }
@@ -184,7 +184,7 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
 
           const regressionData = []
           Object.keys(row.regressionX).forEach(key => {
-            const lr = linearRegression(row.regressionY, row.regressionX)
+            const lr = getLinearRegression(row.regressionY, row.regressionX)
             if((lr.intercept + (lr.slope * Number(row.dataset[key].x))) > 0){
               regressionData.push({
                 x: Number(row.dataset[key].x),
@@ -311,7 +311,7 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
         })
         setLoading(false)
       })
-  }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate])
+  }, [dateRange.endDate, targetRegion.msa, dateRange.startDate])
 
   if(isLoading) {
     return (
@@ -323,7 +323,7 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency by Interest Rate"}
-        msa={compRegions.length > 0 ? "selected regions" : targetRegion.msaName}
+        msa={compRegions.length > 0 ? "selected regions" : targetRegion.name}
         tooltip={"All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
       />
       <ChartDescription

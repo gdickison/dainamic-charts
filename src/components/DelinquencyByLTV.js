@@ -28,7 +28,7 @@ ChartJS.register(
 )
 
 import Loader from "./Loader"
-import { linearRegression, chartFadedColors, chartSolidColors } from "../../public/utils"
+import { getLinearRegression, chartFadedColors, chartSolidColors } from "../../public/utils"
 import { Scatter } from "react-chartjs-2"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 
@@ -55,7 +55,7 @@ const DelinquencyByLTV = ({dateRange, targetRegion, compRegions}) => {
     const JSONdata = JSON.stringify({
       startDate: dateRange.startDate,
       endDate: dateRange.endDate,
-      msaCode: targetRegion.msaCode
+      msaCode: targetRegion.msa
     })
     const endpoint = `/api/get_delinquency_by_ltv`
     const options = {
@@ -89,7 +89,7 @@ const DelinquencyByLTV = ({dateRange, targetRegion, compRegions}) => {
           // }
         }
 
-        const lr = linearRegression(regressionY, regressionX)
+        const lr = getLinearRegression(regressionY, regressionX)
 
         const regressionData = []
         for(const row of dataset){
@@ -198,7 +198,7 @@ const DelinquencyByLTV = ({dateRange, targetRegion, compRegions}) => {
         setIsChecked(false)
         setShowDataLine(false)
       })
-  }, [dateRange.startDate, dateRange.endDate, targetRegion.msaCode])
+  }, [dateRange.startDate, dateRange.endDate, targetRegion.msa])
 
 
   if(isLoading){
@@ -209,7 +209,7 @@ const DelinquencyByLTV = ({dateRange, targetRegion, compRegions}) => {
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency by Loan-to-Value"}
-        msa={targetRegion.msaName}
+        msa={targetRegion.name}
         tooltip={"Delinquent loans at the given LTV ratio are divided by the total loans at that ratio to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
       />
       <section className="-mt-2 mb-8">

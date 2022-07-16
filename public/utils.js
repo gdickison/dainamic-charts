@@ -1,4 +1,22 @@
-function linearRegression(y,x){
+const getDateLabelsForChart = (start, end) => {
+  let start_date = new Date(start)
+  let end_date = new Date(end)
+  const generatedLabels = []
+  while(end_date >= start_date){
+    generatedLabels.push(start_date.toLocaleString('default', { month: 'long' , year: 'numeric'}))
+    start_date.setMonth(start_date.getMonth() + 1);
+  }
+  return generatedLabels
+}
+
+function groupDataByMsa(list, key){
+  return list.reduce(function(rv, x){
+    (rv[x[key]] = rv[x[key]] || []).push(x)
+    return rv
+  }, {})
+}
+
+function getLinearRegression(y,x){
   var lr = {};
   var n = y.length;
   var sum_x = 0;
@@ -23,13 +41,6 @@ function linearRegression(y,x){
   return lr;
 }
 
-function groupDataByMsa(list, key){
-  return list.reduce(function(rv, x){
-    (rv[x[key]] = rv[x[key]] || []).push(x)
-    return rv
-  }, {})
-}
-
 const chartFadedColors = [
   "rgba(255, 0, 0, 0.3)",
   "rgba(0, 83, 255, 0.3)",
@@ -50,4 +61,4 @@ const chartSolidColors = [
   "rgba(0, 0, 0, 0.7)"
 ]
 
-export { linearRegression, groupDataByMsa, chartFadedColors, chartSolidColors }
+export { getDateLabelsForChart, groupDataByMsa, getLinearRegression, chartFadedColors, chartSolidColors }

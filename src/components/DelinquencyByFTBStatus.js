@@ -28,7 +28,7 @@ const DelinquencyByFTBStatus = ({dateRange, targetRegion, compRegions}) => {
   useEffect(() => {
     setLoading(true)
     const JSONdata = JSON.stringify({
-      msaCode: targetRegion.msaCode,
+      msaCode: targetRegion.msa,
       startDate: dateRange.startDate,
       endDate: dateRange.endDate
     })
@@ -163,7 +163,7 @@ const DelinquencyByFTBStatus = ({dateRange, targetRegion, compRegions}) => {
 
         setLoading(false)
       })
-  }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate])
+  }, [dateRange.endDate, targetRegion.msa, dateRange.startDate])
 
   if(isLoading){
     return <Loader loadiingText={"Getting first time buyer data..."}/>
@@ -173,7 +173,7 @@ const DelinquencyByFTBStatus = ({dateRange, targetRegion, compRegions}) => {
     <div>
       <ChartHeaderWithTooltip
         chartName={'Delinquency by First Time Buyer Status'}
-        msa={targetRegion.msaName}
+        msa={targetRegion.name}
       />
       {chartData &&
         <Bar data={chartData} options={chartOptions} />

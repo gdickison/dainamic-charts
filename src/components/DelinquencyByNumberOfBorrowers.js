@@ -31,7 +31,7 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) 
     setLoading(true)
 
     const msaCodes = []
-    msaCodes.push(targetRegion.msaCode)
+    msaCodes.push(targetRegion.msa)
     if(compRegions.length > 0){
       compRegions.map(region => {
         msaCodes.push(region.msa)
@@ -282,7 +282,7 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) 
         setPieChartOptions(pieOptions)
         setLoading(false)
       })
-  }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate])
+  }, [dateRange.endDate, targetRegion.msa, dateRange.startDate])
 
   if(isLoading){
     return <Loader loadiingText={"Getting number of borrowers data..."}/>
@@ -292,7 +292,7 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) 
     <div className="h-max">
       <ChartHeaderWithTooltip
         chartName={"Delinquency By Number of Borrowers"}
-        msa={compRegions.length > 0 ? "selected regions" : targetRegion.msaName}
+        msa={compRegions.length > 0 ? "selected regions" : targetRegion.name}
         tooltip={"All loans for each month are grouped by number of borrowers (1 or 2+). The number of loans with 3 or more borrowers are statistically insignificant and are included in the '2+' category. Click on the legend to show/hide datasets"}
       />
       <div className="flex justify-around w-full">

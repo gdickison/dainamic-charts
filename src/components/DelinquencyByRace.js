@@ -29,7 +29,7 @@ const DelinquencyByRace = ({targetRegion, compRegions}) => {
   const getDelinquencyByRaceChartData = async () => {
     setLoading(true)
     const msaCodes = []
-    msaCodes.push(targetRegion.msaCode)
+    msaCodes.push(targetRegion.msa)
     if(compRegions.length > 0){
       compRegions.map(region => {
         msaCodes.push(region.msa)
@@ -82,7 +82,7 @@ const DelinquencyByRace = ({targetRegion, compRegions}) => {
     })
 
     const barChartStructuredData = barDataset.map((row, i) => {
-      const newRow = row.map(rate => {
+      const delinquencyRateData = row.map(rate => {
         return parseFloat(rate * (delinquencyData[i].regionalDelinquencyRate)).toFixed(2)
       })
 
@@ -95,8 +95,8 @@ const DelinquencyByRace = ({targetRegion, compRegions}) => {
       }
 
       return {
-        label: i === 0 ? targetRegion.msaName : compRegions[i - 1].name,
-        data: newRow,
+        label: i === 0 ? targetRegion.name : compRegions[i - 1].name,
+        data: delinquencyRateData,
         backgroundColor: chartFadedColors[i],
         borderColor: chartSolidColors[i],
         hoverBackgroundColor: chartSolidColors[i],
@@ -190,7 +190,7 @@ const DelinquencyByRace = ({targetRegion, compRegions}) => {
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency Rate by Race"}
-        msa={compRegions.length > 0 ? "selected regions" : targetRegion.msaName}
+        msa={compRegions.length > 0 ? "selected regions" : targetRegion.name}
         tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to racial populations. Delinquency is aggragated for all available dates rather than selected start and end dates."}
       />
         {barChartData &&

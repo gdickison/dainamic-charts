@@ -27,7 +27,7 @@ ChartJS.register(
 
 import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
-import { linearRegression } from "../../public/utils"
+import { getLinearRegression } from "../../public/utils"
 import { useState, useEffect } from "react"
 import { Scatter } from "react-chartjs-2"
 
@@ -54,7 +54,7 @@ const DelinquencyByLoanTerm = ({dateRange, targetRegion, compRegions}) => {
     const JSONdata = JSON.stringify({
       startDate: dateRange.startDate,
       endDate: dateRange.endDate,
-      msaCode: targetRegion.msaCode
+      msaCode: targetRegion.msa
     })
     const endpoint = `/api/get_delinquency_by_loan_term`
     const options = {
@@ -88,7 +88,7 @@ const DelinquencyByLoanTerm = ({dateRange, targetRegion, compRegions}) => {
           // }
         }
 
-        const lr = linearRegression(regressionY, regressionX)
+        const lr = getLinearRegression(regressionY, regressionX)
 
         const regressionData = []
         for(const row of dataset){
@@ -192,7 +192,7 @@ const DelinquencyByLoanTerm = ({dateRange, targetRegion, compRegions}) => {
         setIsChecked(false)
         setShowDataLine(false)
       })
-  }, [dateRange.endDate, targetRegion.msaCode, dateRange.startDate])
+  }, [dateRange.endDate, targetRegion.msa, dateRange.startDate])
 
   if(isLoading) {
     return (
@@ -204,7 +204,7 @@ const DelinquencyByLoanTerm = ({dateRange, targetRegion, compRegions}) => {
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency by Loan Term"}
-        msa={targetRegion.msaName}
+        msa={targetRegion.name}
         tooltip={"Delinquent loans at the given term are divided by the total loans at that term to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
       />
       <section className="-mt-2 mb-8">
