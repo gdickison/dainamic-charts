@@ -39,7 +39,7 @@ const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) =
 
   const getDelinquencyByUnemploymentChartData = async () => {
     setLoading(true)
-
+console.log('targetRegion', targetRegion)
     const msaCodes = []
     msaCodes.push(targetRegion.msa)
     if(compRegions.length > 0) {

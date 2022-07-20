@@ -125,12 +125,19 @@ const Home = () => {
 
   const handleCompRegionChange = e => {
     e.preventDefault()
-    if(compRegions.length < 2){
-      setCompRegions([...compRegions, {compMsaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
+    // if(compRegions.length < 2){
+    if(compRegions.length < 3){
+      // setCompRegions([...compRegions, {compMsaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
+      const updatedCompRegions = ([...compRegions, {compMsaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
+      updatedCompRegions.sort((a, b) => a.compMsaCode - b.compMsaCode)
+console.log('updatedCompRegions', updatedCompRegions)
+      setCompRegions(updatedCompRegions)
     }
-    if(compRegions.length === 2){
+    // if(compRegions.length === 2){
+    if(compRegions.length === 3){
       setShowAlert(true)
-      setAlertMessage('You can select up to two comp regions.')
+      // setAlertMessage('You can select up to two comp regions.')
+      setAlertMessage('You can select up to three regions.')
     }
   }
 
@@ -147,13 +154,11 @@ const Home = () => {
 
   // General Demographic Data
   const getMsaSummaryData = async () => {
-    const msaCodes = []
-    msaCodes.push(targetRegion.targetMsaCode)
-    if(compRegions.length){
-      for(const region of compRegions){
-        msaCodes.push(region.compMsaCode)
-      }
-    }
+console.log('compRegions', compRegions)
+
+    const msaCodes = compRegions.map(region => {
+      return region.compMsaCode
+    })
 
     const JSONdata = JSON.stringify({
       msaCodes: msaCodes
@@ -173,26 +178,22 @@ const Home = () => {
     const status = response.status
     let data = await response.json()
     data = data.response
-
+console.log('msaSummaryData', data)
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
       setTargetRegionData(data[0])
       if(data.length > 0){
-        setCompRegionsData(data.slice(1))
+        setCompRegionsData(data)
       }
     }
   }
 
   // Delinquency Rate for Entire Period
   const getRegionalDelinquencyRateForRange = async () => {
-    const msaCodes = []
-    msaCodes.push(targetRegion.targetMsaCode)
-    if(compRegions.length){
-      for(const region of compRegions){
-        msaCodes.push(region.compMsaCode)
-      }
-    }
+    const msaCodes = compRegions.map(region => {
+      return region.compMsaCode
+    })
 
     const JSONdata = JSON.stringify({
       startDate: dateRange.startDate,
@@ -214,7 +215,7 @@ const Home = () => {
     const status = response.status
     let data = await response.json()
     data = data.response
-
+console.log('regionalDelinquencyForRange', data)
     data = data.map(row => {
       return {...row, delinquencyRate: ((row.delinquent_msa / row.total_msa) * 100).toFixed(2)}
     })
@@ -256,7 +257,8 @@ const Home = () => {
   // Population by Age Chart
   const getPopulationByAgeData = async () => {
     const JSONdata = JSON.stringify({
-      msaCode: targetRegion.targetMsaCode
+      // msaCode: targetRegion.targetMsaCode
+      msaCode: compRegions[0].compMsaCode
     })
 
     const endpoint = `/api/get_population_by_age_data`
@@ -366,7 +368,8 @@ const Home = () => {
   // Population by Income Chart
   const getPopulationByIncome = async () => {
     const JSONdata = JSON.stringify({
-      msaCode: targetRegion.targetMsaCode
+      // msaCode: targetRegion.targetMsaCode
+      msaCode: compRegions[0].compMsaCode
     })
 
     const endpoint = `/api/get_population_by_income`
@@ -589,6 +592,8 @@ const Home = () => {
               </div>
             </section>
             {/* TODO: set params to a const, separate date params and msa code params, since dates will always be the same */}
+{console.log('targetRegionParams', targetRegionData)}
+{console.log('compRegionParams', compRegionsData)}
             {showTopFeatures &&
               <TopFeatures
                 dateRangeParams={{
@@ -599,12 +604,15 @@ const Home = () => {
                   msa: targetRegionData.msa,
                   name: targetRegionData.name
                 }}
-                compRegionsParams={compRegionsData
-                  ? compRegionsData.map(region => {
-                    return {msa: region.msa, name: region.name}
-                  })
-                  : []
-                }
+                // compRegionsParams={compRegionsData
+                //   ? compRegionsData.map(region => {
+                //     return {msa: region.msa, name: region.name}
+                //   })
+                //   : []
+                // }
+                compRegionsParams={compRegionsData.map(region => {
+                  return {msa: region.msa, name: region.name}
+                })}
                 regionalDelinquencyRates={regionalDelinquencyRates}
               />
             }
