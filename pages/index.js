@@ -30,6 +30,7 @@ ChartJS.register(
 import FormInputs from "../src/components/FormInputs"
 import Loader from "../src/components/Loader"
 import RegionalDelinquencyRatePanel from "../src/components/RegionalDelinquencyRatePanel"
+import RegionalPopulationPanel from "../src/components/RegionalPopulationPanel"
 
 import { Bar } from "react-chartjs-2"
 
@@ -49,6 +50,7 @@ const Home = () => {
   const [compRegionsData, setCompRegionsData] = useState()
   const [regionalDelinquencyRates, setRegionalDelinquencyRates] = useState()
   const [nationalDelinquencyRate, setNationalDelinquencyRate] = useState()
+  const [nationalPopulation, setNationalPopulation] = useState()
   const [populationByAgeData, setPopulationByAgeData] = useState()
   const [populationByAgeOptions, setPopulationByAgeOptions] = useState()
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
@@ -188,6 +190,28 @@ console.log('updatedCompRegions', updatedCompRegions)
       if(data.length > 0){
         setCompRegionsData(data)
       }
+    }
+  }
+
+  const getNationalPopulation = async() => {
+    const endpoint = `/api/get_national_population`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error")
+    } else if(status === 200){
+      setNationalPopulation(data)
     }
   }
 
@@ -490,6 +514,7 @@ console.log('updatedCompRegions', updatedCompRegions)
       getPopulationByIncome()
       getRegionalDelinquencyRateForRange()
       getNationalDelinquencyRateForRange()
+      getNationalPopulation()
       setShowTopFeatures(true)
   }
 
@@ -535,7 +560,7 @@ console.log('updatedCompRegions', updatedCompRegions)
             {/* //                                                                   // */}
             {/* //******************************************************************* */}
 
-            <section className="mx-auto px-0 border-2 border-green-600">
+            <section className="flex mx-auto px-0 border-2 border-green-600">
               {/* <header className="">
                 <h1 className="my-6 px-10 text-4xl">Selected Regions:</h1>
                 {compRegionsData.map(region => {
@@ -544,7 +569,7 @@ console.log('updatedCompRegions', updatedCompRegions)
                   )
                 })}
               </header> */}
-                <div>
+                {/* <div> */}
                   {regionalDelinquencyRates
                     ? <RegionalDelinquencyRatePanel
                       compRegionsData={compRegionsData}
@@ -553,11 +578,22 @@ console.log('updatedCompRegions', updatedCompRegions)
                     />
                     : <Loader loadiingText={"Getting the regional delinquency rate..."}/>
                   }
-                </div>
+                {/* </div> */}
+                {/* <div> */}
+                  <RegionalPopulationPanel
+                    nationalPopulation={nationalPopulation}
+                    compRegionsData={compRegionsData}
+                  />
+                {/* </div> */}
+              </section>
+              <section>
               <div className="flex justify-center items-center">
                 <div className="flex flex-col w-2/3">
                   <div className="flex flex-col items-stretch md:flex-row w-full justify-between mt-4 h-auto">
-                  <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
+                    {/* <RegionalPopulationPanel
+                      compRegionsData={compRegionsData}
+                    /> */}
+                    {/* <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
                       <div>
                         <img className="h-12" src="/group.svg" alt="" />
                       </div>
@@ -570,7 +606,7 @@ console.log('updatedCompRegions', updatedCompRegions)
                           : <Loader loadiingText={"Getting population data..."}/>
                         }
                       </div>
-                    </div>
+                    </div> */}
                     <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
                       <div>
                         <img className="h-12" src="/dollars.svg" alt="" />
@@ -640,7 +676,7 @@ console.log('updatedCompRegions', updatedCompRegions)
                 </div>
                 <div className="flex flex-col w-2/3">
                   <div className="flex flex-col items-stretch md:flex-row w-full justify-between mt-4 h-auto">
-                  <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
+                    <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
                       <div>
                         <img className="h-12" src="/group.svg" alt="" />
                       </div>

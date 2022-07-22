@@ -7,14 +7,15 @@ export default async function handler(req, res) {
   await client
     .query(
       `SELECT
-        a.msa,
-        a.name,
-        a.total_population,
-        a.median_home_income,
-        a.median_home_value
-      FROM UNNEST('{${req.body.msaCodes}}'::INT[]) WITH ORDINALITY AS b(msa, order_nr)
-      JOIN banking_app.msa_summary_data a USING (msa)
-      ORDER BY b.order_nr`
+        msa,
+        name,
+        total_population,
+        population_density,
+        median_home_income,
+        median_home_value
+      FROM banking_app.msa_summary_data
+      WHERE msa IN (${req.body.msaCodes})
+      ORDER BY msa`
     )
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
