@@ -28,34 +28,19 @@ ChartJS.register(
 )
 
 import { Bar } from "react-chartjs-2"
-import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
-const RegionalDelinquencyRatePanel = ({targetRegionData, compRegionsData, regionalDelinquencyRates, nationalDelinquencyRate}) => {
-// console.log('regionalDelinquencyRates from panel', regionalDelinquencyRates)
-// console.log('compRegionsData from panel', compRegionsData)
-// console.log('test', Object.is(compRegionsData[0].msa, regionalDelinquencyRates[0].msa) ? 'true' : 'false')
-const regionalData = []
-compRegionsData.forEach((region, idx) => {
-  // console.log('region', region)
-  regionalDelinquencyRates.forEach(rate => {
-    // console.log('rate', rate)
-    if(region.msa === rate.msa){
-      regionalData.push({...region, ...rate})
-    }
+const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates, nationalDelinquencyRate}) => {
+  const regionalData = []
+  compRegionsData.forEach((region, idx) => {
+    regionalDelinquencyRates.forEach(rate => {
+      if(region.msa === rate.msa){
+        regionalData.push({...region, ...rate})
+      }
+    })
   })
-})
-// console.log('regionalData', regionalData)
 
   const barData = regionalData.map(region => {
     return region.delinquencyRate
-  })
-
-  const barColors = regionalData.map((region, idx) => {
-    return chartFadedColors[idx]
-  })
-
-  const barHoverColors = regionalData.map((region, idx) => {
-    return chartSolidColors[idx]
   })
 
   const lineData = regionalData.map(region => {
@@ -73,18 +58,25 @@ compRegionsData.forEach((region, idx) => {
         type: 'bar',
         label: 'Regional Delinquency',
         data: barData,
-        backgroundColor: barColors,
-        hoverBackgroundColor: barHoverColors,
-        borderColor: barHoverColors,
+        backgroundColor: 'rgba(255, 0, 0, 0.3)',
+        hoverBackgroundColor: 'rgba(255, 0, 0, 0.7)',
+        borderColor: 'rgba(255, 0, 0, 0.7)',
         borderWidth: 3,
+        maxBarThickness: 100,
         order: 2
       },
       {
         type: 'line',
         label: 'National Delinquency',
         data: lineData,
-        backgroundColor: 'black',
-        borderColor: 'black',
+        showLine: true,
+        borderColor: 'rgba(0, 0, 255, 1)',
+        backgroundColor: 'rgba(0, 0, 255, 0.3)',
+        pointBackgroundColor: 'rgba(0, 0, 255, 0.3)',
+        spanGaps: true,
+        pointStyle: 'line',
+        borderWidth: 3,
+        hoverBorderWidth: 3,
         order: 1
       }
     ]
@@ -98,7 +90,7 @@ compRegionsData.forEach((region, idx) => {
     },
     plugins: {
       legend: {
-        display: false
+        display: true
       },
       tooltip: {
         callbacks: {
@@ -112,13 +104,13 @@ compRegionsData.forEach((region, idx) => {
             return `${context.raw}%`
           }
         },
-        backgroundColor: 'rgba(245, 245, 245, 1)',
+        backgroundColor: 'rgba(255, 255, 255, 1)',
         bodyColor: 'rgba(0, 0, 0, 1)',
-        borderColor: 'rgba(0, 0, 0, 1)',
+        borderColor: '#2563EB',
         bodyFont: {
           size: 16
         },
-        borderWidth: 2,
+        borderWidth: 3,
       }
     },
     scales: {
@@ -134,22 +126,23 @@ compRegionsData.forEach((region, idx) => {
       },
       x: {
         ticks: {
-          display: false
+          callback: function(value){
+            const labelArray = this.getLabelForValue(value).split(", ")
+            const label = labelArray[0].split("-")
+            label.push(labelArray[1])
+            return label
+          }
         }
       }
     }
   }
 
-
   return (
-    <div className="m-4 border-4 border-blue-400 rounded-md p-6 w-1/4">
+    <div className="m-4 border-4 border-blue-400 rounded-md p-6 w-1/3">
       <h1 className="text-[1.2vw] font-bold py-4 text-center">
         Delinquency Rates
       </h1>
       <div>
-        {/* <p className="text-[1.1vw] py-2">
-          {`The delinquency rate for the selected time period in ${targetRegionData.name} is `}
-        </p> */}
         {nationalDelinquencyRate
           ?  <div className="w-full flex justify-between mb-4">
               <p className="text-[1.0vw] font-semibold">
@@ -158,16 +151,12 @@ compRegionsData.forEach((region, idx) => {
               <p className="text-[1.0vw]">
                 {`${nationalDelinquencyRate}%`}
               </p>
-              {/* <p className="text-[1.1vw] py-2">
-                for the same period.
-              </p> */}
             </div>
           : <Loader loadiingText={"Getting national data..."}/>
         }
-        {regionalData && regionalData.map((region, idx) => {
+        {regionalData && regionalData.map(region => {
           return (
             <div className="w-full flex justify-between">
-              {/* <p className={`text-[1.0vw] font-semibold bg-[${chartFadedColors[idx]}]`}>{(region.name).split(",")[0]}</p> */}
               <p className="text-[1.0vw] font-semibold">{(region.name).split(",")[0]}</p>
               <p className="text-[1.0vw]">
                 {`${region.delinquencyRate}%`}
@@ -175,28 +164,9 @@ compRegionsData.forEach((region, idx) => {
             </div>
           )
         })}
-        {regionalData.length > 1 &&
-            <div className="mt-4">
-              <Bar data={delinquencyChartData} options={delinquencyChartOptions} />
-            </div>
-        }
-        {/* <p className="text-[3vw]">
-          {`${regionalDelinquencyRates[0].delinquencyRate}%`}
-        </p> */}
-        {/* {nationalDelinquencyRate
-          ?  <>
-              <p className="text-[1.5vw] py-2">
-                National
-              </p>
-              <p className="text-[3vw]">
-                {`${nationalDelinquencyRate}%`}
-              </p>
-              <p className="text-[1.1vw] py-2">
-                for the same period.
-              </p>
-            </>
-          : <Loader loadiingText={"Getting national data..."}/>
-        } */}
+        <div className="mt-4">
+          <Bar data={delinquencyChartData} options={delinquencyChartOptions} />
+        </div>
       </div>
     </div>
   )

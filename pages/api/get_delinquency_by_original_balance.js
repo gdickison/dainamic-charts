@@ -3,7 +3,7 @@ import pool from '../../src/client'
 
 export default async function handler(req, res) {
   const client = await pool.connect()
-console.log('req', req)
+
   await client
     .query(`SELECT
       msa,

@@ -159,8 +159,6 @@ console.log('updatedCompRegions', updatedCompRegions)
 
   // General Demographic Data
   const getMsaSummaryData = async () => {
-console.log('compRegions', compRegions)
-
     const msaCodes = compRegions.map(region => {
       return region.compMsaCode
     })
@@ -183,7 +181,6 @@ console.log('compRegions', compRegions)
     const status = response.status
     let data = await response.json()
     data = data.response
-console.log('msaSummaryData', data)
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
@@ -220,7 +217,6 @@ console.log('msaSummaryData', data)
     const status = response.status
     let data = await response.json()
     data = data.response
-console.log('regionalDelinquencyForRange', data)
     data = data.map(row => {
       return {...row, delinquencyRate: ((row.delinquent_msa / row.total_msa) * 100).toFixed(2)}
     })
@@ -551,7 +547,6 @@ console.log('regionalDelinquencyForRange', data)
                 <div>
                   {regionalDelinquencyRates
                     ? <RegionalDelinquencyRatePanel
-                      targetRegionData={targetRegionData}
                       compRegionsData={compRegionsData}
                       regionalDelinquencyRates={regionalDelinquencyRates}
                       nationalDelinquencyRate={nationalDelinquencyRate}
@@ -703,8 +698,6 @@ console.log('regionalDelinquencyForRange', data)
               </div>
             </section>
             {/* TODO: set params to a const, separate date params and msa code params, since dates will always be the same */}
-{console.log('targetRegionParams', targetRegionData)}
-{console.log('compRegionParams', compRegionsData)}
             {showTopFeatures &&
               <TopFeatures
                 dateRangeParams={{
