@@ -32,6 +32,7 @@ import Loader from "../src/components/Loader"
 import RegionalDelinquencyRatePanel from "../src/components/RegionalDelinquencyRatePanel"
 import RegionalPopulationPanel from "../src/components/RegionalPopulationPanel"
 import MedianHouseholdIncomePanel from "../src/components/MedianHouseholdIncomePanel"
+import MedianHomeValuePanel from "../src/components/MedianHomeValuePanel"
 
 import { Bar } from "react-chartjs-2"
 
@@ -53,6 +54,7 @@ const Home = () => {
   const [nationalDelinquencyRate, setNationalDelinquencyRate] = useState()
   const [nationalPopulation, setNationalPopulation] = useState()
   const [nationalMedianHouseholdIncome, setNationalMedianHouseholdIncome] = useState()
+  const [nationalMedianHomeValue, setNationalMedianHomeValue] = useState()
   const [populationByAgeData, setPopulationByAgeData] = useState()
   const [populationByAgeOptions, setPopulationByAgeOptions] = useState()
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
@@ -236,6 +238,28 @@ console.log('updatedCompRegions', updatedCompRegions)
       console.log("There was an error")
     } else if(status === 200){
       setNationalMedianHouseholdIncome(data.national_median_household_income)
+    }
+  }
+
+  const getNationalMedianHomeValue = async() => {
+    const endpoint = `/api/get_national_median_home_value`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error")
+    } else if(status === 200){
+      setNationalMedianHomeValue(data.national_median_home_value)
     }
   }
 
@@ -522,15 +546,6 @@ console.log('updatedCompRegions', updatedCompRegions)
     }
   }
 
-  // const getData = async () => {
-  //     setShowTopFeatures(false)
-  //     await getMsaSummaryData()
-  //     getPopulationByAgeData()
-  //     getPopulationByIncome()
-  //     await getRegionalDelinquencyRateForRange()
-  //     await getNationalDelinquencyRateForRange()
-  //     setShowTopFeatures(true)
-  // }
   const getData = async () => {
       setShowTopFeatures(false)
       getMsaSummaryData()
@@ -540,6 +555,7 @@ console.log('updatedCompRegions', updatedCompRegions)
       getNationalDelinquencyRateForRange()
       getNationalPopulation()
       getNationalMedianHouseholdIncome()
+      getNationalMedianHomeValue()
       setShowTopFeatures(true)
   }
 
@@ -585,7 +601,7 @@ console.log('updatedCompRegions', updatedCompRegions)
             {/* //                                                                   // */}
             {/* //******************************************************************* */}
 
-            <section className="flex mx-auto px-0 border-2 border-green-600">
+            <section className="flex flex-col px-0 border-2 border-green-600">
               {/* <header className="">
                 <h1 className="my-6 px-10 text-4xl">Selected Regions:</h1>
                 {compRegionsData.map(region => {
@@ -594,161 +610,30 @@ console.log('updatedCompRegions', updatedCompRegions)
                   )
                 })}
               </header> */}
-                {/* <div> */}
-                  {regionalDelinquencyRates
-                    ? <RegionalDelinquencyRatePanel
-                      compRegionsData={compRegionsData}
-                      regionalDelinquencyRates={regionalDelinquencyRates}
-                      nationalDelinquencyRate={nationalDelinquencyRate}
-                    />
-                    : <Loader loadiingText={"Getting the regional delinquency rate..."}/>
-                  }
-                {/* </div> */}
-                {/* <div> */}
-                  <RegionalPopulationPanel
-                    nationalPopulation={nationalPopulation}
+              <div className="flex">
+                {regionalDelinquencyRates
+                  ? <RegionalDelinquencyRatePanel
                     compRegionsData={compRegionsData}
+                    regionalDelinquencyRates={regionalDelinquencyRates}
+                    nationalDelinquencyRate={nationalDelinquencyRate}
                   />
-                {/* </div> */}
-                  <MedianHouseholdIncomePanel
-                    nationalMedianHouseholdIncome={nationalMedianHouseholdIncome}
-                    compRegionsData={compRegionsData}
-                  />
-              </section>
-              <section>
-              <div className="flex justify-center items-center">
-                <div className="flex flex-col w-2/3">
-                  <div className="flex flex-col items-stretch md:flex-row w-full justify-between mt-4 h-auto">
-                    {/* <RegionalPopulationPanel
-                      compRegionsData={compRegionsData}
-                    /> */}
-                    {/* <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
-                      <div>
-                        <img className="h-12" src="/group.svg" alt="" />
-                      </div>
-                      <div className="flex flex-col justify-center text-right">
-                        <h1 className="w-full text-xl font-semibold">
-                          Total Population
-                        </h1>
-                        {targetRegionData
-                          ? <p className="text-4xl">{(targetRegionData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</p>
-                          : <Loader loadiingText={"Getting population data..."}/>
-                        }
-                      </div>
-                    </div> */}
-                    {/* <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
-                      <div>
-                        <img className="h-12" src="/dollars.svg" alt="" />
-                      </div>
-                      <div className="flex flex-col justify-center text-right">
-                        <h1 className="w-full text-xl font-semibold">
-                          Median Household Income
-                        </h1>
-                        {targetRegionData
-                          ? <p className="text-4xl">{(targetRegionData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p>
-                          : <Loader loadiingText={"Getting median home income..."}/>
-                        }
-                      </div>
-                    </div> */}
-                    <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
-                      <div>
-                        <img className="h-12" src="/house.svg" alt="" />
-                      </div>
-                      <div className="flex flex-col justify-center text-right">
-                        <h1 className="w-full text-xl font-semibold">
-                          Median Home Value
-                        </h1>
-                        {targetRegionData
-                          ? <p className="text-4xl">{(targetRegionData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p>
-                          : <Loader loadiingText={"Getting median home value"}/>
-                        }
-                      </div>
-                    </div>
-                  </div>
-                  {populationByAgeData  && populationByIncomeData
-                    ? <div className="flex">
-                        <div className="flex items-center w-1/2 h-fit relative m-4 border-4 border-blue-400 rounded-md p-6 shadow-lg">
-                          <Bar data={populationByAgeData} options={populationByAgeOptions} />
-                        </div>
-                        <div className="flex items-center w-1/2 h-fit relative m-4 border-4 border-blue-400 rounded-md p-6 shadow-lg">
-                          <Bar data={populationByIncomeData} options={populationByIncomeOptions} />
-                        </div>
-                      </div>
-                    : <Loader loadiingText={"Getting age and income data..."}/>
-                  }
-                </div>
+                  : <Loader loadiingText={"Getting the regional delinquency rate..."}/>
+                }
+                <MedianHouseholdIncomePanel
+                  nationalMedianHouseholdIncome={nationalMedianHouseholdIncome}
+                  compRegionsData={compRegionsData}
+                />
+                <MedianHomeValuePanel
+                  nationalMedianHomeValue={nationalMedianHomeValue}
+                  compRegionsData={compRegionsData}
+                />
               </div>
-            </section>
-
-            {/* //******************************************************************* */}
-            {/* //                                                                   // */}
-            {/* //                 DON'T CHANGE THIS SUMMARY SECTION                 // */}
-            {/* //                                                                   // */}
-            {/* //******************************************************************* */}
-
-
-            <section className="mx-auto px-0 border-2 border-blue-600">
-              <header className="text-center">
-                <h1 className="my-6 px-10 text-4xl">Regional Summary</h1>
-              </header>
-              <div className="flex justify-center items-center">
-                <div>
-                  {regionalDelinquencyRates
-                    ? <RegionalDelinquencyRatePanel
-                      targetRegionData={targetRegionData}
-                      compRegionsData={compRegionsData}
-                      regionalDelinquencyRates={regionalDelinquencyRates}
-                      nationalDelinquencyRate={nationalDelinquencyRate}
-                    />
-                    : <Loader loadiingText={"Getting the regional delinquency rate..."}/>
-                  }
-                </div>
-                <div className="flex flex-col w-2/3">
-                  <div className="flex flex-col items-stretch md:flex-row w-full justify-between mt-4 h-auto">
-                    <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
-                      <div>
-                        <img className="h-12" src="/group.svg" alt="" />
-                      </div>
-                      <div className="flex flex-col justify-center text-right">
-                        <h1 className="w-full text-xl font-semibold">
-                          Total Population
-                        </h1>
-                        {targetRegionData
-                          ? <p className="text-4xl">{(targetRegionData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</p>
-                          : <Loader loadiingText={"Getting population data..."}/>
-                        }
-                      </div>
-                    </div>
-                    <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
-                      <div>
-                        <img className="h-12" src="/dollars.svg" alt="" />
-                      </div>
-                      <div className="flex flex-col justify-center text-right">
-                        <h1 className="w-full text-xl font-semibold">
-                          Median Household Income
-                        </h1>
-                        {targetRegionData
-                          ? <p className="text-4xl">{(targetRegionData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p>
-                          : <Loader loadiingText={"Getting median home income..."}/>
-                        }
-                      </div>
-                    </div>
-                    <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
-                      <div>
-                        <img className="h-12" src="/house.svg" alt="" />
-                      </div>
-                      <div className="flex flex-col justify-center text-right">
-                        <h1 className="w-full text-xl font-semibold">
-                          Median Home Value
-                        </h1>
-                        {targetRegionData
-                          ? <p className="text-4xl">{(targetRegionData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p>
-                          : <Loader loadiingText={"Getting median home value"}/>
-                        }
-                      </div>
-                    </div>
-                  </div>
-                  {populationByAgeData  && populationByIncomeData
+              <div className="flex">
+                <RegionalPopulationPanel
+                  nationalPopulation={nationalPopulation}
+                  compRegionsData={compRegionsData}
+                />
+                {populationByAgeData  && populationByIncomeData
                     ? <div className="flex">
                         <div className="flex items-center w-1/2 h-fit relative m-4 border-4 border-blue-400 rounded-md p-6 shadow-lg">
                           <Bar data={populationByAgeData} options={populationByAgeOptions} />
@@ -759,7 +644,6 @@ console.log('updatedCompRegions', updatedCompRegions)
                       </div>
                     : <Loader loadiingText={"Getting age and income data..."}/>
                   }
-                </div>
               </div>
             </section>
             {/* TODO: set params to a const, separate date params and msa code params, since dates will always be the same */}

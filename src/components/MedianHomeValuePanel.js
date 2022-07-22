@@ -29,28 +29,28 @@ ChartJS.register(
 
 import { Bar } from "react-chartjs-2"
 
-const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, compRegionsData}) => {
-  const homeIncomeChartData = compRegionsData.map(region => {
-    return region.median_home_income
+const MedianHomeValuePanel = ({nationalMedianHomeValue, compRegionsData}) => {
+  const homeValueChartData = compRegionsData.map(region => {
+    return region.median_home_value
   })
 
-  const homeIncomeChartLabels = compRegionsData.map(region => {
+  const homeValueChartLabels = compRegionsData.map(region => {
     return region.name
   })
 
   const lineData = compRegionsData.map(region => {
-    return nationalMedianHouseholdIncome
+    return nationalMedianHomeValue
   })
 
   const linePointRadius = compRegionsData.length > 2 ? 10 : 30
 
   const chartData = {
-    labels: homeIncomeChartLabels,
+    labels: homeValueChartLabels,
     datasets: [
       {
         type: 'bar',
-        label: "Regional Median Incoome",
-        data: homeIncomeChartData,
+        label: "Regional Home Value",
+        data: homeValueChartData,
         backgroundColor: 'rgba(255, 0, 0, 0.3)',
         hoverBackgroundColor: 'rgba(255, 0, 0, 0.7)',
         borderColor: 'rgba(255, 0, 0, 0.7)',
@@ -60,7 +60,7 @@ const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, compRegionsD
       },
       {
         type: 'line',
-        label: 'National Median Income',
+        label: 'National Home Value',
         data: lineData,
         showLine: true,
         borderColor: 'rgba(0, 0, 255, 1)',
@@ -88,7 +88,7 @@ const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, compRegionsD
       tooltip: {
         callbacks: {
           title: function(){
-            return "Median Household Income"
+            return "Median Home Value"
           },
           beforeLabel: function(context){
             return context.datasetIndex === 0 ? context.label.split(",")[0] : 'National'
@@ -142,33 +142,33 @@ const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, compRegionsD
   return (
     <div className="my-2 border-4 border-blue-400 rounded-md p-6 w-1/3">
       <div className="flex items-center justify-between">
-        <img className="h-12" src="/dollars.svg" alt="" />
+        <img className="h-12" src="/house.svg" alt="" />
         <h1 className="text-[1.2vw] font-bold py-4">
-          Median Household Income
+          Median Home Value
         </h1>
       </div>
       <div>
-        {nationalMedianHouseholdIncome
+        {nationalMedianHomeValue
           ?  <div className="w-full flex justify-between mb-4">
               <p className="text-[1.0vw] font-semibold">
                 National
               </p>
               <p className="text-[1.0vw]">
-                {(nationalMedianHouseholdIncome).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}
+                {(nationalMedianHomeValue).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}
               </p>
             </div>
-          : <Loader loadiingText={"Getting national population..."}/>
+          : <Loader loadiingText={"Getting national home value..."}/>
         }
         {compRegionsData ? compRegionsData.map(region => {
           return (
             <div className="w-full flex justify-between">
               <p className="text-[1.0vw] font-semibold">{(region.name).split(",")[0]}</p>
               <p className="text-[1.0vw]">
-                {(region.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}
+                {(region.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}
               </p>
             </div>
           )
-        }) : <Loader loadiingText={"Getting regional population..."}/> }
+        }) : <Loader loadiingText={"Getting regional home value..."}/> }
       </div>
       <div className="mt-4">
         <Bar data={chartData} options={chartOptions} />
@@ -177,4 +177,4 @@ const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, compRegionsD
   )
 }
 
-export default MedianHouseholdIncomePanel
+export default MedianHomeValuePanel

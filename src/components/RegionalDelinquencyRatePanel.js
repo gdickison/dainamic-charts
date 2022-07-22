@@ -149,7 +149,7 @@ const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates
   }
 
   return (
-    <div className="my-4 mx-2 border-4 border-blue-400 rounded-md p-6 w-1/3">
+    <div className="my-2 border-4 border-blue-400 rounded-md p-6 w-1/3">
       <div className="flex items-center justify-between">
         <img className="h-12" src="/clock.svg" alt="" />
         <h1 className="text-[1.2vw] font-bold py-4">
