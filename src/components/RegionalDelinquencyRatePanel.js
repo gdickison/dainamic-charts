@@ -51,6 +51,8 @@ const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates
     return region.name
   })
 
+  const linePointRadius = compRegionsData.length > 1 ? 10 : 30
+
   const delinquencyChartData = {
     labels: dataLabels,
     datasets: [
@@ -73,7 +75,7 @@ const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates
         borderColor: 'rgba(0, 0, 255, 1)',
         backgroundColor: 'rgba(0, 0, 255, 0.3)',
         pointBackgroundColor: 'rgba(0, 0, 255, 0.3)',
-        pointRadius: 50,
+        pointRadius: linePointRadius,
         pointStyle: 'line',
         borderWidth: 3,
         hoverBorderWidth: 3,
@@ -95,7 +97,7 @@ const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates
       tooltip: {
         callbacks: {
           title: function(){
-            return ''
+            return "Delinquency Rate"
           },
           beforeLabel: function(context){
             return context.datasetIndex === 0 ? context.label.split(",")[0] : 'National'
@@ -107,10 +109,16 @@ const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates
         backgroundColor: 'rgba(255, 255, 255, 1)',
         bodyColor: 'rgba(0, 0, 0, 1)',
         borderColor: '#2563EB',
+        titleColor: 'rgba(0, 0, 0, 1)',
+        titleFont: {
+          size: 14
+        },
         bodyFont: {
-          size: 16
+          size: 14,
+          style: 'italic'
         },
         borderWidth: 3,
+        boxPadding: 6
       }
     },
     scales: {
@@ -141,7 +149,7 @@ const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates
   }
 
   return (
-    <div className="my-4 mx-2 border-4 border-blue-400 rounded-md p-6 w-[35%]">
+    <div className="my-4 mx-2 border-4 border-blue-400 rounded-md p-6 w-1/3">
       <div className="flex items-center justify-between">
         <img className="h-12" src="/clock.svg" alt="" />
         <h1 className="text-[1.2vw] font-bold py-4">

@@ -29,27 +29,48 @@ ChartJS.register(
 
 import { Bar } from "react-chartjs-2"
 
-const RegionalPopulationPanel = ({nationalPopulation, compRegionsData}) => {
-
-  const populationChartData = compRegionsData.map(region => {
-    return region.total_population
+const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, compRegionsData}) => {
+  const homeIncomeChartData = compRegionsData.map(region => {
+    return region.median_home_income
   })
 
-  const populationChartLabels = compRegionsData.map(region => {
+  const homeIncomeChartLabels = compRegionsData.map(region => {
     return region.name
   })
 
+  const lineData = compRegionsData.map(region => {
+    return nationalMedianHouseholdIncome
+  })
+
+  const linePointRadius = compRegionsData.length > 2 ? 10 : 30
+
   const chartData = {
-    labels: populationChartLabels,
+    labels: homeIncomeChartLabels,
     datasets: [
       {
-        label: 'Population',
-        data: populationChartData,
+        type: 'bar',
+        label: "Regional Median Incoome",
+        data: homeIncomeChartData,
         backgroundColor: 'rgba(255, 0, 0, 0.3)',
         hoverBackgroundColor: 'rgba(255, 0, 0, 0.7)',
         borderColor: 'rgba(255, 0, 0, 0.7)',
         borderWidth: 3,
-        maxBarThickness: 100
+        maxBarThickness: 100,
+        order: 2
+      },
+      {
+        type: 'line',
+        label: 'National Median Income',
+        data: lineData,
+        showLine: true,
+        borderColor: 'rgba(0, 0, 255, 1)',
+        backgroundColor: 'rgba(0, 0, 255, 0.3)',
+        pointBackgroundColor: 'rgba(0, 0, 255, 0.3)',
+        pointRadius: linePointRadius,
+        pointStyle: 'line',
+        borderWidth: 3,
+        hoverBorderWidth: 3,
+        order: 1
       }
     ]
   }
@@ -67,22 +88,22 @@ const RegionalPopulationPanel = ({nationalPopulation, compRegionsData}) => {
       tooltip: {
         callbacks: {
           title: function(){
-            return "Population"
+            return "Median Household Income"
           },
           beforeLabel: function(context){
-            return context.label.split(",")[0]
+            return context.datasetIndex === 0 ? context.label.split(",")[0] : 'National'
           },
           label: function(context){
-            return (context.raw).toLocaleString('en-US', {maximumFractionDigits: 0})
+            return (context.raw).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})
           }
         },
         backgroundColor: 'rgba(255, 255, 255, 1)',
         bodyColor: 'rgba(0, 0, 0, 1)',
+        borderColor: '#2563EB',
         titleColor: 'rgba(0, 0, 0, 1)',
         titleFont: {
           size: 14
         },
-        borderColor: '#2563EB',
         bodyFont: {
           size: 14,
           style: 'italic'
@@ -95,7 +116,7 @@ const RegionalPopulationPanel = ({nationalPopulation, compRegionsData}) => {
       y: {
         ticks: {
           callback: function(value){
-            return (value).toLocaleString('en-US', {maximumFractionDigits: 0})
+            return (value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})
           }
         },
         grid: {
@@ -121,19 +142,19 @@ const RegionalPopulationPanel = ({nationalPopulation, compRegionsData}) => {
   return (
     <div className="my-4 mx-2 border-4 border-blue-400 rounded-md p-6 w-1/3">
       <div className="flex items-center justify-between">
-        <img className="h-12" src="/group.svg" alt="" />
+        <img className="h-12" src="/dollars.svg" alt="" />
         <h1 className="text-[1.2vw] font-bold py-4">
-          Regional Population
+          Median Household Income
         </h1>
       </div>
       <div>
-        {nationalPopulation
+        {nationalMedianHouseholdIncome
           ?  <div className="w-full flex justify-between mb-4">
               <p className="text-[1.0vw] font-semibold">
                 National
               </p>
               <p className="text-[1.0vw]">
-                {(nationalPopulation.national_population).toLocaleString('en-US', {maximumFractionDigits: 0})}
+                {(nationalMedianHouseholdIncome).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}
               </p>
             </div>
           : <Loader loadiingText={"Getting national population..."}/>
@@ -143,7 +164,7 @@ const RegionalPopulationPanel = ({nationalPopulation, compRegionsData}) => {
             <div className="w-full flex justify-between">
               <p className="text-[1.0vw] font-semibold">{(region.name).split(",")[0]}</p>
               <p className="text-[1.0vw]">
-                {(region.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}
+                {(region.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}
               </p>
             </div>
           )
@@ -156,4 +177,4 @@ const RegionalPopulationPanel = ({nationalPopulation, compRegionsData}) => {
   )
 }
 
-export default RegionalPopulationPanel
+export default MedianHouseholdIncomePanel

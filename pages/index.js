@@ -31,6 +31,7 @@ import FormInputs from "../src/components/FormInputs"
 import Loader from "../src/components/Loader"
 import RegionalDelinquencyRatePanel from "../src/components/RegionalDelinquencyRatePanel"
 import RegionalPopulationPanel from "../src/components/RegionalPopulationPanel"
+import MedianHouseholdIncomePanel from "../src/components/MedianHouseholdIncomePanel"
 
 import { Bar } from "react-chartjs-2"
 
@@ -51,6 +52,7 @@ const Home = () => {
   const [regionalDelinquencyRates, setRegionalDelinquencyRates] = useState()
   const [nationalDelinquencyRate, setNationalDelinquencyRate] = useState()
   const [nationalPopulation, setNationalPopulation] = useState()
+  const [nationalMedianHouseholdIncome, setNationalMedianHouseholdIncome] = useState()
   const [populationByAgeData, setPopulationByAgeData] = useState()
   const [populationByAgeOptions, setPopulationByAgeOptions] = useState()
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
@@ -212,6 +214,28 @@ console.log('updatedCompRegions', updatedCompRegions)
       console.log("There was an error")
     } else if(status === 200){
       setNationalPopulation(data)
+    }
+  }
+
+  const getNationalMedianHouseholdIncome = async() => {
+    const endpoint = `/api/get_national_median_household_income`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error")
+    } else if(status === 200){
+      setNationalMedianHouseholdIncome(data.national_median_household_income)
     }
   }
 
@@ -515,6 +539,7 @@ console.log('updatedCompRegions', updatedCompRegions)
       getRegionalDelinquencyRateForRange()
       getNationalDelinquencyRateForRange()
       getNationalPopulation()
+      getNationalMedianHouseholdIncome()
       setShowTopFeatures(true)
   }
 
@@ -550,9 +575,9 @@ console.log('updatedCompRegions', updatedCompRegions)
         }
         {targetRegionData &&
           <section className="mb-10 space-y-4">
-            <header className="text-center my-10">
+            {/* <header className="text-center my-10">
               <h1 className="px-10 text-4xl">{targetRegionData.name} {new Date(dateRange.startDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})} - {new Date(dateRange.endDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})}</h1>
-            </header>
+            </header> */}
 
             {/* //******************************************************************* */}
             {/* //                                                                   // */}
@@ -585,6 +610,10 @@ console.log('updatedCompRegions', updatedCompRegions)
                     compRegionsData={compRegionsData}
                   />
                 {/* </div> */}
+                  <MedianHouseholdIncomePanel
+                    nationalMedianHouseholdIncome={nationalMedianHouseholdIncome}
+                    compRegionsData={compRegionsData}
+                  />
               </section>
               <section>
               <div className="flex justify-center items-center">
@@ -607,7 +636,7 @@ console.log('updatedCompRegions', updatedCompRegions)
                         }
                       </div>
                     </div> */}
-                    <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
+                    {/* <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
                       <div>
                         <img className="h-12" src="/dollars.svg" alt="" />
                       </div>
@@ -620,7 +649,7 @@ console.log('updatedCompRegions', updatedCompRegions)
                           : <Loader loadiingText={"Getting median home income..."}/>
                         }
                       </div>
-                    </div>
+                    </div> */}
                     <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
                       <div>
                         <img className="h-12" src="/house.svg" alt="" />
