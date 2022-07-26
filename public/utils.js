@@ -48,7 +48,8 @@ const chartFadedColors = [
   "rgba(0, 180, 0, 0.3)",
   "rgba(51, 177, 255, 0.3)",
   "rgba(255, 130, 0, 0.3)",
-  "rgba(0, 0, 0, 0.3)"
+  "rgba(56, 245, 39, 0.3)",
+  "rgba(245, 172, 39, 0.3)"
 ]
 
 const chartSolidColors = [
@@ -58,7 +59,8 @@ const chartSolidColors = [
   "rgba(0, 180, 0, 0.7)",
   "rgba(51, 177, 255, 0.7)",
   "rgba(255, 130, 0, 0.7)",
-  "rgba(0, 0, 0, 0.7)"
+  "rgba(56, 245, 39, 0.7)",
+  "rgba(245, 172, 39, 0.7)"
 ]
 
 export { getDateLabelsForChart, groupDataByMsa, getLinearRegression, chartFadedColors, chartSolidColors }

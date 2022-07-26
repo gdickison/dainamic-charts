@@ -41,8 +41,7 @@ import RegionalPopulationPanel from "../src/components/RegionalPopulationPanel"
 import MedianHouseholdIncomePanel from "../src/components/MedianHouseholdIncomePanel"
 import MedianHomeValuePanel from "../src/components/MedianHomeValuePanel"
 import PopulationByAgePanel from "../src/components/PopulationByAgePanel"
-
-import { Bar } from "react-chartjs-2"
+import PopulationByIncomePanel from "../src/components/PopulationByIncomePanel"
 
 import TempLogin from "../src/components/TempLogin"
 import TopFeatures from "../src/components/TopFeatures"
@@ -64,9 +63,7 @@ const Home = () => {
   const [nationalMedianHouseholdIncome, setNationalMedianHouseholdIncome] = useState()
   const [nationalMedianHomeValue, setNationalMedianHomeValue] = useState()
   const [populationByAgeData, setPopulationByAgeData] = useState()
-  const [populationByAgeOptions, setPopulationByAgeOptions] = useState()
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
-  const [populationByIncomeOptions, setPopulationByIncomeOptions] = useState()
   const [showTopFeatures, setShowTopFeatures] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
   const [alertMessage, setAlertMessage] = useState("")
@@ -149,7 +146,6 @@ const Home = () => {
       // setCompRegions([...compRegions, {compMsaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
       const updatedCompRegions = ([...compRegions, {compMsaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
       updatedCompRegions.sort((a, b) => a.compMsaCode - b.compMsaCode)
-console.log('updatedCompRegions', updatedCompRegions)
       setCompRegions(updatedCompRegions)
     }
     // if(compRegions.length === 2){
@@ -368,9 +364,12 @@ console.log('data', data)
 
   // Population by Income Chart
   const getPopulationByIncome = async () => {
+    const msaCodes = compRegions.map(region => {
+      return region.compMsaCode
+    })
     const JSONdata = JSON.stringify({
       // msaCode: targetRegion.targetMsaCode
-      msaCode: compRegions[0].compMsaCode
+      msaCodes: msaCodes
     })
 
     const endpoint = `/api/get_population_by_income`
@@ -387,89 +386,9 @@ console.log('data', data)
     data = data.response
 
     if(status === 404){
-      console.log("There was an error getting the population by income")
+      console.log("There was an error getting the population by age")
     } else if(status === 200) {
-      const populationByIncomeLabels = []
-      const populationByIncome = []
-      for(const [key, value] of Object.entries(data)){
-        populationByIncomeLabels.push(key)
-        populationByIncome.push(parseFloat(value * 100).toFixed(2))
-      }
-
-      setPopulationByIncomeData({
-        maintainAspectRation: false,
-        labels: populationByIncomeLabels,
-        datasets: [
-          {
-            label: "Population by Income",
-            data: populationByIncome,
-            backgroundColor: [
-              '#e5f6ff',
-              '#bae6ff',
-              '#82cfff',
-              '#33b1ff',
-              '#1192e8',
-              '#0072c3',
-              '#00539a',
-              '#003a6d'
-            ]
-          }
-        ]
-      })
-
-      setPopulationByIncomeOptions({
-        // indexAxis: 'y',
-        responsive: true,
-        aspectRatio: 2,
-        plugins: {
-          legend: {
-            display: false
-          },
-          title: {
-            display: true,
-            text: "Population % by Income",
-            align: "start",
-            font: {
-              size: function(context){
-                return Math.round(context.chart.width / 20)
-              }
-            }
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context){
-                return `${context.raw}%`
-              }
-            }
-          }
-        },
-        scales: {
-          y: {
-            ticks: {
-              font: {
-                size: function(context){
-                  return Math.round(context.chart.width / 36)
-                }
-              }
-            },
-            grid: {
-              display: false
-            }
-          },
-          x: {
-            ticks: {
-              callback: function(value, index, ticks){
-                return `${value}%`
-              },
-              font: {
-                size: function(context){
-                  return Math.round(context.chart.width / 30)
-                }
-              }
-            }
-          }
-        }
-      })
+      setPopulationByIncomeData(data)
     }
   }
 
@@ -561,22 +480,17 @@ console.log('data', data)
                   compRegionsData={compRegionsData}
                 />
                 {populationByAgeData &&
-                <PopulationByAgePanel
-                  populationByAgeData={populationByAgeData}
-                  compRegionsData={compRegionsData}
-                />
+                  <PopulationByAgePanel
+                    populationByAgeData={populationByAgeData}
+                    compRegionsData={compRegionsData}
+                  />
                 }
-                {/* {populationByAgeData  && populationByIncomeData
-                    ? <div className="flex">
-                        <div className="flex items-center w-1/2 h-fit relative border-4 border-blue-400 rounded-md p-6 shadow-lg">
-                          <Bar data={populationByAgeData} options={populationByAgeOptions} />
-                        </div>
-                        <div className="flex items-center w-1/2 h-fit relative m-4 border-4 border-blue-400 rounded-md p-6 shadow-lg">
-                          <Bar data={populationByIncomeData} options={populationByIncomeOptions} />
-                        </div>
-                      </div>
-                    : <Loader loadiingText={"Getting age and income data..."}/>
-                  } */}
+                {populationByIncomeData &&
+                  <PopulationByIncomePanel
+                    populationByIncomeData={populationByIncomeData}
+                    compRegionsData={compRegionsData}
+                  />
+                }
               </div>
             </section>
             {/* TODO: set params to a const, separate date params and msa code params, since dates will always be the same */}
