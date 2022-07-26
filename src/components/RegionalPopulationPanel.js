@@ -28,6 +28,7 @@ ChartJS.register(
 )
 
 import { Bar } from "react-chartjs-2"
+import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
 const RegionalPopulationPanel = ({nationalPopulation, compRegionsData}) => {
 
@@ -119,12 +120,15 @@ const RegionalPopulationPanel = ({nationalPopulation, compRegionsData}) => {
   }
 
   return (
-    <div className="my-2 border-4 border-blue-400 rounded-md p-6 w-1/3">
+    <div className="border-[1px] border-gray-400 p-6 w-1/3">
       <div className="flex items-center justify-between">
         <img className="h-12" src="/group.svg" alt="" />
         <h1 className="text-[1.2vw] font-bold py-4">
           Regional Population
         </h1>
+      </div>
+      <div className="mt-4">
+        <Bar data={chartData} options={chartOptions} />
       </div>
       <div>
         {nationalPopulation
@@ -148,9 +152,6 @@ const RegionalPopulationPanel = ({nationalPopulation, compRegionsData}) => {
             </div>
           )
         }) : <Loader loadiingText={"Getting regional population..."}/> }
-      </div>
-      <div className="mt-4">
-        <Bar data={chartData} options={chartOptions} />
       </div>
     </div>
   )

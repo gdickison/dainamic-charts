@@ -140,7 +140,7 @@ const MedianHomeValuePanel = ({nationalMedianHomeValue, compRegionsData}) => {
   }
 
   return (
-    <div className="my-2 border-4 border-blue-400 rounded-md p-6 w-1/3">
+    <div className="border-[1px] border-gray-400 p-6 w-1/3">
       <div className="flex items-center justify-between">
         <img className="h-12" src="/house.svg" alt="" />
         <h1 className="text-[1.2vw] font-bold py-4">

@@ -14,6 +14,8 @@ import {
   Filler
 } from "chart.js"
 
+import ChartDataLabels from "chartjs-plugin-datalabels"
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -24,8 +26,13 @@ ChartJS.register(
   Filler,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ChartDataLabels
 )
+
+ChartJS.defaults.set('plugins.datalabels', {
+  display: false
+})
 
 import FormInputs from "../src/components/FormInputs"
 import Loader from "../src/components/Loader"
@@ -33,6 +40,7 @@ import RegionalDelinquencyRatePanel from "../src/components/RegionalDelinquencyR
 import RegionalPopulationPanel from "../src/components/RegionalPopulationPanel"
 import MedianHouseholdIncomePanel from "../src/components/MedianHouseholdIncomePanel"
 import MedianHomeValuePanel from "../src/components/MedianHomeValuePanel"
+import PopulationByAgePanel from "../src/components/PopulationByAgePanel"
 
 import { Bar } from "react-chartjs-2"
 
@@ -330,9 +338,12 @@ console.log('updatedCompRegions', updatedCompRegions)
 
   // Population by Age Chart
   const getPopulationByAgeData = async () => {
+    const msaCodes = compRegions.map(region => {
+      return region.compMsaCode
+    })
     const JSONdata = JSON.stringify({
       // msaCode: targetRegion.targetMsaCode
-      msaCode: compRegions[0].compMsaCode
+      msaCodes: msaCodes
     })
 
     const endpoint = `/api/get_population_by_age_data`
@@ -347,95 +358,11 @@ console.log('updatedCompRegions', updatedCompRegions)
     const status = response.status
     let data = await response.json()
     data = data.response
-
+console.log('data', data)
     if(status === 404){
       console.log("There was an error getting the population by age")
     } else if(status === 200) {
-      const populationByAgeLabels = []
-      const populationByAge = []
-      for(const [key, value] of Object.entries(data)){
-        populationByAgeLabels.push(key)
-        populationByAge.push(parseFloat(value * 100).toFixed(2))
-      }
-
-      setPopulationByAgeData({
-        labels: populationByAgeLabels,
-        datasets: [
-          {
-            label: "Population by Age",
-            data: populationByAge,
-            backgroundColor: [
-              '#33b1ff',
-              '#1192e8',
-              '#0072c3',
-              '#00539a',
-              '#003a6d'
-            ],
-            borderColor: [
-              '#33b1ff',
-              '#1192e8',
-              '#0072c3',
-              '#00539a',
-              '#003a6d'
-            ],
-            hoverOffset: 4
-          }
-        ]
-      })
-
-      setPopulationByAgeOptions({
-        indexAxis: 'y',
-        responsive: true,
-        aspectRatio: 2,
-        plugins: {
-          legend: {
-            display: false
-          },
-          title: {
-            display: true,
-            text: "Population % by Age",
-            align: "start",
-            font: {
-              size: function(context){
-                return Math.round(context.chart.width / 20)
-              }
-            }
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context){
-                return `${context.raw}%`
-              }
-            }
-          }
-        },
-        scales: {
-          y: {
-            ticks: {
-              font: {
-                size: function(context){
-                  return Math.round(context.chart.width / 30)
-                }
-              }
-            },
-            grid: {
-              display: false
-            }
-          },
-          x: {
-            ticks: {
-              callback: function(value, index, ticks){
-                return `${value}%`
-              },
-              font: {
-                size: function(context){
-                  return Math.round(context.chart.width / 30)
-                }
-              }
-            }
-          }
-        }
-      })
+      setPopulationByAgeData(data)
     }
   }
 
@@ -491,7 +418,7 @@ console.log('updatedCompRegions', updatedCompRegions)
       })
 
       setPopulationByIncomeOptions({
-        indexAxis: 'y',
+        // indexAxis: 'y',
         responsive: true,
         aspectRatio: 2,
         plugins: {
@@ -633,9 +560,15 @@ console.log('updatedCompRegions', updatedCompRegions)
                   nationalPopulation={nationalPopulation}
                   compRegionsData={compRegionsData}
                 />
-                {populationByAgeData  && populationByIncomeData
+                {populationByAgeData &&
+                <PopulationByAgePanel
+                  populationByAgeData={populationByAgeData}
+                  compRegionsData={compRegionsData}
+                />
+                }
+                {/* {populationByAgeData  && populationByIncomeData
                     ? <div className="flex">
-                        <div className="flex items-center w-1/2 h-fit relative m-4 border-4 border-blue-400 rounded-md p-6 shadow-lg">
+                        <div className="flex items-center w-1/2 h-fit relative border-4 border-blue-400 rounded-md p-6 shadow-lg">
                           <Bar data={populationByAgeData} options={populationByAgeOptions} />
                         </div>
                         <div className="flex items-center w-1/2 h-fit relative m-4 border-4 border-blue-400 rounded-md p-6 shadow-lg">
@@ -643,7 +576,7 @@ console.log('updatedCompRegions', updatedCompRegions)
                         </div>
                       </div>
                     : <Loader loadiingText={"Getting age and income data..."}/>
-                  }
+                  } */}
               </div>
             </section>
             {/* TODO: set params to a const, separate date params and msa code params, since dates will always be the same */}

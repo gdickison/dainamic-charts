@@ -31,7 +31,7 @@ import { Bar } from "react-chartjs-2"
 
 const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates, nationalDelinquencyRate}) => {
   const regionalData = []
-  compRegionsData.forEach((region, idx) => {
+  compRegionsData.forEach((region) => {
     regionalDelinquencyRates.forEach(rate => {
       if(region.msa === rate.msa){
         regionalData.push({...region, ...rate})
@@ -149,9 +149,9 @@ const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates
   }
 
   return (
-    <div className="my-2 border-4 border-blue-400 rounded-md p-6 w-1/3">
+    <div className="border-[1px] border-gray-400 p-6 w-1/3">
       <div className="flex items-center justify-between">
-        <img className="h-12" src="/clock.svg" alt="" />
+        <img className="h-12" src="/history.svg" alt="" />
         <h1 className="text-[1.2vw] font-bold py-4">
           Delinquency Rates
         </h1>
