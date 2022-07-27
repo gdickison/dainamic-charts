@@ -1,37 +1,7 @@
 import Loader from "./Loader"
-
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  ArcElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-} from "chart.js"
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  ArcElement,
-  BarElement,
-  Filler,
-  Title,
-  Tooltip,
-  Legend
-)
-
 import { Bar } from "react-chartjs-2"
-import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
 const RegionalPopulationPanel = ({nationalPopulation, compRegionsData}) => {
-
   const populationChartData = compRegionsData.map(region => {
     return region.total_population
   })
@@ -63,7 +33,7 @@ const RegionalPopulationPanel = ({nationalPopulation, compRegionsData}) => {
     },
     plugins: {
       legend: {
-        display: true
+        display: false
       },
       tooltip: {
         callbacks: {
@@ -96,7 +66,12 @@ const RegionalPopulationPanel = ({nationalPopulation, compRegionsData}) => {
       y: {
         ticks: {
           callback: function(value){
-            return (value).toLocaleString('en-US', {maximumFractionDigits: 0})
+            if(value !== 0){
+              return (value).toLocaleString('en-US', {maximumFractionDigits: 0})
+            }
+          },
+          font: {
+            size: 14
           }
         },
         grid: {
@@ -120,38 +95,40 @@ const RegionalPopulationPanel = ({nationalPopulation, compRegionsData}) => {
   }
 
   return (
-    <div className="border-[1px] border-gray-400 p-6 w-1/3">
-      <div className="flex items-center justify-between">
+    <div className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
+      <div className="flex items-center space-x-4">
         <img className="h-12" src="/group.svg" alt="" />
         <h1 className="text-[1.2vw] font-bold py-4">
           Regional Population
         </h1>
       </div>
-      <div className="mt-4">
-        <Bar data={chartData} options={chartOptions} />
-      </div>
-      <div>
-        {nationalPopulation
-          ?  <div className="w-full flex justify-between mb-4">
-              <p className="text-[1.0vw] font-semibold">
-                National
-              </p>
-              <p className="text-[1.0vw]">
-                {(nationalPopulation.national_population).toLocaleString('en-US', {maximumFractionDigits: 0})}
-              </p>
-            </div>
-          : <Loader loadiingText={"Getting national population..."}/>
-        }
-        {compRegionsData ? compRegionsData.map(region => {
-          return (
-            <div className="w-full flex justify-between">
-              <p className="text-[1.0vw] font-semibold">{(region.name).split(",")[0]}</p>
-              <p className="text-[1.0vw]">
-                {(region.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}
-              </p>
-            </div>
-          )
-        }) : <Loader loadiingText={"Getting regional population..."}/> }
+      <div className="flex space-x-6 justify-evenly">
+        <div className="flex flex-col justify-center w-2/5">
+          {nationalPopulation
+            ?  <div className="w-full flex justify-between mb-4">
+                <p className="text-[1.2vw] font-semibold">
+                  National
+                </p>
+                <p className="text-[1.2vw]">
+                  {(nationalPopulation.national_population).toLocaleString('en-US', {maximumFractionDigits: 0})}
+                </p>
+              </div>
+            : <Loader loadiingText={"Getting national population..."}/>
+          }
+          {compRegionsData ? compRegionsData.map((region, idx) => {
+            return (
+              <div key={idx} className="w-full flex justify-between">
+                <p className="text-[1.2vw] font-semibold">{(region.name).split(",")[0]}</p>
+                <p className="text-[1.2vw]">
+                  {(region.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}
+                </p>
+              </div>
+            )
+          }) : <Loader loadiingText={"Getting regional population..."}/> }
+        </div>
+        <div className="flex justify-center w-1/2">
+          <Bar data={chartData} options={chartOptions} />
+        </div>
       </div>
     </div>
   )

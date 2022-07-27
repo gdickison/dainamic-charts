@@ -15,7 +15,7 @@ export default async function handler(req, res) {
         income_50k59k AS "$50K-$59K",
         income_60k99k AS "$60K-$99K",
         income_100k149k AS "$100K-$149K",
-        income_over150k AS "> $150K"
+        income_over150k AS "$150K+"
       FROM banking_app.population_by_income
         JOIN banking_app.msa_names
         ON msa = msa_code

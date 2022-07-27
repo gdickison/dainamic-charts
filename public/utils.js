@@ -63,4 +63,34 @@ const chartSolidColors = [
   "rgba(245, 172, 39, 0.7)"
 ]
 
-export { getDateLabelsForChart, groupDataByMsa, getLinearRegression, chartFadedColors, chartSolidColors }
+const chartFadedBlues = [
+  "rgba(107, 185, 240, 0.3)",
+  "rgba(51, 177, 255, 0.3)",
+  "rgba(3, 138, 255, 0.3)",
+  "rgba(80, 155, 255, 0.3)",
+  "rgba(60, 120, 220, 0.3)",
+  "rgba(50, 100, 200, 0.3)",
+  "rgba(40, 80, 230, 0.3)",
+  "rgba(0, 20, 200, 0.3)"
+]
+
+const chartSolidBlues = [
+  "rgba(107, 185, 240, 0.7)",
+  "rgba(51, 177, 255, 0.7)",
+  "rgba(3, 138, 255, 0.7)",
+  "rgba(80, 155, 255, 0.7)",
+  "rgba(60, 120, 220, 0.7)",
+  "rgba(50, 100, 200, 0.7)",
+  "rgba(40, 80, 230, 0.7)",
+  "rgba(0, 20, 200, 0.7)"
+]
+
+export {
+  getDateLabelsForChart,
+  groupDataByMsa,
+  getLinearRegression,
+  chartFadedColors,
+  chartSolidColors,
+  chartFadedBlues,
+  chartSolidBlues
+}

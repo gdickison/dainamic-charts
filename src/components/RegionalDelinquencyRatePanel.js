@@ -1,32 +1,4 @@
 import Loader from "./Loader"
-
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  ArcElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-} from "chart.js"
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  ArcElement,
-  BarElement,
-  Filler,
-  Title,
-  Tooltip,
-  Legend
-)
-
 import { Bar } from "react-chartjs-2"
 
 const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates, nationalDelinquencyRate}) => {
@@ -58,7 +30,7 @@ const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates
     datasets: [
       {
         type: 'bar',
-        label: 'Regional Delinquency',
+        label: 'Regional',
         data: barData,
         backgroundColor: 'rgba(255, 0, 0, 0.3)',
         hoverBackgroundColor: 'rgba(255, 0, 0, 0.7)',
@@ -69,7 +41,7 @@ const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates
       },
       {
         type: 'line',
-        label: 'National Delinquency',
+        label: 'National',
         data: lineData,
         showLine: true,
         borderColor: 'rgba(0, 0, 255, 1)',
@@ -125,7 +97,12 @@ const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates
       y: {
         ticks: {
           callback: function(value){
-            return `${value}%`
+            if(value !== 0){
+              return `${value}%`
+            }
+          },
+          font: {
+            size: 14
           }
         },
         grid: {
@@ -149,36 +126,38 @@ const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates
   }
 
   return (
-    <div className="border-[1px] border-gray-400 p-6 w-1/3">
-      <div className="flex items-center justify-between">
+    <div className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
+      <div className="flex items-center space-x-4">
         <img className="h-12" src="/history.svg" alt="" />
         <h1 className="text-[1.2vw] font-bold py-4">
           Delinquency Rates
         </h1>
       </div>
-      <div>
-        {nationalDelinquencyRate
-          ?  <div className="w-full flex justify-between mb-4">
-              <p className="text-[1.0vw] font-semibold">
-                National
-              </p>
-              <p className="text-[1.0vw]">
-                {`${nationalDelinquencyRate}%`}
-              </p>
-            </div>
-          : <Loader loadiingText={"Getting national delinquency data..."}/>
-        }
-        {regionalData ? regionalData.map(region => {
-          return (
-            <div className="w-full flex justify-between">
-              <p className="text-[1.0vw] font-semibold">{(region.name).split(",")[0]}</p>
-              <p className="text-[1.0vw]">
-                {`${region.delinquencyRate}%`}
-              </p>
-            </div>
-          )
-        }) : <Loader loadiingText={"Getting regional delinquency data..."}/> }
-        <div className="mt-4">
+      <div className="flex space-x-6 justify-evenly">
+        <div className="flex flex-col justify-center w-2/5">
+          {nationalDelinquencyRate
+            ?  <div className="w-full flex justify-between mb-4">
+                <p className="text-[1.2vw] font-semibold">
+                  National
+                </p>
+                <p className="text-[1.2vw]">
+                  {`${nationalDelinquencyRate}%`}
+                </p>
+              </div>
+            : <Loader loadiingText={"Getting national delinquency data..."}/>
+          }
+          {regionalData ? regionalData.map((region, idx) => {
+            return (
+              <div key={idx} className="w-full flex justify-between">
+                <p className="text-[1.2vw] font-semibold">{(region.name).split(",")[0]}</p>
+                <p className="text-[1.2vw]">
+                  {`${region.delinquencyRate}%`}
+                </p>
+              </div>
+            )
+          }) : <Loader loadiingText={"Getting regional delinquency data..."}/> }
+        </div>
+        <div className="flex justify-center w-1/2">
           <Bar data={delinquencyChartData} options={delinquencyChartOptions} />
         </div>
       </div>

@@ -354,7 +354,7 @@ const Home = () => {
     const status = response.status
     let data = await response.json()
     data = data.response
-console.log('data', data)
+
     if(status === 404){
       console.log("There was an error getting the population by age")
     } else if(status === 200) {
@@ -447,7 +447,7 @@ console.log('data', data)
             {/* //                                                                   // */}
             {/* //******************************************************************* */}
 
-            <section className="flex flex-col px-0 border-2 border-green-600">
+            <section className="flex flex-col px-0">
               {/* <header className="">
                 <h1 className="my-6 px-10 text-4xl">Selected Regions:</h1>
                 {compRegionsData.map(region => {
@@ -456,7 +456,15 @@ console.log('data', data)
                   )
                 })}
               </header> */}
-              <div className="flex">
+              <header className="">
+                <h1 className="mb-6 px-10 text-4xl">{`Regional ${compRegionsData.length === 1 ? 'Summary' : 'Summaries'}`}</h1>
+                {/* {compRegionsData.map(region => {
+                  return (
+                    <p>{region.name}</p>
+                  )
+                })} */}
+              </header>
+              <div>
                 {regionalDelinquencyRates
                   ? <RegionalDelinquencyRatePanel
                     compRegionsData={compRegionsData}
@@ -473,8 +481,6 @@ console.log('data', data)
                   nationalMedianHomeValue={nationalMedianHomeValue}
                   compRegionsData={compRegionsData}
                 />
-              </div>
-              <div className="flex">
                 <RegionalPopulationPanel
                   nationalPopulation={nationalPopulation}
                   compRegionsData={compRegionsData}

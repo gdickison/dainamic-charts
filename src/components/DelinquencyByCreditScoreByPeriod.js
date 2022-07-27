@@ -253,11 +253,13 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, targetRegion, compRegions}
 
   return (
     <div>
-      <ChartHeaderWithTooltip
-        chartName={"Delinquency Rate by Credit Score and Origination Date"}
-        msa={compRegions.length > 0 ? "selected regions" : targetRegion.name}
-        tooltip={"Credit scores are grouped into standard ranges corresponding to 'Fair', 'Good', 'Very Good', and 'Exceptional'. The number of delinquent loans for each range in each period is divided by the corresponding total number of loans to get the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given data point and are also excluded. Hover over the data points to see details"}
-      />
+      <div>
+        <ChartHeaderWithTooltip
+          chartName={"Delinquency Rate by Credit Score and Origination Date"}
+          msa={compRegions.length > 0 ? "selected regions" : targetRegion.name}
+          tooltip={"Credit scores are grouped into standard ranges corresponding to 'Fair', 'Good', 'Very Good', and 'Exceptional'. The number of delinquent loans for each range in each period is divided by the corresponding total number of loans to get the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given data point and are also excluded. Hover over the data points to see details"}
+        />
+      </div>
       <div className="flex">
       {chartData &&
         <div className="w-full">

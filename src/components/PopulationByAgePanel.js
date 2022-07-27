@@ -1,5 +1,4 @@
 import Loader from "./Loader"
-
 import { Doughnut } from "react-chartjs-2"
 import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
@@ -53,7 +52,6 @@ const PopulationByAgePanel = ({populationByAgeData, compRegionsData}) => {
       ]
     }
   })
-console.log('structuredData', structuredData)
 
   const chartOptions = {
     responsive: true,
@@ -115,53 +113,29 @@ console.log('structuredData', structuredData)
   }
 
   return (
-    <div className="border-[1px] border-gray-400 p-6 w-1/3">
-      <div className="flex items-center justify-between">
+    <div className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
+      <div className="flex items-center space-x-4">
         <img className="h-12" src="/population.svg" alt="" />
         <h1 className="text-[1.2vw] font-bold py-4">
           Population By Age
         </h1>
       </div>
       <div>
-        {/* {nationalMedianHomeValue
-          ?  <div className="w-full flex justify-between mb-4">
-              <p className="text-[1.0vw] font-semibold">
-                National
-              </p>
-              <p className="text-[1.0vw]">
-                {(nationalMedianHomeValue).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}
-              </p>
-            </div>
-          : <Loader loadiingText={"Getting national home value..."}/>
-        } */}
-        {/* {compRegionsData ? compRegionsData.map(region => {
-          return (
-            <div className="w-full flex justify-between">
-              <p className="text-[1.0vw] font-semibold">{(region.name).split(",")[0]}</p>
-              <p className="text-[1.0vw]">
-                {(region.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}
-              </p>
-            </div>
-          )
-        }) : <Loader loadiingText={"Getting regional home value..."}/> } */}
       </div>
       <div className="flex" >
-
-      {structuredData
-        ?
-          <div className="flex w-full flex-wrap justify-center items-center">
-          {console.log('structuredData', structuredData)}
-            {structuredData.map((chart, i) => {
-              return (
-                <div className={`${structuredData.length === 1 ? 'w-3/5' : 'w-5/12'}`}>
-                  <Doughnut data={chart} options={chartOptions}/>
-                </div>
-
-              )
-            })}
-          </div>
-        : <Loader loadiingText={"Getting population by age data..."}/>
-      }
+        {structuredData
+          ?
+            <div className="flex w-full flex-wrap justify-evenly items-center">
+              {structuredData.map((chart, i) => {
+                return (
+                  <div key={i} className={`${structuredData.length < 3 ? 'w-2/5' : 'w-1/5'}`}>
+                    <Doughnut data={chart} options={chartOptions}/>
+                  </div>
+                )
+              })}
+            </div>
+          : <Loader loadiingText={"Getting population by age data..."}/>
+        }
       </div>
     </div>
   )
