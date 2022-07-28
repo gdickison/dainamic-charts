@@ -16,12 +16,18 @@ import Loader from "./Loader"
 
 const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, regionalDelinquencyRates}) => {
   const [isLoading, setLoading] = useState(false)
-  const [topFeatures, setTopFeatures] = useState()
+  const [regionalTopFeatures, setRegionalTopFeatures] = useState()
+console.log('compRegionsParams', compRegionsParams)
 
-  useEffect(() => {
+  const getTopFeaturesForRegions = async () => {
     setLoading(true)
+
+    const msaCodes = compRegionsParams.map(region => {
+      return region.msa
+    })
     const JSONdata = JSON.stringify({
-      msaCode: targetRegionParams.msa
+      // msaCode: targetRegionParams.msa
+      msaCodes: msaCodes
     })
 
     const endpoint = `/api/get_top_features`
@@ -33,40 +39,71 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
       body: JSONdata
     }
 
-    fetch(endpoint, options)
-      .then(res => res.json())
-      .then(data => {
-        setTopFeatures(Object.values(data.response))
-        setLoading(false)
+    let topFeaturesResponse = await fetch(endpoint, options)
+    topFeaturesResponse = await topFeaturesResponse.json()
+    topFeaturesResponse = topFeaturesResponse.response
+console.log('topFeaturesResponse', topFeaturesResponse)
+
+    const topFeaturesData = []
+    compRegionsParams.forEach(param => {
+      topFeaturesResponse.forEach(res => {
+        if(param.msa == res.msa){
+          topFeaturesData.push({...param, ...res})
+        }
       })
-  }, [])
+    })
+console.log('topFeaturesData', topFeaturesData)
+    setRegionalTopFeatures(topFeaturesData)
+    setLoading(false)
+  }
+  useEffect(() => {
+    getTopFeaturesForRegions()
+  }, [compRegionsParams])
 
   if(isLoading) {
     return <Loader loadiingText={"Getting the top delinquency predictors..."}/>
   }
 
   return (
-    <section className="mx-auto px-0 md:px-24">
-      <header>
-        <h1 className="my-6 text-3xl">{`Top Five Delinquency Predictors for ${targetRegionParams.name}`}</h1>
-        <div className="flex flex-col md:flex-row justify-between pb-6 space-x-4 h-40">
-          {topFeatures &&
-            topFeatures.map((feature, i) => {
+    <section className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
+      <div className="flex items-center space-x-4">
+        <img className="h-12" src="/five.svg" alt="" />
+        <h1 className="text-[1.4vw] font-bold py-4">
+          Top Five Delinquency Predictors
+        </h1>
+      </div>
+      <header className="flex space-x-6 justify-evenly">
+        <div className="flex flex-col justify-center w-full">
+          {regionalTopFeatures &&
+            regionalTopFeatures.map(region => {
+              const featureList = []
+              for(const [key, value] of Object.entries(region)){
+                if(key !== 'msa' && key !== 'name'){
+                  featureList.push(
+                    <div key={key.split("feat")} className="flex flex-col w-full border-4 border-blue-400 rounded-md py-4 space-y-2">
+                      <h1 className="w-full text-[1.2vw] text-center text-blue-500 font-bold">
+                        {key.split("feat")}
+                      </h1>
+                      <h1 className="w-full text-2xl text-center">
+                        {value === "Loan Balance" ? "Original Loan Balance" : value}
+                      </h1>
+                    </div>
+                  )
+                }
+              }
               return (
-                <div key={i} className="flex flex-col md:w-1/5 border-4 border-blue-400 rounded-md py-4 space-y-2">
-                  <h1 className="w-full text-3xl text-center text-blue-500 font-bold">
-                    {i+1}
-                  </h1>
-                  <h1 className="w-full text-2xl text-center">
-                    {feature === "Loan Balance" ? "Original Loan Balance" : feature}
-                  </h1>
+                <div>
+                  <h1 className="my-6 text-[1.2vw] font-semibold">{`${region.name.split(",")[0]}`}</h1>
+                  <div className="flex space-x-2">
+                    {featureList}
+                  </div>
                 </div>
               )
             })
           }
         </div>
       </header>
-      <div className="space-y-6">
+      {/* <div className="space-y-6">
         {topFeatures && topFeatures.map((feature, i) => {
           switch(feature) {
             case "Credit Score":
@@ -199,7 +236,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
               );
           }
         })}
-      </div>
+      </div> */}
     </section>
   )
 }

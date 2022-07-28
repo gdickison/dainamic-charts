@@ -129,7 +129,7 @@ const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates
     <div className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
       <div className="flex items-center space-x-4">
         <img className="h-12" src="/history.svg" alt="" />
-        <h1 className="text-[1.2vw] font-bold py-4">
+        <h1 className="text-[1.4vw] font-bold py-4">
           Delinquency Rates
         </h1>
       </div>

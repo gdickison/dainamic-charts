@@ -410,7 +410,7 @@ const Home = () => {
   }
 
   return (
-    <>
+    <div>
       <Head>
         <title>Dainamic</title>
       </Head>
@@ -437,32 +437,17 @@ const Home = () => {
         }
         {targetRegionData &&
           <section className="mb-10 space-y-4">
-            {/* <header className="text-center my-10">
-              <h1 className="px-10 text-4xl">{targetRegionData.name} {new Date(dateRange.startDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})} - {new Date(dateRange.endDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})}</h1>
-            </header> */}
-
-            {/* //******************************************************************* */}
-            {/* //                                                                   // */}
-            {/* //                 CHANGE THIS SUMMARY SECTION                       // */}
-            {/* //                                                                   // */}
-            {/* //******************************************************************* */}
-
             <section className="flex flex-col px-0">
-              {/* <header className="">
-                <h1 className="my-6 px-10 text-4xl">Selected Regions:</h1>
-                {compRegionsData.map(region => {
-                  return (
-                    <p>{region.name}</p>
-                  )
-                })}
-              </header> */}
-              <header className="">
-                <h1 className="mb-6 px-10 text-4xl">{`Regional ${compRegionsData.length === 1 ? 'Summary' : 'Summaries'}`}</h1>
-                {/* {compRegionsData.map(region => {
-                  return (
-                    <p>{region.name}</p>
-                  )
-                })} */}
+              <header>
+                <p className="px-10 text-[1.2vw] italic">{`Selected ${compRegionsData.length === 1 ? 'Region' : 'Regions'}:`}</p>
+                <div className="mb-6 px-14 text-[1.2vw] italic">
+                  {compRegionsData.map(region => {
+                    return (
+                      <p>{region.name}</p>
+                    )
+                  })}
+                </div>
+                <h1 className="mb-6 px-10 text-[2vw]">{`Regional ${compRegionsData.length === 1 ? 'Summary' : 'Summaries'}`}</h1>
               </header>
               <div>
                 {regionalDelinquencyRates
@@ -536,7 +521,7 @@ const Home = () => {
             closeAlert={CloseAlert}
           />
         }
-    </>
+    </div>
   )
 }
 
