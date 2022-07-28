@@ -76,26 +76,24 @@ console.log('topFeaturesData', topFeaturesData)
         <div className="flex flex-col justify-center w-full">
           {regionalTopFeatures &&
             regionalTopFeatures.map(region => {
-              const featureList = []
-              for(const [key, value] of Object.entries(region)){
-                if(key !== 'msa' && key !== 'name'){
-                  featureList.push(
-                    <div key={key.split("feat")} className="flex flex-col w-full border-4 border-blue-400 rounded-md py-4 space-y-2">
-                      <h1 className="w-full text-[1.2vw] text-center text-blue-500 font-bold">
-                        {key.split("feat")}
-                      </h1>
-                      <h1 className="w-full text-2xl text-center">
-                        {value === "Loan Balance" ? "Original Loan Balance" : value}
-                      </h1>
-                    </div>
-                  )
-                }
-              }
               return (
                 <div>
                   <h1 className="my-6 text-[1.2vw] font-semibold">{`${region.name.split(",")[0]}`}</h1>
                   <div className="flex space-x-2">
-                    {featureList}
+                    {Object.entries(region).map((row, idx) => {
+                      if(row[0] !== 'msa' && row[0] !== 'name'){
+                        return (
+                          <div key={idx} className="flex flex-col w-full border-4 border-blue-400 rounded-md py-4 space-y-2">
+                            <h1 className="w-full text-[1.2vw] text-center text-blue-500 font-bold">
+                              {idx-1}
+                            </h1>
+                            <h1 className="w-full text-2xl text-center">
+                              {row[1] === "Loan Balance" ? "Original Loan Balance" : row[1]}
+                            </h1>
+                          </div>
+                        )
+                      }
+                    })}
                   </div>
                 </div>
               )
