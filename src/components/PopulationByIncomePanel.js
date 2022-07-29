@@ -1,6 +1,6 @@
 import Loader from "./Loader"
 import { Bar } from "react-chartjs-2"
-import { chartFadedColors, chartSolidColors } from "../../public/utils"
+import { chartFadedColors, chartSolidColors, chartFadedBlues, chartSolidBlues } from "../../public/utils"
 
 const PopulationByIncomePanel = ({populationByIncomeData, compRegionsData}) => {
   const regionalData = []
@@ -34,9 +34,9 @@ const PopulationByIncomePanel = ({populationByIncomeData, compRegionsData}) => {
     }
 
     labels.forEach((label,i) => {
-      bgColors.push(chartFadedColors[i])
-      hbgColors.push(chartSolidColors[i])
-      bdColors.push(chartSolidColors[i])
+      bgColors.push(chartFadedBlues[i])
+      hbgColors.push(chartSolidBlues[i])
+      bdColors.push(chartSolidBlues[i])
     })
 
     return {
@@ -45,9 +45,10 @@ const PopulationByIncomePanel = ({populationByIncomeData, compRegionsData}) => {
         {
           label: `${region.name}`,
           data: data,
-          backgroundColor: bgColors,
-          borderColor: bdColors,
-          hoverBackgroundColor: hbgColors,
+          backgroundColor: bgColors.reverse(),
+          borderColor: bdColors.reverse(),
+          borderWidth: 3,
+          hoverBackgroundColor: hbgColors.reverse(),
           categoryPercentage: 1.0,
           barPercentage: 1.0
         }

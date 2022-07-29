@@ -64,26 +64,37 @@ const chartSolidColors = [
 ]
 
 const chartFadedBlues = [
-  "rgba(107, 185, 240, 0.3)",
-  "rgba(51, 177, 255, 0.3)",
-  "rgba(3, 138, 255, 0.3)",
-  "rgba(80, 155, 255, 0.3)",
-  "rgba(60, 120, 220, 0.3)",
-  "rgba(50, 100, 200, 0.3)",
-  "rgba(40, 80, 230, 0.3)",
-  "rgba(0, 20, 200, 0.3)"
+  "#0005ffbf",
+  "#1D4ED8bf",
+  "#2563EBbf",
+  "#3B82F6bf",
+  "#60A5FAbf",
+  "#93C5FDbf",
+  "#BFDBFEbf",
+  "#499adebf"
 ]
 
 const chartSolidBlues = [
-  "rgba(107, 185, 240, 0.7)",
-  "rgba(51, 177, 255, 0.7)",
-  "rgba(3, 138, 255, 0.7)",
-  "rgba(80, 155, 255, 0.7)",
-  "rgba(60, 120, 220, 0.7)",
-  "rgba(50, 100, 200, 0.7)",
-  "rgba(40, 80, 230, 0.7)",
-  "rgba(0, 20, 200, 0.7)"
+  "#0005ff",
+  "#1D4ED8",
+  "#2563EB",
+  "#3B82F6",
+  "#60A5FA",
+  "#93C5FD",
+  "#BFDBFE",
+  "#499ade"
 ]
+// const chartSolidBlues = [
+//   "#1e05ff",
+//   "#005cff",
+//   "#3f8bff",
+//   "#81b5ff",
+//   "#c3dbff",
+//   "#a8cbf7",
+//   "#8dbaef",
+//   "#6eaae6",
+//   "#499ade"
+// ]
 
 export {
   getDateLabelsForChart,

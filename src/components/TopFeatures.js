@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react"
+import dynamic from "next/dynamic"
+
+import { useState, useEffect, Suspense } from "react"
 import DelinquencyByCreditScore from "./DelinquencyByCreditScore"
 import DelinquencyByCreditScoreByPeriod from "./DelinquencyByCreditScoreByPeriod"
 import DelinquencyByDTI from "./DelinquencyByDTI"
@@ -13,6 +15,10 @@ import DelinquencyByNumberOfBorrowers from "./DelinquencyByNumberOfBorrowers"
 import DelinquencyByRace from "./DelinquencyByRace"
 import DelinquencyByUnemploymentRate from "./DelinquencyByUnemploymentRate"
 import Loader from "./Loader"
+
+const DynamicComponent = dynamic(() => import('./lazyComponent'), {
+  suspense: true
+})
 
 const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, regionalDelinquencyRates}) => {
   const [isLoading, setLoading] = useState(false)
@@ -42,18 +48,8 @@ console.log('compRegionsParams', compRegionsParams)
     let topFeaturesResponse = await fetch(endpoint, options)
     topFeaturesResponse = await topFeaturesResponse.json()
     topFeaturesResponse = topFeaturesResponse.response
-console.log('topFeaturesResponse', topFeaturesResponse)
 
-    const topFeaturesData = []
-    compRegionsParams.forEach(param => {
-      topFeaturesResponse.forEach(res => {
-        if(param.msa == res.msa){
-          topFeaturesData.push({...param, ...res})
-        }
-      })
-    })
-console.log('topFeaturesData', topFeaturesData)
-    setRegionalTopFeatures(topFeaturesData)
+    setRegionalTopFeatures(topFeaturesResponse)
     setLoading(false)
   }
   useEffect(() => {
@@ -65,6 +61,7 @@ console.log('topFeaturesData', topFeaturesData)
   }
 
   return (
+    <>
     <section className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
       <div className="flex items-center space-x-4">
         <img className="h-12" src="/five.svg" alt="" />
@@ -81,11 +78,11 @@ console.log('topFeaturesData', topFeaturesData)
                   <h1 className="my-6 text-[1.2vw] font-semibold">{`${region.name.split(",")[0]}`}</h1>
                   <div className="flex space-x-2">
                     {Object.entries(region).map((row, idx) => {
-                      if(row[0] !== 'msa' && row[0] !== 'name'){
+                      if(!row.includes('msa') && !row.includes('name')){
                         return (
-                          <div key={idx} className="flex flex-col w-full border-4 border-blue-400 rounded-md py-4 space-y-2">
+                          <div key={row[0]} className="flex flex-col w-full border-4 border-blue-400 rounded-md py-4 space-y-2">
                             <h1 className="w-full text-[1.2vw] text-center text-blue-500 font-bold">
-                              {idx-1}
+                              {row[0].split("feat")[1]}
                             </h1>
                             <h1 className="w-full text-2xl text-center">
                               {row[1] === "Loan Balance" ? "Original Loan Balance" : row[1]}
@@ -101,6 +98,7 @@ console.log('topFeaturesData', topFeaturesData)
           }
         </div>
       </header>
+    </section>
       {/* <div className="space-y-6">
         {topFeatures && topFeatures.map((feature, i) => {
           switch(feature) {
@@ -235,7 +233,12 @@ console.log('topFeaturesData', topFeaturesData)
           }
         })}
       </div> */}
-    </section>
+      <div>
+        <Suspense fallback={`Loading...`}>
+          <DynamicComponent/>
+        </Suspense>
+      </div>
+    </>
   )
 }
 

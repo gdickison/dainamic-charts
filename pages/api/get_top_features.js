@@ -7,12 +7,15 @@ export default async function handler(req, res) {
   await client
     .query(`SELECT
         msa,
+        msa_name AS "name",
         feat1,
         feat2,
         feat3,
         feat4,
         feat5
       FROM data_refined.model_output_msa
+        JOIN banking_app.msa_names
+        ON msa = msa_code
       WHERE msa IN (${req.body.msaCodes})
       ORDER BY msa;`)
     .then(response => res.status(200).json({response: response.rows}))
