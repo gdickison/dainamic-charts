@@ -64,25 +64,51 @@ const chartSolidColors = [
 ]
 
 const chartFadedBlues = [
-  "#0005ffbf",
-  "#1D4ED8bf",
-  "#2563EBbf",
-  "#3B82F6bf",
-  "#60A5FAbf",
-  "#93C5FDbf",
-  "#BFDBFEbf",
-  "#499adebf"
+  "#00876c",
+  "#51a573",
+  "#88c27b",
+  "#c2dd85",
+  "#fff795",
+  "#fdcb6e",
+  "#f69e56",
+  "#e96f4e",
+  "#d43d51"
+]
+
+const chartHoverColors = [
+  "#00876c",
+  "#51a573",
+  "#88c27b",
+  "#c2dd85",
+  "#fff795",
+  "#fdcb6e",
+  "#f69e56",
+  "#e96f4e",
+  "#d43d51"
 ]
 
 const chartSolidBlues = [
-  "#0005ff",
-  "#1D4ED8",
-  "#2563EB",
-  "#3B82F6",
-  "#60A5FA",
-  "#93C5FD",
-  "#BFDBFE",
-  "#499ade"
+  "#00876c",
+  "#51a676",
+  "#88c580",
+  "#c2e38c",
+  "#ffff9d",
+  "#fdd172",
+  "#f7a258",
+  "#ea714e",
+  "#d43d51"
+]
+
+const chartBackgroundColors = [
+  "#00876c",
+  "#50a16e",
+  "#86ba71",
+  "#bfd177",
+  "#fae684",
+  "#f8be65",
+  "#f29553",
+  "#e76b4d",
+  "#d43d51"
 ]
 // const chartSolidBlues = [
 //   "#1e05ff",
@@ -100,6 +126,8 @@ export {
   getDateLabelsForChart,
   groupDataByMsa,
   getLinearRegression,
+  chartBackgroundColors,
+  chartHoverColors,
   chartFadedColors,
   chartSolidColors,
   chartFadedBlues,

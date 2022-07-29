@@ -23,7 +23,7 @@ const DynamicComponent = dynamic(() => import('./lazyComponent'), {
 const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, regionalDelinquencyRates}) => {
   const [isLoading, setLoading] = useState(false)
   const [regionalTopFeatures, setRegionalTopFeatures] = useState()
-console.log('compRegionsParams', compRegionsParams)
+  const [featuresList, setFeaturesList] = useState()
 
   const getTopFeaturesForRegions = async () => {
     setLoading(true)
@@ -49,7 +49,19 @@ console.log('compRegionsParams', compRegionsParams)
     topFeaturesResponse = await topFeaturesResponse.json()
     topFeaturesResponse = topFeaturesResponse.response
 
+    let featuresOnly = []
+    topFeaturesResponse.forEach(row => {
+      for(const [key, value] of Object.entries(row)){
+        if(key !== 'msa' && key !== 'name'){
+          featuresOnly.push(value)
+        }
+      }
+    })
+
+    featuresOnly = [...new Set(featuresOnly)]
+
     setRegionalTopFeatures(topFeaturesResponse)
+    setFeaturesList(featuresOnly)
     setLoading(false)
   }
   useEffect(() => {
@@ -99,8 +111,8 @@ console.log('compRegionsParams', compRegionsParams)
         </div>
       </header>
     </section>
-      {/* <div className="space-y-6">
-        {topFeatures && topFeatures.map((feature, i) => {
+      <div className="space-y-6">
+        {featuresList && featuresList.map((feature, i) => {
           switch(feature) {
             case "Credit Score":
               return (
@@ -232,7 +244,7 @@ console.log('compRegionsParams', compRegionsParams)
               );
           }
         })}
-      </div> */}
+      </div>
       <div>
         <Suspense fallback={`Loading...`}>
           <DynamicComponent/>

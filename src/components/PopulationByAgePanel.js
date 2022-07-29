@@ -1,6 +1,6 @@
 import Loader from "./Loader"
 import { Doughnut } from "react-chartjs-2"
-import { chartFadedColors, chartSolidColors, chartFadedBlues, chartSolidBlues } from "../../public/utils"
+import { chartFadedColors, chartSolidColors, chartFadedBlues, chartSolidBlues, chartBackgroundColors, chartHoverColors } from "../../public/utils"
 
 const PopulationByAgePanel = ({populationByAgeData, compRegionsData}) => {
   const regionalData = []
@@ -34,9 +34,9 @@ const PopulationByAgePanel = ({populationByAgeData, compRegionsData}) => {
     }
 
     labels.forEach((label,i) => {
-      bgColors.push(chartFadedBlues[i])
-      hbgColors.push(chartSolidBlues[i])
-      bdColors.push(chartSolidBlues[i])
+      bgColors.push(chartBackgroundColors[i])
+      hbgColors.push(chartHoverColors[i])
+      bdColors.push(chartHoverColors[i])
     })
 
     return {
@@ -45,9 +45,9 @@ const PopulationByAgePanel = ({populationByAgeData, compRegionsData}) => {
         {
           label: `${region.name}`,
           data: data.reverse(),
-          backgroundColor: bgColors.reverse(),
-          borderColor: bdColors.reverse(),
-          hoverBackgroundColor: hbgColors.reverse(),
+          backgroundColor: bgColors,
+          borderColor: bdColors,
+          hoverBackgroundColor: hbgColors,
           borderWidth: 2
         }
       ]
