@@ -21,20 +21,16 @@ import { Bar } from "react-chartjs-2"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
-const DelinquencyByRace = ({targetRegion, compRegions}) => {
+const DelinquencyByRace = ({selectedRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [barChartData, setBarChartData] = useState()
   const [barChartOptions, setBarChartOptions] = useState()
 
   const getDelinquencyByRaceChartData = async () => {
     setLoading(true)
-    const msaCodes = []
-    msaCodes.push(targetRegion.msa)
-    if(compRegions.length > 0){
-      compRegions.map(region => {
-        msaCodes.push(region.msa)
-      })
-    }
+    const msaCodes = selectedRegions.map(region => {
+      return region.msa
+    })
 
     const JSONdata = JSON.stringify({
       msaCodes: msaCodes
@@ -95,7 +91,7 @@ const DelinquencyByRace = ({targetRegion, compRegions}) => {
       }
 
       return {
-        label: i === 0 ? targetRegion.name : compRegions[i - 1].name,
+        label: selectedRegions[i].name,
         data: delinquencyRateData,
         backgroundColor: chartFadedColors[i],
         borderColor: chartSolidColors[i],
@@ -146,7 +142,7 @@ const DelinquencyByRace = ({targetRegion, compRegions}) => {
             }
           },
           ticks: {
-            callback: function(value, index, title){
+            callback: function(value){
               return `${value}%`
             },
             font: {
@@ -190,7 +186,7 @@ const DelinquencyByRace = ({targetRegion, compRegions}) => {
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency Rate by Race"}
-        msa={compRegions.length > 0 ? "selected regions" : targetRegion.name}
+        msa={selectedRegions.length === 1 ? selectedRegions[0].name : "selected regions"}
         tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to racial populations. Delinquency is aggragated for all available dates rather than selected start and end dates."}
       />
         {barChartData &&

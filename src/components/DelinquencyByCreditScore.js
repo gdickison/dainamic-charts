@@ -21,7 +21,7 @@ import { Bar, Doughnut } from "react-chartjs-2"
 import { useState, useEffect } from "react"
 import { chartSolidColors, chartFadedColors } from "../../public/utils"
 
-const DelinquencyByCreditScoreByPeriod = ({dateRange, targetRegion, compRegions}) => {
+const DelinquencyByCreditScoreByPeriod = ({dateRange, selectedRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [barChartData, setBarChartData] = useState()
   const [barChartOptions, setBarChartOptions] = useState()
@@ -31,13 +31,9 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, targetRegion, compRegions}
   useEffect(() => {
     setLoading(true)
 
-    const msaCodes = []
-    msaCodes.push(targetRegion.msa)
-    if(compRegions.length > 0){
-      compRegions.map(region => {
-        msaCodes.push(region.msa)
-      })
-    }
+    const msaCodes = selectedRegions.map(region => {
+      return region.msa
+    })
 
     const JSONdata = JSON.stringify({
       startDate: dateRange.startDate,
@@ -344,7 +340,8 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, targetRegion, compRegions}
         setPieChartOptions(pieOptions)
         setLoading(false)
       })
-  }, [dateRange.endDate, targetRegion.msa, dateRange.startDate])
+  }, [])
+  // }, [dateRange.endDate, selectedRegions, dateRange.startDate])
 
   if(isLoading) {
     return <Loader loadiingText={"Getting credit score by region data..."}/>
@@ -354,7 +351,7 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, targetRegion, compRegions}
     <div className="h-max">
       <ChartHeaderWithTooltip
         chartName={"Delinquency Rate by Credit Score"}
-        msa={compRegions.length > 0 ? "selected regions" : targetRegion.name}
+        msa={selectedRegions.length === 1 ? selectedRegions[0].name : "selected regions"}
         tooltip={"Credit scores are grouped into standard ranges corresponding to 'Fair', 'Good', 'Very Good', and 'Exceptional'. The number of delinquent loans for each range in each period is divided by the corresponding total number of loans to get the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given data point and are also excluded. Hover over the data points to see details"}
       />
       {barChartData && <p className="text-base">The bar chart shows the delinquency rate within each credit score category. It is to be expected that lower credit scores will have a higher frequency of delinquency. However, those scores also typically represent a smaller portion of the overall loan portfolio, as shown in {barChartData.labels.length === 1 ? 'the' : 'each'} region's corresponding doughnut chart.</p>}

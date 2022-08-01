@@ -32,7 +32,7 @@ import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Line } from "react-chartjs-2"
 import { getDateLabelsForChart, groupDataByMsa, chartFadedColors, chartSolidColors } from "../../public/utils"
 
-const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) => {
+const DelinquencyByUnemploymentRate = ({dateRange, selectedRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
@@ -40,13 +40,9 @@ const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) =
   const getDelinquencyByUnemploymentChartData = async () => {
     setLoading(true)
 
-    const msaCodes = []
-    msaCodes.push(targetRegion.msa)
-    if(compRegions.length > 0) {
-      compRegions.map(region => {
-        msaCodes.push(region.msa)
-      })
-    }
+    const msaCodes = selectedRegions.map(region => {
+      return region.msa
+    })
 
     const JSONdata = JSON.stringify({
       startDate: dateRange.startDate,
@@ -76,13 +72,14 @@ const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) =
       })
 
       return {
-        label: `${idx === 0 ? targetRegion.name.split(",")[0] : compRegions[idx - 1].name.split(",")[0]} Unemployment Rate`,
+        label: `${selectedRegions[idx].name.split(",")[0]} Unemployment Rate`,
         data: unemploymentRateData,
         borderColor: chartFadedColors[idx],
         backgroundColor: chartFadedColors[idx],
         pointRadius: 5,
         pointHitRadius: 15,
-        pointHoverRadius: 12
+        pointHoverRadius: 12,
+        pointHoverBackgroundColor: chartSolidColors[idx]
       }
     })
 
@@ -100,7 +97,7 @@ const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) =
       })
 
       return {
-        label: `${idx === 0 ? targetRegion.name.split(",")[0] : compRegions[idx - 1].name.split(",")[0]} Delinquency Rate`,
+        label: `${selectedRegions[idx].name.split(",")[0]} Delinquency Rate`,
         data: delinquencyRateData,
         borderColor: chartSolidColors[idx],
         backgroundColor: chartSolidColors[idx],
@@ -146,7 +143,7 @@ const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) =
             }
           },
           ticks: {
-            callback: function(value, index, ticks){
+            callback: function(value){
               return `${value}%`
             },
             font: {
@@ -182,7 +179,8 @@ const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) =
 
   useEffect(() => {
     getDelinquencyByUnemploymentChartData()
-  }, [dateRange.startDate, dateRange.endDate, targetRegion.msa])
+  }, [])
+  // }, [dateRange.startDate, dateRange.endDate, selectedRegions])
 
   if(isLoading) {
     return <Loader loadiingText={"Getting unemployment data..."}/>
@@ -192,7 +190,7 @@ const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) =
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency by Unemployment Rate"}
-        msa={targetRegion.name}
+        msa={selectedRegions.length === 1 ? selectedRegions[0].name : "selected regions"}
       />
       {chartData &&
         <Line data={chartData} options={chartOptions}/>

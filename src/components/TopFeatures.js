@@ -32,7 +32,6 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
       return region.msa
     })
     const JSONdata = JSON.stringify({
-      // msaCode: targetRegionParams.msa
       msaCodes: msaCodes
     })
 
@@ -84,9 +83,9 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
       <header className="flex space-x-6 justify-evenly">
         <div className="flex flex-col justify-center w-full">
           {regionalTopFeatures &&
-            regionalTopFeatures.map(region => {
+            regionalTopFeatures.map((region, idx) => {
               return (
-                <div>
+                <div key={idx}>
                   <h1 className="my-6 text-[1.2vw] font-semibold">{`${region.name.split(",")[0]}`}</h1>
                   <div className="flex space-x-2">
                     {Object.entries(region).map((row, idx) => {
@@ -120,15 +119,13 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
                   <div key={`credit_score_by_period_${i}`} >
                     <DelinquencyByCreditScoreByPeriod
                       dateRange={dateRangeParams}
-                      targetRegion={targetRegionParams}
-                      compRegions={compRegionsParams}
+                      selectedRegions={compRegionsParams}
                     />
                   </div>
                   <div key={`credit_score_${i}`} >
                     <DelinquencyByCreditScore
                       dateRange={dateRangeParams}
-                      targetRegion={targetRegionParams}
-                      compRegions={compRegionsParams}
+                      selectedRegions={compRegionsParams}
                     />
                   </div>
                 </div>
@@ -148,8 +145,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByEducation
                     targetRegion={targetRegionParams}
-                    compRegions={compRegionsParams}
-                    regionalDelinquencyRates={regionalDelinquencyRates}
+                    selectedRegions={compRegionsParams}
                   />
                 </div>
               );
@@ -178,8 +174,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByInterestRate
                     dateRange={dateRangeParams}
-                    targetRegion={targetRegionParams}
-                    compRegions={compRegionsParams}
+                    selectedRegions={compRegionsParams}
                   />
                 </div>
               );
@@ -188,8 +183,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByOriginalBalance
                     dateRange={dateRangeParams}
-                    targetRegion={targetRegionParams}
-                    compRegions={compRegionsParams}
+                    selectedRegions={compRegionsParams}
                   />
                 </div>
               );
@@ -218,8 +212,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByNumberOfBorrowers
                     dateRange={dateRangeParams}
-                    targetRegion={targetRegionParams}
-                    compRegions={compRegionsParams}
+                    selectedRegions={compRegionsParams}
                   />
                 </div>
               );
@@ -227,8 +220,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByRace
-                    targetRegion={targetRegionParams}
-                    compRegions={compRegionsParams}
+                    selectedRegions={compRegionsParams}
                   />
                 </div>
               );
@@ -237,8 +229,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByUnemploymentRate
                     dateRange={dateRangeParams}
-                    targetRegion={targetRegionParams}
-                    compRegions={compRegionsParams}
+                    selectedRegions={compRegionsParams}
                   />
                 </div>
               );

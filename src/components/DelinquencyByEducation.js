@@ -21,20 +21,16 @@ import { useState, useEffect } from "react"
 import { Bar } from "react-chartjs-2"
 import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
-const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyRates}) => {
+const DelinquencyByEducation = ({targetRegion, selectedRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
 
   const getDelinquencyByEducationChartData = async () => {
     setLoading(true)
-    const msaCodes = []
-    msaCodes.push(targetRegion.msa)
-    if(compRegions.length > 0){
-      compRegions.map(region => {
-        msaCodes.push(region.msa)
-      })
-    }
+    const msaCodes = selectedRegions.map(region => {
+      return region.msa
+    })
 
     const JSONdata = JSON.stringify({
       msaCodes: msaCodes
@@ -95,7 +91,7 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
       }
 
       return {
-        label: i === 0 ? targetRegion.name : compRegions[i - 1].name,
+        label: i === 0 ? targetRegion.name : selectedRegions[i - 1].name,
         data: newRow,
         backgroundColor: chartFadedColors[i],
         borderColor: chartSolidColors[i],
@@ -188,7 +184,7 @@ const DelinquencyByEducation = ({targetRegion, compRegions, regionalDelinquencyR
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency Rate by Education Level"}
-        msa={compRegions.length > 0 ? "selected regions" : targetRegion.name}
+        msa={selectedRegions.length === 1 ? selectedRegions[0].name : "selected regions"}
         tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to education level segments. Delinquency is aggragated for all available dates rather than selected start and end dates."}
       />
         {chartData &&

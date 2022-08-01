@@ -441,9 +441,9 @@ const Home = () => {
               <header>
                 <p className="px-10 text-[1.2vw] italic">{`Selected ${compRegionsData.length === 1 ? 'Region' : 'Regions'}:`}</p>
                 <div className="mb-6 px-14 text-[1.2vw] italic">
-                  {compRegionsData.map(region => {
+                  {compRegionsData.map((region, idx) => {
                     return (
-                      <p>{region.name}</p>
+                      <p key={idx}>{region.name}</p>
                     )
                   })}
                 </div>

@@ -16,11 +16,11 @@ ChartJS.register(
 )
 
 import Loader from "./Loader"
-import { Scatter, Bar, Pie } from "react-chartjs-2"
+import { Bar, Pie } from "react-chartjs-2"
 import { useState, useEffect } from "react"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 
-const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) => {
+const DelinquencyByNumberOfBorrowers = ({dateRange, selectedRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [barChartData, setBarChartData] = useState()
   const [barChartOptions, setBarChartOptions] = useState()
@@ -30,13 +30,10 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) 
   useEffect(() => {
     setLoading(true)
 
-    const msaCodes = []
-    msaCodes.push(targetRegion.msa)
-    if(compRegions.length > 0){
-      compRegions.map(region => {
-        msaCodes.push(region.msa)
-      })
-    }
+    const msaCodes = selectedRegions.map(region => {
+      return region.msa
+    })
+
     const JSONdata = JSON.stringify({
       startDate: dateRange.startDate,
       endDate: dateRange.endDate,
@@ -282,7 +279,8 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) 
         setPieChartOptions(pieOptions)
         setLoading(false)
       })
-  }, [dateRange.endDate, targetRegion.msa, dateRange.startDate])
+  }, [])
+  // }, [dateRange.endDate, selectedRegions, dateRange.startDate])
 
   if(isLoading){
     return <Loader loadiingText={"Getting number of borrowers data..."}/>
@@ -292,7 +290,7 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) 
     <div className="h-max">
       <ChartHeaderWithTooltip
         chartName={"Delinquency By Number of Borrowers"}
-        msa={compRegions.length > 0 ? "selected regions" : targetRegion.name}
+        msa={selectedRegions.length === 1 ? selectedRegions[0].name : "selected regions"}
         tooltip={"All loans for each month are grouped by number of borrowers (1 or 2+). The number of loans with 3 or more borrowers are statistically insignificant and are included in the '2+' category. Click on the legend to show/hide datasets"}
       />
       <div className="flex justify-around w-full">

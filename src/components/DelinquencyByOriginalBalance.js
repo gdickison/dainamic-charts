@@ -33,7 +33,7 @@ import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public
 
 import { useEffect, useState } from "react"
 
-const DelinquencyByOriginalBalance = ({dateRange, targetRegion, compRegions}) => {
+const DelinquencyByOriginalBalance = ({dateRange, selectedRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
@@ -47,13 +47,10 @@ const DelinquencyByOriginalBalance = ({dateRange, targetRegion, compRegions}) =>
   useEffect(() => {
     setLoading(true)
 
-    const msaCodes = []
-    msaCodes.push(targetRegion.msa)
-    if(compRegions.length > 0){
-      compRegions.map(region => {
-        msaCodes.push(region.msa)
-      })
-    }
+    const msaCodes = selectedRegions.map(region => {
+      return region.msa
+    })
+
     const JSONdata = JSON.stringify({
       startDate: dateRange.startDate,
       endDate: dateRange.endDate,
@@ -114,11 +111,7 @@ const DelinquencyByOriginalBalance = ({dateRange, targetRegion, compRegions}) =>
           const tooltipArray = []
           for(const [key, value] of Object.entries(region)){
             value.delinquencyRate =  parseFloat((Number(value.delinquent) / Number(value.total_loans)) * 100).toFixed(2)
-            if(value.msa === targetRegion.msa){
-              value.name = targetRegion.name
-            } else {
-              value.name = compRegions.find(row => row.msa === value.msa).name
-            }
+            value.name = selectedRegions.find(row => row.msa === value.msa).name
             dataArray.push(value.delinquencyRate)
             tooltipArray.push({
               totalAtUpb: value.total_loans,
@@ -187,7 +180,7 @@ const DelinquencyByOriginalBalance = ({dateRange, targetRegion, compRegions}) =>
                   }
                 },
                 ticks: {
-                  callback: function(value, index, ticks){
+                  callback: function(value){
                     return value + "%"
                   },
                   font: {
@@ -216,7 +209,7 @@ const DelinquencyByOriginalBalance = ({dateRange, targetRegion, compRegions}) =>
 
         setLoading(false)
       })
-  }, [dateRange.endDate, targetRegion.msa, dateRange.startDate, divisor])
+  }, [dateRange.endDate, selectedRegions, dateRange.startDate, divisor])
 
   if(isLoading){
     return <Loader loadiingText={"Getting original loan balance data..."}/>
@@ -226,7 +219,7 @@ const DelinquencyByOriginalBalance = ({dateRange, targetRegion, compRegions}) =>
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency By Original Balance"}
-        msa={compRegions.length > 0 ? "selected regions" : targetRegion.name}
+        msa={selectedRegions.length === 1 ? selectedRegions[0].name : "selected regions"}
         tooltip={"Original balances (OUPB) are grouped into the selected increment (default $50,000). Delinquent loans with a given OUPB are divided by the total loans at that OUPB to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given data point and are also excluded. Hover over the bars to see details"}
       />
       <ChartDescription

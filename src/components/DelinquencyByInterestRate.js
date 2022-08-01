@@ -33,7 +33,7 @@ import { getLinearRegression, groupDataByMsa, chartSolidColors, chartFadedColors
 import { useState, useEffect, useRef } from "react"
 import { Scatter, Line, Bar } from "react-chartjs-2"
 
-const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
+const DelinquencyByInterestRate = ({dateRange, selectedRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
@@ -42,13 +42,10 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
   useEffect(() => {
     setLoading(true)
 
-    const msaCodes = []
-    msaCodes.push(targetRegion.msa)
-    if(compRegions.length > 0){
-      compRegions.map(region => {
-        msaCodes.push(region.msa)
-      })
-    }
+    const msaCodes = selectedRegions.map(region => {
+      return region.msa
+    })
+
     const JSONdata = JSON.stringify({
       startDate: dateRange.startDate,
       endDate: dateRange.endDate,
@@ -100,11 +97,7 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
         rawChartData.map(region => {
           Object.values(region).map(value => {
             value.delinquencyRate =  parseFloat((Number(value.delinquent) / Number(value.total_loans)) * 100).toFixed(2)
-            if(value.msa === targetRegion.msa){
-              value.name = targetRegion.name
-            } else {
-              value.name = compRegions.find(row => row.msa === value.msa).name
-            }
+            value.name = selectedRegions.find(row => row.msa === value.msa).name
           })
         })
 
@@ -311,7 +304,8 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
         })
         setLoading(false)
       })
-  }, [dateRange.endDate, targetRegion.msa, dateRange.startDate])
+  }, [])
+  // }, [dateRange.endDate, selectedRegions, dateRange.startDate])
 
   if(isLoading) {
     return (
@@ -323,7 +317,7 @@ const DelinquencyByInterestRate = ({dateRange, targetRegion, compRegions}) => {
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency by Interest Rate"}
-        msa={compRegions.length > 0 ? "selected regions" : targetRegion.name}
+        msa={selectedRegions.length === 1 ? selectedRegions[0].name : "selected regions"}
         tooltip={"All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
       />
       <ChartDescription
