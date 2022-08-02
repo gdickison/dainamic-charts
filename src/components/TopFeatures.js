@@ -191,8 +191,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByLoanTerm
                     dateRange={dateRangeParams}
-                    targetRegion={targetRegionParams}
-                    compRegions={compRegionsParams}
+                    selectedRegions={compRegionsParams}
                   />
                 </div>
               );
