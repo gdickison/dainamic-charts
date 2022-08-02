@@ -29,9 +29,9 @@ import outliers from "outliers"
 import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import ChartDescription from "./ChartDescription"
-import { getLinearRegression, groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
+import { getLinearRegression, groupDataByMsa, chartSolidColors } from "../../public/utils"
 import { useState, useEffect, useRef } from "react"
-import { Scatter, Line, Bar } from "react-chartjs-2"
+import { Scatter } from "react-chartjs-2"
 
 const DelinquencyByInterestRate = ({dateRange, selectedRegions}) => {
   const [isLoading, setLoading] = useState(false)
@@ -136,10 +136,10 @@ const DelinquencyByInterestRate = ({dateRange, selectedRegions}) => {
 
         const datasets = []
         dataForChart.map((row, i) => {
-          const yArray = []
-          row.dataset.map(set => {
-            yArray.push(Number(set.y))
+          const yArray = row.dataset.map(set => {
+            return Number(set.y)
           })
+
           const normalized = yArray.filter(outliers())
           const normalHigh = Math.max(...normalized)
           const normalLow = Math.min(...normalized)
@@ -221,15 +221,15 @@ const DelinquencyByInterestRate = ({dateRange, selectedRegions}) => {
                 usePointStyle: true
               },
               onHover: function(event, legendItem, legend){
-                const myChart = legend.chart
-                myChart.show(legendItem.datasetIndex + 1)
-                myChart.update()
-                myChart.setActiveElements([{datasetIndex: legendItem.datasetIndex, index: 0}])
+                const intChart = legend.chart
+                intChart.show(legendItem.datasetIndex + 1)
+                intChart.update()
+                intChart.setActiveElements([{datasetIndex: legendItem.datasetIndex, index: 0}])
               },
               onLeave: function(event, legendItem, legend){
-                const myChart = legend.chart
-                myChart.hide(legendItem.datasetIndex + 1)
-                myChart.update()
+                const intChart = legend.chart
+                intChart.hide(legendItem.datasetIndex + 1)
+                intChart.update()
               }
             },
             tooltip: {

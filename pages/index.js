@@ -410,7 +410,7 @@ const Home = () => {
   }
 
   return (
-    <div>
+    <div className="max-w-[1600px] mx-auto">
       <Head>
         <title>Dainamic</title>
       </Head>
