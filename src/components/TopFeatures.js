@@ -16,10 +16,6 @@ import DelinquencyByRace from "./DelinquencyByRace"
 import DelinquencyByUnemploymentRate from "./DelinquencyByUnemploymentRate"
 import Loader from "./Loader"
 
-const DynamicComponent = dynamic(() => import('./lazyComponent'), {
-  suspense: true
-})
-
 const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams}) => {
   const [isLoading, setLoading] = useState(false)
   const [regionalTopFeatures, setRegionalTopFeatures] = useState()
@@ -231,11 +227,6 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams}) =
               );
           }
         })}
-      </div>
-      <div>
-        <Suspense fallback={`Loading...`}>
-          <DynamicComponent/>
-        </Suspense>
       </div>
     </>
   )

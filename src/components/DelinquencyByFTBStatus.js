@@ -55,16 +55,16 @@ const DelinquencyByFTBStatus = ({dateRange, selectedRegions}) => {
             })
           }
           region.forEach(row => {
-            if(row.first_time_buyer_indicator === true){
-              firstTimeBuyerData.push(((row.delinquent / row.total_loans) * 100).toFixed(2))
+            if(row.firstTimeBuyer === true){
+              firstTimeBuyerData.push(((row.delinquent / row.total) * 100).toFixed(2))
               firstTimeBuyerTooltip.push({
-                totalAtPoint: row.total_loans,
+                totalAtPoint: row.total,
                 delinquentAtPoint: row.delinquent
               })
             } else {
-              multiTimeBuyerData.push(((row.delinquent / row.total_loans) * 100).toFixed(2))
+              multiTimeBuyerData.push(((row.delinquent / row.total) * 100).toFixed(2))
               multiTimeBuyerTooltip.push({
-                totalAtPoint: row.total_loans,
+                totalAtPoint: row.total,
                 delinquentAtPoint: row.delinquent
               })
             }

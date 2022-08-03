@@ -9,20 +9,20 @@ export default async function handler(req, res) {
       loan.msa,
       region.msa_name AS "name",
       origination_date,
-      first_time_buyer_indicator AS "firstTimeBuyer",
+      high_balance_indicator AS "highBalance",
       COUNT(loan.loanid) AS "total",
       COUNT(loan.loanid) FILTER (WHERE delinquency_status !='00') AS "delinquent",
       COUNT(loan.loanid) FILTER (WHERE delinquency_status = '00') AS "current"
     FROM
       banking_app.loan_basic AS "loan"
-      JOIN banking_app.loan_first_time_buyer AS "ftb"
-        ON loan.loanid = ftb.loanid
+      JOIN banking_app.loan_high_balance AS "hb"
+        ON loan.loanid = hb.loanid
       JOIN banking_app.msa_names AS "region"
         ON loan.msa = region.msa_code
     WHERE msa IN (${req.body.msaCodes})
       AND origination_date >= '${req.body.startDate}'::date
       AND origination_date <= '${req.body.endDate}'::date
-    GROUP BY loan.msa, region.msa_name, origination_date, first_time_buyer_indicator;`)
+    GROUP BY loan.msa, region.msa_name, origination_date, high_balance_indicator;`)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
     .catch(error => console.log("There is an error getting FTSB data: ", error))
