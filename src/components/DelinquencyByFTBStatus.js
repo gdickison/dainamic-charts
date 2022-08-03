@@ -1,36 +1,25 @@
-import {
-  Chart as ChartJS,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-} from "chart.js"
-
-ChartJS.register(
-  BarElement,
-  Filler,
-  Title,
-  Tooltip,
-  Legend
-)
-
 import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Bar } from "react-chartjs-2"
 import { useState, useEffect } from "react"
+import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
 
-const DelinquencyByFTBStatus = ({dateRange, targetRegion, compRegions}) => {
+const DelinquencyByFTBStatus = ({dateRange, selectedRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
 
   useEffect(() => {
     setLoading(true)
+
+    const msaCodes = selectedRegions.map(region => {
+      return region.msa
+    })
+
     const JSONdata = JSON.stringify({
-      msaCode: targetRegion.msa,
       startDate: dateRange.startDate,
-      endDate: dateRange.endDate
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
     })
 
     const endpoint = `/api/get_delinquency_by_ftbs`
@@ -46,50 +35,63 @@ const DelinquencyByFTBStatus = ({dateRange, targetRegion, compRegions}) => {
       .then(res => res.json())
       .then(data => data.response)
       .then(data => {
-        const labels = []
-        const firstTimeBuyerData = []
-        const firstTimeBuyerTooltip = []
-        const multiTimeBuyerData = []
-        const multiTimeBuyerTooltip = []
-        data.map((row, i) => {
-          if(i % 2 === 0){
-            labels.push(row.origination_date.split('T')[0])
-          }
-          if(row.first_time_buyer_indicator === true){
-            firstTimeBuyerData.push(((row.delinquent / row.total_loans) * 100).toFixed(2))
-            firstTimeBuyerTooltip.push({
-              totalAtPoint: row.total_loans,
-              delinquentAtPoint: row.delinquent
-            })
-          } else {
-            multiTimeBuyerData.push(((row.delinquent / row.total_loans) * 100).toFixed(2))
-            multiTimeBuyerTooltip.push({
-              totalAtPoint: row.total_loans,
-              delinquentAtPoint: row.delinquent
-            })
-          }
-        })
+        const groupedData = Object.values(groupDataByMsa(data, "msa"))
 
-        setChartData({
-          labels: labels,
-          datasets: [
+        const ftbsBarChartData = {
+          labels: [],
+          datasets: []
+        }
+
+        groupedData.forEach((region, regionIdx) => {
+          const firstTimeBuyerData = []
+          const firstTimeBuyerTooltip = []
+          const multiTimeBuyerData = []
+          const multiTimeBuyerTooltip = []
+          if(regionIdx === 0){
+            region.forEach((row, i) => {
+              if(i % 2 === 0){
+                ftbsBarChartData.labels.push((row.origination_date.split('T')[0]).toString())
+              }
+            })
+          }
+          region.forEach(row => {
+            if(row.first_time_buyer_indicator === true){
+              firstTimeBuyerData.push(((row.delinquent / row.total_loans) * 100).toFixed(2))
+              firstTimeBuyerTooltip.push({
+                totalAtPoint: row.total_loans,
+                delinquentAtPoint: row.delinquent
+              })
+            } else {
+              multiTimeBuyerData.push(((row.delinquent / row.total_loans) * 100).toFixed(2))
+              multiTimeBuyerTooltip.push({
+                totalAtPoint: row.total_loans,
+                delinquentAtPoint: row.delinquent
+              })
+            }
+          })
+          ftbsBarChartData.datasets.push(
             {
-              label: "1st Time Buyer",
-              backgroundColor: "#33b1ff",
-              borderColor: "#33b1ff",
+              label: `1st Time Buyer - ${region[0].name.split(',')[0]}`,
+              backgroundColor: chartFadedColors[regionIdx],
+              borderColor: chartFadedColors[regionIdx],
               borderWidth: 1,
               data: firstTimeBuyerData,
               tooltip: firstTimeBuyerTooltip
             },
             {
-              label: "Multi Time Buyer",
-              backgroundColor: "#003a6d",
-              borderColor: "#003a6d",
+              label: `Multi Time Buyer - ${region[0].name.split(',')[0]}`,
+              backgroundColor: chartSolidColors[regionIdx],
+              borderColor: chartSolidColors[regionIdx],
               borderWidth: 1,
               data: multiTimeBuyerData,
               tooltip: multiTimeBuyerTooltip
             }
-          ]
+          )
+        })
+
+        setChartData({
+          labels: ftbsBarChartData.labels,
+          datasets: ftbsBarChartData.datasets
         })
 
         setChartOptions({
@@ -148,7 +150,7 @@ const DelinquencyByFTBStatus = ({dateRange, targetRegion, compRegions}) => {
               ticks: {
                 callback: function(value){
                   let date = new Date(this.getLabelForValue(value))
-                  return `${date.toLocaleString('en-us', {month: 'long'})} ${date.getFullYear()}`
+                  return `${date.toLocaleString('en-us', {timeZone: 'UTC', month: 'long', year: 'numeric'})}`
                 },
                 font: {
                   size: 16
@@ -163,7 +165,7 @@ const DelinquencyByFTBStatus = ({dateRange, targetRegion, compRegions}) => {
 
         setLoading(false)
       })
-  }, [dateRange.endDate, targetRegion.msa, dateRange.startDate])
+  }, [dateRange.endDate, dateRange.startDate, selectedRegions])
 
   if(isLoading){
     return <Loader loadiingText={"Getting first time buyer data..."}/>
@@ -173,7 +175,7 @@ const DelinquencyByFTBStatus = ({dateRange, targetRegion, compRegions}) => {
     <div>
       <ChartHeaderWithTooltip
         chartName={'Delinquency by First Time Buyer Status'}
-        msa={targetRegion.name}
+        msa={selectedRegions.length === 1 ? selectedRegions[0].name : "selected regions"}
       />
       {chartData &&
         <Bar data={chartData} options={chartOptions} />

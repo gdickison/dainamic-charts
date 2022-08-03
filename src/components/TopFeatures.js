@@ -20,13 +20,13 @@ const DynamicComponent = dynamic(() => import('./lazyComponent'), {
   suspense: true
 })
 
-const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, regionalDelinquencyRates}) => {
+const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams}) => {
   const [isLoading, setLoading] = useState(false)
   const [regionalTopFeatures, setRegionalTopFeatures] = useState()
   const [featuresList, setFeaturesList] = useState()
 
   const getTopFeaturesForRegions = async () => {
-    setLoading(true)
+    // setLoading(true)
 
     const msaCodes = compRegionsParams.map(region => {
       return region.msa
@@ -61,10 +61,12 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
 
     setRegionalTopFeatures(topFeaturesResponse)
     setFeaturesList(featuresOnly)
-    setLoading(false)
+    // setLoading(false)
   }
   useEffect(() => {
+    setLoading(true)
     getTopFeaturesForRegions()
+    setLoading(false)
   }, [compRegionsParams])
 
   if(isLoading) {
@@ -153,8 +155,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams, re
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByFTBStatus
                     dateRange={dateRangeParams}
-                    targetRegion={targetRegionParams}
-                    compRegions={compRegionsParams}
+                    selectedRegions={compRegionsParams}
                   />
                 </div>
               );

@@ -485,7 +485,7 @@ const Home = () => {
               </div>
             </section>
             {/* TODO: set params to a const, separate date params and msa code params, since dates will always be the same */}
-            {showTopFeatures &&
+            {/* {showTopFeatures && */}
               <TopFeatures
                 dateRangeParams={{
                   startDate: dateRange.startDate,
@@ -506,7 +506,7 @@ const Home = () => {
                 })}
                 regionalDelinquencyRates={regionalDelinquencyRates}
               />
-            }
+            {/* } */}
           </section>
         }
       </main>

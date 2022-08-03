@@ -1,20 +1,3 @@
-import {
-  Chart as ChartJS,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-} from "chart.js"
-
-ChartJS.register(
-  BarElement,
-  Filler,
-  Title,
-  Tooltip,
-  Legend
-)
-
 import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Bar } from "react-chartjs-2"
@@ -213,6 +196,8 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, selectedRegions}) => {
               grace: 5
             },
             x: {
+              min: 0,
+              max: 6,
               title: {
                 display: true,
                 text: '',
@@ -241,8 +226,7 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, selectedRegions}) => {
         setChartOptions(delinquencyRateFeatureOptions)
         setLoading(false)
       })
-  }, [])
-  // }, [dateRange.endDate, selectedRegions, dateRange.startDate])
+  }, [dateRange, selectedRegions])
 
   if(isLoading) {
     return <Loader loadiingText={"Getting credit score by month data..."}/>

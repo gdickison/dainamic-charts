@@ -6,6 +6,8 @@ export default async function handler(req, res) {
 
   await client
     .query(`SELECT
+      loan.msa,
+      region.msa_name AS "name",
       origination_date,
       first_time_buyer_indicator,
       COUNT(loan.loanid) AS "total_loans",
@@ -13,12 +15,14 @@ export default async function handler(req, res) {
       COUNT(loan.loanid) FILTER (WHERE delinquency_status = '00') AS "current"
     FROM
       banking_app.loan_basic AS "loan"
-      INNER JOIN banking_app.loan_first_time_buyer AS "ftb"
+      JOIN banking_app.loan_first_time_buyer AS "ftb"
         ON loan.loanid = ftb.loanid
-    WHERE msa = ${req.body.msaCode}
+      JOIN banking_app.msa_names AS "region"
+        ON loan.msa = region.msa_code
+    WHERE msa IN (${req.body.msaCodes})
       AND origination_date >= '${req.body.startDate}'::date
       AND origination_date <= '${req.body.endDate}'::date
-    GROUP BY origination_date, first_time_buyer_indicator;`)
+    GROUP BY loan.msa, region.msa_name, origination_date, first_time_buyer_indicator;`)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
     .catch(error => console.log("There is an error getting FTSB data: ", error))
