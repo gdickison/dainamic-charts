@@ -145,7 +145,6 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams}) =
               return (
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByEducation
-                    targetRegion={targetRegionParams}
                     selectedRegions={compRegionsParams}
                   />
                 </div>
@@ -164,8 +163,7 @@ const TopFeatures = ({dateRangeParams, targetRegionParams, compRegionsParams}) =
                 <div key={i} className="border-2 border-slate-400 rounded-md p-4">
                   <DelinquencyByHighBalance
                     dateRange={dateRangeParams}
-                    targetRegion={targetRegionParams}
-                    compRegions={compRegionsParams}
+                    selectedRegions={compRegionsParams}
                   />
                 </div>
               );

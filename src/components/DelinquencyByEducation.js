@@ -21,7 +21,7 @@ import { useState, useEffect } from "react"
 import { Bar } from "react-chartjs-2"
 import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
-const DelinquencyByEducation = ({targetRegion, selectedRegions}) => {
+const DelinquencyByEducation = ({selectedRegions}) => {
   const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
   const [chartOptions, setChartOptions] = useState()
@@ -91,7 +91,7 @@ const DelinquencyByEducation = ({targetRegion, selectedRegions}) => {
       }
 
       return {
-        label: i === 0 ? targetRegion.name : selectedRegions[i - 1].name,
+        label: selectedRegions[i].name,
         data: newRow,
         backgroundColor: chartFadedColors[i],
         borderColor: chartSolidColors[i],
