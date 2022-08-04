@@ -491,10 +491,10 @@ const Home = () => {
                   startDate: dateRange.startDate,
                   endDate: dateRange.endDate
                 }}
-                targetRegionParams={{
-                  msa: targetRegionData.msa,
-                  name: targetRegionData.name
-                }}
+                // targetRegionParams={{
+                //   msa: targetRegionData.msa,
+                //   name: targetRegionData.name
+                // }}
                 // compRegionsParams={compRegionsData
                 //   ? compRegionsData.map(region => {
                 //     return {msa: region.msa, name: region.name}

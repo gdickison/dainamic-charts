@@ -8,11 +8,21 @@ export default async function handler(req, res) {
     .query(`SELECT
         msa,
         msa_name AS "name",
-        feat1,
-        feat2,
-        feat3,
-        feat4,
-        feat5
+        feat1 AS "feat01",
+        feat2 AS "feat02",
+        feat3 AS "feat03",
+        feat4 AS "feat04",
+        feat5 AS "feat05",
+        feat6 AS "feat06",
+        feat7 AS "feat07",
+        feat8 AS "feat08",
+        feat9 AS "feat09",
+        feat10,
+        feat11,
+        feat12,
+        feat13,
+        feat14,
+        feat15
       FROM data_refined.model_output_msa
         JOIN banking_app.msa_names
         ON msa = msa_code
@@ -21,10 +31,4 @@ export default async function handler(req, res) {
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
     .catch(error => console.log("There is an error getting top feature data: ", error))
-    // .query(`SELECT feat1, feat2, feat3, feat4, feat5
-    //   FROM data_refined.model_output_msa
-    //   WHERE msa = ${req.body.msaCode};`)
-    // .then(response => res.status(200).json({response: response.rows[0]}))
-    // .then(client.release())
-    // .catch(error => console.log("There is an error getting top feature data: ", error))
 }
