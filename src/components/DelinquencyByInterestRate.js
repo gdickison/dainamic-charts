@@ -34,14 +34,10 @@ import { useState, useEffect, useRef } from "react"
 import { Scatter } from "react-chartjs-2"
 
 const DelinquencyByInterestRate = ({dateRange, selectedRegions}) => {
-  const [isLoading, setLoading] = useState(false)
   const [chartData, setChartData] = useState()
-  const [chartOptions, setChartOptions] = useState()
   const thisChart = useRef(null)
 
   useEffect(() => {
-    setLoading(true)
-
     const msaCodes = selectedRegions.map(region => {
       return region.msa
     })
@@ -200,132 +196,131 @@ const DelinquencyByInterestRate = ({dateRange, selectedRegions}) => {
         })
 
         setChartData({datasets})
+      })
+  }, [])
 
-        setChartOptions({
-          responsive: true,
-          aspectRatio: 2.5,
-          hover: {
-            mode: 'dataset',
-            intersect: true,
+  const chartOptions = {
+    responsive: true,
+    aspectRatio: 2.5,
+    hover: {
+      mode: 'dataset',
+      intersect: true,
+    },
+    plugins: {
+      legend: {
+        display: true,
+        labels: {
+          filter: function(item, chart) {
+            return !item.text.includes('Regression');
           },
-          plugins: {
-            legend: {
-              display: true,
-              labels: {
-                filter: function(item, chart) {
-                  return !item.text.includes('Regression');
-                },
-                font: {
-                  size: 16
-                },
-                usePointStyle: true
-              },
-              onHover: function(event, legendItem, legend){
-                const intChart = legend.chart
-                intChart.show(legendItem.datasetIndex + 1)
-                intChart.update()
-                intChart.setActiveElements([{datasetIndex: legendItem.datasetIndex, index: 0}])
-              },
-              onLeave: function(event, legendItem, legend){
-                const intChart = legend.chart
-                intChart.hide(legendItem.datasetIndex + 1)
-                intChart.update()
-              }
-            },
-            tooltip: {
-              usePointStyle: true,
-              callbacks: {
-                title: function(context) {
-                  return `${context[0].dataset.label}`
-                },
-                beforeBody: function(context) {
-                  return [
-                    `Interest Rate: ${context[0].raw.x}%`,
-                    `Total Loans at Rate: ${context[0].raw.totalAtRate}`,
-                    `Delinquent Loans at Rate: ${context[0].raw.delinquentAtRate}`
-                  ]
-                },
-                label: function(context) {
-                  let label = `Delinquency Rate: ${context.raw.y}%`
-                  return label
-                },
-                labelPointStyle: function(context) {
-                  return {
-                    pointStyle: `${context.dataset.pointStyle}`,
-                    rotation: 0
-                  }
-                }
-              }
-            }
+          font: {
+            size: 16
           },
-          scales: {
-            y: {
-              title: {
-                display: true,
-                text: "Delinquency Rate",
-                padding: 20,
-                font: {
-                  size: 16
-                }
-              },
-              ticks: {
-                callback: function(value, index, ticks){
-                  return value + "%"
-                },
-                font: {
-                  size: 16
-                }
-              },
-              grace: 5,
-              beginAtZero: true
-            },
-            x: {
-              title: {
-                display: true,
-                text: "Interest Rate (grouped by .125%)",
-                padding: 20,
-                font: {
-                  size: 16
-                }
-              },
-              ticks: {
-                callback: function(value, index, ticks){
-                  return value + "%"
-                },
-                font: {
-                  size: 16
-                }
-              },
-              grid: {
-                display: false
-              }
+          usePointStyle: true
+        },
+        onHover: function(event, legendItem, legend){
+          const intChart = legend.chart
+          intChart.show(legendItem.datasetIndex + 1)
+          intChart.update()
+          intChart.setActiveElements([{datasetIndex: legendItem.datasetIndex, index: 0}])
+        },
+        onLeave: function(event, legendItem, legend){
+          const intChart = legend.chart
+          intChart.hide(legendItem.datasetIndex + 1)
+          intChart.update()
+        }
+      },
+      tooltip: {
+        usePointStyle: true,
+        callbacks: {
+          title: function(context) {
+            return `${context[0].dataset.label}`
+          },
+          beforeBody: function(context) {
+            return [
+              `Interest Rate: ${context[0].raw.x}%`,
+              `Total Loans at Rate: ${context[0].raw.totalAtRate}`,
+              `Delinquent Loans at Rate: ${context[0].raw.delinquentAtRate}`
+            ]
+          },
+          label: function(context) {
+            let label = `Delinquency Rate: ${context.raw.y}%`
+            return label
+          },
+          labelPointStyle: function(context) {
+            return {
+              pointStyle: `${context.dataset.pointStyle}`,
+              rotation: 0
             }
           }
-        })
-        setLoading(false)
-      })
-  }, [dateRange, selectedRegions])
-
-  if(isLoading) {
-    return (
-      <Loader loadiingText={"Getting interest rate data..."}/>
-    )
+        }
+      }
+    },
+    scales: {
+      y: {
+        title: {
+          display: true,
+          text: "Delinquency Rate",
+          padding: 20,
+          font: {
+            size: 16
+          }
+        },
+        ticks: {
+          callback: function(value, index, ticks){
+            return value + "%"
+          },
+          font: {
+            size: 16
+          }
+        },
+        grace: 5,
+        beginAtZero: true
+      },
+      x: {
+        title: {
+          display: true,
+          text: "Interest Rate (grouped by .125%)",
+          padding: 20,
+          font: {
+            size: 16
+          }
+        },
+        ticks: {
+          callback: function(value, index, ticks){
+            return value + "%"
+          },
+          font: {
+            size: 16
+          }
+        },
+        grid: {
+          display: false
+        }
+      }
+    }
   }
 
   return (
     <div>
-      <ChartHeaderWithTooltip
-        chartName={"Delinquency by Interest Rate"}
-        msa={selectedRegions.length === 1 ? selectedRegions[0].name : "selected regions"}
-        tooltip={"All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
-      />
-      <ChartDescription
-        description={`Hover over the legend to see the datapoints and trend line for a region. Hover over a datapoint on the chart for specific details. Click the legend to show and hide datasets`}
-      />
-      {chartData &&
-        <div className="relative flex items-center">
-          <Scatter id={"intChart"} ref={thisChart} className="my-6" data={chartData} options={chartOptions}/>
-        </div>
+      {chartData
+        ?
+          <>
+            <ChartHeaderWithTooltip
+              chartName={"Delinquency by Interest Rate"}
+              msa={selectedRegions.length === 1 ? selectedRegions[0].name : "selected regions"}
+              tooltip={"All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
+            />
+            <ChartDescription
+              description={`Hover over the legend to see the datapoints and trend line for a region. Hover over a datapoint on the chart for specific details. Click the legend to show and hide datasets`}
+            />
+            {chartData &&
+              <div className="relative flex items-center">
+                <Scatter id={"intChart"} ref={thisChart} className="my-6" data={chartData} options={chartOptions}/>
+              </div>
+            }
+          </>
+        : <Loader loadiingText={"Getting interest rate data..."}/>
       }
     </div>
   )

@@ -196,8 +196,8 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, selectedRegions}) => {
               grace: 5
             },
             x: {
-              min: 0,
-              max: 6,
+              // min: 0,
+              // max: 6,
               title: {
                 display: true,
                 text: '',

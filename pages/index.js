@@ -377,16 +377,16 @@ const Home = () => {
   }
 
   const getData = () => {
-      setShowTopFeatures(false)
-      getMsaSummaryData()
-      getPopulationByAgeData()
-      getPopulationByIncome()
-      getRegionalDelinquencyRateForRange()
-      getNationalDelinquencyRateForRange()
-      getNationalPopulation()
-      getNationalMedianHouseholdIncome()
-      getNationalMedianHomeValue()
-      setShowTopFeatures(true)
+    setShowTopFeatures(false)
+    getMsaSummaryData()
+    getPopulationByAgeData()
+    getPopulationByIncome()
+    getRegionalDelinquencyRateForRange()
+    getNationalDelinquencyRateForRange()
+    getNationalPopulation()
+    getNationalMedianHouseholdIncome()
+    getNationalMedianHomeValue()
+    setShowTopFeatures(true)
   }
 
   if(isLoading) {
@@ -432,6 +432,7 @@ const Home = () => {
                 <h1 className="mb-6 px-10 text-[2vw]">{`Regional ${selectedRegionsData.length === 1 ? 'Summary' : 'Summaries'}`}</h1>
               </header>
               <div>
+              {/* TODO: these should be refactored to fetch the data INSIDE the component if only that component uses the data. That might speed things up! According to R. Wieruch I only want to fetch data when the component mounts. */}
                 {regionalDelinquencyRates
                   ? <RegionalDelinquencyRatePanel
                     selectedRegionsData={selectedRegionsData}
@@ -466,17 +467,12 @@ const Home = () => {
                 }
               </div>
             </section>
-            {/* TODO: set params to a const, separate date params and msa code params, since dates will always be the same */}
             {/* {showTopFeatures && */}
               <TopFeatures
-                dateRangeParams={{
-                  startDate: dateRange.startDate,
-                  endDate: dateRange.endDate
-                }}
+                dateRangeParams={dateRange}
                 compRegionsParams={selectedRegionsData.map(region => {
                   return {msa: region.msa, name: region.name}
                 })}
-                regionalDelinquencyRates={regionalDelinquencyRates}
               />
             {/* } */}
           </section>

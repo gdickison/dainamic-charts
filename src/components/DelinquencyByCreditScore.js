@@ -22,15 +22,12 @@ import { useState, useEffect } from "react"
 import { chartSolidColors, chartFadedColors } from "../../public/utils"
 
 const DelinquencyByCreditScoreByPeriod = ({dateRange, selectedRegions}) => {
-  const [isLoading, setLoading] = useState(false)
   const [barChartData, setBarChartData] = useState()
   const [barChartOptions, setBarChartOptions] = useState()
   const [pieChartData, setPieChartData] = useState()
   const [pieChartOptions, setPieChartOptions] = useState()
 
   useEffect(() => {
-    setLoading(true)
-
     const msaCodes = selectedRegions.map(region => {
       return region.msa
     })
@@ -338,12 +335,10 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, selectedRegions}) => {
         setBarChartOptions(barOptions)
         setPieChartData(pieChartStructuredData)
         setPieChartOptions(pieOptions)
-        setLoading(false)
       })
   }, [dateRange, selectedRegions])
-  // }, [dateRange.endDate, selectedRegions, dateRange.startDate])
 
-  if(isLoading) {
+  if(!barChartData || !pieChartData) {
     return <Loader loadiingText={"Getting credit score by region data..."}/>
   }
 
@@ -370,23 +365,27 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, selectedRegions}) => {
           })}
         </div>
         <div className="flex flex-col items-center space-y-8 px-12 py-4 w-7/12">
-          <p>Delinquency Rate By Credit Score Range</p>
           {barChartData &&
-            <div className="flex w-11/12">
-              <Bar data={barChartData} options={barChartOptions} />
-            </div>
+            <>
+              <p>Delinquency Rate By Credit Score Range</p>
+              <div className="flex w-11/12">
+                <Bar data={barChartData} options={barChartOptions} />
+              </div>
+            </>
           }
-          <p>Credit Score Range Share of Regional Delinquency Rate</p>
           {pieChartData &&
-            <div className="flex">
-              {pieChartData.map((chart, i) => {
-                return (
-                  <div key={i} className="flex">
-                    <Doughnut data={chart} options={pieChartOptions} width={pieChartData.length === 1 ? 250 : 200} />
-                  </div>
-                )
-              })}
-            </div>
+            <>
+              <p>Credit Score Range Share of Regional Delinquency Rate</p>
+              <div className="flex">
+                {pieChartData.map((chart, i) => {
+                  return (
+                    <div key={i} className="flex">
+                      <Doughnut data={chart} options={pieChartOptions} width={pieChartData.length === 1 ? 250 : 200} />
+                    </div>
+                  )
+                })}
+              </div>
+            </>
           }
         </div>
       </div>
