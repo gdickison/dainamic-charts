@@ -34,9 +34,9 @@ const PopulationByAgePanel = ({populationByAgeData, compRegionsData}) => {
     }
 
     labels.forEach((label,i) => {
-      bgColors.push(chartBackgroundColors[i])
-      hbgColors.push(chartHoverColors[i])
-      bdColors.push(chartHoverColors[i])
+      bgColors.push(chartFadedColors[i])
+      hbgColors.push(chartSolidColors[i])
+      bdColors.push(chartSolidColors[i])
     })
 
     return {

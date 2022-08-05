@@ -1,5 +1,3 @@
-import dynamic from "next/dynamic"
-
 import { useState, useEffect } from "react"
 import DelinquencyByCreditScore from "./DelinquencyByCreditScore"
 import DelinquencyByCreditScoreByPeriod from "./DelinquencyByCreditScoreByPeriod"
@@ -18,9 +16,10 @@ import Loader from "./Loader"
 
 const TopFeatures = ({dateRangeParams, compRegionsParams}) => {
   const [isLoading, setLoading] = useState(false)
-  const [regionalTopFeatures, setRegionalTopFeatures] = useState()
+  const [topFeaturesForList, setTopFeaturesForList] = useState()
+  const [topFeaturesForCharts, setTopFeaturesForCharts] = useState()
 
-  const getTopFeaturesForRegions = async () => {
+  const getRegionalTopFeatures = async () => {
     const msaCodes = compRegionsParams.map(region => {
       return region.msa
     })
@@ -37,12 +36,11 @@ const TopFeatures = ({dateRangeParams, compRegionsParams}) => {
       body: JSONdata
     }
 
-    let topFeaturesResponse = await fetch(endpoint, options)
-    topFeaturesResponse = await topFeaturesResponse.json()
-    topFeaturesResponse = topFeaturesResponse.response
-
-    topFeaturesResponse.forEach(row => {
-      const uniqueValues = Object.keys(row)
+    let regionalTopFeatures = await fetch(endpoint, options)
+    regionalTopFeatures = await regionalTopFeatures.json()
+    regionalTopFeatures = regionalTopFeatures.response
+    regionalTopFeatures.forEach(row => {
+      const uniqueFeatures = Object.keys(row)
         .filter((key) => key.includes("feat"))
         .reduce((obj, key) => {
             return Object.assign(obj, {
@@ -50,15 +48,24 @@ const TopFeatures = ({dateRangeParams, compRegionsParams}) => {
             });
       }, {});
 
-      row.uniqueFeatures = [...new Set(Object.values(uniqueValues))].slice(0,5)
+      row.featureList = [...new Set(Object.values(uniqueFeatures))].slice(0,5)
     })
 
-    setRegionalTopFeatures(topFeaturesResponse)
+    let featuresForCharts = regionalTopFeatures.map(row => {
+      return row.featureList
+    })
+    featuresForCharts = [...new Set([].concat.apply([], featuresForCharts))]
+
+    setTopFeaturesForList(regionalTopFeatures)
+    setTopFeaturesForCharts(featuresForCharts)
   }
+
 
   useEffect(() => {
     setLoading(true)
-    getTopFeaturesForRegions()
+    setTopFeaturesForList(null)
+    setTopFeaturesForCharts(null)
+    getRegionalTopFeatures()
     setLoading(false)
   }, [compRegionsParams])
 
@@ -77,13 +84,13 @@ const TopFeatures = ({dateRangeParams, compRegionsParams}) => {
         </div>
         <header className="flex space-x-6 justify-evenly">
           <div className="flex flex-col justify-center w-full">
-            {regionalTopFeatures &&
-              regionalTopFeatures.map((region, idx) => {
+            {topFeaturesForList &&
+              topFeaturesForList.map((region, idx) => {
                 return (
                   <div key={idx}>
                     <h1 className="my-6 text-[1.2vw] font-semibold">{`${region.name.split(",")[0]}`}</h1>
                     <div className="flex space-x-2">
-                      {region.uniqueFeatures.map((feature, idx) => {
+                      {region.featureList.map((feature, idx) => {
                         return (
                           <div key={feature} className="flex flex-col w-full border-4 border-blue-400 rounded-md py-4 space-y-2">
                             <h1 className="w-full text-[1.2vw] text-center text-blue-500 font-bold">
@@ -104,129 +111,123 @@ const TopFeatures = ({dateRangeParams, compRegionsParams}) => {
         </header>
       </section>
       <div className="space-y-6">
-        {regionalTopFeatures && regionalTopFeatures.map((region, idx) => {
-          return (
-            <div key={idx}>
-              {region.uniqueFeatures.map((feature, i) => {
-                switch(feature) {
-                  case "Credit Score":
-                    return (
-                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4 divide-y-2">
-                        <div>
-                          <DelinquencyByCreditScoreByPeriod
-                            dateRange={dateRangeParams}
-                            selectedRegions={compRegionsParams}
-                          />
-                        </div>
-                        <div>
-                          <DelinquencyByCreditScore
-                            dateRange={dateRangeParams}
-                            selectedRegions={compRegionsParams}
-                          />
-                        </div>
-                      </div>
-                    );
-                  case "Debt-to-Income":
-                    return (
-                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByDTI
-                          dateRange={dateRangeParams}
-                          selectedRegions={compRegionsParams}
-                        />
-                      </div>
-                    );
-                  case "Education":
-                    return (
-                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByEducation
-                          selectedRegions={compRegionsParams}
-                        />
-                      </div>
-                    );
-                  case "First Time Buyer Status":
-                    return (
-                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByFTBStatus
-                          dateRange={dateRangeParams}
-                          selectedRegions={compRegionsParams}
-                        />
-                      </div>
-                    );
-                  case "High Balance":
-                    return (
-                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByHighBalance
-                          dateRange={dateRangeParams}
-                          selectedRegions={compRegionsParams}
-                        />
-                      </div>
-                    );
-                  case "Interest Rate":
-                    return (
-                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByInterestRate
-                          dateRange={dateRangeParams}
-                          selectedRegions={compRegionsParams}
-                        />
-                      </div>
-                    );
-                  case "Loan Balance":
-                    return (
-                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByOriginalBalance
-                          dateRange={dateRangeParams}
-                          selectedRegions={compRegionsParams}
-                        />
-                      </div>
-                    );
-                  case "Loan Term":
-                    return (
-                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByLoanTerm
-                          dateRange={dateRangeParams}
-                          selectedRegions={compRegionsParams}
-                        />
-                      </div>
-                    );
-                  case "Loan-to-Value":
-                    return (
-                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByLTV
-                          dateRange={dateRangeParams}
-                          selectedRegions={compRegionsParams}
-                        />
-                      </div>
-                    );
-                  case "Number of Borrowers":
-                    return (
-                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByNumberOfBorrowers
-                          dateRange={dateRangeParams}
-                          selectedRegions={compRegionsParams}
-                        />
-                      </div>
-                    );
-                  case "Race":
-                    return (
-                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByRace
-                          selectedRegions={compRegionsParams}
-                        />
-                      </div>
-                    );
-                  case "Unemployment Rate":
-                    return (
-                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByUnemploymentRate
-                          dateRange={dateRangeParams}
-                          selectedRegions={compRegionsParams}
-                        />
-                      </div>
-                    );
-                }
-              })}
-            </div>
-          )
+        {topFeaturesForCharts && topFeaturesForCharts.map((feature, i) => {
+          switch(feature) {
+            case "Credit Score":
+              return (
+                <div key={feature} className="border-2 border-slate-400 rounded-md p-4 divide-y-2">
+                  <div>
+                    <DelinquencyByCreditScoreByPeriod
+                      dateRange={dateRangeParams}
+                      selectedRegions={compRegionsParams}
+                    />
+                  </div>
+                  <div>
+                    <DelinquencyByCreditScore
+                      dateRange={dateRangeParams}
+                      selectedRegions={compRegionsParams}
+                    />
+                  </div>
+                </div>
+              );
+            case "Debt-to-Income":
+              return (
+                <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByDTI
+                    dateRange={dateRangeParams}
+                    selectedRegions={compRegionsParams}
+                  />
+                </div>
+              );
+            case "Education":
+              return (
+                <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByEducation
+                    selectedRegions={compRegionsParams}
+                  />
+                </div>
+              );
+            case "First Time Buyer Status":
+              return (
+                <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByFTBStatus
+                    dateRange={dateRangeParams}
+                    selectedRegions={compRegionsParams}
+                  />
+                </div>
+              );
+            case "High Balance":
+              return (
+                <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByHighBalance
+                    dateRange={dateRangeParams}
+                    selectedRegions={compRegionsParams}
+                  />
+                </div>
+              );
+            case "Interest Rate":
+              return (
+                <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByInterestRate
+                    dateRange={dateRangeParams}
+                    selectedRegions={compRegionsParams}
+                  />
+                </div>
+              );
+            case "Loan Balance":
+              return (
+                <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByOriginalBalance
+                    dateRange={dateRangeParams}
+                    selectedRegions={compRegionsParams}
+                  />
+                </div>
+              );
+            case "Loan Term":
+              return (
+                <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByLoanTerm
+                    dateRange={dateRangeParams}
+                    selectedRegions={compRegionsParams}
+                  />
+                </div>
+              );
+            case "Loan-to-Value":
+              return (
+                <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByLTV
+                    dateRange={dateRangeParams}
+                    selectedRegions={compRegionsParams}
+                  />
+                </div>
+              );
+            case "Number of Borrowers":
+              return (
+                <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByNumberOfBorrowers
+                    dateRange={dateRangeParams}
+                    selectedRegions={compRegionsParams}
+                  />
+                </div>
+              );
+            case "Race":
+              return (
+                <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByRace
+                    selectedRegions={compRegionsParams}
+                  />
+                </div>
+              );
+            case "Unemployment Rate":
+              return (
+                <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                  <DelinquencyByUnemploymentRate
+                    dateRange={dateRangeParams}
+                    selectedRegions={compRegionsParams}
+                  />
+                </div>
+              );
+          }
         })}
       </div>
     </>
