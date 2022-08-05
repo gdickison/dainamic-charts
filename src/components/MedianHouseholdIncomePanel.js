@@ -10,11 +10,7 @@ const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, selectedRegi
     return region.name
   })
 
-  const lineData = selectedRegionsData.map(region => {
-    return nationalMedianHouseholdIncome
-  })
-
-  const linePointRadius = selectedRegionsData.length > 2 ? 10 : 30
+  // const formattedContent = nationalMedianHouseholdIncome.toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})
 
   const chartData = {
     labels: homeIncomeChartLabels,
@@ -29,20 +25,6 @@ const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, selectedRegi
         borderWidth: 3,
         maxBarThickness: 100,
         order: 2
-      },
-      {
-        type: 'line',
-        label: 'National',
-        data: lineData,
-        showLine: true,
-        borderColor: 'rgba(0, 0, 255, 1)',
-        backgroundColor: 'rgba(0, 0, 255, 0.3)',
-        pointBackgroundColor: 'rgba(0, 0, 255, 0.3)',
-        pointRadius: linePointRadius,
-        pointStyle: 'line',
-        borderWidth: 3,
-        hoverBorderWidth: 3,
-        order: 1
       }
     ]
   }
@@ -55,7 +37,7 @@ const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, selectedRegi
     },
     plugins: {
       legend: {
-        display: true
+        display: false
       },
       tooltip: {
         callbacks: {
@@ -82,6 +64,47 @@ const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, selectedRegi
         },
         borderWidth: 3,
         boxPadding: 6
+      },
+      datalabels: {
+        display: true,
+        color: '#000',
+        align: 'start',
+        anchor: 'end',
+        formatter: function(value, context){
+          return (value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})
+        },
+        labels: {
+          title: {
+            font: {
+              weight: 'bold',
+              size: 12,
+            }
+          }
+        }
+      },
+      annotation: {
+        annotations: {
+          line1: {
+            type: 'line',
+            yMin: nationalMedianHouseholdIncome,
+            yMax: nationalMedianHouseholdIncome,
+            borderColor: 'rgba(0, 0, 255, 1)',
+            borderWidth: 3,
+            label: {
+              display: true,
+              content: `National: ${nationalMedianHouseholdIncome && nationalMedianHouseholdIncome.toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}`,
+              position: (context, opts) => {
+                if(selectedRegionsData.length === 1){
+                  return "start"
+                }
+                if(selectedRegionsData.length === 3){
+                  return "33.33%"
+                }
+              },
+              backgroundColor: 'rgba(0, 0, 255, 0.8)'
+            }
+          }
+        }
       }
     },
     scales: {

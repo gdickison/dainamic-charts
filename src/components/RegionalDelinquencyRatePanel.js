@@ -2,6 +2,7 @@ import Loader from "./Loader"
 import { Bar } from "react-chartjs-2"
 
 const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyRates, nationalDelinquencyRate}) => {
+  console.log(selectedRegionsData)
   const regionalData = []
   selectedRegionsData.forEach((region) => {
     regionalDelinquencyRates.forEach(rate => {
@@ -15,15 +16,9 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
     return region.delinquencyRate
   })
 
-  const lineData = regionalData.map(region => {
-    return nationalDelinquencyRate
-  })
-
   const dataLabels = regionalData.map(region => {
     return region.name
   })
-
-  const linePointRadius = selectedRegionsData.length > 1 ? 10 : 30
 
   const delinquencyChartData = {
     labels: dataLabels,
@@ -38,20 +33,6 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
         borderWidth: 3,
         maxBarThickness: 100,
         order: 2
-      },
-      {
-        type: 'line',
-        label: 'National',
-        data: lineData,
-        showLine: true,
-        borderColor: 'rgba(0, 0, 255, 1)',
-        backgroundColor: 'rgba(0, 0, 255, 0.3)',
-        pointBackgroundColor: 'rgba(0, 0, 255, 0.3)',
-        pointRadius: linePointRadius,
-        pointStyle: 'line',
-        borderWidth: 3,
-        hoverBorderWidth: 3,
-        order: 1
       }
     ]
   }
@@ -64,7 +45,7 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
     },
     plugins: {
       legend: {
-        display: true
+        display: false
       },
       tooltip: {
         callbacks: {
@@ -91,6 +72,47 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
         },
         borderWidth: 3,
         boxPadding: 6
+      },
+      datalabels: {
+        display: true,
+        color: '#000',
+        align: 'start',
+        anchor: 'end',
+        formatter: function(value, context){
+          return `${value}%`
+        },
+        labels: {
+          title: {
+            font: {
+              weight: 'bold',
+              size: 12,
+            }
+          }
+        }
+      },
+      annotation: {
+        annotations: {
+          line1: {
+            type: 'line',
+            yMin: nationalDelinquencyRate,
+            yMax: nationalDelinquencyRate,
+            borderColor: 'rgba(0, 0, 255, 1)',
+            borderWidth: 3,
+            label: {
+              display: true,
+              content: `National: ${nationalDelinquencyRate}%`,
+              position: (context, opts) => {
+                if(selectedRegionsData.length === 1){
+                  return "start"
+                }
+                if(selectedRegionsData.length === 3){
+                  return "33.33%"
+                }
+              },
+              backgroundColor: 'rgba(0, 0, 255, 0.8)'
+            }
+          }
+        }
       }
     },
     scales: {

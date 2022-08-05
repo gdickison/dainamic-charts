@@ -60,7 +60,24 @@ const RegionalPopulationPanel = ({nationalPopulation, selectedRegionsData}) => {
         },
         borderWidth: 3,
         boxPadding: 6
-      }
+      },
+      datalabels: {
+        display: true,
+        color: '#000',
+        align: 'start',
+        anchor: 'end',
+        formatter: function(value, context){
+          return value.toLocaleString('en-US', {maximumFractionDigits: 0})
+        },
+        labels: {
+          title: {
+            font: {
+              weight: 'bold',
+              size: 12,
+            }
+          }
+        }
+      },
     },
     scales: {
       y: {
