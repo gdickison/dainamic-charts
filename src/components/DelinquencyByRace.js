@@ -176,7 +176,7 @@ const DelinquencyByRace = ({selectedRegions}) => {
 
   useEffect(() => {
     getDelinquencyByRaceChartData()
-  }, [])
+  }, [selectedRegions])
 
   if(isLoading) {
     return <Loader loadiingText={"Getting race data..."}/>

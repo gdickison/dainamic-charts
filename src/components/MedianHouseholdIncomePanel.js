@@ -1,20 +1,20 @@
 import Loader from "./Loader"
 import { Bar } from "react-chartjs-2"
 
-const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, compRegionsData}) => {
-  const homeIncomeChartData = compRegionsData.map(region => {
+const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, selectedRegionsData}) => {
+  const homeIncomeChartData = selectedRegionsData.map(region => {
     return region.median_home_income
   })
 
-  const homeIncomeChartLabels = compRegionsData.map(region => {
+  const homeIncomeChartLabels = selectedRegionsData.map(region => {
     return region.name
   })
 
-  const lineData = compRegionsData.map(region => {
+  const lineData = selectedRegionsData.map(region => {
     return nationalMedianHouseholdIncome
   })
 
-  const linePointRadius = compRegionsData.length > 2 ? 10 : 30
+  const linePointRadius = selectedRegionsData.length > 2 ? 10 : 30
 
   const chartData = {
     labels: homeIncomeChartLabels,
@@ -137,7 +137,7 @@ const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, compRegionsD
               </div>
             : <Loader loadiingText={"Getting national population..."}/>
           }
-          {compRegionsData ? compRegionsData.map((region, idx) => {
+          {selectedRegionsData ? selectedRegionsData.map((region, idx) => {
             return (
               <div key={idx} className="w-full flex justify-between">
                 <p className="text-[1.2vw] font-semibold">{(region.name).split(",")[0]}</p>

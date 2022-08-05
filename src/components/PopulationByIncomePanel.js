@@ -2,9 +2,9 @@ import Loader from "./Loader"
 import { Bar } from "react-chartjs-2"
 import { chartFadedColors, chartSolidColors, chartFadedBlues, chartSolidBlues, chartBackgroundColors, chartHoverColors } from "../../public/utils"
 
-const PopulationByIncomePanel = ({populationByIncomeData, compRegionsData}) => {
+const PopulationByIncomePanel = ({populationByIncomeData, selectedRegionsData}) => {
   const regionalData = []
-  compRegionsData.forEach((region) => {
+  selectedRegionsData.forEach((region) => {
     populationByIncomeData.forEach(pop => {
       if(region.msa === pop.msa){
         regionalData.push({...region, ...pop})

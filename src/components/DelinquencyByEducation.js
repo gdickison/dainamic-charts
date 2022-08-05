@@ -174,7 +174,7 @@ const DelinquencyByEducation = ({selectedRegions}) => {
 
   useEffect(() => {
     getDelinquencyByEducationChartData()
-  }, [])
+  }, [selectedRegions])
 
   if(isLoading) {
     return <Loader loadiingText={"Getting education level data..."}/>

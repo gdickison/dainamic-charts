@@ -222,7 +222,7 @@ const DelinquencyByLoanTerm = ({dateRange, selectedRegions}) => {
         })
         setLoading(false)
       })
-  }, [dateRange.endDate, dateRange.startDate, selectedRegions])
+  }, [dateRange, selectedRegions])
 
   if(isLoading) {
     return (

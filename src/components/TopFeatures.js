@@ -67,7 +67,7 @@ const TopFeatures = ({dateRangeParams, compRegionsParams}) => {
     setTopFeaturesForCharts(null)
     getRegionalTopFeatures()
     setLoading(false)
-  }, [compRegionsParams])
+  }, [dateRangeParams, compRegionsParams])
 
   if(isLoading) {
     return <Loader loadiingText={"Getting the top delinquency predictors..."}/>

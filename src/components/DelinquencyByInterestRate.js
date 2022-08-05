@@ -304,8 +304,7 @@ const DelinquencyByInterestRate = ({dateRange, selectedRegions}) => {
         })
         setLoading(false)
       })
-  }, [])
-  // }, [dateRange.endDate, selectedRegions, dateRange.startDate])
+  }, [dateRange, selectedRegions])
 
   if(isLoading) {
     return (

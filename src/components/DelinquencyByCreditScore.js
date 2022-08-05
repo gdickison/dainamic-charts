@@ -340,7 +340,7 @@ const DelinquencyByCreditScoreByPeriod = ({dateRange, selectedRegions}) => {
         setPieChartOptions(pieOptions)
         setLoading(false)
       })
-  }, [])
+  }, [dateRange, selectedRegions])
   // }, [dateRange.endDate, selectedRegions, dateRange.startDate])
 
   if(isLoading) {

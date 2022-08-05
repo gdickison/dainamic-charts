@@ -179,8 +179,7 @@ const DelinquencyByUnemploymentRate = ({dateRange, selectedRegions}) => {
 
   useEffect(() => {
     getDelinquencyByUnemploymentChartData()
-  }, [])
-  // }, [dateRange.startDate, dateRange.endDate, selectedRegions])
+  }, [dateRange, selectedRegions])
 
   if(isLoading) {
     return <Loader loadiingText={"Getting unemployment data..."}/>

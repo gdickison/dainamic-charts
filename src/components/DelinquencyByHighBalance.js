@@ -165,7 +165,7 @@ const DelinquencyByHighBalance = ({dateRange, selectedRegions}) => {
 
         setLoading(false)
       })
-  }, [dateRange.endDate, dateRange.startDate, selectedRegions])
+  }, [dateRange, selectedRegions])
 
   if(isLoading){
     return <Loader loadiingText={"Getting first time buyer data..."}/>

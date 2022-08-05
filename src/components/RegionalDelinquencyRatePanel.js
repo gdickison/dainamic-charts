@@ -1,9 +1,9 @@
 import Loader from "./Loader"
 import { Bar } from "react-chartjs-2"
 
-const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates, nationalDelinquencyRate}) => {
+const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyRates, nationalDelinquencyRate}) => {
   const regionalData = []
-  compRegionsData.forEach((region) => {
+  selectedRegionsData.forEach((region) => {
     regionalDelinquencyRates.forEach(rate => {
       if(region.msa === rate.msa){
         regionalData.push({...region, ...rate})
@@ -23,7 +23,7 @@ const RegionalDelinquencyRatePanel = ({compRegionsData, regionalDelinquencyRates
     return region.name
   })
 
-  const linePointRadius = compRegionsData.length > 1 ? 10 : 30
+  const linePointRadius = selectedRegionsData.length > 1 ? 10 : 30
 
   const delinquencyChartData = {
     labels: dataLabels,

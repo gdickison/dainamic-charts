@@ -221,7 +221,7 @@ const DelinquencyByLTV = ({dateRange, selectedRegions}) => {
         })
         setLoading(false)
       })
-  }, [dateRange.startDate, dateRange.endDate, selectedRegions])
+  }, [dateRange, selectedRegions])
 
 
   if(isLoading){

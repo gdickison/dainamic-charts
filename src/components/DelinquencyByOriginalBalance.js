@@ -209,7 +209,7 @@ const DelinquencyByOriginalBalance = ({dateRange, selectedRegions}) => {
 
         setLoading(false)
       })
-  }, [dateRange.endDate, selectedRegions, dateRange.startDate, divisor])
+  }, [dateRange, selectedRegions, divisor])
 
   if(isLoading){
     return <Loader loadiingText={"Getting original loan balance data..."}/>

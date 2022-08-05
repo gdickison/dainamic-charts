@@ -2,9 +2,9 @@ import Loader from "./Loader"
 import { Doughnut } from "react-chartjs-2"
 import { chartFadedColors, chartSolidColors, chartFadedBlues, chartSolidBlues, chartBackgroundColors, chartHoverColors } from "../../public/utils"
 
-const PopulationByAgePanel = ({populationByAgeData, compRegionsData}) => {
+const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
   const regionalData = []
-  compRegionsData.forEach((region) => {
+  selectedRegionsData.forEach((region) => {
     populationByAgeData.forEach(pop => {
       if(region.msa === pop.msa){
         regionalData.push({...region, ...pop})

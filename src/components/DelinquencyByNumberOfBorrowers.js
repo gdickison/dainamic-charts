@@ -279,8 +279,7 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, selectedRegions}) => {
         setPieChartOptions(pieOptions)
         setLoading(false)
       })
-  }, [])
-  // }, [dateRange.endDate, selectedRegions, dateRange.startDate])
+  }, [dateRange, selectedRegions])
 
   if(isLoading){
     return <Loader loadiingText={"Getting number of borrowers data..."}/>

@@ -1,12 +1,12 @@
 import Loader from "./Loader"
 import { Bar } from "react-chartjs-2"
 
-const RegionalPopulationPanel = ({nationalPopulation, compRegionsData}) => {
-  const populationChartData = compRegionsData.map(region => {
+const RegionalPopulationPanel = ({nationalPopulation, selectedRegionsData}) => {
+  const populationChartData = selectedRegionsData.map(region => {
     return region.total_population
   })
 
-  const populationChartLabels = compRegionsData.map(region => {
+  const populationChartLabels = selectedRegionsData.map(region => {
     return region.name
   })
 
@@ -115,7 +115,7 @@ const RegionalPopulationPanel = ({nationalPopulation, compRegionsData}) => {
               </div>
             : <Loader loadiingText={"Getting national population..."}/>
           }
-          {compRegionsData ? compRegionsData.map((region, idx) => {
+          {selectedRegionsData ? selectedRegionsData.map((region, idx) => {
             return (
               <div key={idx} className="w-full flex justify-between">
                 <p className="text-[1.2vw] font-semibold">{(region.name).split(",")[0]}</p>

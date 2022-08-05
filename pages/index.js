@@ -53,10 +53,8 @@ const Home = () => {
   const [msaOptions, setMsaOptions] = useState()
   const [monthOptions, setMonthOptions] = useState()
   const [dateRange, setDateRange] = useState({})
-  const [targetRegion, setTargetRegion] = useState()
-  const [targetRegionData, setTargetRegionData] = useState()
-  const [compRegions, setCompRegions] = useState([])
-  const [compRegionsData, setCompRegionsData] = useState()
+  const [selectedRegions, setSelectedRegions] = useState([])
+  const [selectedRegionsData, setSelectedRegionsData] = useState()
   const [regionalDelinquencyRates, setRegionalDelinquencyRates] = useState()
   const [nationalDelinquencyRate, setNationalDelinquencyRate] = useState()
   const [nationalPopulation, setNationalPopulation] = useState()
@@ -134,24 +132,15 @@ const Home = () => {
     setDateRange({...dateRange, [e.target.name]: e.target.value})
   }
 
-  const handleTargetRegionChange = e => {
+  const handleSelectedRegionsChange = e => {
     e.preventDefault()
-    setTargetRegion({...targetRegion, [e.target.name]: e.target.value})
-  }
-
-  const handleCompRegionChange = e => {
-    e.preventDefault()
-    // if(compRegions.length < 2){
-    if(compRegions.length < 3){
-      // setCompRegions([...compRegions, {compMsaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
-      const updatedCompRegions = ([...compRegions, {compMsaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
+    if(selectedRegions.length < 3){
+      const updatedCompRegions = ([...selectedRegions, {compMsaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
       updatedCompRegions.sort((a, b) => a.compMsaCode - b.compMsaCode)
-      setCompRegions(updatedCompRegions)
+      setSelectedRegions(updatedCompRegions)
     }
-    // if(compRegions.length === 2){
-    if(compRegions.length === 3){
+    if(selectedRegions.length === 3){
       setShowAlert(true)
-      // setAlertMessage('You can select up to two comp regions.')
       setAlertMessage('You can select up to three regions.')
     }
   }
@@ -160,16 +149,16 @@ const Home = () => {
     setShowAlert(false)
   }
 
-  const removeCompRegion = e => {
+  const removeRegion = e => {
     e.preventDefault()
-    const newCompRegions = compRegions.filter(region => region.compMsaCode !== e.target.id)
-    setCompRegions(newCompRegions)
+    const newCompRegions = selectedRegions.filter(region => region.compMsaCode !== e.target.id)
+    setSelectedRegions(newCompRegions)
     setShowAlert(false)
   }
 
   // General Demographic Data
   const getMsaSummaryData = async () => {
-    const msaCodes = compRegions.map(region => {
+    const msaCodes = selectedRegions.map(region => {
       return region.compMsaCode
     })
 
@@ -194,10 +183,7 @@ const Home = () => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      setTargetRegionData(data[0])
-      if(data.length > 0){
-        setCompRegionsData(data)
-      }
+      setSelectedRegionsData(data)
     }
   }
 
@@ -269,7 +255,7 @@ const Home = () => {
 
   // Delinquency Rate for Entire Period
   const getRegionalDelinquencyRateForRange = async () => {
-    const msaCodes = compRegions.map(region => {
+    const msaCodes = selectedRegions.map(region => {
       return region.compMsaCode
     })
 
@@ -334,11 +320,10 @@ const Home = () => {
 
   // Population by Age Chart
   const getPopulationByAgeData = async () => {
-    const msaCodes = compRegions.map(region => {
+    const msaCodes = selectedRegions.map(region => {
       return region.compMsaCode
     })
     const JSONdata = JSON.stringify({
-      // msaCode: targetRegion.targetMsaCode
       msaCodes: msaCodes
     })
 
@@ -364,11 +349,10 @@ const Home = () => {
 
   // Population by Income Chart
   const getPopulationByIncome = async () => {
-    const msaCodes = compRegions.map(region => {
+    const msaCodes = selectedRegions.map(region => {
       return region.compMsaCode
     })
     const JSONdata = JSON.stringify({
-      // msaCode: targetRegion.targetMsaCode
       msaCodes: msaCodes
     })
 
@@ -392,7 +376,7 @@ const Home = () => {
     }
   }
 
-  const getData = async () => {
+  const getData = () => {
       setShowTopFeatures(false)
       getMsaSummaryData()
       getPopulationByAgeData()
@@ -424,35 +408,33 @@ const Home = () => {
           ? <FormInputs
               handleDateChange={handleDateChange}
               monthOptions={monthOptions}
-              handleTargetRegionChange={handleTargetRegionChange}
-              targetRegion={targetRegion}
               msaOptions={msaOptions}
-              handleCompRegionChange={handleCompRegionChange}
-              compRegions={compRegions}
-              removeCompRegion={removeCompRegion}
+              handleSelectedRegionsChange={handleSelectedRegionsChange}
+              selectedRegions={selectedRegions}
+              removeRegion={removeRegion}
               dateRange={dateRange}
               getData={getData}
             />
           : <Loader loadiingText="Building the inputs..." />
         }
-        {targetRegionData &&
+        {selectedRegionsData &&
           <section className="mb-10 space-y-4">
             <section className="flex flex-col px-0">
               <header>
-                <p className="px-10 text-[1.2vw] italic">{`Selected ${compRegionsData.length === 1 ? 'Region' : 'Regions'}:`}</p>
+                <p className="px-10 text-[1.2vw] italic">{`Selected ${selectedRegionsData.length === 1 ? 'Region' : 'Regions'}:`}</p>
                 <div className="mb-6 px-14 text-[1.2vw] italic">
-                  {compRegionsData.map((region, idx) => {
+                  {selectedRegionsData.map((region, idx) => {
                     return (
                       <p key={idx}>{region.name}</p>
                     )
                   })}
                 </div>
-                <h1 className="mb-6 px-10 text-[2vw]">{`Regional ${compRegionsData.length === 1 ? 'Summary' : 'Summaries'}`}</h1>
+                <h1 className="mb-6 px-10 text-[2vw]">{`Regional ${selectedRegionsData.length === 1 ? 'Summary' : 'Summaries'}`}</h1>
               </header>
               <div>
                 {regionalDelinquencyRates
                   ? <RegionalDelinquencyRatePanel
-                    compRegionsData={compRegionsData}
+                    selectedRegionsData={selectedRegionsData}
                     regionalDelinquencyRates={regionalDelinquencyRates}
                     nationalDelinquencyRate={nationalDelinquencyRate}
                   />
@@ -460,26 +442,26 @@ const Home = () => {
                 }
                 <MedianHouseholdIncomePanel
                   nationalMedianHouseholdIncome={nationalMedianHouseholdIncome}
-                  compRegionsData={compRegionsData}
+                  selectedRegionsData={selectedRegionsData}
                 />
                 <MedianHomeValuePanel
                   nationalMedianHomeValue={nationalMedianHomeValue}
-                  compRegionsData={compRegionsData}
+                  selectedRegionsData={selectedRegionsData}
                 />
                 <RegionalPopulationPanel
                   nationalPopulation={nationalPopulation}
-                  compRegionsData={compRegionsData}
+                  selectedRegionsData={selectedRegionsData}
                 />
                 {populationByAgeData &&
                   <PopulationByAgePanel
                     populationByAgeData={populationByAgeData}
-                    compRegionsData={compRegionsData}
+                    selectedRegionsData={selectedRegionsData}
                   />
                 }
                 {populationByIncomeData &&
                   <PopulationByIncomePanel
                     populationByIncomeData={populationByIncomeData}
-                    compRegionsData={compRegionsData}
+                    selectedRegionsData={selectedRegionsData}
                   />
                 }
               </div>
@@ -491,17 +473,7 @@ const Home = () => {
                   startDate: dateRange.startDate,
                   endDate: dateRange.endDate
                 }}
-                // targetRegionParams={{
-                //   msa: targetRegionData.msa,
-                //   name: targetRegionData.name
-                // }}
-                // compRegionsParams={compRegionsData
-                //   ? compRegionsData.map(region => {
-                //     return {msa: region.msa, name: region.name}
-                //   })
-                //   : []
-                // }
-                compRegionsParams={compRegionsData.map(region => {
+                compRegionsParams={selectedRegionsData.map(region => {
                   return {msa: region.msa, name: region.name}
                 })}
                 regionalDelinquencyRates={regionalDelinquencyRates}
