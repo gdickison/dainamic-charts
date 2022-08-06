@@ -45,6 +45,20 @@ import MedianHomeValuePanel from "../src/components/MedianHomeValuePanel"
 import PopulationByAgePanel from "../src/components/PopulationByAgePanel"
 import PopulationByIncomePanel from "../src/components/PopulationByIncomePanel"
 
+import DelinquencyByCreditScore from "../src/components/DelinquencyByCreditScore"
+import DelinquencyByCreditScoreByPeriod from "../src/components/DelinquencyByCreditScoreByPeriod"
+import DelinquencyByDTI from "../src/components/DelinquencyByDTI"
+import DelinquencyByEducation from "../src/components/DelinquencyByEducation"
+import DelinquencyByFTBStatus from "../src/components/DelinquencyByFTBStatus"
+import DelinquencyByInterestRate from "../src/components/DelinquencyByInterestRate"
+import DelinquencyByHighBalance from "../src/components/DelinquencyByHighBalance"
+import DelinquencyByOriginalBalance from "../src/components/DelinquencyByOriginalBalance"
+import DelinquencyByLoanTerm from "../src/components/DelinquencyByLoanTerm"
+import DelinquencyByLTV from "../src/components/DelinquencyByLTV"
+import DelinquencyByNumberOfBorrowers from "../src/components/DelinquencyByNumberOfBorrowers"
+import DelinquencyByRace from "../src/components/DelinquencyByRace"
+import DelinquencyByUnemploymentRate from "../src/components/DelinquencyByUnemploymentRate"
+
 import TempLogin from "../src/components/TempLogin"
 import TopFeatures from "../src/components/TopFeatures"
 import Alert from "../src/components/Alert"
@@ -64,7 +78,11 @@ const Home = () => {
   const [nationalMedianHomeValue, setNationalMedianHomeValue] = useState()
   const [populationByAgeData, setPopulationByAgeData] = useState()
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
-  const [showTopFeatures, setShowTopFeatures] = useState(false)
+  const [topFeatures, setTopFeatures] = useState()
+  // state for features
+  const [featuredCharts, setFeaturedCharts] = useState()
+  const [delinquencyByCreditScoreByPeriod, setDelinquencyByCreditScoreByPeriod] = useState()
+  const [delinquencyByCreditScore, setDelinquencyByCreditScore] = useState()
   const [showAlert, setShowAlert] = useState(false)
   const [alertMessage, setAlertMessage] = useState("")
 
@@ -137,8 +155,8 @@ const Home = () => {
   const handleSelectedRegionsChange = e => {
     e.preventDefault()
     if(selectedRegions.length < 3){
-      const updatedCompRegions = ([...selectedRegions, {compMsaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
-      updatedCompRegions.sort((a, b) => a.compMsaCode - b.compMsaCode)
+      const updatedCompRegions = ([...selectedRegions, {msaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
+      updatedCompRegions.sort((a, b) => a.msaCode - b.msaCode)
       setSelectedRegions(updatedCompRegions)
     }
     if(selectedRegions.length === 3){
@@ -153,7 +171,7 @@ const Home = () => {
 
   const removeRegion = e => {
     e.preventDefault()
-    const newCompRegions = selectedRegions.filter(region => region.compMsaCode !== e.target.id)
+    const newCompRegions = selectedRegions.filter(region => region.msaCode !== e.target.id)
     setSelectedRegions(newCompRegions)
     setShowAlert(false)
   }
@@ -161,7 +179,7 @@ const Home = () => {
   // General Demographic Data
   const getMsaSummaryData = async () => {
     const msaCodes = selectedRegions.map(region => {
-      return region.compMsaCode
+      return region.msaCode
     })
 
     const JSONdata = JSON.stringify({
@@ -258,7 +276,7 @@ const Home = () => {
   // Delinquency Rate for Entire Period
   const getRegionalDelinquencyRateForRange = async () => {
     const msaCodes = selectedRegions.map(region => {
-      return region.compMsaCode
+      return region.msaCode
     })
 
     const JSONdata = JSON.stringify({
@@ -323,7 +341,7 @@ const Home = () => {
   // Population by Age Chart
   const getPopulationByAgeData = async () => {
     const msaCodes = selectedRegions.map(region => {
-      return region.compMsaCode
+      return region.msaCode
     })
     const JSONdata = JSON.stringify({
       msaCodes: msaCodes
@@ -352,7 +370,7 @@ const Home = () => {
   // Population by Income Chart
   const getPopulationByIncome = async () => {
     const msaCodes = selectedRegions.map(region => {
-      return region.compMsaCode
+      return region.msaCode
     })
     const JSONdata = JSON.stringify({
       msaCodes: msaCodes
@@ -378,8 +396,114 @@ const Home = () => {
     }
   }
 
+  const getRegionalTopFeatures = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+    const JSONdata = JSON.stringify({
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_top_features`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the population by age")
+    } else if(status === 200) {
+      data.forEach(row => {
+        const uniqueFeatures = Object.keys(row)
+          .filter((key) => key.includes("feat"))
+          .reduce((obj, key) => {
+              return Object.assign(obj, {
+                [key]: row[key]
+              });
+        }, {});
+
+        row.featureList = [...new Set(Object.values(uniqueFeatures))].slice(0,5)
+      })
+
+      let featuresForCharts = data.map(row => {
+        return row.featureList
+      })
+      featuresForCharts = [...new Set([].concat.apply([], featuresForCharts))]
+      setTopFeatures(data)
+      setFeaturedCharts(featuresForCharts)
+    }
+  }
+
+  const getDeliquencyByCreditScoreByPeriod = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_loan_status_by_credit_score_per_period`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200) {
+      setDelinquencyByCreditScoreByPeriod(data)
+    }
+  }
+
+  const getDelinquencyByCreditScore = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_loan_status_by_credit_score`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200) {
+      setDelinquencyByCreditScore(data)
+    }
+  }
+
   const getData = () => {
-    setShowTopFeatures(false)
     getMsaSummaryData()
     getPopulationByAgeData()
     getPopulationByIncome()
@@ -388,7 +512,9 @@ const Home = () => {
     getNationalPopulation()
     getNationalMedianHouseholdIncome()
     getNationalMedianHomeValue()
-    setShowTopFeatures(true)
+    getRegionalTopFeatures()
+    getDeliquencyByCreditScoreByPeriod()
+    getDelinquencyByCreditScore()
   }
 
   if(isLoading) {
@@ -468,14 +594,139 @@ const Home = () => {
                 }
               </div>
             </section>
-            {showTopFeatures &&
+            {topFeatures &&
               <TopFeatures
-                dateRangeParams={dateRange}
-                compRegionsParams={selectedRegionsData.map(region => {
-                  return {msa: region.msa, name: region.name}
-                })}
+                topFeatures={topFeatures}
               />
             }
+            <div className="space-y-6">
+              {featuredCharts && featuredCharts.map((feature, i) => {
+                switch(feature) {
+                  case "Credit Score":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4 divide-y-2">
+                        {delinquencyByCreditScoreByPeriod ?
+                          <div>
+                            <DelinquencyByCreditScoreByPeriod
+                              delinquencyByCreditScoreByPeriod={delinquencyByCreditScoreByPeriod}
+                              dateRange={dateRange}
+                              selectedRegions={selectedRegions}
+                            />
+                          </div>
+                          : <Loader loadiingText={"Getting credit score by month data..."}/>
+                        }
+                        {delinquencyByCreditScore ?
+                          <div>
+                            <DelinquencyByCreditScore
+                              delinquencyByCreditScore={delinquencyByCreditScore}
+                              dateRange={dateRange}
+                              selectedRegions={selectedRegions}
+                            />
+                          </div>
+                          : <Loader loadiingText={"Getting credit score by region data..."}/>
+                        }
+                      </div>
+                    );
+                  case "Debt-to-Income":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        <DelinquencyByDTI
+                          dateRange={dateRange}
+                          selectedRegions={selectedRegions}
+                        />
+                      </div>
+                    );
+                  case "Education":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        <DelinquencyByEducation
+                          selectedRegions={selectedRegions}
+                        />
+                      </div>
+                    );
+                  case "First Time Buyer Status":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        <DelinquencyByFTBStatus
+                          dateRange={dateRange}
+                          selectedRegions={selectedRegions}
+                        />
+                      </div>
+                    );
+                  case "High Balance":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        <DelinquencyByHighBalance
+                          dateRange={dateRange}
+                          selectedRegions={selectedRegions}
+                        />
+                      </div>
+                    );
+                  case "Interest Rate":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        <DelinquencyByInterestRate
+                          dateRange={dateRange}
+                          selectedRegions={selectedRegions}
+                        />
+                      </div>
+                    );
+                  case "Loan Balance":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        <DelinquencyByOriginalBalance
+                          dateRange={dateRange}
+                          selectedRegions={selectedRegions}
+                        />
+                      </div>
+                    );
+                  case "Loan Term":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        <DelinquencyByLoanTerm
+                          dateRange={dateRange}
+                          selectedRegions={selectedRegions}
+                        />
+                      </div>
+                    );
+                  case "Loan-to-Value":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        <DelinquencyByLTV
+                          dateRange={dateRange}
+                          selectedRegions={selectedRegions}
+                        />
+                      </div>
+                    );
+                  case "Number of Borrowers":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        <DelinquencyByNumberOfBorrowers
+                          dateRange={dateRange}
+                          selectedRegions={selectedRegions}
+                        />
+                      </div>
+                    );
+                  case "Race":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        <DelinquencyByRace
+                          selectedRegions={selectedRegions}
+                        />
+                      </div>
+                    );
+                  case "Unemployment Rate":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        <DelinquencyByUnemploymentRate
+                          dateRange={dateRange}
+                          selectedRegions={selectedRegions}
+                        />
+                      </div>
+                    );
+                }
+              })}
+            </div>
           </section>
         }
       </main>

@@ -1,6 +1,6 @@
 import Loader from "./Loader"
 import { Doughnut } from "react-chartjs-2"
-import { chartFadedColors, chartSolidColors, chartFadedBlues, chartSolidBlues, chartBackgroundColors, chartHoverColors } from "../../public/utils"
+import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
 const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
   const regionalData = []

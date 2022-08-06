@@ -29,8 +29,8 @@ const FormInputs = ({handleDateChange, monthOptions, msaOptions, handleSelectedR
         <div className="w-full mt-4 flex flex-col space-y-2">
           <div>
             <div className="flex flex-col space-y-4 float-right">
-              <label className="text-2xl mx-2" htmlFor="compMsaCode">Select 1-3 Regions </label>
-              <select className="mx-2 w-80 md:w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="compMsaCode" name="compMsaCode" defaultValue="" onChange={handleSelectedRegionsChange}>
+              <label className="text-2xl mx-2" htmlFor="msaCode">Select 1-3 Regions </label>
+              <select className="mx-2 w-80 md:w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="msaCode" name="msaCode" defaultValue="" onChange={handleSelectedRegionsChange}>
                 <option disabled></option>
                 {msaOptions && msaOptions.map(singleMsa => {
                   return (
@@ -47,10 +47,10 @@ const FormInputs = ({handleDateChange, monthOptions, msaOptions, handleSelectedR
                 {selectedRegions.length > 0 &&
                   selectedRegions.map(region => {
                     return (
-                      <p key={region.compMsaCode} className="inline-block w-max text-center m-1 border-2 border-gray-300 md:px-2 bg-gray-200 text-lg leading-8 space-x-4">
+                      <p key={region.msaCode} className="inline-block w-max text-center m-1 border-2 border-gray-300 md:px-2 bg-gray-200 text-lg leading-8 space-x-4">
                         <span>{region.displayText}</span>
                         <span className=" h-6 w-6 group hover:cursor-pointer" onClick={removeRegion}>
-                          <img id={region.compMsaCode} className="h-6 inline align-text-top" src="/close.svg" alt="remove region" />
+                          <img id={region.msaCode} className="h-6 inline align-text-top" src="/close.svg" alt="remove region" />
                         </span>
                       </p>
                     )

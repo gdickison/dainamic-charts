@@ -1,6 +1,6 @@
 import Loader from "./Loader"
 import { Bar } from "react-chartjs-2"
-import { chartFadedColors, chartSolidColors, chartFadedBlues, chartSolidBlues, chartBackgroundColors, chartHoverColors } from "../../public/utils"
+import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
 const PopulationByIncomePanel = ({populationByIncomeData, selectedRegionsData}) => {
   const regionalData = []

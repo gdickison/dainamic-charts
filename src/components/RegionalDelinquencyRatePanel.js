@@ -2,7 +2,6 @@ import Loader from "./Loader"
 import { Bar } from "react-chartjs-2"
 
 const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyRates, nationalDelinquencyRate}) => {
-  console.log(selectedRegionsData)
   const regionalData = []
   selectedRegionsData.forEach((region) => {
     regionalDelinquencyRates.forEach(rate => {

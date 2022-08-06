@@ -10,8 +10,6 @@ const MedianHomeValuePanel = ({nationalMedianHomeValue, selectedRegionsData}) =>
     return region.name
   })
 
-  // const formattedContent = nationalMedianHomeValue.toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})
-
   const chartData = {
     labels: homeValueChartLabels,
     datasets: [
