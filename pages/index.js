@@ -79,12 +79,13 @@ const Home = () => {
   const [populationByAgeData, setPopulationByAgeData] = useState()
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
   const [topFeatures, setTopFeatures] = useState()
-  // state for features
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertMessage, setAlertMessage] = useState("")
+  // STATE FOR CHARTS
   const [featuredCharts, setFeaturedCharts] = useState()
   const [delinquencyByCreditScoreByPeriod, setDelinquencyByCreditScoreByPeriod] = useState()
   const [delinquencyByCreditScore, setDelinquencyByCreditScore] = useState()
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertMessage, setAlertMessage] = useState("")
+  const [delinquencyByDTI, setDelinquencyByDTI] = useState()
 
   //*******************************************************************//
   //                                                                   //
@@ -503,6 +504,37 @@ const Home = () => {
     }
   }
 
+  const getDelinquencyByDTI = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_delinquency_by_dti`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200) {
+      setDelinquencyByDTI(data)
+    }
+  }
+
   const getData = () => {
     getMsaSummaryData()
     getPopulationByAgeData()
@@ -515,6 +547,7 @@ const Home = () => {
     getRegionalTopFeatures()
     getDeliquencyByCreditScoreByPeriod()
     getDelinquencyByCreditScore()
+    getDelinquencyByDTI()
   }
 
   if(isLoading) {
@@ -609,7 +642,6 @@ const Home = () => {
                           <div>
                             <DelinquencyByCreditScoreByPeriod
                               delinquencyByCreditScoreByPeriod={delinquencyByCreditScoreByPeriod}
-                              dateRange={dateRange}
                               selectedRegions={selectedRegions}
                             />
                           </div>
@@ -630,10 +662,13 @@ const Home = () => {
                   case "Debt-to-Income":
                     return (
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByDTI
-                          dateRange={dateRange}
-                          selectedRegions={selectedRegions}
-                        />
+                        {delinquencyByDTI ?
+                          <DelinquencyByDTI
+                            delinquencyByDTI={delinquencyByDTI}
+                            selectedRegions={selectedRegions}
+                          />
+                          : <Loader loadiingText={"Getting debt-to-income data..."}/>
+                        }
                       </div>
                     );
                   case "Education":

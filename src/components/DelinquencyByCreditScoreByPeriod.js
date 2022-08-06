@@ -1,4 +1,3 @@
-import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Bar } from "react-chartjs-2"
 import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
