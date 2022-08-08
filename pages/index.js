@@ -89,6 +89,7 @@ const Home = () => {
   const [regionalDelinquencyRateForAllDates, setRegionalDelinquencyRateForAllDates] = useState()
   const [delinquencyByEducation, setDelinquencyByEducation] = useState()
   const [delinquencyByFTBS, setDelinquencyByFTBS] = useState()
+  const [delinquencyByHighBalance, setDelinquencyByHighBalance] = useState()
 
   //*******************************************************************//
   //                                                                   //
@@ -627,6 +628,37 @@ const Home = () => {
     }
   }
 
+  const getDelinquencyRateByHighBalance = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_delinquency_by_high_balance`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByHighBalance(data)
+    }
+  }
+
   const getData = () => {
     getMsaSummaryData()
     getPopulationByAgeData()
@@ -644,6 +676,7 @@ const Home = () => {
     getRegionalDelinquencyRateForAllDates()
     getDelinquencyRateByEducation()
     getDelinquencyRateByFTBS()
+    getDelinquencyRateByHighBalance()
   }
 
   if(isLoading) {
@@ -788,23 +821,23 @@ const Home = () => {
                         {delinquencyByFTBS ?
                           <DelinquencyByFTBStatus
                             delinquencyByFTBS={delinquencyByFTBS}
-                            dateRange={dateRange}
-                            selectedRegions={selectedRegions}
                           />
                           : <Loader loadiingText={"Getting first time buyer data..."}/>
                         }
                       </div>
                     );
-                  {/* case "High Balance":
+                  case "High Balance":
                     return (
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByHighBalance
-                          dateRange={dateRange}
-                          selectedRegions={selectedRegions}
-                        />
+                        {delinquencyByHighBalance ?
+                          <DelinquencyByHighBalance
+                            delinquencyByHighBalance={delinquencyByHighBalance}
+                          />
+                          : <Loader loadiingText={"Getting high balance indicator data..."}/>
+                        }
                       </div>
                     );
-                  case "Interest Rate":
+                  {/* case "Interest Rate":
                     return (
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
                         <DelinquencyByInterestRate
