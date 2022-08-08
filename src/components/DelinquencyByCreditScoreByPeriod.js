@@ -2,7 +2,7 @@ import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Bar } from "react-chartjs-2"
 import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
 
-const DelinquencyByCreditScoreByPeriod = ({selectedRegions, delinquencyByCreditScoreByPeriod}) => {
+const DelinquencyByCreditScoreByPeriod = ({delinquencyByCreditScoreByPeriod}) => {
   const groupedData = Object.values(groupDataByMsa(delinquencyByCreditScoreByPeriod, "msa"))
   const delinquencyRateFeatureData = {
     labels: [],
@@ -17,7 +17,7 @@ const DelinquencyByCreditScoreByPeriod = ({selectedRegions, delinquencyByCreditS
     }
     delinquencyRateFeatureData.datasets.push(
       {
-        label: `580-669 - ${group[0].msa_name.split(',')[0]}`,
+        label: `580-669 - ${group[0].name.split(',')[0]}`,
         backgroundColor: null,
         hoverBackgroundColor: null,
         borderColor: null,
@@ -26,7 +26,7 @@ const DelinquencyByCreditScoreByPeriod = ({selectedRegions, delinquencyByCreditS
         tooltip: []
       },
       {
-        label: `670-739 - ${group[0].msa_name.split(',')[0]}`,
+        label: `670-739 - ${group[0].name.split(',')[0]}`,
         backgroundColor: null,
         hoverBackgroundColor: null,
         borderColor: null,
@@ -35,7 +35,7 @@ const DelinquencyByCreditScoreByPeriod = ({selectedRegions, delinquencyByCreditS
         tooltip: []
       },
       {
-        label: `740-799 - ${group[0].msa_name.split(',')[0]}`,
+        label: `740-799 - ${group[0].name.split(',')[0]}`,
         backgroundColor: null,
         hoverBackgroundColor: null,
         borderColor: null,
@@ -44,7 +44,7 @@ const DelinquencyByCreditScoreByPeriod = ({selectedRegions, delinquencyByCreditS
         tooltip: []
       },
       {
-        label: `800+ - ${group[0].msa_name.split(',')[0]}`,
+        label: `800+ - ${group[0].name.split(',')[0]}`,
         backgroundColor: null,
         hoverBackgroundColor: null,
         borderColor: null,
@@ -56,7 +56,7 @@ const DelinquencyByCreditScoreByPeriod = ({selectedRegions, delinquencyByCreditS
 
     delinquencyRateFeatureData.datasets.map((dataSet) => {
       group.map((row, idx) => {
-        if(dataSet.label.indexOf(`580-669 - ${group[0].msa_name.split(',')[0]}`) !== -1){
+        if(dataSet.label.indexOf(`580-669 - ${group[0].name.split(',')[0]}`) !== -1){
           dataSet.data.push(((row.fair_delinquent / row.fair_total) * 100).toFixed(2))
           dataSet.tooltip.push({
             totalAtPoint: row.fair_total,
@@ -66,7 +66,7 @@ const DelinquencyByCreditScoreByPeriod = ({selectedRegions, delinquencyByCreditS
           dataSet.hoverBackgroundColor = chartSolidColors[0]
           dataSet.borderColor = chartSolidColors[0]
         }
-        if(dataSet.label.indexOf(`670-739 - ${group[0].msa_name.split(',')[0]}`) !== -1){
+        if(dataSet.label.indexOf(`670-739 - ${group[0].name.split(',')[0]}`) !== -1){
           dataSet.data.push(((row.good_delinquent / row.good_total) * 100).toFixed(2))
           dataSet.tooltip.push({
             totalAtPoint: row.good_total,
@@ -76,7 +76,7 @@ const DelinquencyByCreditScoreByPeriod = ({selectedRegions, delinquencyByCreditS
           dataSet.hoverBackgroundColor = chartSolidColors[1]
           dataSet.borderColor = chartSolidColors[1]
         }
-        if(dataSet.label.indexOf(`740-799 - ${group[0].msa_name.split(',')[0]}`) !== -1){
+        if(dataSet.label.indexOf(`740-799 - ${group[0].name.split(',')[0]}`) !== -1){
           dataSet.data.push(((row.very_good_delinquent / row.very_good_total) * 100).toFixed(2))
           dataSet.tooltip.push({
             totalAtPoint: row.very_good_total,
@@ -86,7 +86,7 @@ const DelinquencyByCreditScoreByPeriod = ({selectedRegions, delinquencyByCreditS
           dataSet.hoverBackgroundColor = chartSolidColors[2]
           dataSet.borderColor = chartSolidColors[2]
         }
-        if(dataSet.label.indexOf(`800+ - ${group[0].msa_name.split(',')[0]}`) !== -1){
+        if(dataSet.label.indexOf(`800+ - ${group[0].name.split(',')[0]}`) !== -1){
           dataSet.data.push(((row.exceptional_delinquent / row.exceptional_total) * 100).toFixed(2))
           dataSet.tooltip.push({
             totalAtPoint: row.exceptional_total,
@@ -194,7 +194,7 @@ const DelinquencyByCreditScoreByPeriod = ({selectedRegions, delinquencyByCreditS
       <div>
         <ChartHeaderWithTooltip
           chartName={"Delinquency Rate by Credit Score and Origination Date"}
-          msa={selectedRegions.length === 1 ? selectedRegions[0].name : "selected regions"}
+          msa={groupedData.length === 1 ? groupedData[0].name : "selected regions"}
           tooltip={"Credit scores are grouped into standard ranges corresponding to 'Fair', 'Good', 'Very Good', and 'Exceptional'. The number of delinquent loans for each range in each period is divided by the corresponding total number of loans to get the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given data point and are also excluded. Hover over the data points to see details"}
         />
       </div>

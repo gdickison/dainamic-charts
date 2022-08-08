@@ -86,6 +86,8 @@ const Home = () => {
   const [delinquencyByCreditScoreByPeriod, setDelinquencyByCreditScoreByPeriod] = useState()
   const [delinquencyByCreditScore, setDelinquencyByCreditScore] = useState()
   const [delinquencyByDTI, setDelinquencyByDTI] = useState()
+  const [regionalDelinquencyRateForAllDates, setRegionalDelinquencyRateForAllDates] = useState()
+  const [delinquencyByEducation, setDelinquencyByEducation] = useState()
 
   //*******************************************************************//
   //                                                                   //
@@ -535,6 +537,64 @@ const Home = () => {
     }
   }
 
+  const getRegionalDelinquencyRateForAllDates = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `api/get_regional_delinquency_rate_for_all_dates`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setRegionalDelinquencyRateForAllDates(data)
+    }
+  }
+
+  const getDelinquencyRateByEducation = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `api/get_population_by_education`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByEducation(data)
+    }
+  }
+
   const getData = () => {
     getMsaSummaryData()
     getPopulationByAgeData()
@@ -548,6 +608,8 @@ const Home = () => {
     getDeliquencyByCreditScoreByPeriod()
     getDelinquencyByCreditScore()
     getDelinquencyByDTI()
+    getRegionalDelinquencyRateForAllDates()
+    getDelinquencyRateByEducation()
   }
 
   if(isLoading) {
@@ -636,13 +698,14 @@ const Home = () => {
               {featuredCharts && featuredCharts.map((feature, i) => {
                 switch(feature) {
                   case "Credit Score":
+                    {/* getDeliquencyByCreditScoreByPeriod()
+                    getDelinquencyByCreditScore() */}
                     return (
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4 divide-y-2">
                         {delinquencyByCreditScoreByPeriod ?
                           <div>
                             <DelinquencyByCreditScoreByPeriod
                               delinquencyByCreditScoreByPeriod={delinquencyByCreditScoreByPeriod}
-                              selectedRegions={selectedRegions}
                             />
                           </div>
                           : <Loader loadiingText={"Getting credit score by month data..."}/>
@@ -660,26 +723,32 @@ const Home = () => {
                       </div>
                     );
                   case "Debt-to-Income":
+                    {/* getDelinquencyByDTI() */}
                     return (
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
                         {delinquencyByDTI ?
                           <DelinquencyByDTI
                             delinquencyByDTI={delinquencyByDTI}
-                            selectedRegions={selectedRegions}
                           />
                           : <Loader loadiingText={"Getting debt-to-income data..."}/>
                         }
                       </div>
                     );
                   case "Education":
+                    {/* getRegionalDelinquencyRateForAllDates()
+                    getDelinquencyRateByEducation() */}
                     return (
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByEducation
-                          selectedRegions={selectedRegions}
-                        />
+                        {(regionalDelinquencyRateForAllDates && delinquencyByEducation) ?
+                          <DelinquencyByEducation
+                            regionalDelinquencyRateForAllDates={regionalDelinquencyRateForAllDates}
+                            delinquencyByEducation={delinquencyByEducation}
+                          />
+                          : <Loader loadiingText={"Getting education level data..."}/>
+                        }
                       </div>
                     );
-                  case "First Time Buyer Status":
+                  {/* case "First Time Buyer Status":
                     return (
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
                         <DelinquencyByFTBStatus
@@ -758,7 +827,7 @@ const Home = () => {
                           selectedRegions={selectedRegions}
                         />
                       </div>
-                    );
+                    ); */}
                 }
               })}
             </div>

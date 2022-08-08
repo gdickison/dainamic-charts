@@ -2,7 +2,7 @@ import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { getLinearRegression, groupDataByMsa, chartSolidColors } from "../../public/utils"
 import { Scatter } from "react-chartjs-2"
 
-const DelinquencyByDTI = ({selectedRegions, delinquencyByDTI}) => {
+const DelinquencyByDTI = ({delinquencyByDTI}) => {
   const groupedData = groupDataByMsa(delinquencyByDTI, "msa")
 
   Object.values(groupedData).forEach(row => {
@@ -196,7 +196,7 @@ const DelinquencyByDTI = ({selectedRegions, delinquencyByDTI}) => {
         <>
           <ChartHeaderWithTooltip
             chartName={"Delinquency by Debt-to-Income"}
-            msa={selectedRegions.length === 1 ? selectedRegions[0].name : "selected regions"}
+            msa={delinquencyByDTI.length === 1 ? delinquencyByDTI[0].name : "selected regions"}
             tooltip={"Delinquent loans at the given DTI ratio are divided by the total loans at that ratio to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
           />
           <Scatter id={"dtiChart"} data={chartData} options={chartOptions}/>

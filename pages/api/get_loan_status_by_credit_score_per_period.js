@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   await client
     .query(`SELECT
     msa,
-    msa_name,
+    msa_name AS "name",
     loan.origination_date,
     COUNT(loan.loanid) AS "total",
     COUNT(loan.loanid) FILTER (WHERE loan.delinquency_status = '00') AS "current",
