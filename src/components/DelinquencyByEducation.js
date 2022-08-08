@@ -22,9 +22,11 @@ const DelinquencyByEducation = ({regionalDelinquencyRateForAllDates, delinquency
     }
     dataset.push(dataGroup)
   })
-
+console.log('delinquencyData', delinquencyData)
   const barChartStructuredData = dataset.map((row, i) => {
+console.log('i first', i)
     const newRow = row.map(rate => {
+console.log('i second', i)
       return parseFloat(rate * (delinquencyData[i].regionalDelinquencyRate)).toFixed(2)
     })
 

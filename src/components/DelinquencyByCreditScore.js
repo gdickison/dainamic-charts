@@ -328,7 +328,7 @@ const DelinquencyByCreditScore = ({dateRange, delinquencyByCreditScore}) => {
                     {pieChartStructuredData.map((chart, i) => {
                       return (
                         <div key={i} className="flex">
-                          <Doughnut data={chart} options={pieOptions} width={delinquencyByCreditScore.length === 1 ? 250 : 200} />
+                          <Doughnut data={chart} options={pieOptions} width={delinquencyByCreditScore.length > 1 ? 200 : 250} />
                         </div>
                       )
                     })}

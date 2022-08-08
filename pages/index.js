@@ -88,6 +88,7 @@ const Home = () => {
   const [delinquencyByDTI, setDelinquencyByDTI] = useState()
   const [regionalDelinquencyRateForAllDates, setRegionalDelinquencyRateForAllDates] = useState()
   const [delinquencyByEducation, setDelinquencyByEducation] = useState()
+  const [delinquencyByFTBS, setDelinquencyByFTBS] = useState()
 
   //*******************************************************************//
   //                                                                   //
@@ -595,6 +596,37 @@ const Home = () => {
     }
   }
 
+  const getDelinquencyRateByFTBS = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_delinquency_by_ftbs`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByFTBS(data)
+    }
+  }
+
   const getData = () => {
     getMsaSummaryData()
     getPopulationByAgeData()
@@ -605,11 +637,13 @@ const Home = () => {
     getNationalMedianHouseholdIncome()
     getNationalMedianHomeValue()
     getRegionalTopFeatures()
+    // Get delinquency rate data for charts
     getDeliquencyByCreditScoreByPeriod()
     getDelinquencyByCreditScore()
     getDelinquencyByDTI()
     getRegionalDelinquencyRateForAllDates()
     getDelinquencyRateByEducation()
+    getDelinquencyRateByFTBS()
   }
 
   if(isLoading) {
@@ -748,16 +782,20 @@ const Home = () => {
                         }
                       </div>
                     );
-                  {/* case "First Time Buyer Status":
+                  case "First Time Buyer Status":
                     return (
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByFTBStatus
-                          dateRange={dateRange}
-                          selectedRegions={selectedRegions}
-                        />
+                        {delinquencyByFTBS ?
+                          <DelinquencyByFTBStatus
+                            delinquencyByFTBS={delinquencyByFTBS}
+                            dateRange={dateRange}
+                            selectedRegions={selectedRegions}
+                          />
+                          : <Loader loadiingText={"Getting first time buyer data..."}/>
+                        }
                       </div>
                     );
-                  case "High Balance":
+                  {/* case "High Balance":
                     return (
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
                         <DelinquencyByHighBalance
