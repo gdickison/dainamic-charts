@@ -2,6 +2,7 @@ import Loader from "./Loader"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Bar, Doughnut } from "react-chartjs-2"
 import { chartSolidColors, chartFadedColors } from "../../public/utils"
+import { memo } from "react"
 
 const DelinquencyByCreditScore = ({dateRange, delinquencyByCreditScore}) => {
   const barLabels = []
@@ -328,7 +329,7 @@ const DelinquencyByCreditScore = ({dateRange, delinquencyByCreditScore}) => {
                     {pieChartStructuredData.map((chart, i) => {
                       return (
                         <div key={i} className="flex">
-                          <Doughnut data={chart} options={pieOptions} width={delinquencyByCreditScore.length > 1 ? 200 : 250} />
+                          <Doughnut data={chart} options={pieOptions} width={200} />
                         </div>
                       )
                     })}
@@ -343,4 +344,4 @@ const DelinquencyByCreditScore = ({dateRange, delinquencyByCreditScore}) => {
   )
 }
 
-export default DelinquencyByCreditScore
+export default memo(DelinquencyByCreditScore)

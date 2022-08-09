@@ -1,6 +1,7 @@
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Bar } from "react-chartjs-2"
 import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
+import { memo } from "react"
 
 const DelinquencyByCreditScoreByPeriod = ({delinquencyByCreditScoreByPeriod}) => {
   const groupedData = Object.values(groupDataByMsa(delinquencyByCreditScoreByPeriod, "msa"))
@@ -163,8 +164,6 @@ const DelinquencyByCreditScoreByPeriod = ({delinquencyByCreditScoreByPeriod}) =>
         grace: 5
       },
       x: {
-        // min: 0,
-        // max: 6,
         title: {
           display: true,
           text: '',
@@ -194,7 +193,7 @@ const DelinquencyByCreditScoreByPeriod = ({delinquencyByCreditScoreByPeriod}) =>
       <div>
         <ChartHeaderWithTooltip
           chartName={"Delinquency Rate by Credit Score and Origination Date"}
-          msa={groupedData.length === 1 ? groupedData[0].name : "selected regions"}
+          msa={"selected regions"}
           tooltip={"Credit scores are grouped into standard ranges corresponding to 'Fair', 'Good', 'Very Good', and 'Exceptional'. The number of delinquent loans for each range in each period is divided by the corresponding total number of loans to get the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given data point and are also excluded. Hover over the data points to see details"}
         />
       </div>
@@ -209,4 +208,4 @@ const DelinquencyByCreditScoreByPeriod = ({delinquencyByCreditScoreByPeriod}) =>
   )
 }
 
-export default DelinquencyByCreditScoreByPeriod
+export default memo(DelinquencyByCreditScoreByPeriod)

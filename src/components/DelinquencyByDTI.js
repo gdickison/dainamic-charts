@@ -196,7 +196,7 @@ const DelinquencyByDTI = ({delinquencyByDTI}) => {
         <>
           <ChartHeaderWithTooltip
             chartName={"Delinquency by Debt-to-Income"}
-            msa={delinquencyByDTI.length === 1 ? delinquencyByDTI[0].name : "selected regions"}
+            msa={lineData.length === 1 ? lineData[0].label : "selected regions"}
             tooltip={"Delinquent loans at the given DTI ratio are divided by the total loans at that ratio to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
           />
           <Scatter id={"dtiChart"} data={chartData} options={chartOptions}/>

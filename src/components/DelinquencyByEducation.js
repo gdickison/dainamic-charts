@@ -1,45 +1,39 @@
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Bar } from "react-chartjs-2"
 import { chartFadedColors, chartSolidColors } from "../../public/utils"
+import { Fragment, memo } from "react"
 
-const DelinquencyByEducation = ({regionalDelinquencyRateForAllDates, delinquencyByEducation}) => {
-  const delinquencyData = regionalDelinquencyRateForAllDates.map(region => ({
-    ...region,
-    regionalDelinquencyRate: ((Number(region.delinquent) / Number(region.total)) * 100).toFixed(2)
-  }))
+const DelinquencyByEducation = ({delinquencyByEducation}) => {
+console.log('education')
+  const labels = [
+    "< High School Diploma",
+    "Some College",
+    "College Degree",
+    "College Post Grad"
+]
+  const delinquencyByEdLevel = []
 
-  const labels = []
-  const dataset = []
-  delinquencyByEducation.map((row, i) => {
-    const dataGroup = []
-    for(const [key, value] of Object.entries(row)){
-      if(i === 0 && key !== 'msa'){
-        labels.push(key)
+  const barChartStructuredData = delinquencyByEducation.map((region, i) => {
+
+    const dataset = []
+    Object.entries(region).map(row => {
+      if(row[0] === "< High School Diploma" || row[0] === "Some College" || row[0] === "College Degree" || row[0] === "College Post Grad"){
+        dataset.push(parseFloat(row[1]).toFixed(2))
       }
-      if(key !== 'msa' && key !== 'name'){
-        dataGroup.push(value)
-      }
-    }
-    dataset.push(dataGroup)
-  })
-
-  const barChartStructuredData = dataset.map((row, i) => {
-
-    const newRow = row.map(rate => {
-      return parseFloat(rate * (delinquencyData[i].regionalDelinquencyRate)).toFixed(2)
     })
+    delinquencyByEdLevel.push(dataset)
 
     const tooltipData = {
-      regionDelinquencyRate: delinquencyData[i].regionalDelinquencyRate,
-      regionDelinquent: delinquencyData[i].delinquent_msa,
-      regionTotal: delinquencyData[i].total_msa,
-      minDate: delinquencyData[i].min,
-      maxDate: delinquencyData[i].max
+      regionDelinquencyRate: parseFloat(region.delinquency_rate).toFixed(2),
+      regionDelinquent: region.delinquent_msa,
+      regionTotal: region.total_msa,
+      minDate: region.min,
+      maxDate: region.max
     }
 
     return {
-      label: delinquencyData[i].name,
-      data: newRow,
+      label: region.name,
+      data: delinquencyByEdLevel[i],
       backgroundColor: chartFadedColors[i],
       borderColor: chartSolidColors[i],
       hoverBackgroundColor: chartSolidColors[i],
@@ -118,19 +112,19 @@ const DelinquencyByEducation = ({regionalDelinquencyRateForAllDates, delinquency
   }
 
   return (
-    <div>
-        {chartData &&
-          <>
-            <ChartHeaderWithTooltip
-              chartName={"Delinquency Rate by Education Level"}
-              msa={delinquencyData.length === 1 ? delinquencyData[0].name : "selected regions"}
-              tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to education level segments. Delinquency is aggragated for all available dates rather than selected start and end dates."}
-            />
-            <Bar data={chartData} options={chartOptions} />
-          </>
-        }
-    </div>
+    <Fragment>
+      {chartData &&
+        <>
+          <ChartHeaderWithTooltip
+            chartName={"Delinquency Rate by Education Level"}
+            msa={delinquencyByEducation.length === 1 ? delinquencyByEducation[0].name : "selected regions"}
+            tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to education level segments. Delinquency is aggragated for all available dates rather than selected start and end dates."}
+          />
+          <Bar data={chartData} options={chartOptions} />
+        </>
+      }
+    </Fragment>
   )
 }
 
-export default DelinquencyByEducation
+export default memo(DelinquencyByEducation)

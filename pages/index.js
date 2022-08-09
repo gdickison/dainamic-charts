@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useEffect, useState } from "react"
+import { useEffect, useState, memo } from "react"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -161,9 +161,9 @@ const Home = () => {
   const handleSelectedRegionsChange = e => {
     e.preventDefault()
     if(selectedRegions.length < 3){
-      const updatedCompRegions = ([...selectedRegions, {msaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
-      updatedCompRegions.sort((a, b) => a.msaCode - b.msaCode)
-      setSelectedRegions(updatedCompRegions)
+      const updatedRegions = ([...selectedRegions, {msaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
+      updatedRegions.sort((a, b) => a.msaCode - b.msaCode)
+      setSelectedRegions(updatedRegions)
     }
     if(selectedRegions.length === 3){
       setShowAlert(true)
@@ -540,36 +540,8 @@ const Home = () => {
     }
   }
 
-  const getRegionalDelinquencyRateForAllDates = async () => {
-    const msaCodes = selectedRegions.map(region => {
-      return region.msaCode
-    })
-
-    const JSONdata = JSON.stringify({
-      msaCodes: msaCodes
-    })
-
-    const endpoint = `api/get_regional_delinquency_rate_for_all_dates`
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSONdata
-    }
-
-    const response = await fetch(endpoint, options)
-    const status = response.status
-    let data = await response.json()
-    data = data.response
-    if(status === 404){
-      console.log("There was an error getting the data")
-    } else if(status === 200){
-      setRegionalDelinquencyRateForAllDates(data)
-    }
-  }
-
   const getDelinquencyRateByEducation = async () => {
+    const endpoint = `api/get_population_by_education`
     const msaCodes = selectedRegions.map(region => {
       return region.msaCode
     })
@@ -578,7 +550,6 @@ const Home = () => {
       msaCodes: msaCodes
     })
 
-    const endpoint = `api/get_population_by_education`
     const options = {
       method: 'POST',
       headers: {
@@ -706,7 +677,7 @@ const Home = () => {
     getDeliquencyByCreditScoreByPeriod()
     getDelinquencyByCreditScore()
     getDelinquencyByDTI()
-    getRegionalDelinquencyRateForAllDates()
+    // getRegionalDelinquencyRateForAllDates()
     getDelinquencyRateByEducation()
     getDelinquencyRateByFTBS()
     getDelinquencyRateByHighBalance()
@@ -836,13 +807,11 @@ const Home = () => {
                       </div>
                     );
                   case "Education":
-                    {/* getRegionalDelinquencyRateForAllDates()
-                    getDelinquencyRateByEducation() */}
+                    {/* getDelinquencyRateByEducation() */}
                     return (
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        {(regionalDelinquencyRateForAllDates && delinquencyByEducation) ?
+                        {(delinquencyByEducation) ?
                           <DelinquencyByEducation
-                            regionalDelinquencyRateForAllDates={regionalDelinquencyRateForAllDates}
                             delinquencyByEducation={delinquencyByEducation}
                           />
                           : <Loader loadiingText={"Getting education level data..."}/>
@@ -956,4 +925,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default memo(Home)

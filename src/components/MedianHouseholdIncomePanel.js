@@ -90,12 +90,13 @@ const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, selectedRegi
             yMax: nationalMedianHouseholdIncome,
             borderColor: 'rgba(0, 0, 255, 1)',
             borderWidth: 3,
+            display: (ctx) => ctx.chart.isDatasetVisible(0),
             label: {
-              display: true,
+              display: (ctx) => ctx.chart.isDatasetVisible(0),
               content: `National: ${nationalMedianHouseholdIncome && nationalMedianHouseholdIncome.toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}`,
               position: (context, opts) => {
                 if(selectedRegionsData.length === 1){
-                  return "start"
+                  return "20%"
                 }
                 if(selectedRegionsData.length === 3){
                   return "33.33%"
