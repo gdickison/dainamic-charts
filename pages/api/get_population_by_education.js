@@ -39,7 +39,14 @@ export default async function handler(req, res) {
       ed.educ_somecoll,
       ed.educ_college,
       ed.educ_collpl;`)
-    .then(response => res.status(200).json({response: response.rows}))
-    .then(client.release())
-    .catch(error => console.log("There is an error getting population by education data: ", error))
+  .then(response => {
+    res.status = 200
+    res.end(res.json({response: response.rows}))
+  })
+  .then(client.release())
+  .catch(error => {
+    res.json(error)
+    res.status(405).end()
+    console.log("There is an error getting population by education data: ", error)
+  })
 }

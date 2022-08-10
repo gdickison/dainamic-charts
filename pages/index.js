@@ -93,6 +93,7 @@ const Home = () => {
   const [delinquencyByOriginalBalance, setDelinquencyByOriginalBalance] = useState()
   const [delinquencyByLoanTerm, setDelinquencyByLoanTerm] = useState()
   const [delinquencyByLTV, setDelinquencyByLTV] = useState()
+  const [delinquencyByRace, setDelinquencyByRace] = useState()
 
   //*******************************************************************//
   //                                                                   //
@@ -753,6 +754,37 @@ const Home = () => {
     }
   }
 
+  const getDelinquencyByRace = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      msaCodes: msaCodes
+    })
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    // Get regional delinquency rates
+    const endpoint = `api/get_population_by_race`
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByRace(data)
+    }
+  }
+
   const getData = () => {
     getMsaSummaryData()
     getPopulationByAgeData()
@@ -763,7 +795,7 @@ const Home = () => {
     getNationalMedianHouseholdIncome()
     getNationalMedianHomeValue()
     getRegionalTopFeatures()
-    // Get delinquency rate data for charts
+
     getDeliquencyByCreditScoreByPeriod()
     getDelinquencyByCreditScore()
     getDelinquencyByDTI()
@@ -774,6 +806,7 @@ const Home = () => {
     getDelinquencyByOriginalBalance()
     getDelinquencyByLoanTerm()
     getDelinquencyByLTV()
+    getDelinquencyByRace()
   }
 
   if(isLoading) {
@@ -981,16 +1014,19 @@ const Home = () => {
                           selectedRegions={selectedRegions}
                         />
                       </div>
-                    );
+                    ); */}
                   case "Race":
                     return (
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByRace
-                          selectedRegions={selectedRegions}
-                        />
+                      {delinquencyByRace ?
+                          <DelinquencyByRace
+                            data={delinquencyByRace}
+                          />
+                          : <Loader loadiingText={"Getting race data..."}/>
+                        }
                       </div>
                     );
-                  case "Unemployment Rate":
+                  {/* case "Unemployment Rate":
                     return (
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
                         <DelinquencyByUnemploymentRate
