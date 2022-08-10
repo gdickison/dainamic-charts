@@ -2,9 +2,7 @@
 import pool from '../../src/client'
 
 export default async function handler(req, res) {
-  const client = await pool.connect()
-
-  await client
+  pool
     .query(`SELECT
       loan.msa,
       region.msa_name AS "name",
@@ -39,14 +37,10 @@ export default async function handler(req, res) {
       ed.educ_somecoll,
       ed.educ_college,
       ed.educ_collpl;`)
-  .then(response => {
-    res.status = 200
-    res.end(res.json({response: response.rows}))
-  })
-  .then(client.release())
+  .then(response => res.status(200).json({response: response.rows}))
   .catch(error => {
-    res.json(error)
-    res.status(405).end()
-    console.log("There is an error getting population by education data: ", error)
+    setImmediate(() => {
+      throw error
+    })
   })
 }
