@@ -1,6 +1,7 @@
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { getLinearRegression, groupDataByMsa, chartSolidColors } from "../../public/utils"
 import { Scatter } from "react-chartjs-2"
+import { memo } from "react"
 
 const DelinquencyByDTI = ({data}) => {
   const groupedData = groupDataByMsa(data, "msa")
@@ -206,4 +207,4 @@ const DelinquencyByDTI = ({data}) => {
   )
 }
 
-export default DelinquencyByDTI
+export default memo(DelinquencyByDTI)

@@ -1,6 +1,7 @@
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Bar } from "react-chartjs-2"
 import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
+import { memo } from "react"
 
 const DelinquencyByFTBStatus = ({data}) => {
   const groupedData = Object.values(groupDataByMsa(data, "msa"))
@@ -144,4 +145,4 @@ const DelinquencyByFTBStatus = ({data}) => {
   )
 }
 
-export default DelinquencyByFTBStatus
+export default memo(DelinquencyByFTBStatus)

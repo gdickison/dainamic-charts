@@ -3,6 +3,7 @@ import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import ChartDescription from "./ChartDescription"
 import { getLinearRegression, groupDataByMsa, chartSolidColors } from "../../public/utils"
 import { Scatter } from "react-chartjs-2"
+import { memo } from "react"
 
 const DelinquencyByInterestRate = ({data}) => {
   for(const row of data){
@@ -250,4 +251,4 @@ const DelinquencyByInterestRate = ({data}) => {
   )
 }
 
-export default DelinquencyByInterestRate
+export default memo(DelinquencyByInterestRate)

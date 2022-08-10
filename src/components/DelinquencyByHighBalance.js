@@ -1,6 +1,7 @@
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Bar } from "react-chartjs-2"
 import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
+import { memo } from "react"
 
 const DelinquencyByHighBalance = ({data}) => {
   const groupedData = Object.values(groupDataByMsa(data, "msa"))
@@ -144,4 +145,4 @@ const DelinquencyByHighBalance = ({data}) => {
   )
 }
 
-export default DelinquencyByHighBalance
+export default memo(DelinquencyByHighBalance)
