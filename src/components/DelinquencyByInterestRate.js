@@ -4,12 +4,12 @@ import ChartDescription from "./ChartDescription"
 import { getLinearRegression, groupDataByMsa, chartSolidColors } from "../../public/utils"
 import { Scatter } from "react-chartjs-2"
 
-const DelinquencyByInterestRate = ({delinquencyByInterestRate}) => {
-  for(const row of delinquencyByInterestRate){
+const DelinquencyByInterestRate = ({data}) => {
+  for(const row of data){
     row.interest_rate = (Math.round(row.interest_rate * 8) / 8).toFixed(3)
   }
 
-  const groupedData = groupDataByMsa(delinquencyByInterestRate, "msa")
+  const groupedData = groupDataByMsa(data, "msa")
 
   const numRegions = Object.keys(groupedData).length
   const rawChartData = []

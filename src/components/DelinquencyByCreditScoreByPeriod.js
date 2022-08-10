@@ -3,8 +3,8 @@ import { Bar } from "react-chartjs-2"
 import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
 import { memo } from "react"
 
-const DelinquencyByCreditScoreByPeriod = ({delinquencyByCreditScoreByPeriod}) => {
-  const groupedData = Object.values(groupDataByMsa(delinquencyByCreditScoreByPeriod, "msa"))
+const DelinquencyByCreditScoreByPeriod = ({data}) => {
+  const groupedData = Object.values(groupDataByMsa(data, "msa"))
   const delinquencyRateFeatureData = {
     labels: [],
     datasets: []

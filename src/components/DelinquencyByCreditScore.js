@@ -4,7 +4,7 @@ import { Bar, Doughnut } from "react-chartjs-2"
 import { chartSolidColors, chartFadedColors } from "../../public/utils"
 import { memo } from "react"
 
-const DelinquencyByCreditScore = ({dateRange, delinquencyByCreditScore}) => {
+const DelinquencyByCreditScore = ({dateRange, data}) => {
   const barLabels = []
   const barFair = []
   const barGood = []
@@ -15,7 +15,7 @@ const DelinquencyByCreditScore = ({dateRange, delinquencyByCreditScore}) => {
   const tooltipVeryGood = []
   const tooltipExceptional = []
 
-  delinquencyByCreditScore.map(region => {
+  data.map(region => {
     barLabels.push(region.region_name)
     barFair.push((Number(region.fair_delinquent) / Number(region.fair_total) * 100).toFixed(2))
     tooltipFair.push({
@@ -102,7 +102,7 @@ const DelinquencyByCreditScore = ({dateRange, delinquencyByCreditScore}) => {
   }
 
   const pieChartStructuredData = []
-  delinquencyByCreditScore.map(region => {
+  data.map(region => {
     pieChartStructuredData.push({
       labels: [
         '580-669 (Fair)',
@@ -292,7 +292,7 @@ const DelinquencyByCreditScore = ({dateRange, delinquencyByCreditScore}) => {
         <div className="h-max">
           <ChartHeaderWithTooltip
             chartName={"Delinquency Rate by Credit Score"}
-            msa={delinquencyByCreditScore.length === 1 ? delinquencyByCreditScore[0].region_name : "selected regions"}
+            msa={data.length === 1 ? data[0].region_name : "selected regions"}
             tooltip={"Credit scores are grouped into standard ranges corresponding to 'Fair', 'Good', 'Very Good', and 'Exceptional'. The number of delinquent loans for each range in each period is divided by the corresponding total number of loans to get the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given data point and are also excluded. Hover over the data points to see details"}
           />
           {barChartStructuredData &&

@@ -2,8 +2,8 @@ import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { getLinearRegression, groupDataByMsa, chartSolidColors } from "../../public/utils"
 import { Scatter } from "react-chartjs-2"
 
-const DelinquencyByDTI = ({delinquencyByDTI}) => {
-  const groupedData = groupDataByMsa(delinquencyByDTI, "msa")
+const DelinquencyByDTI = ({data}) => {
+  const groupedData = groupDataByMsa(data, "msa")
 
   Object.values(groupedData).forEach(row => {
     row.forEach(item => {

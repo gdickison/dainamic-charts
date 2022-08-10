@@ -3,8 +3,7 @@ import { Bar } from "react-chartjs-2"
 import { chartFadedColors, chartSolidColors } from "../../public/utils"
 import { Fragment, memo } from "react"
 
-const DelinquencyByEducation = ({delinquencyByEducation}) => {
-console.log('education')
+const DelinquencyByEducation = ({data}) => {
   const labels = [
     "< High School Diploma",
     "Some College",
@@ -13,7 +12,7 @@ console.log('education')
 ]
   const delinquencyByEdLevel = []
 
-  const barChartStructuredData = delinquencyByEducation.map((region, i) => {
+  const barChartStructuredData = data.map((region, i) => {
 
     const dataset = []
     Object.entries(region).map(row => {
@@ -117,7 +116,7 @@ console.log('education')
         <>
           <ChartHeaderWithTooltip
             chartName={"Delinquency Rate by Education Level"}
-            msa={delinquencyByEducation.length === 1 ? delinquencyByEducation[0].name : "selected regions"}
+            msa={data.length === 1 ? data[0].name : "selected regions"}
             tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to education level segments. Delinquency is aggragated for all available dates rather than selected start and end dates."}
           />
           <Bar data={chartData} options={chartOptions} />

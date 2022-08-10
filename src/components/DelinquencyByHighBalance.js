@@ -2,8 +2,8 @@ import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Bar } from "react-chartjs-2"
 import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
 
-const DelinquencyByHighBalance = ({delinquencyByHighBalance}) => {
-  const groupedData = Object.values(groupDataByMsa(delinquencyByHighBalance, "msa"))
+const DelinquencyByHighBalance = ({data}) => {
+  const groupedData = Object.values(groupDataByMsa(data, "msa"))
 
   const hbBarChartData = {
     labels: [],

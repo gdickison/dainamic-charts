@@ -91,6 +91,7 @@ const Home = () => {
   const [delinquencyByHighBalance, setDelinquencyByHighBalance] = useState()
   const [delinquencyByInterestRate, setDelinquencyByInterestRate] = useState()
   const [delinquencyByOriginalBalance, setDelinquencyByOriginalBalance] = useState()
+  const [delinquencyByLoanTerm, setDelinquencyByLoanTerm] = useState()
 
   //*******************************************************************//
   //                                                                   //
@@ -693,6 +694,35 @@ const Home = () => {
     }
   }
 
+  const getDelinquencyByLoanTerm = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+    const endpoint = `/api/get_delinquency_by_loan_term`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByLoanTerm(data)
+    }
+  }
+
   const getData = () => {
     getMsaSummaryData()
     getPopulationByAgeData()
@@ -712,6 +742,7 @@ const Home = () => {
     getDelinquencyRateByHighBalance()
     getDelinquencyRateByInterestRate()
     getDelinquencyByOriginalBalance()
+    getDelinquencyByLoanTerm()
   }
 
   if(isLoading) {
@@ -805,7 +836,7 @@ const Home = () => {
                         {delinquencyByCreditScoreByPeriod ?
                           <div>
                             <DelinquencyByCreditScoreByPeriod
-                              delinquencyByCreditScoreByPeriod={delinquencyByCreditScoreByPeriod}
+                              data={delinquencyByCreditScoreByPeriod}
                             />
                           </div>
                           : <Loader loadiingText={"Getting credit score by month data..."}/>
@@ -813,9 +844,8 @@ const Home = () => {
                         {delinquencyByCreditScore ?
                           <div>
                             <DelinquencyByCreditScore
-                              delinquencyByCreditScore={delinquencyByCreditScore}
+                              data={delinquencyByCreditScore}
                               dateRange={dateRange}
-                              selectedRegions={selectedRegions}
                             />
                           </div>
                           : <Loader loadiingText={"Getting credit score by region data..."}/>
@@ -827,7 +857,7 @@ const Home = () => {
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
                         {delinquencyByDTI ?
                           <DelinquencyByDTI
-                            delinquencyByDTI={delinquencyByDTI}
+                            data={delinquencyByDTI}
                           />
                           : <Loader loadiingText={"Getting debt-to-income data..."}/>
                         }
@@ -838,7 +868,7 @@ const Home = () => {
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
                         {(delinquencyByEducation) ?
                           <DelinquencyByEducation
-                            delinquencyByEducation={delinquencyByEducation}
+                            data={delinquencyByEducation}
                           />
                           : <Loader loadiingText={"Getting education level data..."}/>
                         }
@@ -849,7 +879,7 @@ const Home = () => {
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
                         {delinquencyByFTBS ?
                           <DelinquencyByFTBStatus
-                            delinquencyByFTBS={delinquencyByFTBS}
+                            data={delinquencyByFTBS}
                           />
                           : <Loader loadiingText={"Getting first time buyer data..."}/>
                         }
@@ -860,7 +890,7 @@ const Home = () => {
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
                         {delinquencyByHighBalance ?
                           <DelinquencyByHighBalance
-                            delinquencyByHighBalance={delinquencyByHighBalance}
+                            data={delinquencyByHighBalance}
                           />
                           : <Loader loadiingText={"Getting high balance indicator data..."}/>
                         }
@@ -871,7 +901,7 @@ const Home = () => {
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
                         {delinquencyByInterestRate ?
                           <DelinquencyByInterestRate
-                            delinquencyByInterestRate={delinquencyByInterestRate}
+                            data={delinquencyByInterestRate}
                           />
                           : <Loader loadiingText={"Getting interest rate data..."}/>
                         }
@@ -882,24 +912,24 @@ const Home = () => {
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
                         {delinquencyByOriginalBalance ?
                           <DelinquencyByOriginalBalance
-                            dateRange={dateRange}
-                            selectedRegions={selectedRegions}
                             data={delinquencyByOriginalBalance}
                           />
                           : <Loader loadiingText={"Getting original loan balance data..."}/>
                         }
                       </div>
                     );
-                  {/* case "Loan Term":
+                  case "Loan Term":
                     return (
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
-                        <DelinquencyByLoanTerm
-                          dateRange={dateRange}
-                          selectedRegions={selectedRegions}
-                        />
+                        {delinquencyByLoanTerm ?
+                          <DelinquencyByLoanTerm
+                            data={delinquencyByLoanTerm}
+                          />
+                          : <Loader loadiingText={"Getting loan term data..."}/>
+                        }
                       </div>
                     );
-                  case "Loan-to-Value":
+                  {/* case "Loan-to-Value":
                     return (
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
                         <DelinquencyByLTV
