@@ -11,7 +11,7 @@ export default async function queryUnemploymentRate(req, res) {
         r.msa_name AS "name",
         origination_date,
         unemployment_rate
-      FROM banking_app.unemployment_rate
+      FROM banking_app.unemployment_rates
         JOIN banking_app.msa_names as "r"
           ON msa = r.msa_code
       WHERE msa IN (${req.body.msaCodes})
