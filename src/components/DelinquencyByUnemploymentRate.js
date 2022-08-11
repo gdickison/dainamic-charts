@@ -7,13 +7,13 @@ const DelinquencyByUnemploymentRate = ({dateRange, unemploymentRateData, delinqu
     const unemploymentDataByMsa = Object.values(groupDataByMsa(unemploymentRateData, "msa"))
 
     const unemploymentRateStructuredData = unemploymentDataByMsa.map((region, idx) => {
-      const unemploymentRateData = region.map(row => {
+      const unemploymentRateDataRaw = region.map(row => {
         return row.unemployment_rate
       })
 
       return {
         label: `${region[0].name.split(",")[0]} Unemployment Rate`,
-        data: unemploymentRateData,
+        data: unemploymentRateDataRaw,
         borderColor: chartFadedColors[idx],
         backgroundColor: chartFadedColors[idx],
         pointRadius: 5,
@@ -26,13 +26,13 @@ const DelinquencyByUnemploymentRate = ({dateRange, unemploymentRateData, delinqu
     const delinquencyDataByMsa = Object.values(groupDataByMsa(delinquencyRateData, "msa"))
 
     const delinquencyRateStructuredData = delinquencyDataByMsa.map((region, idx) => {
-      const delinquencyRateData = region.map(row => {
+      const delinquencyRateDataRaw = region.map(row => {
         return parseFloat((Number(row.delinquent) / Number(row.total) * 100).toFixed(2))
       })
 
       return {
         label: `${region[0].name.split(",")[0]} Delinquency Rate`,
-        data: delinquencyRateData,
+        data: delinquencyRateDataRaw,
         borderColor: chartSolidColors[idx],
         backgroundColor: chartSolidColors[idx],
         pointRadius: 5,
