@@ -34,7 +34,7 @@ export default async function queryCreditScorePerPeriod(req, res) {
     AND origination_date >= '${req.body.startDate}'::date
     AND origination_date <= '${req.body.endDate}'::date
   GROUP BY msa, msa_name, loan.origination_date
-  ORDER BY msa`)
+  ORDER BY msa, loan.origination_date`)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
     .catch(error => console.log("There is an error getting delinquency by credit score data: ", error))

@@ -22,7 +22,8 @@ export default async function queryFTBS(req, res) {
     WHERE msa IN (${req.body.msaCodes})
       AND origination_date >= '${req.body.startDate}'::date
       AND origination_date <= '${req.body.endDate}'::date
-    GROUP BY loan.msa, region.msa_name, origination_date, first_time_buyer_indicator;`)
+    GROUP BY loan.msa, region.msa_name, origination_date, first_time_buyer_indicator
+    ORDER BY loan.msa, origination_date`)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
     .catch(error => console.log("There is an error getting FTSB data: ", error))
