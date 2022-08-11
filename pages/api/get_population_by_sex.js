@@ -1,6 +1,6 @@
 import pool from "../../src/client";
 
-export default async function handler(req, res) {
+export default async function queryPopulationBySex(req, res) {
   const client = await pool.connect()
 
   await client
