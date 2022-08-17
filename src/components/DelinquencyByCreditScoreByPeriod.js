@@ -108,9 +108,9 @@ const DelinquencyByCreditScoreByPeriod = ({data}) => {
       legend: {
         display: true,
         onHover: function(event, legendItem, legend){
-          const myChart = legend.chart
+          const thisChart = legend.chart
           const indices = []
-          for(let i = 0; i < myChart.getDatasetMeta(0).data.length; i++){
+          for(let i = 0; i < thisChart.getDatasetMeta(0).data.length; i++){
             indices.push(
               {
                 datasetIndex: legendItem.datasetIndex,
@@ -118,12 +118,12 @@ const DelinquencyByCreditScoreByPeriod = ({data}) => {
               }
             )
           }
-          myChart.setActiveElements(indices)
-          myChart.update()
+          thisChart.setActiveElements(indices)
+          thisChart.update()
         },
         onLeave: function(event, legendItem, legend){
-          const myChart = legend.chart
-          myChart.update()
+          const thisChart = legend.chart
+          thisChart.update()
         }
       },
       tooltip: {
