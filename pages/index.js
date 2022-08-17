@@ -55,6 +55,7 @@ import DelinquencyByHighBalance from "../src/components/DelinquencyByHighBalance
 import DelinquencyByOriginalBalance from "../src/components/DelinquencyByOriginalBalance"
 import DelinquencyByLoanTerm from "../src/components/DelinquencyByLoanTerm"
 import DelinquencyByLTV from "../src/components/DelinquencyByLTV"
+import DelinquencyByMaritalStatus from "../src/components/DelinquencyByMaritalStatus"
 import DelinquencyByNumberOfBorrowers from "../src/components/DelinquencyByNumberOfBorrowers"
 import DelinquencyByRace from "../src/components/DelinquencyByRace"
 import DelinquencyByUnemploymentRate from "../src/components/DelinquencyByUnemploymentRate"
@@ -93,6 +94,7 @@ const Home = () => {
   const [delinquencyByOriginalBalance, setDelinquencyByOriginalBalance] = useState()
   const [delinquencyByLoanTerm, setDelinquencyByLoanTerm] = useState()
   const [delinquencyByLTV, setDelinquencyByLTV] = useState()
+  const [delinquencyByMaritalStatus, setDelinquencyByMaritalStatus] = useState()
   const [delinquencyByRace, setDelinquencyByRace] = useState()
   const [delinquencyByNumberOfBorrowers, setDelinquencyByNumberOfBorrowers] = useState()
   const [unemploymentRateData, setUnemploymentRateData] = useState()
@@ -759,6 +761,37 @@ const Home = () => {
     }
   }
 
+  const getDelinquencyByMaritalStatus = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      msaCodes: msaCodes
+    })
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    // Get regional delinquency rates
+    const endpoint = `api/get_delinquency_by_marital_status`
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByMaritalStatus(data)
+    }
+  }
+
   const getDelinquencyByRace = async () => {
     const msaCodes = selectedRegions.map(region => {
       return region.msaCode
@@ -907,10 +940,11 @@ const Home = () => {
     getDelinquencyByOriginalBalance()
     getDelinquencyByLoanTerm()
     getDelinquencyByLTV()
-    getDelinquencyByRace()
+    getDelinquencyByMaritalStatus()
     getDelinquencyByNumberOfBorrowers()
-    getUnemploymentRateData()
+    getDelinquencyByRace()
     getDelinquencyRateData()
+    getUnemploymentRateData()
   }
 
   if(isLoading) {
@@ -1104,6 +1138,17 @@ const Home = () => {
                             data={delinquencyByLTV}
                           />
                           : <Loader loadiingText={"Getting loan-to-value data..."}/>
+                        }
+                      </div>
+                    );
+                  case "Marital Status":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        {delinquencyByMaritalStatus ?
+                          <DelinquencyByMaritalStatus
+                            data={delinquencyByMaritalStatus}
+                          />
+                          : <Loader loadiingText={"Getting marital status data..."}/>
                         }
                       </div>
                     );

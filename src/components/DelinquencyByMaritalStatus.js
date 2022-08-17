@@ -3,27 +3,23 @@ import { Bar } from "react-chartjs-2"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
-const DelinquencyByRace = ({data}) => {
+const MaritalStatus = ({data}) => {
   const labels = [
-    "White",
-    "Black",
-    "Native American",
-    "Asian",
-    "Pacific Islander",
-    "Other/Mixed"
+    "Married",
+    "Unmarried"
   ]
 
-  const delinquencyByRace = []
+  const delinquencyByMaritalStatus = []
 
   const barChartStructuredData = data.map((region, i) => {
 
     const dataset = []
     Object.entries(region).map(row => {
-      if(row[0] === "White" || row[0] === "Black" || row[0] === "Native American" || row[0] === "Asian" || row[0] === "Pacific Islander" || row[0] === "Other/Mixed"){
+      if(row[0] === "Married" || row[0] === "Unmarried"){
         dataset.push(parseFloat(row[1]).toFixed(2))
       }
     })
-    delinquencyByRace.push(dataset)
+    delinquencyByMaritalStatus.push(dataset)
 
     const tooltipData = {
       regionDelinquencyRate: parseFloat(region.delinquency_rate).toFixed(2),
@@ -35,7 +31,7 @@ const DelinquencyByRace = ({data}) => {
 
     return {
       label: region.name,
-      data: delinquencyByRace[i],
+      data: delinquencyByMaritalStatus[i],
       backgroundColor: chartFadedColors[i],
       borderColor: chartSolidColors[i],
       hoverBackgroundColor: chartSolidColors[i],
@@ -136,9 +132,9 @@ const DelinquencyByRace = ({data}) => {
       {chartData &&
         <div>
           <ChartHeaderWithTooltip
-            chartName={"Delinquency Rate by Race"}
+            chartName={"Delinquency Rate by Marital Status"}
             msa={data.length === 1 ? data[0].name : "selected regions"}
-            tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to racial populations. Delinquency is aggragated for all available dates rather than selected start and end dates."}
+            tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to marital status. Delinquency is aggragated for all available dates rather than selected start and end dates."}
           />
           <Bar data={chartData} options={chartOptions} />
         </div>
@@ -147,4 +143,4 @@ const DelinquencyByRace = ({data}) => {
   )
 }
 
-export default memo(DelinquencyByRace)
+export default memo(MaritalStatus)
