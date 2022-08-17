@@ -20,7 +20,7 @@ const FormInputs = ({handleDateChange, monthOptions, msaOptions, handleSelectedR
               <option disabled></option>
               {monthOptions && monthOptions.map(month => {
                 return (
-                  <option key={month} value={month}>{month.toString()}</option>
+                  <option key={month} value={month}>{month}</option>
                 )
               })}
             </select>
