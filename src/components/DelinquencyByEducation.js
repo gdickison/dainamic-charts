@@ -16,7 +16,7 @@ const DelinquencyByEducation = ({data}) => {
 
     const dataset = []
     Object.entries(region).map(row => {
-      if(row[0] === "< High School Diploma" || row[0] === "Some College" || row[0] === "College Degree" || row[0] === "College Post Grad"){
+      if(labels.includes(row[0])){
         dataset.push(parseFloat(row[1]).toFixed(2))
       }
     })

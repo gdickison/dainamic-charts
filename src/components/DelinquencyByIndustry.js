@@ -3,23 +3,34 @@ import { Bar } from "react-chartjs-2"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
-const MaritalStatus = ({data}) => {
+const DelinquencyByIndustry = ({data}) => {
   const labels = [
-    "Married",
-    "Unmarried"
+    "Ag/Mining",
+    "Construction",
+    "Manufacturing",
+    "Wholesale Trade",
+    "Retail Trade",
+    "Transportation",
+    "Information",
+    "Finance/Insurance/Real Estate",
+    "Professional Services",
+    "Education/Healthcare",
+    "Arts/Entertainment",
+    "Public Sector",
+    "Other"
   ]
 
-  const delinquencyByMaritalStatus = []
+  const delinquencyByIndustry = []
 
   const barChartStructuredData = data.map((region, i) => {
 
     const dataset = []
     Object.entries(region).map(row => {
-      if(row[0] === "Married" || row[0] === "Unmarried"){
+      if(labels.includes(row[0])){
         dataset.push(parseFloat(row[1]).toFixed(2))
       }
     })
-    delinquencyByMaritalStatus.push(dataset)
+    delinquencyByIndustry.push(dataset)
 
     const tooltipData = {
       regionDelinquencyRate: parseFloat(region.delinquency_rate).toFixed(2),
@@ -31,7 +42,7 @@ const MaritalStatus = ({data}) => {
 
     return {
       label: region.name,
-      data: delinquencyByMaritalStatus[i],
+      data: delinquencyByIndustry[i],
       backgroundColor: chartFadedColors[i],
       borderColor: chartSolidColors[i],
       hoverBackgroundColor: chartSolidColors[i],
@@ -109,7 +120,7 @@ const MaritalStatus = ({data}) => {
       x: {
         title: {
           display: true,
-          text: "Marital Status",
+          text: "Industry",
           padding: 20,
           font: {
             size: 20
@@ -132,9 +143,9 @@ const MaritalStatus = ({data}) => {
       {chartData &&
         <div>
           <ChartHeaderWithTooltip
-            chartName={"Delinquency Rate by Marital Status"}
+            chartName={"Delinquency Rate by Industry"}
             msa={data.length === 1 ? data[0].name : "selected regions"}
-            tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to marital status. Delinquency is aggragated for all available dates rather than selected start and end dates."}
+            tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to employment in particular industries. Delinquency is aggragated for all available dates rather than selected start and end dates."}
           />
           <Bar data={chartData} options={chartOptions} />
         </div>
@@ -143,4 +154,4 @@ const MaritalStatus = ({data}) => {
   )
 }
 
-export default memo(MaritalStatus)
+export default memo(DelinquencyByIndustry)

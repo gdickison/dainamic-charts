@@ -50,6 +50,7 @@ import DelinquencyByCreditScoreByPeriod from "../src/components/DelinquencyByCre
 import DelinquencyByDTI from "../src/components/DelinquencyByDTI"
 import DelinquencyByEducation from "../src/components/DelinquencyByEducation"
 import DelinquencyByFTBStatus from "../src/components/DelinquencyByFTBStatus"
+import DelinquencyByIndustry from "../src/components/DelinquencyByIndustry"
 import DelinquencyByInterestRate from "../src/components/DelinquencyByInterestRate"
 import DelinquencyByHighBalance from "../src/components/DelinquencyByHighBalance"
 import DelinquencyByOriginalBalance from "../src/components/DelinquencyByOriginalBalance"
@@ -90,6 +91,7 @@ const Home = () => {
   const [delinquencyByEducation, setDelinquencyByEducation] = useState()
   const [delinquencyByFTBS, setDelinquencyByFTBS] = useState()
   const [delinquencyByHighBalance, setDelinquencyByHighBalance] = useState()
+  const [delinquencyByIndustry, setDelinquencyByIndustry] = useState()
   const [delinquencyByInterestRate, setDelinquencyByInterestRate] = useState()
   const [delinquencyByOriginalBalance, setDelinquencyByOriginalBalance] = useState()
   const [delinquencyByLoanTerm, setDelinquencyByLoanTerm] = useState()
@@ -641,6 +643,36 @@ const Home = () => {
     }
   }
 
+  const getDelinquencyByIndustry = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      msaCodes: msaCodes
+    })
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const endpoint = `api/get_delinquency_by_industry`
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByIndustry(data)
+    }
+  }
+
   const getDelinquencyRateByInterestRate = async () => {
     const msaCodes = selectedRegions.map(region => {
       return region.msaCode
@@ -936,6 +968,7 @@ const Home = () => {
     getDelinquencyRateByEducation()
     getDelinquencyRateByFTBS()
     getDelinquencyRateByHighBalance()
+    getDelinquencyByIndustry()
     getDelinquencyRateByInterestRate()
     getDelinquencyByOriginalBalance()
     getDelinquencyByLoanTerm()
@@ -1094,6 +1127,17 @@ const Home = () => {
                             data={delinquencyByHighBalance}
                           />
                           : <Loader loadiingText={"Getting high balance indicator data..."}/>
+                        }
+                      </div>
+                    );
+                  case "Industry":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        {delinquencyByIndustry ?
+                          <DelinquencyByIndustry
+                            data={delinquencyByIndustry}
+                          />
+                          : <Loader loadiingText={"Getting industry data..."}/>
                         }
                       </div>
                     );

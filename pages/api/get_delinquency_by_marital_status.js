@@ -24,7 +24,9 @@ export default async function queryPopulationByRace(req, res) {
       GROUP BY
         loan.msa,
         region.msa_name,
-        m.married`)
+        m.married
+      ORDER BY
+        loan.msa`)
   .then(response => {
     res.status = 200
     res.end(res.json({response: response.rows}))

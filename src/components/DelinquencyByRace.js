@@ -19,7 +19,7 @@ const DelinquencyByRace = ({data}) => {
 
     const dataset = []
     Object.entries(region).map(row => {
-      if(row[0] === "White" || row[0] === "Black" || row[0] === "Native American" || row[0] === "Asian" || row[0] === "Pacific Islander" || row[0] === "Other/Mixed"){
+      if(labels.includes(row[0])){
         dataset.push(parseFloat(row[1]).toFixed(2))
       }
     })
