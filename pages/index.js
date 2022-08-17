@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useEffect, useState } from "react"
+import { useEffect, useState, memo } from "react"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,6 +14,9 @@ import {
   Filler
 } from "chart.js"
 
+import ChartDataLabels from "chartjs-plugin-datalabels"
+import annotationPlugin from "chartjs-plugin-annotation"
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -24,14 +27,37 @@ ChartJS.register(
   Filler,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ChartDataLabels,
+  annotationPlugin
 )
+
+ChartJS.defaults.set('plugins.datalabels', {
+  display: false
+})
 
 import FormInputs from "../src/components/FormInputs"
 import Loader from "../src/components/Loader"
 import RegionalDelinquencyRatePanel from "../src/components/RegionalDelinquencyRatePanel"
+import RegionalPopulationPanel from "../src/components/RegionalPopulationPanel"
+import MedianHouseholdIncomePanel from "../src/components/MedianHouseholdIncomePanel"
+import MedianHomeValuePanel from "../src/components/MedianHomeValuePanel"
+import PopulationByAgePanel from "../src/components/PopulationByAgePanel"
+import PopulationByIncomePanel from "../src/components/PopulationByIncomePanel"
 
-import { Bar } from "react-chartjs-2"
+import DelinquencyByCreditScore from "../src/components/DelinquencyByCreditScore"
+import DelinquencyByCreditScoreByPeriod from "../src/components/DelinquencyByCreditScoreByPeriod"
+import DelinquencyByDTI from "../src/components/DelinquencyByDTI"
+import DelinquencyByEducation from "../src/components/DelinquencyByEducation"
+import DelinquencyByFTBStatus from "../src/components/DelinquencyByFTBStatus"
+import DelinquencyByInterestRate from "../src/components/DelinquencyByInterestRate"
+import DelinquencyByHighBalance from "../src/components/DelinquencyByHighBalance"
+import DelinquencyByOriginalBalance from "../src/components/DelinquencyByOriginalBalance"
+import DelinquencyByLoanTerm from "../src/components/DelinquencyByLoanTerm"
+import DelinquencyByLTV from "../src/components/DelinquencyByLTV"
+import DelinquencyByNumberOfBorrowers from "../src/components/DelinquencyByNumberOfBorrowers"
+import DelinquencyByRace from "../src/components/DelinquencyByRace"
+import DelinquencyByUnemploymentRate from "../src/components/DelinquencyByUnemploymentRate"
 
 import TempLogin from "../src/components/TempLogin"
 import TopFeatures from "../src/components/TopFeatures"
@@ -43,20 +69,40 @@ const Home = () => {
   const [msaOptions, setMsaOptions] = useState()
   const [monthOptions, setMonthOptions] = useState()
   const [dateRange, setDateRange] = useState({})
-  const [targetRegion, setTargetRegion] = useState()
-  const [targetRegionData, setTargetRegionData] = useState()
-  const [compRegions, setCompRegions] = useState([])
-  const [compRegionsData, setCompRegionsData] = useState()
+  const [selectedRegions, setSelectedRegions] = useState([])
+  const [selectedRegionsData, setSelectedRegionsData] = useState()
   const [regionalDelinquencyRates, setRegionalDelinquencyRates] = useState()
   const [nationalDelinquencyRate, setNationalDelinquencyRate] = useState()
+  const [nationalPopulation, setNationalPopulation] = useState()
+  const [nationalMedianHouseholdIncome, setNationalMedianHouseholdIncome] = useState()
+  const [nationalMedianHomeValue, setNationalMedianHomeValue] = useState()
   const [populationByAgeData, setPopulationByAgeData] = useState()
-  const [populationByAgeOptions, setPopulationByAgeOptions] = useState()
   const [populationByIncomeData, setPopulationByIncomeData] = useState()
-  const [populationByIncomeOptions, setPopulationByIncomeOptions] = useState()
-  const [showTopFeatures, setShowTopFeatures] = useState(false)
+  const [topFeatures, setTopFeatures] = useState()
   const [showAlert, setShowAlert] = useState(false)
   const [alertMessage, setAlertMessage] = useState("")
+  // STATE FOR CHARTS
+  const [featuredCharts, setFeaturedCharts] = useState()
+  const [delinquencyByCreditScoreByPeriod, setDelinquencyByCreditScoreByPeriod] = useState()
+  const [delinquencyByCreditScore, setDelinquencyByCreditScore] = useState()
+  const [delinquencyByDTI, setDelinquencyByDTI] = useState()
+  const [delinquencyByEducation, setDelinquencyByEducation] = useState()
+  const [delinquencyByFTBS, setDelinquencyByFTBS] = useState()
+  const [delinquencyByHighBalance, setDelinquencyByHighBalance] = useState()
+  const [delinquencyByInterestRate, setDelinquencyByInterestRate] = useState()
+  const [delinquencyByOriginalBalance, setDelinquencyByOriginalBalance] = useState()
+  const [delinquencyByLoanTerm, setDelinquencyByLoanTerm] = useState()
+  const [delinquencyByLTV, setDelinquencyByLTV] = useState()
+  const [delinquencyByRace, setDelinquencyByRace] = useState()
+  const [delinquencyByNumberOfBorrowers, setDelinquencyByNumberOfBorrowers] = useState()
+  const [unemploymentRateData, setUnemploymentRateData] = useState()
+  const [delinquencyRateData, setDelinquencyRateData] = useState()
 
+  //*******************************************************************//
+  //                                                                   //
+  //                 SET UP SELECT OPTION INPUTS                       //
+  //                                                                   //
+  //*******************************************************************//
   const getSelectMsaInputOptions = async () => {
     const endpoint = `/api/get_select_msa_input_options`
 
@@ -118,24 +164,16 @@ const Home = () => {
     setDateRange({...dateRange, [e.target.name]: e.target.value})
   }
 
-  const handleTargetRegionChange = e => {
+  const handleSelectedRegionsChange = e => {
     e.preventDefault()
-    setTargetRegion({...targetRegion, [e.target.name]: e.target.value})
-  }
 
-  const handleCompRegionChange = e => {
-    e.preventDefault()
-    // if(compRegions.length < 2){
-    if(compRegions.length < 3){
-      // setCompRegions([...compRegions, {compMsaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
-      const updatedCompRegions = ([...compRegions, {compMsaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
-      updatedCompRegions.sort((a, b) => a.compMsaCode - b.compMsaCode)
-      setCompRegions(updatedCompRegions)
+    if(selectedRegions.length < 3){
+      const updatedRegions = ([...selectedRegions, {msaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
+      updatedRegions.sort((a, b) => a.msaCode - b.msaCode)
+      setSelectedRegions(updatedRegions)
     }
-    // if(compRegions.length === 2){
-    if(compRegions.length === 3){
+    if(selectedRegions.length === 3){
       setShowAlert(true)
-      // setAlertMessage('You can select up to two comp regions.')
       setAlertMessage('You can select up to three regions.')
     }
   }
@@ -144,18 +182,17 @@ const Home = () => {
     setShowAlert(false)
   }
 
-  const removeCompRegion = e => {
+  const removeRegion = e => {
     e.preventDefault()
-    const newCompRegions = compRegions.filter(region => region.compMsaCode !== e.target.id)
-    setCompRegions(newCompRegions)
+    const newCompRegions = selectedRegions.filter(region => region.msaCode !== e.target.id)
+    setSelectedRegions(newCompRegions)
     setShowAlert(false)
   }
 
   // General Demographic Data
   const getMsaSummaryData = async () => {
-
-    const msaCodes = compRegions.map(region => {
-      return region.compMsaCode
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
     })
 
     const JSONdata = JSON.stringify({
@@ -180,17 +217,80 @@ const Home = () => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      setTargetRegionData(data[0])
-      if(data.length > 0){
-        setCompRegionsData(data)
+      setSelectedRegionsData(data)
+    }
+  }
+
+  const getNationalPopulation = async() => {
+    const endpoint = `/api/get_national_population`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
       }
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error")
+    } else if(status === 200){
+      setNationalPopulation(data)
+    }
+  }
+
+  const getNationalMedianHouseholdIncome = async() => {
+    const endpoint = `/api/get_national_median_household_income`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error")
+    } else if(status === 200){
+      setNationalMedianHouseholdIncome(data.national_median_household_income)
+    }
+  }
+
+  const getNationalMedianHomeValue = async() => {
+    const endpoint = `/api/get_national_median_home_value`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error")
+    } else if(status === 200){
+      setNationalMedianHomeValue(data.national_median_home_value)
     }
   }
 
   // Delinquency Rate for Entire Period
   const getRegionalDelinquencyRateForRange = async () => {
-    const msaCodes = compRegions.map(region => {
-      return region.compMsaCode
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
     })
 
     const JSONdata = JSON.stringify({
@@ -223,6 +323,7 @@ const Home = () => {
       setRegionalDelinquencyRates(data)
     }
   }
+
   const getNationalDelinquencyRateForRange = async () => {
     const JSONdata = JSON.stringify({
       startDate: dateRange.startDate,
@@ -253,9 +354,11 @@ const Home = () => {
 
   // Population by Age Chart
   const getPopulationByAgeData = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
     const JSONdata = JSON.stringify({
-      // msaCode: targetRegion.targetMsaCode
-      msaCode: compRegions[0].compMsaCode
+      msaCodes: msaCodes
     })
 
     const endpoint = `/api/get_population_by_age_data`
@@ -274,99 +377,17 @@ const Home = () => {
     if(status === 404){
       console.log("There was an error getting the population by age")
     } else if(status === 200) {
-      const populationByAgeLabels = []
-      const populationByAge = []
-      for(const [key, value] of Object.entries(data)){
-        populationByAgeLabels.push(key)
-        populationByAge.push(parseFloat(value * 100).toFixed(2))
-      }
-
-      setPopulationByAgeData({
-        labels: populationByAgeLabels,
-        datasets: [
-          {
-            label: "Population by Age",
-            data: populationByAge,
-            backgroundColor: [
-              '#33b1ff',
-              '#1192e8',
-              '#0072c3',
-              '#00539a',
-              '#003a6d'
-            ],
-            borderColor: [
-              '#33b1ff',
-              '#1192e8',
-              '#0072c3',
-              '#00539a',
-              '#003a6d'
-            ],
-            hoverOffset: 4
-          }
-        ]
-      })
-
-      setPopulationByAgeOptions({
-        indexAxis: 'y',
-        responsive: true,
-        aspectRatio: 2,
-        plugins: {
-          legend: {
-            display: false
-          },
-          title: {
-            display: true,
-            text: "Population % by Age",
-            align: "start",
-            font: {
-              size: function(context){
-                return Math.round(context.chart.width / 20)
-              }
-            }
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context){
-                return `${context.raw}%`
-              }
-            }
-          }
-        },
-        scales: {
-          y: {
-            ticks: {
-              font: {
-                size: function(context){
-                  return Math.round(context.chart.width / 30)
-                }
-              }
-            },
-            grid: {
-              display: false
-            }
-          },
-          x: {
-            ticks: {
-              callback: function(value, index, ticks){
-                return `${value}%`
-              },
-              font: {
-                size: function(context){
-                  return Math.round(context.chart.width / 30)
-                }
-              }
-            }
-          }
-        }
-      })
+      setPopulationByAgeData(data)
     }
   }
 
   // Population by Income Chart
   const getPopulationByIncome = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
     const JSONdata = JSON.stringify({
-      // msaCode: targetRegion.targetMsaCode
-      msaCode: compRegions[0].compMsaCode
+      msaCodes: msaCodes
     })
 
     const endpoint = `/api/get_population_by_income`
@@ -383,100 +404,513 @@ const Home = () => {
     data = data.response
 
     if(status === 404){
-      console.log("There was an error getting the population by income")
+      console.log("There was an error getting the population by age")
     } else if(status === 200) {
-      const populationByIncomeLabels = []
-      const populationByIncome = []
-      for(const [key, value] of Object.entries(data)){
-        populationByIncomeLabels.push(key)
-        populationByIncome.push(parseFloat(value * 100).toFixed(2))
-      }
-
-      setPopulationByIncomeData({
-        maintainAspectRation: false,
-        labels: populationByIncomeLabels,
-        datasets: [
-          {
-            label: "Population by Income",
-            data: populationByIncome,
-            backgroundColor: [
-              '#e5f6ff',
-              '#bae6ff',
-              '#82cfff',
-              '#33b1ff',
-              '#1192e8',
-              '#0072c3',
-              '#00539a',
-              '#003a6d'
-            ]
-          }
-        ]
-      })
-
-      setPopulationByIncomeOptions({
-        indexAxis: 'y',
-        responsive: true,
-        aspectRatio: 2,
-        plugins: {
-          legend: {
-            display: false
-          },
-          title: {
-            display: true,
-            text: "Population % by Income",
-            align: "start",
-            font: {
-              size: function(context){
-                return Math.round(context.chart.width / 20)
-              }
-            }
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context){
-                return `${context.raw}%`
-              }
-            }
-          }
-        },
-        scales: {
-          y: {
-            ticks: {
-              font: {
-                size: function(context){
-                  return Math.round(context.chart.width / 36)
-                }
-              }
-            },
-            grid: {
-              display: false
-            }
-          },
-          x: {
-            ticks: {
-              callback: function(value, index, ticks){
-                return `${value}%`
-              },
-              font: {
-                size: function(context){
-                  return Math.round(context.chart.width / 30)
-                }
-              }
-            }
-          }
-        }
-      })
+      setPopulationByIncomeData(data)
     }
   }
 
-  const getData = async () => {
-      setShowTopFeatures(false)
-      await getMsaSummaryData()
-      getPopulationByAgeData()
-      getPopulationByIncome()
-      await getRegionalDelinquencyRateForRange()
-      await getNationalDelinquencyRateForRange()
-      setShowTopFeatures(true)
+  const getRegionalTopFeatures = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+    const JSONdata = JSON.stringify({
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_top_features`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the population by age")
+    } else if(status === 200) {
+      data.forEach(row => {
+        const uniqueFeatures = Object.keys(row)
+          .filter((key) => key.includes("feat"))
+          .reduce((obj, key) => {
+              return Object.assign(obj, {
+                [key]: row[key]
+              });
+        }, {});
+
+        row.featureList = [...new Set(Object.values(uniqueFeatures))].slice(0,5)
+      })
+
+      let featuresForCharts = data.map(row => {
+        return row.featureList
+      })
+      featuresForCharts = [...new Set([].concat.apply([], featuresForCharts))]
+      setTopFeatures(data)
+      setFeaturedCharts(featuresForCharts)
+    }
+  }
+
+  const getDeliquencyByCreditScoreByPeriod = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_loan_status_by_credit_score_per_period`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200) {
+      setDelinquencyByCreditScoreByPeriod(data)
+    }
+  }
+
+  const getDelinquencyByCreditScore = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_loan_status_by_credit_score`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200) {
+      setDelinquencyByCreditScore(data)
+    }
+  }
+
+  const getDelinquencyByDTI = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_delinquency_by_dti`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200) {
+      setDelinquencyByDTI(data)
+    }
+  }
+
+  const getDelinquencyRateByEducation = async () => {
+    const endpoint = `api/get_population_by_education`
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      msaCodes: msaCodes
+    })
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByEducation(data)
+    }
+  }
+
+  const getDelinquencyRateByFTBS = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_delinquency_by_ftbs`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByFTBS(data)
+    }
+  }
+
+  const getDelinquencyRateByHighBalance = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_delinquency_by_high_balance`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByHighBalance(data)
+    }
+  }
+
+  const getDelinquencyRateByInterestRate = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_delinquency_by_interest_rate`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByInterestRate(data)
+    }
+  }
+
+  const getDelinquencyByOriginalBalance = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_delinquency_by_original_balance`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByOriginalBalance(data)
+    }
+  }
+
+  const getDelinquencyByLoanTerm = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+    const endpoint = `/api/get_delinquency_by_loan_term`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByLoanTerm(data)
+    }
+  }
+
+  const getDelinquencyByLTV = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+    const endpoint = `/api/get_delinquency_by_ltv`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByLTV(data)
+    }
+  }
+
+  const getDelinquencyByRace = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      msaCodes: msaCodes
+    })
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    // Get regional delinquency rates
+    const endpoint = `api/get_population_by_race`
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByRace(data)
+    }
+  }
+
+  const getDelinquencyByNumberOfBorrowers = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+
+    const endpoint = `/api/get_delinquency_by_num_borrowers`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyByNumberOfBorrowers(data)
+    }
+  }
+
+  const getUnemploymentRateData = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const endpoint = `/api/get_unemployment_rate`
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setUnemploymentRateData(data)
+    }
+  }
+
+  const getDelinquencyRateData = async () => {
+    const msaCodes = selectedRegions.map(region => {
+      return region.msaCode
+    })
+
+    const JSONdata = JSON.stringify({
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      msaCodes: msaCodes
+    })
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const endpoint = `/api/get_delinquency_data_per_period`
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status === 404){
+      console.log("There was an error getting the data")
+    } else if(status === 200){
+      setDelinquencyRateData(data)
+  }
+}
+
+  const getData = () => {
+    getMsaSummaryData()
+    getPopulationByAgeData()
+    getPopulationByIncome()
+    getRegionalDelinquencyRateForRange()
+    getNationalDelinquencyRateForRange()
+    getNationalPopulation()
+    getNationalMedianHouseholdIncome()
+    getNationalMedianHomeValue()
+    getRegionalTopFeatures()
+
+    getDeliquencyByCreditScoreByPeriod()
+    getDelinquencyByCreditScore()
+    getDelinquencyByDTI()
+    getDelinquencyRateByEducation()
+    getDelinquencyRateByFTBS()
+    getDelinquencyRateByHighBalance()
+    getDelinquencyRateByInterestRate()
+    getDelinquencyByOriginalBalance()
+    getDelinquencyByLoanTerm()
+    getDelinquencyByLTV()
+    getDelinquencyByRace()
+    getDelinquencyByNumberOfBorrowers()
+    getUnemploymentRateData()
+    getDelinquencyRateData()
   }
 
   if(isLoading) {
@@ -484,7 +918,7 @@ const Home = () => {
   }
 
   return (
-    <>
+    <div className="max-w-[1600px] mx-auto">
       <Head>
         <title>Dainamic</title>
       </Head>
@@ -498,119 +932,219 @@ const Home = () => {
           ? <FormInputs
               handleDateChange={handleDateChange}
               monthOptions={monthOptions}
-              handleTargetRegionChange={handleTargetRegionChange}
-              targetRegion={targetRegion}
               msaOptions={msaOptions}
-              handleCompRegionChange={handleCompRegionChange}
-              compRegions={compRegions}
-              removeCompRegion={removeCompRegion}
+              handleSelectedRegionsChange={handleSelectedRegionsChange}
+              selectedRegions={selectedRegions}
+              removeRegion={removeRegion}
               dateRange={dateRange}
               getData={getData}
             />
           : <Loader loadiingText="Building the inputs..." />
         }
-        {targetRegionData &&
-          <section className="mb-10">
-            <header className="text-center my-10">
-              <h1 className="px-10 text-4xl">{targetRegionData.name} {new Date(dateRange.startDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})} - {new Date(dateRange.endDate).toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})}</h1>
-            </header>
-            <section className="mx-auto px-0">
-              <header className="text-center">
-                <h1 className="my-6 px-10 text-4xl">Regional Summary</h1>
+        {selectedRegionsData &&
+          <section className="mb-10 space-y-4">
+            <section className="flex flex-col px-0">
+              <header>
+                <p className="px-10 text-[1.2vw] italic">{`Selected ${selectedRegionsData.length === 1 ? 'Region' : 'Regions'}:`}</p>
+                <div className="mb-6 px-14 text-[1.2vw] italic">
+                  {selectedRegionsData.map((region, idx) => {
+                    return (
+                      <p key={idx}>{region.name}</p>
+                    )
+                  })}
+                </div>
+                <h1 className="mb-6 px-10 text-[2vw]">{`Regional ${selectedRegionsData.length === 1 ? 'Summary' : 'Summaries'}`}</h1>
               </header>
-              <div className="flex justify-center items-center">
-                <div>
-                  {regionalDelinquencyRates
-                    ? <RegionalDelinquencyRatePanel
-                      targetRegionData={targetRegionData}
-                      regionalDelinquencyRates={regionalDelinquencyRates}
-                      nationalDelinquencyRate={nationalDelinquencyRate}
-                    />
-                    : <Loader loadiingText={"Getting the regional delinquency rate..."}/>
-                  }
-                </div>
-                <div className="flex flex-col w-2/3">
-                  <div className="flex flex-col items-stretch md:flex-row w-full justify-between mt-4 h-auto">
-                  <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
-                      <div>
-                        <img className="h-12" src="/group.svg" alt="" />
-                      </div>
-                      <div className="flex flex-col justify-center text-right">
-                        <h1 className="w-full text-xl font-semibold">
-                          Total Population
-                        </h1>
-                        {targetRegionData
-                          ? <p className="text-4xl">{(targetRegionData.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}</p>
-                          : <Loader loadiingText={"Getting population data..."}/>
-                        }
-                      </div>
-                    </div>
-                    <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
-                      <div>
-                        <img className="h-12" src="/dollars.svg" alt="" />
-                      </div>
-                      <div className="flex flex-col justify-center text-right">
-                        <h1 className="w-full text-xl font-semibold">
-                          Median Household Income
-                        </h1>
-                        {targetRegionData
-                          ? <p className="text-4xl">{(targetRegionData.median_home_income).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p>
-                          : <Loader loadiingText={"Getting median home income..."}/>
-                        }
-                      </div>
-                    </div>
-                    <div className="flex items-center w-1/3 border-4 border-blue-400 rounded-md mx-4 p-4 justify-between">
-                      <div>
-                        <img className="h-12" src="/house.svg" alt="" />
-                      </div>
-                      <div className="flex flex-col justify-center text-right">
-                        <h1 className="w-full text-xl font-semibold">
-                          Median Home Value
-                        </h1>
-                        {targetRegionData
-                          ? <p className="text-4xl">{(targetRegionData.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}</p>
-                          : <Loader loadiingText={"Getting median home value"}/>
-                        }
-                      </div>
-                    </div>
-                  </div>
-                  {populationByAgeData  && populationByIncomeData
-                    ? <div className="flex">
-                        <div className="flex items-center w-1/2 h-fit relative m-4 border-4 border-blue-400 rounded-md p-6 shadow-lg">
-                          <Bar data={populationByAgeData} options={populationByAgeOptions} />
-                        </div>
-                        <div className="flex items-center w-1/2 h-fit relative m-4 border-4 border-blue-400 rounded-md p-6 shadow-lg">
-                          <Bar data={populationByIncomeData} options={populationByIncomeOptions} />
-                        </div>
-                      </div>
-                    : <Loader loadiingText={"Getting age and income data..."}/>
-                  }
-                </div>
+              <div>
+                {regionalDelinquencyRates
+                  ? <RegionalDelinquencyRatePanel
+                    selectedRegionsData={selectedRegionsData}
+                    regionalDelinquencyRates={regionalDelinquencyRates}
+                    nationalDelinquencyRate={nationalDelinquencyRate}
+                  />
+                  : <Loader loadiingText={"Getting the regional delinquency rate..."}/>
+                }
+                <MedianHouseholdIncomePanel
+                  nationalMedianHouseholdIncome={nationalMedianHouseholdIncome}
+                  selectedRegionsData={selectedRegionsData}
+                />
+                <MedianHomeValuePanel
+                  nationalMedianHomeValue={nationalMedianHomeValue}
+                  selectedRegionsData={selectedRegionsData}
+                />
+                <RegionalPopulationPanel
+                  nationalPopulation={nationalPopulation}
+                  selectedRegionsData={selectedRegionsData}
+                />
+                {populationByAgeData &&
+                  <PopulationByAgePanel
+                    populationByAgeData={populationByAgeData}
+                    selectedRegionsData={selectedRegionsData}
+                  />
+                }
+                {populationByIncomeData &&
+                  <PopulationByIncomePanel
+                    populationByIncomeData={populationByIncomeData}
+                    selectedRegionsData={selectedRegionsData}
+                  />
+                }
               </div>
             </section>
-            {/* TODO: set params to a const, separate date params and msa code params, since dates will always be the same */}
-            {showTopFeatures &&
+            {topFeatures &&
               <TopFeatures
-                dateRangeParams={{
-                  startDate: dateRange.startDate,
-                  endDate: dateRange.endDate
-                }}
-                targetRegionParams={{
-                  msa: targetRegionData.msa,
-                  name: targetRegionData.name
-                }}
-                // compRegionsParams={compRegionsData
-                //   ? compRegionsData.map(region => {
-                //     return {msa: region.msa, name: region.name}
-                //   })
-                //   : []
-                // }
-                compRegionsParams={compRegionsData.map(region => {
-                  return {msa: region.msa, name: region.name}
-                })}
-                regionalDelinquencyRates={regionalDelinquencyRates}
+                topFeatures={topFeatures}
               />
             }
+            <div className="space-y-6">
+              {featuredCharts && featuredCharts.map((feature, i) => {
+                switch(feature) {
+                  case "Credit Score":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4 divide-y-2">
+                        {delinquencyByCreditScoreByPeriod ?
+                          <div>
+                            <DelinquencyByCreditScoreByPeriod
+                              data={delinquencyByCreditScoreByPeriod}
+                            />
+                          </div>
+                          : <Loader loadiingText={"Getting credit score by month data..."}/>
+                        }
+                        {delinquencyByCreditScore ?
+                          <div>
+                            <DelinquencyByCreditScore
+                              data={delinquencyByCreditScore}
+                            />
+                          </div>
+                          : <Loader loadiingText={"Getting credit score by region data..."}/>
+                        }
+                      </div>
+                    );
+                  case "Debt-to-Income":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        {delinquencyByDTI ?
+                          <DelinquencyByDTI
+                            data={delinquencyByDTI}
+                          />
+                          : <Loader loadiingText={"Getting debt-to-income data..."}/>
+                        }
+                      </div>
+                    );
+                  case "Education":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        {(delinquencyByEducation) ?
+                          <DelinquencyByEducation
+                            data={delinquencyByEducation}
+                          />
+                          : <Loader loadiingText={"Getting education level data..."}/>
+                        }
+                      </div>
+                    );
+                  case "First Time Buyer Status":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        {delinquencyByFTBS ?
+                          <DelinquencyByFTBStatus
+                            data={delinquencyByFTBS}
+                          />
+                          : <Loader loadiingText={"Getting first time buyer data..."}/>
+                        }
+                      </div>
+                    );
+                  case "High Balance":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        {delinquencyByHighBalance ?
+                          <DelinquencyByHighBalance
+                            data={delinquencyByHighBalance}
+                          />
+                          : <Loader loadiingText={"Getting high balance indicator data..."}/>
+                        }
+                      </div>
+                    );
+                  case "Interest Rate":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        {delinquencyByInterestRate ?
+                          <DelinquencyByInterestRate
+                            data={delinquencyByInterestRate}
+                          />
+                          : <Loader loadiingText={"Getting interest rate data..."}/>
+                        }
+                      </div>
+                    );
+                  case "Loan Balance":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        {delinquencyByOriginalBalance ?
+                          <DelinquencyByOriginalBalance
+                            data={delinquencyByOriginalBalance}
+                          />
+                          : <Loader loadiingText={"Getting original loan balance data..."}/>
+                        }
+                      </div>
+                    );
+                  case "Loan Term":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        {delinquencyByLoanTerm ?
+                          <DelinquencyByLoanTerm
+                            data={delinquencyByLoanTerm}
+                          />
+                          : <Loader loadiingText={"Getting loan term data..."}/>
+                        }
+                      </div>
+                    );
+                  case "Loan-to-Value":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        {delinquencyByLTV ?
+                          <DelinquencyByLTV
+                            data={delinquencyByLTV}
+                          />
+                          : <Loader loadiingText={"Getting loan-to-value data..."}/>
+                        }
+                      </div>
+                    );
+                  case "Number of Borrowers":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        {delinquencyByNumberOfBorrowers ?
+                          <DelinquencyByNumberOfBorrowers
+                            data={delinquencyByNumberOfBorrowers}
+                          />
+                          : <Loader loadiingText={"Getting number of borrowers data..."}/>
+                        }
+                      </div>
+                    );
+                  case "Race":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                      {delinquencyByRace ?
+                          <DelinquencyByRace
+                            data={delinquencyByRace}
+                          />
+                          : <Loader loadiingText={"Getting race data..."}/>
+                        }
+                      </div>
+                    );
+                  case "Unemployment Rate":
+                    return (
+                      <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
+                        {(unemploymentRateData && delinquencyRateData) ?
+                          <DelinquencyByUnemploymentRate
+                            dateRange={dateRange}
+                            unemploymentRateData={unemploymentRateData}
+                            delinquencyRateData={delinquencyRateData}
+                          />
+                          : <Loader loadiingText={"Getting unemployment data..."}/>
+                        }
+                      </div>
+                    );
+                }
+              })}
+            </div>
           </section>
         }
       </main>
@@ -625,8 +1159,8 @@ const Home = () => {
             closeAlert={CloseAlert}
           />
         }
-    </>
+    </div>
   )
 }
 
-export default Home
+export default memo(Home)

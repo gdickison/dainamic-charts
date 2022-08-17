@@ -1,298 +1,232 @@
-import {
-  Chart as ChartJS,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-} from "chart.js"
-
-ChartJS.register(
-  BarElement,
-  Filler,
-  Title,
-  Tooltip,
-  Legend
-)
-
-import Loader from "./Loader"
-import { Scatter, Bar, Pie } from "react-chartjs-2"
-import { useState, useEffect } from "react"
+import { Bar, Pie } from "react-chartjs-2"
+import { memo } from "react"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 
-const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) => {
-  const [isLoading, setLoading] = useState(false)
-  const [barChartData, setBarChartData] = useState()
-  const [barChartOptions, setBarChartOptions] = useState()
-  const [pieChartData, setPieChartData] = useState()
-  const [pieChartOptions, setPieChartOptions] = useState()
+const DelinquencyByNumberOfBorrowers = ({data}) => {
+  const barLabels = []
+  const barDataOneBorrower = []
+  const barDataMultiBorrower = []
+  const barTooltipOneBorrower = []
+  const barTooltipMultiBorrower = []
 
-  useEffect(() => {
-    setLoading(true)
-
-    const msaCodes = []
-    msaCodes.push(targetRegion.msa)
-    if(compRegions.length > 0){
-      compRegions.map(region => {
-        msaCodes.push(region.msa)
-      })
-    }
-    const JSONdata = JSON.stringify({
-      startDate: dateRange.startDate,
-      endDate: dateRange.endDate,
-      msaCodes: msaCodes
+  data.map(row => {
+    barLabels.push(row.region_name)
+    barDataOneBorrower.push((Number(row.one_borrower_delinquent) / Number(row.one_borrower_total) * 100).toFixed(2))
+    barDataMultiBorrower.push((Number(row.multi_borrower_delinquent) / Number(row.multi_borrower_total) * 100).toFixed(2))
+    barTooltipOneBorrower.push({
+      region: row.region,
+      name: row.region_name,
+      region_total: row.total_loans,
+      region_current: row.total_current,
+      region_delinquent: row.total_delinquent,
+      region_delinquency_rate: (Number(row.total_delinquent) / Number(row.total_loans) * 100).toFixed(2),
+      borrower_total: row.one_borrower_total,
+      borrower_current: row.one_borrower_current,
+      borrower_delinquent: row.one_borrower_delinquent,
+      borrower_delinquency_rate: (Number(row.one_borrower_delinquent) / Number(row.one_borrower_total) * 100).toFixed(2)
     })
+    barTooltipMultiBorrower.push({
+      region: row.region,
+      name: row.region_name,
+      region_total: row.total_loans,
+      region_current: row.total_current,
+      region_delinquent: row.total_delinquent,
+      region_delinquency_rate: (Number(row.total_delinquent) / Number(row.total_loans) * 100).toFixed(2),
+      borrower_total: row.multi_borrower_total,
+      borrower_current: row.multi_borrower_current,
+      borrower_delinquent: row.multi_borrower_delinquent,
+      borrower_delinquency_rate: (Number(row.multi_borrower_delinquent) / Number(row.multi_borrower_total) * 100).toFixed(2),
+    })
+  })
 
-    const endpoint = `/api/get_delinquency_by_num_borrowers`
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
+  const barChartData = {
+    labels: barLabels,
+    datasets: [
+      {
+        type: "bar",
+        label: "1 Borrower",
+        backgroundColor: ["rgba(51, 177, 255, 0.5)"],
+        borderColor: ["rgba(51, 177, 255, 1)"],
+        hoverBackgroundColor: ["rgba(51, 177, 255, 1)"],
+        borderWidth: 3,
+        data: barDataOneBorrower,
+        tooltip: barTooltipOneBorrower,
+        order: 1
       },
-      body: JSONdata
-    }
+      {
+        type: "bar",
+        label: "2+ Borrowers",
+        backgroundColor: ["rgba(0, 83, 255, 0.5)"],
+        borderColor: ["rgba(0, 83, 255, 1)"],
+        hoverBackgroundColor: ["rgba(0, 83, 255, 1)"],
+        borderWidth: 3,
+        data: barDataMultiBorrower,
+        tooltip: barTooltipMultiBorrower,
+        order: 2
+      }
+    ]
+  }
 
-    fetch(endpoint, options)
-      .then(res => res.json())
-      .then(data => data.response)
-      .then(data => {
-        const barLabels = []
-        const barDataOneBorrower = []
-        const barDataMultiBorrower = []
-        const barTooltipOneBorrower = []
-        const barTooltipMultiBorrower = []
-
-        data.map(row => {
-          barLabels.push(row.region_name)
-          barDataOneBorrower.push((Number(row.one_borrower_delinquent) / Number(row.one_borrower_total) * 100).toFixed(2))
-          barDataMultiBorrower.push((Number(row.multi_borrower_delinquent) / Number(row.multi_borrower_total) * 100).toFixed(2))
-          barTooltipOneBorrower.push({
-            region: row.region,
-            name: row.region_name,
-            region_total: row.total_loans,
-            region_current: row.total_current,
-            region_delinquent: row.total_delinquent,
-            region_delinquency_rate: (Number(row.total_delinquent) / Number(row.total_loans) * 100).toFixed(2),
-            borrower_total: row.one_borrower_total,
-            borrower_current: row.one_borrower_current,
-            borrower_delinquent: row.one_borrower_delinquent,
-            borrower_delinquency_rate: (Number(row.one_borrower_delinquent) / Number(row.one_borrower_total) * 100).toFixed(2)
-          })
-          barTooltipMultiBorrower.push({
-            region: row.region,
-            name: row.region_name,
-            region_total: row.total_loans,
-            region_current: row.total_current,
-            region_delinquent: row.total_delinquent,
-            region_delinquency_rate: (Number(row.total_delinquent) / Number(row.total_loans) * 100).toFixed(2),
-            borrower_total: row.multi_borrower_total,
-            borrower_current: row.multi_borrower_current,
-            borrower_delinquent: row.multi_borrower_delinquent,
-            borrower_delinquency_rate: (Number(row.multi_borrower_delinquent) / Number(row.multi_borrower_total) * 100).toFixed(2),
-          })
-        })
-
-        const barChartStructuredData = {
-          labels: barLabels,
-          datasets: [
-            {
-              type: "bar",
-              label: "1 Borrower",
-              backgroundColor: ["rgba(51, 177, 255, 0.5)"],
-              borderColor: ["rgba(51, 177, 255, 1)"],
-              hoverBackgroundColor: ["rgba(51, 177, 255, 1)"],
-              borderWidth: 3,
-              data: barDataOneBorrower,
-              tooltip: barTooltipOneBorrower,
-              order: 1
-            },
-            {
-              type: "bar",
-              label: "2+ Borrowers",
-              backgroundColor: ["rgba(0, 83, 255, 0.5)"],
-              borderColor: ["rgba(0, 83, 255, 1)"],
-              hoverBackgroundColor: ["rgba(0, 83, 255, 1)"],
-              borderWidth: 3,
-              data: barDataMultiBorrower,
-              tooltip: barTooltipMultiBorrower,
-              order: 2
-            }
-          ]
-        }
-
-        const barOptions = {
-          showLabel: false,
-          responsive: true,
-          aspectRatio: 1.75,
-          maxBarThickness: 125,
-          plugins: {
-            title: {
-              text: "Delinquency Rate per Category",
-              display: false
-            },
-            legend: {
-              display: true
-            },
-            tooltip: {
-              callbacks: {
-                beforeTitle: function(context){
-                  return [
-                    `${context[0].label}`,
-                    `Regional Delinquency Rate: ${context[0].dataset.tooltip[context[0].dataIndex].region_delinquency_rate}%`,
-                    ''
-                  ]
-                },
-                title: function(context){
-                  return `${context[0].dataset.label}`
-                },
-                beforeLabel: function(context){
-                  return [
-                    `Total loans with ${context.dataset.label}: ${context.dataset.tooltip[context.dataIndex].borrower_total}`,
-                    `Total delinquent loans with ${context.dataset.label}: ${context.dataset.tooltip[context.dataIndex].borrower_delinquent}`
-                  ]
-                },
-                label: function(context){
-                  return `Delinquency rate: ${context.raw}%`
-                }
-              }
-            }
+  const barChartOptions = {
+    showLabel: false,
+    responsive: true,
+    aspectRatio: 1.75,
+    maxBarThickness: 125,
+    plugins: {
+      title: {
+        text: "Delinquency Rate per Category",
+        display: false
+      },
+      legend: {
+        display: true
+      },
+      tooltip: {
+        callbacks: {
+          beforeTitle: function(context){
+            return [
+              `${context[0].label}`,
+              `Regional Delinquency Rate: ${context[0].dataset.tooltip[context[0].dataIndex].region_delinquency_rate}%`,
+              ''
+            ]
           },
-          scales: {
-            x: {
-              title: {
-                display: false,
-                text: "Region",
-                padding: 20,
-                font: {
-                  size: 16
-                }
-              },
-              ticks: {
-                callback: function(value, index, ticks){
-                  return this.getLabelForValue(value)
-                },
-                font: {
-                  weight: 'bold'
-                }
-              }
-            },
-            y: {
-              title: {
-                display: false,
-                text: "Delinquency Rate",
-                padding: 20,
-                font: {
-                  size: 16
-                }
-              },
-              ticks: {
-                callback: function(value, index, ticks){
-                  return value + "%"
-                },
-                font: {
-                  size: 16
-                }
-              },
-              grid: {
-                display: false
-              }
-            }
+          title: function(context){
+            return `${context[0].dataset.label}`
+          },
+          beforeLabel: function(context){
+            return [
+              `Total loans with ${context.dataset.label}: ${context.dataset.tooltip[context.dataIndex].borrower_total}`,
+              `Total delinquent loans with ${context.dataset.label}: ${context.dataset.tooltip[context.dataIndex].borrower_delinquent}`
+            ]
+          },
+          label: function(context){
+            return `Delinquency rate: ${context.raw}%`
           }
         }
-
-        const pieChartStructuredData = []
-        data.map((region, i) => {
-          pieChartStructuredData.push({
-            labels: [
-              '1 Borrower',
-              '2+ Borrowers'
-            ],
-            datasets: [
-              {
-                label: `${region.region_name}`,
-                data: [
-                  (Number(region.one_borrower_delinquent) / Number(region.total_delinquent) * 100).toFixed(2),
-                  (Number(region.multi_borrower_delinquent) / Number(region.total_delinquent) * 100).toFixed(2)
-                ],
-                tooltip: {
-                  totalDelinquent: region.total_delinquent,
-                  oneBorrowerDelinquent: region.one_borrower_delinquent,
-                  multiBorrowerDelinquent: region.multi_borrower_delinquent
-                },
-                backgroundColor: [
-                  "rgba(51, 177, 255, 0.5)",
-                  "rgba(0, 83, 255, 0.5)"
-                ],
-                borderColor: [
-                  "rgba(51, 177, 255, 1)",
-                  "rgba(0, 83, 255, 1)"
-                ],
-                hoverBackgroundColor: [
-                  "rgba(51, 177, 255, 1)",
-                  "rgba(0, 83, 255, 1)"
-                ]
-              }
-            ]
-          })
-        })
-
-        const pieOptions = {
-          responsive: true,
-          aspectRatio: 1,
-          plugins: {
-            title: {
-              text: function(chart){
-                return chart.chart.getDatasetMeta(0).label
-              },
-              position: 'bottom',
-              display: true
-            },
-            label: {
-              display: true
-            },
-            legend: {
-              display: false
-            },
-            tooltip: {
-              callbacks: {
-                beforeTitle: function(context){
-                  return `${context[0].dataset.label}`
-                },
-                title: function(context){
-                  return `${context[0].label}`
-                },
-                beforeLabel: function(context){
-                  return [
-                    `Total delinquent loans: ${context.dataset.tooltip.totalDelinquent}`,
-                    `Delinquent ${context.label} borrower loans: ${context.dataIndex === 0 ? context.dataset.tooltip.oneBorrowerDelinquent : context.dataset.tooltip.multiBorrowerDelinquent}`
-                  ]
-                },
-                label: function(context){
-                  return `Share of Regional Delinquency Rate: ${context.raw}%`
-                }
-              }
-            }
+      }
+    },
+    scales: {
+      x: {
+        title: {
+          display: false,
+          text: "Region",
+          padding: 20,
+          font: {
+            size: 16
+          }
+        },
+        ticks: {
+          callback: function(value, index, ticks){
+            return this.getLabelForValue(value)
           },
-          rotation: 180
+          font: {
+            weight: 'bold'
+          }
         }
+      },
+      y: {
+        title: {
+          display: false,
+          text: "Delinquency Rate",
+          padding: 20,
+          font: {
+            size: 16
+          }
+        },
+        ticks: {
+          callback: function(value, index, ticks){
+            return value + "%"
+          },
+          font: {
+            size: 16
+          }
+        },
+        grid: {
+          display: false
+        }
+      }
+    }
+  }
 
-        setBarChartData(barChartStructuredData)
-        setBarChartOptions(barOptions)
-        setPieChartData(pieChartStructuredData)
-        setPieChartOptions(pieOptions)
-        setLoading(false)
-      })
-  }, [dateRange.endDate, targetRegion.msa, dateRange.startDate])
+  const pieChartData = data.map((region, i) => {
+    return {
+      labels: [
+        '1 Borrower',
+        '2+ Borrowers'
+      ],
+      datasets: [
+        {
+          label: `${region.region_name}`,
+          data: [
+            (Number(region.one_borrower_delinquent) / Number(region.total_delinquent) * 100).toFixed(2),
+            (Number(region.multi_borrower_delinquent) / Number(region.total_delinquent) * 100).toFixed(2)
+          ],
+          tooltip: {
+            totalDelinquent: region.total_delinquent,
+            oneBorrowerDelinquent: region.one_borrower_delinquent,
+            multiBorrowerDelinquent: region.multi_borrower_delinquent
+          },
+          backgroundColor: [
+            "rgba(51, 177, 255, 0.5)",
+            "rgba(0, 83, 255, 0.5)"
+          ],
+          borderColor: [
+            "rgba(51, 177, 255, 1)",
+            "rgba(0, 83, 255, 1)"
+          ],
+          hoverBackgroundColor: [
+            "rgba(51, 177, 255, 1)",
+            "rgba(0, 83, 255, 1)"
+          ]
+        }
+      ]
+    }
+  })
 
-  if(isLoading){
-    return <Loader loadiingText={"Getting number of borrowers data..."}/>
+  const pieChartOptions = {
+    responsive: true,
+    aspectRatio: 1,
+    plugins: {
+      title: {
+        text: function(chart){
+          return chart.chart.getDatasetMeta(0).label
+        },
+        position: 'bottom',
+        display: true
+      },
+      label: {
+        display: true
+      },
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          beforeTitle: function(context){
+            return `${context[0].dataset.label}`
+          },
+          title: function(context){
+            return `${context[0].label}`
+          },
+          beforeLabel: function(context){
+            return [
+              `Total delinquent loans: ${context.dataset.tooltip.totalDelinquent}`,
+              `Delinquent ${context.label} borrower loans: ${context.dataIndex === 0 ? context.dataset.tooltip.oneBorrowerDelinquent : context.dataset.tooltip.multiBorrowerDelinquent}`
+            ]
+          },
+          label: function(context){
+            return `Share of Regional Delinquency Rate: ${context.raw}%`
+          }
+        }
+      }
+    },
+    rotation: 180
   }
 
   return (
     <div className="h-max">
       <ChartHeaderWithTooltip
         chartName={"Delinquency By Number of Borrowers"}
-        msa={compRegions.length > 0 ? "selected regions" : targetRegion.name}
+        msa={data.length === 1 ? data[0].region_name : "selected regions"}
         tooltip={"All loans for each month are grouped by number of borrowers (1 or 2+). The number of loans with 3 or more borrowers are statistically insignificant and are included in the '2+' category. Click on the legend to show/hide datasets"}
       />
       <div className="flex justify-around w-full">
@@ -323,7 +257,7 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) 
               {pieChartData.map((chart, i) => {
                 return (
                   <div key={i} className="flex">
-                    <Pie data={chart} options={pieChartOptions} width={pieChartData.length === 1 ? 250 : 200} />
+                    <Pie data={chart} options={pieChartOptions} width={200} />
                   </div>
                 )
               })}
@@ -335,4 +269,4 @@ const DelinquencyByNumberOfBorrowers = ({dateRange, targetRegion, compRegions}) 
   )
 }
 
-export default DelinquencyByNumberOfBorrowers
+export default memo(DelinquencyByNumberOfBorrowers)

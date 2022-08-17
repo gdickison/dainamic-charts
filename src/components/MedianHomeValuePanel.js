@@ -1,31 +1,22 @@
 import Loader from "./Loader"
 import { Bar } from "react-chartjs-2"
 
-const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyRates, nationalDelinquencyRate}) => {
-  const regionalData = []
-  selectedRegionsData.forEach((region) => {
-    regionalDelinquencyRates.forEach(rate => {
-      if(region.msa === rate.msa){
-        regionalData.push({...region, ...rate})
-      }
-    })
+const MedianHomeValuePanel = ({nationalMedianHomeValue, selectedRegionsData}) => {
+  const homeValueChartData = selectedRegionsData.map(region => {
+    return region.median_home_value
   })
 
-  const barData = regionalData.map(region => {
-    return region.delinquencyRate
-  })
-
-  const dataLabels = regionalData.map(region => {
+  const homeValueChartLabels = selectedRegionsData.map(region => {
     return region.name
   })
 
-  const delinquencyChartData = {
-    labels: dataLabels,
+  const chartData = {
+    labels: homeValueChartLabels,
     datasets: [
       {
         type: 'bar',
-        label: 'Regional',
-        data: barData,
+        label: "Regional",
+        data: homeValueChartData,
         backgroundColor: 'rgba(255, 0, 0, 0.3)',
         hoverBackgroundColor: 'rgba(255, 0, 0, 0.7)',
         borderColor: 'rgba(255, 0, 0, 0.7)',
@@ -36,7 +27,7 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
     ]
   }
 
-  const delinquencyChartOptions = {
+  const chartOptions = {
     responsive: true,
     aspectRatio: 2,
     interaction: {
@@ -49,13 +40,13 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
       tooltip: {
         callbacks: {
           title: function(){
-            return "Delinquency Rate"
+            return "Median Home Value"
           },
           beforeLabel: function(context){
             return context.datasetIndex === 0 ? context.label.split(",")[0] : 'National'
           },
           label: function(context){
-            return `${context.raw}%`
+            return (context.raw).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})
           }
         },
         backgroundColor: 'rgba(255, 255, 255, 1)',
@@ -78,7 +69,7 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
         align: 'start',
         anchor: 'end',
         formatter: function(value, context){
-          return `${value}%`
+          return (value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})
         },
         labels: {
           title: {
@@ -93,14 +84,14 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
         annotations: {
           line1: {
             type: 'line',
-            yMin: nationalDelinquencyRate,
-            yMax: nationalDelinquencyRate,
+            yMin: nationalMedianHomeValue,
+            yMax: nationalMedianHomeValue,
             borderColor: 'rgba(0, 0, 255, 1)',
             borderWidth: 3,
             display: (ctx) => ctx.chart.isDatasetVisible(0),
             label: {
               display: (ctx) => ctx.chart.isDatasetVisible(0),
-              content: `National: ${nationalDelinquencyRate}%`,
+              content: `National: ${nationalMedianHomeValue && nationalMedianHomeValue.toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}`,
               position: (context, opts) => {
                 if(selectedRegionsData.length === 1){
                   return "20%"
@@ -120,7 +111,7 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
         ticks: {
           callback: function(value){
             if(value !== 0){
-              return `${value}%`
+              return (value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})
             }
           },
           font: {
@@ -150,41 +141,41 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
   return (
     <div className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
       <div className="flex items-center space-x-4">
-        <img className="h-12" src="/history.svg" alt="" />
+        <img className="h-12" src="/house.svg" alt="" />
         <h1 className="text-[1.4vw] font-bold py-4">
-          Delinquency Rates
+          Median Home Value
         </h1>
       </div>
       <div className="flex space-x-6 justify-evenly">
         <div className="flex flex-col justify-center w-2/5">
-          {nationalDelinquencyRate
+          {nationalMedianHomeValue
             ?  <div className="w-full flex justify-between mb-4">
                 <p className="text-[1.2vw] font-semibold">
                   National
                 </p>
                 <p className="text-[1.2vw]">
-                  {`${nationalDelinquencyRate}%`}
+                  {(nationalMedianHomeValue).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}
                 </p>
               </div>
-            : <Loader loadiingText={"Getting national delinquency data..."}/>
+            : <Loader loadiingText={"Getting national home value..."}/>
           }
-          {regionalData ? regionalData.map((region, idx) => {
+          {selectedRegionsData ? selectedRegionsData.map((region, idx) => {
             return (
               <div key={idx} className="w-full flex justify-between">
                 <p className="text-[1.2vw] font-semibold">{(region.name).split(",")[0]}</p>
                 <p className="text-[1.2vw]">
-                  {`${region.delinquencyRate}%`}
+                  {(region.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}
                 </p>
               </div>
             )
-          }) : <Loader loadiingText={"Getting regional delinquency data..."}/> }
+          }) : <Loader loadiingText={"Getting regional home value..."}/> }
         </div>
         <div className="flex justify-center w-1/2">
-          <Bar data={delinquencyChartData} options={delinquencyChartOptions} />
+          <Bar data={chartData} options={chartOptions} />
         </div>
       </div>
     </div>
   )
 }
 
-export default RegionalDelinquencyRatePanel
+export default MedianHomeValuePanel

@@ -1,10 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import pool from '../../src/client'
 
-export default async function handler(req, res) {
-  const client = await pool.connect()
+export default async function queryNumBorrowers(req, res) {
+  // const client = await pool.connect()
 
-  await client
+  // await client
+  pool
     .query(`SELECT
     msa AS "region",
     msa_name AS "region_name",
@@ -28,6 +29,9 @@ export default async function handler(req, res) {
       AND origination_date <= '${req.body.endDate}'::date
   GROUP BY msa, msa_name;`)
     .then(response => res.status(200).json({response: response.rows}))
-    .then(client.release())
-    .catch(error => console.log("There is an error getting number of borrowers data: ", error))
+    .catch(error => {
+      setImmediate(() => {
+        throw error
+      })
+    })
 }

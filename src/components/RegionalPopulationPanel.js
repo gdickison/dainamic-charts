@@ -1,42 +1,31 @@
 import Loader from "./Loader"
 import { Bar } from "react-chartjs-2"
 
-const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyRates, nationalDelinquencyRate}) => {
-  const regionalData = []
-  selectedRegionsData.forEach((region) => {
-    regionalDelinquencyRates.forEach(rate => {
-      if(region.msa === rate.msa){
-        regionalData.push({...region, ...rate})
-      }
-    })
+const RegionalPopulationPanel = ({nationalPopulation, selectedRegionsData}) => {
+  const populationChartData = selectedRegionsData.map(region => {
+    return region.total_population
   })
 
-  const barData = regionalData.map(region => {
-    return region.delinquencyRate
-  })
-
-  const dataLabels = regionalData.map(region => {
+  const populationChartLabels = selectedRegionsData.map(region => {
     return region.name
   })
 
-  const delinquencyChartData = {
-    labels: dataLabels,
+  const chartData = {
+    labels: populationChartLabels,
     datasets: [
       {
-        type: 'bar',
-        label: 'Regional',
-        data: barData,
+        label: 'Population',
+        data: populationChartData,
         backgroundColor: 'rgba(255, 0, 0, 0.3)',
         hoverBackgroundColor: 'rgba(255, 0, 0, 0.7)',
         borderColor: 'rgba(255, 0, 0, 0.7)',
         borderWidth: 3,
-        maxBarThickness: 100,
-        order: 2
+        maxBarThickness: 100
       }
     ]
   }
 
-  const delinquencyChartOptions = {
+  const chartOptions = {
     responsive: true,
     aspectRatio: 2,
     interaction: {
@@ -49,22 +38,22 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
       tooltip: {
         callbacks: {
           title: function(){
-            return "Delinquency Rate"
+            return "Population"
           },
           beforeLabel: function(context){
-            return context.datasetIndex === 0 ? context.label.split(",")[0] : 'National'
+            return context.label.split(",")[0]
           },
           label: function(context){
-            return `${context.raw}%`
+            return (context.raw).toLocaleString('en-US', {maximumFractionDigits: 0})
           }
         },
         backgroundColor: 'rgba(255, 255, 255, 1)',
         bodyColor: 'rgba(0, 0, 0, 1)',
-        borderColor: '#2563EB',
         titleColor: 'rgba(0, 0, 0, 1)',
         titleFont: {
           size: 14
         },
+        borderColor: '#2563EB',
         bodyFont: {
           size: 14,
           style: 'italic'
@@ -78,7 +67,7 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
         align: 'start',
         anchor: 'end',
         formatter: function(value, context){
-          return `${value}%`
+          return value.toLocaleString('en-US', {maximumFractionDigits: 0})
         },
         labels: {
           title: {
@@ -89,38 +78,13 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
           }
         }
       },
-      annotation: {
-        annotations: {
-          line1: {
-            type: 'line',
-            yMin: nationalDelinquencyRate,
-            yMax: nationalDelinquencyRate,
-            borderColor: 'rgba(0, 0, 255, 1)',
-            borderWidth: 3,
-            display: (ctx) => ctx.chart.isDatasetVisible(0),
-            label: {
-              display: (ctx) => ctx.chart.isDatasetVisible(0),
-              content: `National: ${nationalDelinquencyRate}%`,
-              position: (context, opts) => {
-                if(selectedRegionsData.length === 1){
-                  return "20%"
-                }
-                if(selectedRegionsData.length === 3){
-                  return "33.33%"
-                }
-              },
-              backgroundColor: 'rgba(0, 0, 255, 0.8)'
-            }
-          }
-        }
-      }
     },
     scales: {
       y: {
         ticks: {
           callback: function(value){
             if(value !== 0){
-              return `${value}%`
+              return (value).toLocaleString('en-US', {maximumFractionDigits: 0})
             }
           },
           font: {
@@ -150,41 +114,41 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
   return (
     <div className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
       <div className="flex items-center space-x-4">
-        <img className="h-12" src="/history.svg" alt="" />
+        <img className="h-12" src="/group.svg" alt="" />
         <h1 className="text-[1.4vw] font-bold py-4">
-          Delinquency Rates
+          Regional Population
         </h1>
       </div>
       <div className="flex space-x-6 justify-evenly">
         <div className="flex flex-col justify-center w-2/5">
-          {nationalDelinquencyRate
+          {nationalPopulation
             ?  <div className="w-full flex justify-between mb-4">
                 <p className="text-[1.2vw] font-semibold">
                   National
                 </p>
                 <p className="text-[1.2vw]">
-                  {`${nationalDelinquencyRate}%`}
+                  {(nationalPopulation.national_population).toLocaleString('en-US', {maximumFractionDigits: 0})}
                 </p>
               </div>
-            : <Loader loadiingText={"Getting national delinquency data..."}/>
+            : <Loader loadiingText={"Getting national population..."}/>
           }
-          {regionalData ? regionalData.map((region, idx) => {
+          {selectedRegionsData ? selectedRegionsData.map((region, idx) => {
             return (
               <div key={idx} className="w-full flex justify-between">
                 <p className="text-[1.2vw] font-semibold">{(region.name).split(",")[0]}</p>
                 <p className="text-[1.2vw]">
-                  {`${region.delinquencyRate}%`}
+                  {(region.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}
                 </p>
               </div>
             )
-          }) : <Loader loadiingText={"Getting regional delinquency data..."}/> }
+          }) : <Loader loadiingText={"Getting regional population..."}/> }
         </div>
         <div className="flex justify-center w-1/2">
-          <Bar data={delinquencyChartData} options={delinquencyChartOptions} />
+          <Bar data={chartData} options={chartOptions} />
         </div>
       </div>
     </div>
   )
 }
 
-export default RegionalDelinquencyRatePanel
+export default RegionalPopulationPanel

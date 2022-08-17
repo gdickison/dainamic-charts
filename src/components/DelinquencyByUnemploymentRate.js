@@ -1,107 +1,38 @@
-import { useState, useEffect } from "react"
-
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  ArcElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-} from "chart.js"
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  ArcElement,
-  BarElement,
-  Filler,
-  Title,
-  Tooltip,
-  Legend
-)
-
-import Loader from "./Loader"
+import { memo} from "react"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Line } from "react-chartjs-2"
 import { getDateLabelsForChart, groupDataByMsa, chartFadedColors, chartSolidColors } from "../../public/utils"
 
-const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) => {
-  const [isLoading, setLoading] = useState(false)
-  const [chartData, setChartData] = useState()
-  const [chartOptions, setChartOptions] = useState()
-
-  const getDelinquencyByUnemploymentChartData = async () => {
-    setLoading(true)
-
-    const msaCodes = []
-    msaCodes.push(targetRegion.msa)
-    if(compRegions.length > 0) {
-      compRegions.map(region => {
-        msaCodes.push(region.msa)
-      })
-    }
-
-    const JSONdata = JSON.stringify({
-      startDate: dateRange.startDate,
-      endDate: dateRange.endDate,
-      msaCodes: msaCodes
-    })
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSONdata
-    }
-
-    // Get unemployment data
-    const unemploymentEndpoint = `/api/get_unemployment_rate`
-    const unemploymentResponse = await fetch(unemploymentEndpoint, options)
-    let unemploymentData = await unemploymentResponse.json()
-    unemploymentData = unemploymentData.response
-
-    const unemploymentDataByMsa = Object.values(groupDataByMsa(unemploymentData, "msa"))
+const DelinquencyByUnemploymentRate = ({dateRange, unemploymentRateData, delinquencyRateData}) => {
+    const unemploymentDataByMsa = Object.values(groupDataByMsa(unemploymentRateData, "msa"))
 
     const unemploymentRateStructuredData = unemploymentDataByMsa.map((region, idx) => {
-      const unemploymentRateData = region.map(row => {
+      const unemploymentRateDataRaw = region.map(row => {
         return row.unemployment_rate
       })
 
       return {
-        label: `${idx === 0 ? targetRegion.name.split(",")[0] : compRegions[idx - 1].name.split(",")[0]} Unemployment Rate`,
-        data: unemploymentRateData,
+        label: `${region[0].name.split(",")[0]} Unemployment Rate`,
+        data: unemploymentRateDataRaw,
         borderColor: chartFadedColors[idx],
         backgroundColor: chartFadedColors[idx],
         pointRadius: 5,
         pointHitRadius: 15,
-        pointHoverRadius: 12
+        pointHoverRadius: 12,
+        pointHoverBackgroundColor: chartSolidColors[idx]
       }
     })
 
-    // Get delinquency data
-    const delinquencyEndpoint = `/api/get_delinquency_data_per_period`
-    const delinquencyResponse = await fetch(delinquencyEndpoint, options)
-    let delinquencyData = await delinquencyResponse.json()
-    delinquencyData = delinquencyData.response
-
-    const delinquencyDataByMsa = Object.values(groupDataByMsa(delinquencyData, "msa"))
+    const delinquencyDataByMsa = Object.values(groupDataByMsa(delinquencyRateData, "msa"))
 
     const delinquencyRateStructuredData = delinquencyDataByMsa.map((region, idx) => {
-      const delinquencyRateData = region.map(row => {
+      const delinquencyRateDataRaw = region.map(row => {
         return parseFloat((Number(row.delinquent) / Number(row.total) * 100).toFixed(2))
       })
 
       return {
-        label: `${idx === 0 ? targetRegion.name.split(",")[0] : compRegions[idx - 1].name.split(",")[0]} Delinquency Rate`,
-        data: delinquencyRateData,
+        label: `${region[0].name.split(",")[0]} Delinquency Rate`,
+        data: delinquencyRateDataRaw,
         borderColor: chartSolidColors[idx],
         backgroundColor: chartSolidColors[idx],
         pointRadius: 5,
@@ -112,12 +43,12 @@ const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) =
 
     const chartLabels = getDateLabelsForChart(dateRange.startDate, dateRange.endDate)
 
-    setChartData({
+    const chartData = {
       labels: chartLabels,
       datasets: [].concat(delinquencyRateStructuredData, unemploymentRateStructuredData)
-    })
+    }
 
-    setChartOptions({
+    const chartOptions = {
       responsive: true,
       aspectRatio: 2.5,
       interaction: {
@@ -146,7 +77,7 @@ const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) =
             }
           },
           ticks: {
-            callback: function(value, index, ticks){
+            callback: function(value){
               return `${value}%`
             },
             font: {
@@ -176,23 +107,13 @@ const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) =
           }
         }
       }
-    })
-    setLoading(false)
-  }
-
-  useEffect(() => {
-    getDelinquencyByUnemploymentChartData()
-  }, [dateRange.startDate, dateRange.endDate, targetRegion.msa])
-
-  if(isLoading) {
-    return <Loader loadiingText={"Getting unemployment data..."}/>
-  }
+    }
 
   return (
     <div>
       <ChartHeaderWithTooltip
         chartName={"Delinquency by Unemployment Rate"}
-        msa={targetRegion.name}
+        msa={delinquencyRateStructuredData.length === 1 ? delinquencyRateData[0].name : "selected regions"}
       />
       {chartData &&
         <Line data={chartData} options={chartOptions}/>
@@ -201,4 +122,4 @@ const DelinquencyByUnemploymentRate = ({dateRange, targetRegion, compRegions}) =
   )
 }
 
-export default DelinquencyByUnemploymentRate
+export default memo(DelinquencyByUnemploymentRate)

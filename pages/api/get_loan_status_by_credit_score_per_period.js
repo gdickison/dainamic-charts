@@ -1,13 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import pool from '../../src/client'
 
-export default async function handler(req, res) {
+export default async function queryCreditScorePerPeriod(req, res) {
   const client = await pool.connect()
 // TODO: refactor this like the other credit score query? Just add origination_date to the other one. It might make building charts easier
   await client
     .query(`SELECT
     msa,
-    msa_name,
+    msa_name AS "name",
     loan.origination_date,
     COUNT(loan.loanid) AS "total",
     COUNT(loan.loanid) FILTER (WHERE loan.delinquency_status = '00') AS "current",
@@ -34,7 +34,7 @@ export default async function handler(req, res) {
     AND origination_date >= '${req.body.startDate}'::date
     AND origination_date <= '${req.body.endDate}'::date
   GROUP BY msa, msa_name, loan.origination_date
-  ORDER BY msa`)
+  ORDER BY msa, loan.origination_date`)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
     .catch(error => console.log("There is an error getting delinquency by credit score data: ", error))
