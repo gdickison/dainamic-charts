@@ -166,6 +166,7 @@ const Home = () => {
 
   const handleSelectedRegionsChange = e => {
     e.preventDefault()
+
     if(selectedRegions.length < 3){
       const updatedRegions = ([...selectedRegions, {msaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
       updatedRegions.sort((a, b) => a.msaCode - b.msaCode)
@@ -212,6 +213,7 @@ const Home = () => {
     const status = response.status
     let data = await response.json()
     data = data.response
+
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
