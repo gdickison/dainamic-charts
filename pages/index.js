@@ -810,7 +810,7 @@ const Home = () => {
     }
 
     // Get regional delinquency rates
-    const endpoint = `api/get_population_by_race`
+    const endpoint = `api/get_delinquency_by_race`
     const response = await fetch(endpoint, options)
     const status = response.status
     let data = await response.json()
