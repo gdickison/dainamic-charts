@@ -48,7 +48,10 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
           backgroundColor: bgColors,
           borderColor: bdColors,
           hoverBackgroundColor: hbgColors,
-          borderWidth: 2
+          borderWidth: 3,
+          borderJoinStyle: 'bevel',
+          offset: 10,
+          hoverOffset: -10
         }
       ]
     }
@@ -71,9 +74,13 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
         },
         labels: {
           title: {
-            font: {
-              weight: 'bold',
-              size: 12,
+            font: function(context) {
+              const width = context.chart.width
+              const size = structuredData.length < 3 ? Math.round(width / 30) : Math.round(width / 24)
+              return {
+                size: size,
+                weight: 'bold'
+              }
             }
           }
         }
@@ -85,7 +92,11 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
           ]
         },
         position: 'bottom',
-        display: true
+        display: true,
+        font: {
+          size: 16,
+          weight: 'normal'
+        }
       },
       label: {
         display: true
@@ -129,7 +140,7 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
             <div className="flex w-full flex-wrap justify-evenly items-center">
               {structuredData.map((chart, i) => {
                 return (
-                  <div key={i} className={`${structuredData.length < 3 ? 'w-2/5' : 'w-1/5'}`}>
+                  <div key={i} className={`${structuredData.length < 3 ? 'w-2/5' : 'w-1/4'}`}>
                     <Doughnut data={chart} options={chartOptions}/>
                   </div>
                 )
