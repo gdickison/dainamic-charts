@@ -6,6 +6,8 @@ export default async function queryCreditScore(req, res) {
 
   await client
     .query(`SELECT
+    MIN(origination_date) as "start_date",
+    MAX(origination_date) as "end_date",
     msa AS "region",
     msa_name AS "region_name",
     COUNT(loan.loanid) AS "total",

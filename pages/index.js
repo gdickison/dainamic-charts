@@ -1011,7 +1011,6 @@ const Home = () => {
                           <div>
                             <DelinquencyByCreditScore
                               data={delinquencyByCreditScore}
-                              dateRange={dateRange}
                             />
                           </div>
                           : <Loader loadiingText={"Getting credit score by region data..."}/>
@@ -1100,8 +1099,6 @@ const Home = () => {
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
                         {delinquencyByLTV ?
                           <DelinquencyByLTV
-                            dateRange={dateRange}
-                            selectedRegions={selectedRegions}
                             data={delinquencyByLTV}
                           />
                           : <Loader loadiingText={"Getting loan-to-value data..."}/>
@@ -1113,8 +1110,6 @@ const Home = () => {
                       <div key={feature} className="border-2 border-slate-400 rounded-md p-4">
                         {delinquencyByNumberOfBorrowers ?
                           <DelinquencyByNumberOfBorrowers
-                            dateRange={dateRange}
-                            selectedRegions={selectedRegions}
                             data={delinquencyByNumberOfBorrowers}
                           />
                           : <Loader loadiingText={"Getting number of borrowers data..."}/>
@@ -1138,7 +1133,6 @@ const Home = () => {
                         {(unemploymentRateData && delinquencyRateData) ?
                           <DelinquencyByUnemploymentRate
                             dateRange={dateRange}
-                            selectedRegions={selectedRegions}
                             unemploymentRateData={unemploymentRateData}
                             delinquencyRateData={delinquencyRateData}
                           />
