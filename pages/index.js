@@ -138,15 +138,30 @@ const Home = () => {
         'Content-Type': 'application/json'
       }
     }
-
+    const monthsList = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ]
     const response = await fetch(endpoint, options)
     const status = response.status
     let data = await response.json()
     data = data.response
 
     const months = data.map(row => {
-      const readableDate =  new Date(row.date)
-      return readableDate.toLocaleDateString('en-us', {year: "numeric", month: "long", day: "numeric"})
+      const year = new Date(row.date).getFullYear()
+      const date = new Date(row.date).getDate()
+      const month = monthsList[new Date(row.date).getMonth()]
+      return (`${month.toString()} ${date.toString()}, ${year.toString()}`)
     })
 
     if(status === 404){
