@@ -19,7 +19,7 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
     }
   }
 
-  const structuredData = populationByAgeData.map((region, idx) => {
+  const structuredData = populationByAgeData.map((region) => {
     const labels = []
     const data = []
     const bgColors = []
@@ -50,8 +50,8 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
           hoverBackgroundColor: hbgColors,
           borderWidth: 3,
           borderJoinStyle: 'bevel',
-          offset: 10,
-          hoverOffset: -10
+          cutout: '0%',
+          hoverOffset: 20
         }
       ]
     }
@@ -61,11 +61,14 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
     responsive: true,
     aspectRatio: 1,
     maintainAspectRation: true,
+    layout: {
+      padding: 10
+    },
     plugins: {
       datalabels: {
         display: true,
         color: '#000',
-        align: 'center',
+        align: 'end',
         formatter: function(value, context){
           return [
             context.chart.data.labels[context.dataIndex],
@@ -128,13 +131,13 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
     <div className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
       <div className="flex items-center space-x-4">
         <img className="h-12" src="/population.svg" alt="" />
-        <h1 className="text-[1.4vw] font-bold py-4">
-          Population By Age
+        <h1 className="text-[1.6vw] font-bold py-4">
+          Population % By Age
         </h1>
       </div>
       <div>
       </div>
-      <div className="flex" >
+      <div className="flex py-4" >
         {structuredData
           ?
             <div className="flex w-full flex-wrap justify-evenly items-center">

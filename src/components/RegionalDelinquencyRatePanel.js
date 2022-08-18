@@ -77,14 +77,14 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
         color: '#000',
         align: 'start',
         anchor: 'end',
-        formatter: function(value, context){
+        formatter: function(value){
           return `${value}%`
         },
         labels: {
           title: {
             font: {
               weight: 'bold',
-              size: 12,
+              size: 16,
             }
           }
         }
@@ -107,6 +107,15 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
                 }
                 if(selectedRegionsData.length === 3){
                   return "33.33%"
+                }
+              },
+              font: {
+                size: () => {
+                  if(selectedRegionsData.length < 3){
+                    return 14
+                  } else {
+                    return 12
+                  }
                 }
               },
               backgroundColor: 'rgba(0, 0, 255, 0.8)'

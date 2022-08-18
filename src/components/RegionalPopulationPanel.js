@@ -66,14 +66,14 @@ const RegionalPopulationPanel = ({nationalPopulation, selectedRegionsData}) => {
         color: '#000',
         align: 'start',
         anchor: 'end',
-        formatter: function(value, context){
+        formatter: function(value){
           return value.toLocaleString('en-US', {maximumFractionDigits: 0})
         },
         labels: {
           title: {
             font: {
               weight: 'bold',
-              size: 12,
+              size: 16,
             }
           }
         }

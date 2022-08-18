@@ -990,7 +990,7 @@ const Home = () => {
         <title>Dainamic</title>
       </Head>
       <header className="mx-6">
-        <h1 className='p-10 text-7xl text-center lg:text-left'>
+        <h1 className='p-10 text-[3.5vw] text-left'>
           Welcome to D<span className='text-yellow-300'>AI</span>NAMIC
         </h1>
       </header>

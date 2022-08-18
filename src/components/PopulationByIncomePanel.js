@@ -19,7 +19,7 @@ const PopulationByIncomePanel = ({populationByIncomeData, selectedRegionsData}) 
     }
   }
 
-  const structuredData = populationByIncomeData.map((region, idx) => {
+  const structuredData = populationByIncomeData.map((region) => {
     const labels = []
     const data = []
     const bgColors = []
@@ -68,7 +68,11 @@ const PopulationByIncomePanel = ({populationByIncomeData, selectedRegionsData}) 
           ]
         },
         position: 'bottom',
-        display: true
+        display: true,
+        font: {
+          size: 16,
+          weight: 'normal'
+        }
       },
       label: {
         display: true
@@ -110,8 +114,12 @@ const PopulationByIncomePanel = ({populationByIncomeData, selectedRegionsData}) 
               return `${value}%`
             }
           },
-          font: {
-            size: 14
+          font: function(context) {
+            const width = context.chart.width
+            const size = structuredData.length < 3 ? Math.round(width / 34) : Math.round(width / 24)
+            return {
+              size: size
+            }
           }
         }
       }
@@ -122,8 +130,8 @@ const PopulationByIncomePanel = ({populationByIncomeData, selectedRegionsData}) 
     <div className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
       <div className="flex items-center space-x-4">
         <img className="h-12" src="/income.svg" alt="" />
-        <h1 className="text-[1.4vw] font-bold py-4">
-          Population By Income
+        <h1 className="text-[1.6vw] font-bold py-4">
+          Population % By Income
         </h1>
       </div>
       <div>
@@ -134,7 +142,7 @@ const PopulationByIncomePanel = ({populationByIncomeData, selectedRegionsData}) 
             <div className="flex w-full flex-wrap justify-evenly items-center">
               {structuredData.map((chart, i) => {
                 return (
-                  <div key={i} className={`${structuredData.length < 3 ? 'w-2/5' : 'w-1/5'}`}>
+                  <div key={i} className={`${structuredData.length < 3 ? 'w-2/5' : 'w-1/4'}`}>
                     <Bar data={chart} options={chartOptions}/>
                   </div>
                 )

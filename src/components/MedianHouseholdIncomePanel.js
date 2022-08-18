@@ -70,14 +70,14 @@ const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, selectedRegi
         color: '#000',
         align: 'start',
         anchor: 'end',
-        formatter: function(value, context){
+        formatter: function(value){
           return (value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})
         },
         labels: {
           title: {
             font: {
               weight: 'bold',
-              size: 12,
+              size: 16,
             }
           }
         }
@@ -94,12 +94,21 @@ const MedianHouseholdIncomePanel = ({nationalMedianHouseholdIncome, selectedRegi
             label: {
               display: nationalMedianHouseholdIncome ? true : false,
               content: `National: ${nationalMedianHouseholdIncome && nationalMedianHouseholdIncome.toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}`,
-              position: (context, opts) => {
+              position: () => {
                 if(selectedRegionsData.length === 1){
                   return "20%"
                 }
                 if(selectedRegionsData.length === 3){
                   return "33.33%"
+                }
+              },
+              font: {
+                size: () => {
+                  if(selectedRegionsData.length < 3){
+                    return 14
+                  } else {
+                    return 12
+                  }
                 }
               },
               backgroundColor: 'rgba(0, 0, 255, 0.8)'
