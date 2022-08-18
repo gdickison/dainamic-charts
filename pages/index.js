@@ -990,7 +990,7 @@ const Home = () => {
         <title>Dainamic</title>
       </Head>
       <header className="mx-6">
-        <h1 className='p-10 text-7xl text-center lg:text-left'>
+        <h1 className='p-10 text-[3.5vw] text-left'>
           Welcome to D<span className='text-yellow-300'>AI</span>NAMIC
         </h1>
       </header>
@@ -1012,7 +1012,7 @@ const Home = () => {
           <section className="mb-10 space-y-4">
             <section className="flex flex-col px-0">
               <header>
-                <p className="px-10 text-[1.2vw] italic">{`Selected ${selectedRegionsData.length === 1 ? 'Region' : 'Regions'}:`}</p>
+                <p className="px-10 text-[1.6vw] italic">{`Selected ${selectedRegionsData.length === 1 ? 'Region' : 'Regions'}:`}</p>
                 <div className="mb-6 px-14 text-[1.2vw] italic">
                   {selectedRegionsData.map((region, idx) => {
                     return (
@@ -1020,7 +1020,7 @@ const Home = () => {
                     )
                   })}
                 </div>
-                <h1 className="mb-6 px-10 text-[2vw]">{`Regional ${selectedRegionsData.length === 1 ? 'Summary' : 'Summaries'}`}</h1>
+                <h1 className="mb-6 px-10 text-[1.8vw]">{`Regional ${selectedRegionsData.length === 1 ? 'Summary' : 'Summaries'}`}</h1>
               </header>
               <div>
                 {regionalDelinquencyRates

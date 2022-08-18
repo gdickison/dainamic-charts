@@ -68,14 +68,14 @@ const MedianHomeValuePanel = ({nationalMedianHomeValue, selectedRegionsData}) =>
         color: '#000',
         align: 'start',
         anchor: 'end',
-        formatter: function(value, context){
+        formatter: function(value){
           return (value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})
         },
         labels: {
           title: {
             font: {
               weight: 'bold',
-              size: 12,
+              size: 16,
             }
           }
         }
@@ -88,9 +88,9 @@ const MedianHomeValuePanel = ({nationalMedianHomeValue, selectedRegionsData}) =>
             yMax: nationalMedianHomeValue,
             borderColor: 'rgba(0, 0, 255, 1)',
             borderWidth: 3,
-            display: (ctx) => ctx.chart.isDatasetVisible(0),
+            display: nationalMedianHomeValue ? true : false,
             label: {
-              display: (ctx) => ctx.chart.isDatasetVisible(0),
+              display: nationalMedianHomeValue ? true : false,
               content: `National: ${nationalMedianHomeValue && nationalMedianHomeValue.toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}`,
               position: (context, opts) => {
                 if(selectedRegionsData.length === 1){
@@ -98,6 +98,15 @@ const MedianHomeValuePanel = ({nationalMedianHomeValue, selectedRegionsData}) =>
                 }
                 if(selectedRegionsData.length === 3){
                   return "33.33%"
+                }
+              },
+              font: {
+                size: () => {
+                  if(selectedRegionsData.length < 3){
+                    return 14
+                  } else {
+                    return 12
+                  }
                 }
               },
               backgroundColor: 'rgba(0, 0, 255, 0.8)'
@@ -114,8 +123,12 @@ const MedianHomeValuePanel = ({nationalMedianHomeValue, selectedRegionsData}) =>
               return (value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})
             }
           },
-          font: {
-            size: 14
+          font: function(context) {
+            const width = context.chart.width
+            const size = Math.round(width / 40)
+            return {
+              size: size
+            }
           }
         },
         grid: {
@@ -129,6 +142,13 @@ const MedianHomeValuePanel = ({nationalMedianHomeValue, selectedRegionsData}) =>
             let label = labelArray[0].includes("--") ? labelArray[0].split("--") : labelArray[0].split("-")
             label.push(labelArray[1])
             return label
+          },
+          font: function(context) {
+            const width = context.chart.width
+            const size = Math.round(width / 42)
+            return {
+              size: size
+            }
           }
         },
         grid: {
@@ -138,22 +158,24 @@ const MedianHomeValuePanel = ({nationalMedianHomeValue, selectedRegionsData}) =>
     }
   }
 
+  const fontSize = selectedRegionsData.length === 1 ? '1.35vw' : '1.2vw'
+
   return (
     <div className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
       <div className="flex items-center space-x-4">
         <img className="h-12" src="/house.svg" alt="" />
-        <h1 className="text-[1.4vw] font-bold py-4">
+        <h1 className="text-[1.6vw] font-bold py-4">
           Median Home Value
         </h1>
       </div>
       <div className="flex space-x-6 justify-evenly">
         <div className="flex flex-col justify-center w-2/5">
           {nationalMedianHomeValue
-            ?  <div className="w-full flex justify-between mb-4">
-                <p className="text-[1.2vw] font-semibold">
+            ?  <div className="w-full flex justify-between mb-8">
+                <p className={`text-[${fontSize}]`}>
                   National
                 </p>
-                <p className="text-[1.2vw]">
+                <p className={`text-[${fontSize}]`}>
                   {(nationalMedianHomeValue).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}
                 </p>
               </div>
@@ -162,15 +184,15 @@ const MedianHomeValuePanel = ({nationalMedianHomeValue, selectedRegionsData}) =>
           {selectedRegionsData ? selectedRegionsData.map((region, idx) => {
             return (
               <div key={idx} className="w-full flex justify-between">
-                <p className="text-[1.2vw] font-semibold">{(region.name).split(",")[0]}</p>
-                <p className="text-[1.2vw]">
+                <p className={`text-[${fontSize}]`}>{(region.name).split(",")[0]}</p>
+                <p className={`text-[${fontSize}]`}>
                   {(region.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}
                 </p>
               </div>
             )
           }) : <Loader loadiingText={"Getting regional home value..."}/> }
         </div>
-        <div className="flex justify-center w-1/2">
+        <div className="flex justify-center w-1/2 p-4 shadow-lg bg-gray-50">
           <Bar data={chartData} options={chartOptions} />
         </div>
       </div>

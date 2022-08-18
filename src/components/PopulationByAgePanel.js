@@ -19,7 +19,7 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
     }
   }
 
-  const structuredData = populationByAgeData.map((region, idx) => {
+  const structuredData = populationByAgeData.map((region) => {
     const labels = []
     const data = []
     const bgColors = []
@@ -48,7 +48,10 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
           backgroundColor: bgColors,
           borderColor: bdColors,
           hoverBackgroundColor: hbgColors,
-          borderWidth: 2
+          borderWidth: 3,
+          borderJoinStyle: 'bevel',
+          cutout: '0%',
+          hoverOffset: 20
         }
       ]
     }
@@ -58,11 +61,14 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
     responsive: true,
     aspectRatio: 1,
     maintainAspectRation: true,
+    layout: {
+      padding: 10
+    },
     plugins: {
       datalabels: {
         display: true,
         color: '#000',
-        align: 'center',
+        align: 'end',
         formatter: function(value, context){
           return [
             context.chart.data.labels[context.dataIndex],
@@ -71,9 +77,13 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
         },
         labels: {
           title: {
-            font: {
-              weight: 'bold',
-              size: 12,
+            font: function(context) {
+              const width = context.chart.width
+              const size = structuredData.length < 3 ? Math.round(width / 30) : Math.round(width / 24)
+              return {
+                size: size,
+                weight: 'bold'
+              }
             }
           }
         }
@@ -85,7 +95,11 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
           ]
         },
         position: 'bottom',
-        display: true
+        display: true,
+        font: {
+          size: 16,
+          weight: 'normal'
+        }
       },
       label: {
         display: true
@@ -117,19 +131,19 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
     <div className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
       <div className="flex items-center space-x-4">
         <img className="h-12" src="/population.svg" alt="" />
-        <h1 className="text-[1.4vw] font-bold py-4">
-          Population By Age
+        <h1 className="text-[1.6vw] font-bold py-4">
+          Population % By Age
         </h1>
       </div>
       <div>
       </div>
-      <div className="flex" >
+      <div className="flex py-4" >
         {structuredData
           ?
             <div className="flex w-full flex-wrap justify-evenly items-center">
               {structuredData.map((chart, i) => {
                 return (
-                  <div key={i} className={`${structuredData.length < 3 ? 'w-2/5' : 'w-1/5'}`}>
+                  <div key={i} className={`${structuredData.length < 3 ? 'w-2/5' : 'w-1/4'}`}>
                     <Doughnut data={chart} options={chartOptions}/>
                   </div>
                 )
