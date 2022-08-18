@@ -1,8 +1,10 @@
 import { Bar, Pie } from "react-chartjs-2"
 import { memo } from "react"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
+import { split } from "../../public/utils"
 
 const DelinquencyByNumberOfBorrowers = ({data}) => {
+console.log('num borrowers data', data)
   const barLabels = []
   const barDataOneBorrower = []
   const barDataMultiBorrower = []
@@ -115,8 +117,11 @@ const DelinquencyByNumberOfBorrowers = ({data}) => {
           }
         },
         ticks: {
-          callback: function(value, index, ticks){
-            return this.getLabelForValue(value)
+          callback: function(value){
+            const labelArray = this.getLabelForValue(value).split(", ")
+            let label = labelArray[0].includes("--") ? labelArray[0].split("--") : labelArray[0].split("-")
+            label.push(labelArray[1])
+            return label
           },
           font: {
             weight: 'bold'
@@ -188,7 +193,10 @@ const DelinquencyByNumberOfBorrowers = ({data}) => {
     plugins: {
       title: {
         text: function(chart){
-          return chart.chart.getDatasetMeta(0).label
+          const labelArray = chart.chart.getDatasetMeta(0).label.split(", ")
+          let label = labelArray[0].includes("--") ? labelArray[0].split("--") : labelArray[0].split("-")
+          label.push(labelArray[1])
+          return label
         },
         position: 'bottom',
         display: true
@@ -202,7 +210,8 @@ const DelinquencyByNumberOfBorrowers = ({data}) => {
       tooltip: {
         callbacks: {
           beforeTitle: function(context){
-            return `${context[0].dataset.label}`
+            const [first, second] = split(context[0].dataset.label, (context[0].dataset.label).indexOf('-', 15))
+            return (context[0].dataset.label).length > 30 ? [first, second] : `${context[0].dataset.label}`
           },
           title: function(context){
             return `${context[0].label}`
@@ -234,7 +243,7 @@ const DelinquencyByNumberOfBorrowers = ({data}) => {
           {barChartData && barChartData.labels.map((label, i) => {
             return (
               <div className="flex flex-col">
-                <p key={i} className="pl-3 py-2 text-xl">{label} Region</p>
+                <p key={i} className="pl-3 py-2 text-xl font-medium">{label}</p>
                 <ul className="pl-5 text-sm">
                   <li>Regional Delinquency Rate: {barChartData.datasets[0].tooltip[i].region_delinquency_rate}%</li>
                   <li>Delinquency Rate for loans with 1 borrower: {barChartData.datasets[0].tooltip[i].borrower_delinquency_rate}%</li>
@@ -253,11 +262,11 @@ const DelinquencyByNumberOfBorrowers = ({data}) => {
             </div>
           }
           {pieChartData &&
-            <div className="flex">
+            <div className="w-full flex justify-evenly pl-12">
               {pieChartData.map((chart, i) => {
                 return (
                   <div key={i} className="flex">
-                    <Pie data={chart} options={pieChartOptions} width={200} />
+                    <Pie data={chart} options={pieChartOptions} width={230} />
                   </div>
                 )
               })}

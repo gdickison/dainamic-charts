@@ -41,6 +41,12 @@ function getLinearRegression(y,x){
   return lr;
 }
 
+function split(str, index) {
+  const result = [str.slice(0, index), str.slice(index)];
+
+  return result;
+}
+
 const chartFadedColors = [
   "rgba(255, 0, 0, 0.3)",
   "rgba(0, 83, 255, 0.3)",
@@ -67,6 +73,7 @@ export {
   getDateLabelsForChart,
   groupDataByMsa,
   getLinearRegression,
+  split,
   chartFadedColors,
   chartSolidColors
 }
