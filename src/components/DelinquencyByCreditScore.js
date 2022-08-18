@@ -1,6 +1,6 @@
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Bar, Doughnut } from "react-chartjs-2"
-import { chartSolidColors, chartFadedColors } from "../../public/utils"
+import { chartSolidColors, chartFadedColors, split } from "../../public/utils"
 import { memo } from "react"
 
 const DelinquencyByCreditScore = ({data}) => {
@@ -262,7 +262,8 @@ const DelinquencyByCreditScore = ({data}) => {
         position: "nearest",
         callbacks: {
           beforeTitle: function(context){
-            return `${context[0].dataset.label}`
+            const [first, second] = split(context[0].dataset.label, (context[0].dataset.label).indexOf('-', 15))
+            return (context[0].dataset.label).length > 30 ? [first, second] : `${context[0].dataset.label}`
           },
           title: function(context){
             return `${context[0].label}`
@@ -306,7 +307,7 @@ const DelinquencyByCreditScore = ({data}) => {
               {barChartStructuredData && barChartStructuredData.labels.map((label, i) => {
                 return (
                   <div className="flex flex-col">
-                    <p key={i} className="pl-3 py-2 text-xl">{label.split(',')[0]} Region</p>
+                    <p key={i} className="pl-3 py-2 text-xl font-medium">{label.split(',')[0]}</p>
                     <ul className="pl-5 text-base space-y-2">
                       <li>In the {label} Region <span className="font-semibold">{Number(barChartStructuredData.datasets[0].tooltip[i].regionalTotal).toLocaleString()}</span> loans were originated from {startDate} through {endDate}</li>
                       <li>Of those loans <span className="font-semibold">{Number(barChartStructuredData.datasets[0].tooltip[i].regionalDelinquent).toLocaleString()}</span> are delinquent, resulting in a Regional Delinquency Rate of <span className="font-semibold">{barChartStructuredData.datasets[0].tooltip[i].regionalDelinquencyRate}%</span></li>
