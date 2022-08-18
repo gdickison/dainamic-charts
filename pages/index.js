@@ -84,6 +84,8 @@ const Home = () => {
   const [showAlert, setShowAlert] = useState(false)
   const [alertMessage, setAlertMessage] = useState("")
   // STATE FOR CHARTS
+  const [inputDisplay, setInputDisplay] = useState("inline")
+  const [showInputButton, setShowInputButton] = useState("hidden")
   const [featuredCharts, setFeaturedCharts] = useState()
   const [delinquencyByCreditScoreByPeriod, setDelinquencyByCreditScoreByPeriod] = useState()
   const [delinquencyByCreditScore, setDelinquencyByCreditScore] = useState()
@@ -170,7 +172,7 @@ const Home = () => {
 
   const handleSelectedRegionsChange = e => {
     e.preventDefault()
-
+    setInputDisplay(false)
     if(selectedRegions.length < 3){
       const updatedRegions = ([...selectedRegions, {msaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
       updatedRegions.sort((a, b) => a.msaCode - b.msaCode)
@@ -952,6 +954,8 @@ const Home = () => {
 }
 
   const getData = () => {
+    setInputDisplay("hidden")
+    setShowInputButton("flex")
     getMsaSummaryData()
     getPopulationByAgeData()
     getPopulationByIncome()
@@ -980,6 +984,11 @@ const Home = () => {
     getUnemploymentRateData()
   }
 
+  const showInputForm = () => {
+    setInputDisplay("inline")
+    setShowInputButton("hidden")
+  }
+
   if(isLoading) {
     return <Loader/>
   }
@@ -1005,23 +1014,34 @@ const Home = () => {
               removeRegion={removeRegion}
               dateRange={dateRange}
               getData={getData}
+              inputDisplay={inputDisplay}
+              showInputButton={showInputButton}
+              showInputForm={showInputForm}
             />
           : <Loader loadiingText="Building the inputs..." />
         }
         {selectedRegionsData &&
           <section className="mb-10 space-y-4">
             <section className="flex flex-col px-0">
-              <header>
-                <p className="px-10 text-[1.6vw] italic">{`Selected ${selectedRegionsData.length === 1 ? 'Region' : 'Regions'}:`}</p>
-                <div className="mb-6 px-14 text-[1.2vw] italic">
-                  {selectedRegionsData.map((region, idx) => {
-                    return (
-                      <p key={idx}>{region.name}</p>
-                    )
-                  })}
+              <header className={`${showInputButton}`}>
+                <div>
+                  <p className="px-10 text-[1.6vw] italic">{`Selected ${selectedRegionsData.length === 1 ? 'Region' : 'Regions'}:`}</p>
+                  <div className="mb-6 px-14 text-[1.2vw] italic">
+                    {selectedRegionsData.map((region, idx) => {
+                      return (
+                        <p key={idx}>{region.name}</p>
+                      )
+                    })}
+                  </div>
                 </div>
-                <h1 className="mb-6 px-10 text-[1.8vw]">{`Regional ${selectedRegionsData.length === 1 ? 'Summary' : 'Summaries'}`}</h1>
+                <div>
+                  <p className="px-10 text-[1.6vw] italic">Selected Dates</p>
+                  <div className="mb-6 px-14 text-[1.2vw] italic">
+                    <p><span>{dateRange.startDate}</span> - <span>{dateRange.endDate}</span></p>
+                  </div>
+                </div>
               </header>
+                <h1 className="mb-6 px-10 text-[1.8vw]">{`Regional ${selectedRegionsData.length === 1 ? 'Summary' : 'Summaries'}`}</h1>
               <div>
                 {regionalDelinquencyRates
                   ? <RegionalDelinquencyRatePanel

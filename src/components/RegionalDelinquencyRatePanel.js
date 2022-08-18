@@ -167,7 +167,7 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
     }
   }
 
-  const fontSize = selectedRegionsData.length === 1 ? '1.35vw' : '1.2vw'
+  const fontSize = selectedRegionsData.length === 1 ? '1.5vw' : '1.2vw'
 
   return (
     <div className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
