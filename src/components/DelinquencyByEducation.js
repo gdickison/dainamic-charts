@@ -1,124 +1,167 @@
+import { Bar, Pie } from "react-chartjs-2"
+import { memo } from "react"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
-import { Bar } from "react-chartjs-2"
-import { chartFadedColors, chartSolidColors } from "../../public/utils"
-import { Fragment, memo } from "react"
+import { chartFadedColors, chartSolidColors, split } from "./../../public/utils"
 
 const DelinquencyByEducation = ({data}) => {
-  const labels = [
-    "< High School Diploma",
-    "Some College",
-    "College Degree",
-    "College Post Grad"
-]
-  const delinquencyByEdLevel = []
+  const barLabels = []
+  const barDataLessThanHS = []
+  const barDataSomeCollege = []
+  const barDataCollegeDegree = []
+  const barDataPostGrad = []
+  const bartooltipLessThanHS = []
+  const bartooltipSomeCollege = []
+  const bartooltipCollegeDegree = []
+  const bartooltipPostGrad = []
 
-  const barChartStructuredData = data.map((region, i) => {
-
-    const dataset = []
-    Object.entries(region).map(row => {
-      if(labels.includes(row[0])){
-        dataset.push(parseFloat(row[1]).toFixed(2))
-      }
+  data.map(row => {
+    barLabels.push(row.name)
+    barDataLessThanHS.push(row.less_than_hs)
+    barDataSomeCollege.push(row.some_college)
+    barDataCollegeDegree.push(row.college_degree)
+    barDataPostGrad.push(row.college_post_grad)
+    bartooltipLessThanHS.push({
+      name: row.name,
+      region_delinquency_rate: row.delinquency_rate,
+      borrower_delinquency_rate: row.less_than_hs
     })
-    delinquencyByEdLevel.push(dataset)
-
-    const tooltipData = {
-      regionDelinquencyRate: parseFloat(region.delinquency_rate).toFixed(2),
-      regionDelinquent: region.delinquent_msa,
-      regionTotal: region.total_msa,
-      minDate: region.min,
-      maxDate: region.max
-    }
-
-    return {
-      label: region.name,
-      data: delinquencyByEdLevel[i],
-      backgroundColor: chartFadedColors[i],
-      borderColor: chartSolidColors[i],
-      hoverBackgroundColor: chartSolidColors[i],
-      borderWidth: 3,
-      tooltip: tooltipData
-    }
+    bartooltipSomeCollege.push({
+      name: row.name,
+      region_delinquency_rate: row.delinquency_rate,
+      borrower_delinquency_rate: row.some_college
+    })
+    bartooltipCollegeDegree.push({
+      name: row.name,
+      region_delinquency_rate: row.delinquency_rate,
+      borrower_delinquency_rate: row.college_degree
+    })
+    bartooltipPostGrad.push({
+      name: row.name,
+      region_delinquency_rate: row.delinquency_rate,
+      borrower_delinquency_rate: row.college_post_grad
+    })
   })
 
-  const chartData = {
-    labels: labels,
-    datasets: barChartStructuredData
+  const barChartData = {
+    labels: barLabels,
+    datasets: [
+      {
+        type: "bar",
+        label: "< High School Diploma",
+        backgroundColor: chartFadedColors[0],
+        borderColor: chartSolidColors[0],
+        hoverBackgroundColor: chartSolidColors[0],
+        borderWidth: 3,
+        data: barDataLessThanHS,
+        tooltip: bartooltipLessThanHS,
+        order: 1
+      },
+      {
+        type: "bar",
+        label: "Some College",
+        backgroundColor: chartFadedColors[1],
+        borderColor: chartSolidColors[1],
+        hoverBackgroundColor: chartSolidColors[1],
+        borderWidth: 3,
+        data: barDataSomeCollege,
+        tooltip: bartooltipSomeCollege,
+        order: 2
+      },
+      {
+        type: "bar",
+        label: "College Degree",
+        backgroundColor: chartFadedColors[2],
+        borderColor: chartSolidColors[2],
+        hoverBackgroundColor: chartSolidColors[2],
+        borderWidth: 3,
+        data: barDataCollegeDegree,
+        tooltip: bartooltipCollegeDegree,
+        order: 3
+      },
+      {
+        type: "bar",
+        label: "Post Grad",
+        backgroundColor: chartFadedColors[3],
+        borderColor: chartSolidColors[3],
+        hoverBackgroundColor: chartSolidColors[3],
+        borderWidth: 3,
+        data: barDataPostGrad,
+        tooltip: bartooltipPostGrad,
+        order: 4
+      }
+    ]
   }
 
-  const chartOptions = {
+  const barChartOptions = {
+    showLabel: false,
     responsive: true,
-    aspectRatio: 2.5,
+    aspectRatio: 1.75,
+    maxBarThickness: 125,
     plugins: {
+      title: {
+        text: "Delinquency Rate per Category",
+        display: false
+      },
       legend: {
-        display: true,
-        onHover: function(event, legendItem, legend){
-          const thisChart = legend.chart
-          const indices = []
-          for(let i = 0; i < thisChart.getDatasetMeta(0).data.length; i++){
-            indices.push(
-              {
-                datasetIndex: legendItem.datasetIndex,
-                index: i
-              }
-            )
-          }
-          thisChart.setActiveElements(indices)
-          thisChart.update()
-        },
-        onLeave: function(event, legendItem, legend){
-          const thisChart = legend.chart
-          thisChart.update()
-        },
-        labels: {
-          fontSize: 16
-        }
+        display: true
       },
       tooltip: {
         callbacks: {
-          title: function(context){
-            return `${context[0].dataset.label}`
+          beforeTitle: function(context){
+            const region = context[0].label.split("-")[0]
+            const state = context[0].label.split(", ")[1]
+            return `${region}, ${state}`
+          },
+          title: function(){
+            return ''
           },
           beforeLabel: function(context){
-            return `Delinquency Rate for region: ${context.dataset.tooltip.regionDelinquencyRate}%`
+            return `Regional Delinquency Rate: ${Number(context.dataset.tooltip[context.dataIndex].region_delinquency_rate).toFixed(2)}%`
           },
           label: function(context){
-            return `Delinquency Rate for ${context.label}: ${context.raw}%`
+            return `${context.dataset.label} delinquency rate: ${Number(context.raw).toFixed(2)}%`
           }
-        }
+        },
+        boxPadding: 6,
+        caretPadding: 10
       }
     },
     scales: {
-      y: {
+      x: {
         title: {
-          display: true,
-          text: "Delinquency Rate",
+          display: false,
+          text: "Region",
           padding: 20,
           font: {
-            size: 20
+            size: 16
           }
         },
         ticks: {
-          callback: function(value, index, title){
-            return `${value}%`
+          callback: function(value){
+            const region = this.getLabelForValue(value).split("-")[0]
+            const state = this.getLabelForValue(value).split(", ")[1]
+            return `${region}, ${state}`
           },
           font: {
-            size: 20
+            weight: 'bold'
           }
         }
       },
-      x: {
+      y: {
         title: {
-          display: true,
-          text: "Education Level",
+          display: false,
+          text: "Delinquency Rate",
           padding: 20,
           font: {
-            size: 20
+            size: 16
           }
         },
         ticks: {
+          callback: function(value, index, ticks){
+            return value + "%"
+          },
           font: {
-            size: 20
+            size: 16
           }
         },
         grid: {
@@ -128,19 +171,145 @@ const DelinquencyByEducation = ({data}) => {
     }
   }
 
-  return (
-    <Fragment>
-      {chartData &&
-        <>
-          <ChartHeaderWithTooltip
-            chartName={"Delinquency Rate by Education Level"}
-            msa={data.length === 1 ? data[0].name : "selected regions"}
-            tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to education level segments. Delinquency is aggragated for all available dates rather than selected start and end dates."}
-          />
-          <Bar data={chartData} options={chartOptions} />
-        </>
+  const pieChartData = data.map((region, i) => {
+    return {
+      labels: [
+        "< High School Diploma",
+        "Some College",
+        "College Degree",
+        "Post Grad"
+      ],
+      datasets: [
+        {
+          label: `${region.name}`,
+          data: [
+            (Number(region.less_than_hs) / Number(region.delinquency_rate)) * 100,
+            (Number(region.some_college) / Number(region.delinquency_rate)) * 100,
+            (Number(region.college_degree) / Number(region.delinquency_rate)) * 100,
+            (Number(region.college_post_grad) / Number(region.delinquency_rate)) * 100
+          ],
+          tooltip: {
+            totalDelinquent: region.delinquency_rate,
+            hsDelinquent: region.less_than_hs,
+            someCollegeDelinquent: region.some_college,
+            collegeDegreeDelinquent: region.college_degree,
+            postGradDelinquent: region.college_post_grad
+          },
+          backgroundColor: chartFadedColors.slice(0, 4),
+          borderColor: chartSolidColors.slice(0, 4),
+          hoverBackgroundColor: chartSolidColors.slice(0, 4)
+        }
+      ]
+    }
+  })
+
+  const pieChartOptions = {
+    responsive: true,
+    aspectRatio: 1,
+    plugins: {
+      title: {
+        text: function(chart){
+          const region = chart.chart.getDatasetMeta(0).label.split("-")[0]
+          const state = chart.chart.getDatasetMeta(0).label.split(", ")[1]
+          return `${region}, ${state}`
+        },
+        position: 'bottom',
+        display: true
+      },
+      label: {
+        display: true
+      },
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          beforeTitle: function(context){
+            const region = context[0].dataset.label.split("-")[0]
+            const state = context[0].dataset.label.split(", ")[1]
+            return `${region}, ${state}`
+          },
+          title: function(){
+            return ''
+          },
+          beforeLabel: function(context){
+            return [
+              `Regional Delinquency Rate: ${Number(context.dataset.tooltip.totalDelinquent).toFixed(2)}%`,
+              '',
+              `${context.label}`
+            ]
+          },
+          label: function(context){
+            return [`Share of Regional`, `Delinquency Rate: ${Number(context.raw).toFixed(2)}%`]
+          }
+        },
+        boxPadding: 6
       }
-    </Fragment>
+    },
+    radius: '95%',
+    hoverOffset: 10
+  }
+
+  return (
+    <div className="h-max">
+      <ChartHeaderWithTooltip
+        chartName={"Delinquency By Education"}
+        msa={data.length === 1 ? data[0].name : "Selected Regions"}
+        tooltip={"Dainamic's model determines what portion of a region's overall delinquency rate is attributable to education level. Delinquency is aggragated for all available dates rather than selected start and end dates."}
+      />
+      <div>
+        <p className="italic text-sm text-gray-500">The Delinquency by Education Chart shows what part of a region's overall delinquency rate is attributable to each available level of education. For each region, the overall regional delinquecy rate is shown, the delinquency rate for each educational level, and the education level's proportional share of the overall regional delinquency rate. Education data is not broken down by month, so delinquency is aggragated for all available dates rather than selected start and end dates.</p>
+      </div>
+      <div className="flex justify-around w-full">
+        <div className="w-[36%] justify-evenly flex flex-col space-y-2">
+          {barChartData && barChartData.labels.map((label, i) => {
+            return (
+              <div className="flex flex-col text-sm space-y-1 p-4 shadow-lg bg-gray-50">
+                <p key={i} className="text-lg font-medium">{label}</p>
+                <div className="w-full flex justify-between py-2">
+                  <p>Regional Delinquency Rate:</p>
+                  <p>{Number(barChartData.datasets[0].tooltip[i].region_delinquency_rate).toFixed(2)}%</p>
+                </div>
+                <div className="w-full flex justify-between">
+                  <p>&lt; High School Diploma Delinquency - Rate / Share:</p>
+                  <p>{Number(barChartData.datasets[0].tooltip[i].borrower_delinquency_rate).toFixed(2)}% / {(Number(pieChartData[i].datasets[0].tooltip.hsDelinquent) / Number(pieChartData[i].datasets[0].tooltip.totalDelinquent) * 100).toFixed(2)}%</p>
+                </div>
+                <div className="w-full flex justify-between">
+                  <p>Some College Delinquency - Rate / Share:</p>
+                  <p>{Number(barChartData.datasets[1].tooltip[i].borrower_delinquency_rate).toFixed(2)}% / {(Number(pieChartData[i].datasets[0].tooltip.someCollegeDelinquent) / Number(pieChartData[i].datasets[0].tooltip.totalDelinquent) * 100).toFixed(2)}%</p>
+                </div>
+                <div className="w-full flex justify-between">
+                  <p>College Degree Delinquency - Rate / Share:</p>
+                  <p>{Number(barChartData.datasets[2].tooltip[i].borrower_delinquency_rate).toFixed(2)}% / {(Number(pieChartData[i].datasets[0].tooltip.collegeDegreeDelinquent) / Number(pieChartData[i].datasets[0].tooltip.totalDelinquent) * 100).toFixed(2)}%</p>
+                </div>
+                <div className="w-full flex justify-between">
+                  <p>Post Grad Delinquency - Rate / Share:</p>
+                  <p>{Number(barChartData.datasets[3].tooltip[i].borrower_delinquency_rate).toFixed(2)}% / {(Number(pieChartData[i].datasets[0].tooltip.postGradDelinquent) / Number(pieChartData[i].datasets[0].tooltip.totalDelinquent) * 100).toFixed(2)}%</p>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+        <div className="flex flex-col justify-center items-center space-y-8 px-12 py-4 w-7/12">
+          {barChartData &&
+            <div className="flex w-11/12">
+              <Bar data={barChartData} options={barChartOptions} />
+            </div>
+          }
+          {pieChartData &&
+            <div className="w-full flex justify-evenly pl-12">
+              {pieChartData.map((chart, i) => {
+                return (
+                  <div key={i} className="flex">
+                    <Pie data={chart} options={pieChartOptions} width={230} />
+                  </div>
+                )
+              })}
+            </div>
+          }
+        </div>
+      </div>
+    </div>
   )
 }
 

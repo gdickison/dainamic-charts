@@ -11,10 +11,10 @@ export default async function queryPopulationByEducation(req, res) {
       COUNT(loan.loanid) FILTER(WHERE delinquency_status::INT != 00) AS "delinquent",
       COUNT(loan.loanid) AS "total",
       ROUND(CAST(COUNT(loan.loanid) FILTER (WHERE delinquency_status !='00') AS NUMERIC)/COUNT(loan.loanid), 4) * 100 AS "delinquency_rate",
-      CAST(ed.educ_lesshs AS NUMERIC) * (ROUND(CAST(COUNT(loan.loanid) FILTER (WHERE delinquency_status !='00') AS NUMERIC)/COUNT(loan.loanid), 4) * 100) AS "< High School Diploma",
-      CAST(ed.educ_somecoll AS NUMERIC) * (ROUND(CAST(COUNT(loan.loanid) FILTER (WHERE delinquency_status !='00') AS NUMERIC)/COUNT(loan.loanid), 4) * 100) AS "Some College",
-      CAST(ed.educ_college AS NUMERIC) * (ROUND(CAST(COUNT(loan.loanid) FILTER (WHERE delinquency_status !='00') AS NUMERIC)/COUNT(loan.loanid), 4) * 100) AS "College Degree",
-      CAST(ed.educ_collpl AS NUMERIC) * (ROUND(CAST(COUNT(loan.loanid) FILTER (WHERE delinquency_status !='00') AS NUMERIC)/COUNT(loan.loanid), 4) * 100) AS "College Post Grad"
+      CAST(ed.educ_lesshs AS NUMERIC) * (ROUND(CAST(COUNT(loan.loanid) FILTER (WHERE delinquency_status !='00') AS NUMERIC)/COUNT(loan.loanid), 4) * 100) AS "less_than_hs",
+      CAST(ed.educ_somecoll AS NUMERIC) * (ROUND(CAST(COUNT(loan.loanid) FILTER (WHERE delinquency_status !='00') AS NUMERIC)/COUNT(loan.loanid), 4) * 100) AS "some_college",
+      CAST(ed.educ_college AS NUMERIC) * (ROUND(CAST(COUNT(loan.loanid) FILTER (WHERE delinquency_status !='00') AS NUMERIC)/COUNT(loan.loanid), 4) * 100) AS "college_degree",
+      CAST(ed.educ_collpl AS NUMERIC) * (ROUND(CAST(COUNT(loan.loanid) FILTER (WHERE delinquency_status !='00') AS NUMERIC)/COUNT(loan.loanid), 4) * 100) AS "college_post_grad"
     FROM banking_app.loan_basic AS "loan"
       JOIN banking_app.msa_names AS "region"
         ON loan.msa = region.msa_code

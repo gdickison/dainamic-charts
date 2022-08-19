@@ -3,7 +3,7 @@ import { memo } from "react"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { split } from "./../../public/utils"
 
-const DelinquencyByMaritalStatusRevised = ({data}) => {
+const DelinquencyByMaritalStatus = ({data}) => {
   const barLabels = []
   const barDataMarried = []
   const barDataUnmarried = []
@@ -208,22 +208,24 @@ const DelinquencyByMaritalStatusRevised = ({data}) => {
         boxPadding: 6
       }
     },
-    rotation: 180
+    rotation: 180,
+    radius: '92%',
+    hoverOffset: 10
   }
 
   return (
     <div className="h-max">
       <ChartHeaderWithTooltip
         chartName={"Delinquency By Marital Status"}
-        msa={data.length === 1 ? data[0].region_name : "selected regions"}
-        tooltip={"All loans for each month are grouped by marital status. Click on the legend to show/hide datasets"}
+        msa={data.length === 1 ? data[0].name : "selected regions"}
+        tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to marital status. Delinquency is aggragated for all available dates rather than selected start and end dates."}
       />
       <div className="flex justify-around w-full">
         <div className="w-[36%] justify-evenly flex flex-col">
           {barChartData && barChartData.labels.map((label, i) => {
             return (
-              <div className="flex flex-col text-sm space-y-2">
-                <p key={i} className="text-xl font-medium">{label}</p>
+              <div className="flex flex-col text-sm space-y-2 p-4 shadow-lg bg-gray-50">
+                <p key={i} className="text-xl font-medium">{label.split(',')[0]}</p>
                 <div className="w-full flex justify-between space-y-2">
                   <p>Regional Delinquency Rate:</p>
                   <p>{Number(barChartData.datasets[0].tooltip[i].region_delinquency_rate).toFixed(2)}%</p>
@@ -252,7 +254,7 @@ const DelinquencyByMaritalStatusRevised = ({data}) => {
             )
           })}
         </div>
-        <div className="flex flex-col items-center space-y-8 px-12 py-4 w-7/12">
+        <div className="flex flex-col justify-center items-center space-y-8 px-12 py-4 w-7/12">
           {barChartData &&
             <div className="flex w-11/12">
               <Bar data={barChartData} options={barChartOptions} />
@@ -275,4 +277,4 @@ const DelinquencyByMaritalStatusRevised = ({data}) => {
   )
 }
 
-export default memo(DelinquencyByMaritalStatusRevised)
+export default memo(DelinquencyByMaritalStatus)

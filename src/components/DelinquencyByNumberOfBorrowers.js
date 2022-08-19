@@ -228,7 +228,9 @@ console.log('num borrowers data', data)
         }
       }
     },
-    rotation: 180
+    rotation: 180,
+    radius: '92%',
+    hoverOffset: 10
   }
 
   return (
@@ -239,11 +241,11 @@ console.log('num borrowers data', data)
         tooltip={"All loans for each month are grouped by number of borrowers (1 or 2+). The number of loans with 3 or more borrowers are statistically insignificant and are included in the '2+' category. Click on the legend to show/hide datasets"}
       />
       <div className="flex justify-around w-full">
-        <div className="w-1/3 justify-evenly flex flex-col">
+        <div className="w-[36%] justify-evenly flex flex-col space-y-2">
           {barChartData && barChartData.labels.map((label, i) => {
             return (
-              <div className="flex flex-col">
-                <p key={i} className="pl-3 py-2 text-xl font-medium">{label}</p>
+              <div className="flex flex-col space-y-1 p-4 shadow-lg bg-gray-50">
+                <p key={i} className="pl-3 py-2 text-lg font-medium">{label}</p>
                 <ul className="pl-5 text-sm">
                   <li>Regional Delinquency Rate: {barChartData.datasets[0].tooltip[i].region_delinquency_rate}%</li>
                   <li>Delinquency Rate for loans with 1 borrower: {barChartData.datasets[0].tooltip[i].borrower_delinquency_rate}%</li>
@@ -255,7 +257,7 @@ console.log('num borrowers data', data)
             )
           })}
         </div>
-        <div className="flex flex-col items-center space-y-8 px-12 py-4 w-7/12">
+        <div className="flex flex-col justify-center items-center space-y-8 px-12 py-4 w-7/12">
           {barChartData &&
             <div className="flex w-11/12">
               <Bar data={barChartData} options={barChartOptions} />

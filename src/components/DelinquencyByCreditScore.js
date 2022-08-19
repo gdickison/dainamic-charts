@@ -245,7 +245,7 @@ const DelinquencyByCreditScore = ({data}) => {
       title: {
         text: function(chart){
           return [
-            `${chart.chart.getDatasetMeta(0).label}`,
+            `${(chart.chart.getDatasetMeta(0).label).split('-')[0]}`,
             `${(Number(chart.chart.getDatasetMeta(0)._dataset.tooltip.total)).toLocaleString("en-us")} Total Loans`
           ]
         },
@@ -286,7 +286,9 @@ const DelinquencyByCreditScore = ({data}) => {
         }
       },
       rotation: 180
-    }
+    },
+    radius: '95%',
+    hoverOffset: 10
   }
 
   return (
@@ -306,7 +308,7 @@ const DelinquencyByCreditScore = ({data}) => {
             <div className="w-1/3 justify-evenly flex flex-col">
               {barChartStructuredData && barChartStructuredData.labels.map((label, i) => {
                 return (
-                  <div className="flex flex-col">
+                  <div className="flex flex-col space-y-1 p-4 shadow-lg bg-gray-50">
                     <p key={i} className="pl-3 py-2 text-xl font-medium">{label.split(',')[0]}</p>
                     <ul className="pl-5 text-base space-y-2">
                       <li>In the {label} Region <span className="font-semibold">{Number(barChartStructuredData.datasets[0].tooltip[i].regionalTotal).toLocaleString()}</span> loans were originated from {startDate} through {endDate}</li>
@@ -316,7 +318,7 @@ const DelinquencyByCreditScore = ({data}) => {
                 )
               })}
             </div>
-            <div className="flex flex-col items-center space-y-8 px-12 py-4 w-7/12">
+            <div className="flex flex-col justify-center items-center space-y-8 px-12 py-4 w-7/12">
               {barChartStructuredData &&
                 <>
                   <p>Delinquency Rate By Credit Score Range</p>
@@ -332,7 +334,7 @@ const DelinquencyByCreditScore = ({data}) => {
                     {pieChartStructuredData.map((chart, i) => {
                       return (
                         <div key={i} className="flex">
-                          <Doughnut data={chart} options={pieOptions} width={200} />
+                          <Doughnut data={chart} options={pieOptions} width={230} />
                         </div>
                       )
                     })}
