@@ -37,17 +37,18 @@ const DelinquencyByLTV = ({data}) => {
       label: `${region[0].name}`,
       data: dataArray,
       borderColor: 'transparent',
-      borderWidth: 3,
+      borderWidth: 0,
       hoverBorderWidth: 3,
       hoverBorderColor: chartSolidColors[idx],
       backgroundColor: chartSolidColors[idx],
       hoverBackgroundColor: chartSolidColors[idx],
-      pointRadius: 8,
+      pointRadius: 5,
       pointHoverBorderWidth: 3,
       pointHitRadius: 5,
       pointHoverRadius: 8,
       msa: region[0].msa,
-      pointStyle: pointStyles[idx]
+      pointStyle: pointStyles[idx],
+      showLine: true
     }
   })
 
