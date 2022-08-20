@@ -125,7 +125,6 @@ const DelinquencyByLTV = ({data}) => {
 // console.log('item', legendItem.datasetIndex)
 // console.log('length', lineData.length)
           const ltvChart = legend.chart
-          ltvChart.hide(legendItem.datasetIndex)
           ltvChart.hide(legendItem.datasetIndex + lineData.length)
           ltvChart.update()
         }
