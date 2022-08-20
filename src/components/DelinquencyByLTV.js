@@ -110,13 +110,22 @@ const DelinquencyByLTV = ({data}) => {
           usePointStyle: true
         },
         onHover: function(event, legendItem, legend){
+// console.log('legend.chart', legend.chart)
+// console.log('item', legendItem.datasetIndex)
+// console.log('item', legendItem.datasetIndex + lineData.length)
+// console.log('length', lineData.length)
           const ltvChart = legend.chart
+          ltvChart.show(legendItem.datasetIndex)
           ltvChart.show(legendItem.datasetIndex + lineData.length)
           ltvChart.update()
           ltvChart.setActiveElements([{datasetIndex: legendItem.datasetIndex, index: 0}])
         },
         onLeave: function(event, legendItem, legend){
+// console.log('legend.chart', legend.chart)
+// console.log('item', legendItem.datasetIndex)
+// console.log('length', lineData.length)
           const ltvChart = legend.chart
+          ltvChart.hide(legendItem.datasetIndex)
           ltvChart.hide(legendItem.datasetIndex + lineData.length)
           ltvChart.update()
         }
