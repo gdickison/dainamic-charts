@@ -1,5 +1,5 @@
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
-import { Bar } from "react-chartjs-2"
+import { Line } from "react-chartjs-2"
 import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
 import { memo } from "react"
 
@@ -10,6 +10,12 @@ const DelinquencyByHighBalance = ({data}) => {
     labels: [],
     datasets: []
   }
+
+  const pointStyles = [
+    'circle',
+    'rect',
+    'triangle'
+  ]
 
   groupedData.forEach((region, regionIdx) => {
     const highBalanceData = []
@@ -43,7 +49,12 @@ const DelinquencyByHighBalance = ({data}) => {
         label: `High Balance Buyer - ${region[0].name.split(',')[0]}`,
         backgroundColor: chartFadedColors[regionIdx],
         borderColor: chartFadedColors[regionIdx],
-        borderWidth: 1,
+        borderWidth: 3,
+        hoverBorderWidth: 5,
+        pointRadius: 8,
+        pointHitRadius: 5,
+        pointHoverRadius: 12,
+        pointStyle: pointStyles[regionIdx],
         data: highBalanceData,
         tooltip: highBalanceTooltip
       },
@@ -51,7 +62,12 @@ const DelinquencyByHighBalance = ({data}) => {
         label: `Non-High Balance Buyer - ${region[0].name.split(',')[0]}`,
         backgroundColor: chartSolidColors[regionIdx],
         borderColor: chartSolidColors[regionIdx],
-        borderWidth: 1,
+        borderWidth: 3,
+        hoverBorderWidth: 5,
+        pointRadius: 8,
+        pointHitRadius: 5,
+        pointHoverRadius: 12,
+        pointStyle: pointStyles[regionIdx],
         data: lowBalanceBuyerData,
         tooltip: lowBalanceBuyerTooltip
       }
@@ -66,11 +82,16 @@ const DelinquencyByHighBalance = ({data}) => {
   const chartOptions = {
     responsive: true,
     aspectRatio: 2.5,
+    hover: {
+      mode: 'dataset',
+      intersect: true
+    },
     plugins: {
       legend: {
         display: true
       },
       tooltip: {
+        usePointStyle: true,
         callbacks: {
           beforeTitle: function(context){
             return `${context[0].dataset.label}`
@@ -84,7 +105,9 @@ const DelinquencyByHighBalance = ({data}) => {
           label: function(context){
             return `Delinquency rate: ${context.raw}%`
           }
-        }
+        },
+        boxPadding: 6,
+        caretPadding: 20
       }
     },
     scales: {
@@ -104,8 +127,7 @@ const DelinquencyByHighBalance = ({data}) => {
           font: {
             size: 16
           }
-        },
-        grace: 5
+        }
       },
       x: {
         title: {
@@ -139,7 +161,7 @@ const DelinquencyByHighBalance = ({data}) => {
         msa={groupedData.length === 1 ? groupedData[0][0].name : "selected regions"}
       />
       {chartData &&
-        <Bar data={chartData} options={chartOptions} />
+        <Line data={chartData} options={chartOptions} />
       }
     </div>
   )
