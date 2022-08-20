@@ -90,8 +90,8 @@ const DelinquencyByInterestRate = ({data}) => {
     datasets.push({
       label: `${row.dataset[0].name}`,
       data: lineData,
-      borderColor: chartSolidColors[i],
-      borderWidth: 0,
+      borderColor: 'transparent',
+      borderWidth: 3,
       hoverBorderWidth: 3,
       hoverBorderColor: chartSolidColors[i],
       backgroundColor: chartSolidColors[i],

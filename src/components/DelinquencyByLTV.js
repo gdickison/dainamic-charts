@@ -36,8 +36,8 @@ const DelinquencyByLTV = ({data}) => {
     return {
       label: `${region[0].name}`,
       data: dataArray,
-      borderColor: chartSolidColors[idx],
-      borderWidth: 0,
+      borderColor: 'transparent',
+      borderWidth: 3,
       hoverBorderWidth: 3,
       hoverBorderColor: chartSolidColors[idx],
       backgroundColor: chartSolidColors[idx],
