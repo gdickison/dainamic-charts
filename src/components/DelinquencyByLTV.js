@@ -1,5 +1,5 @@
 import { memo } from "react"
-import { getLinearRegression, groupDataByMsa, chartSolidColors } from "../../public/utils"
+import { getLinearRegression, groupDataByMsa, chartSolidColors, regressionLineColor } from "../../public/utils"
 import { Scatter } from "react-chartjs-2"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 
@@ -76,8 +76,8 @@ const DelinquencyByLTV = ({data}) => {
     return {
       label: `${region[0].name} Regression`,
       data: regressionData,
-      borderColor: '#94A3B8',
-      backgroundColor: '#94A3B8',
+      borderColor: regressionLineColor,
+      backgroundColor: regressionLineColor,
       borderWidth: 3,
       pointRadius: 0,
       pointHitRadius: 0,
@@ -97,6 +97,11 @@ const DelinquencyByLTV = ({data}) => {
       mode: 'dataset',
       intersect: true,
     },
+    elements: {
+      line: {
+        borderJoinStyle: 'round'
+      }
+    },
     plugins: {
       legend: {
         display: true,
@@ -110,10 +115,6 @@ const DelinquencyByLTV = ({data}) => {
           usePointStyle: true
         },
         onHover: function(event, legendItem, legend){
-// console.log('legend.chart', legend.chart)
-// console.log('item', legendItem.datasetIndex)
-// console.log('item', legendItem.datasetIndex + lineData.length)
-// console.log('length', lineData.length)
           const ltvChart = legend.chart
           ltvChart.show(legendItem.datasetIndex)
           ltvChart.show(legendItem.datasetIndex + lineData.length)
@@ -121,12 +122,12 @@ const DelinquencyByLTV = ({data}) => {
           ltvChart.setActiveElements([{datasetIndex: legendItem.datasetIndex, index: 0}])
         },
         onLeave: function(event, legendItem, legend){
-// console.log('legend.chart', legend.chart)
-// console.log('item', legendItem.datasetIndex)
-// console.log('length', lineData.length)
           const ltvChart = legend.chart
           ltvChart.hide(legendItem.datasetIndex + lineData.length)
           ltvChart.update()
+        },
+        onClick: function(){
+          return null
         }
       },
       tooltip: {

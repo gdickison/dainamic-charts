@@ -1,5 +1,5 @@
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
-import { getLinearRegression, groupDataByMsa, chartSolidColors } from "../../public/utils"
+import { getLinearRegression, groupDataByMsa, chartSolidColors, regressionLineColor } from "../../public/utils"
 import { memo } from "react"
 import { Scatter } from "react-chartjs-2"
 
@@ -75,8 +75,8 @@ const DelinquencyByLoanTerm = ({data}) => {
     return {
       label: `${region[0].name} Regression`,
       data: regressionData,
-      borderColor: '#94A3B8',
-      backgroundColor: '#94A3B8',
+      borderColor: regressionLineColor,
+      backgroundColor: regressionLineColor,
       borderWidth: 3,
       pointRadius: 0,
       pointHitRadius: 0,

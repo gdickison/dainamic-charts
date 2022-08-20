@@ -1,7 +1,7 @@
 import outliers from "outliers"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import ChartDescription from "./ChartDescription"
-import { getLinearRegression, groupDataByMsa, chartSolidColors } from "../../public/utils"
+import { getLinearRegression, groupDataByMsa, chartSolidColors, regressionLineColor } from "../../public/utils"
 import { Scatter } from "react-chartjs-2"
 import { memo } from "react"
 
@@ -118,8 +118,8 @@ const DelinquencyByInterestRate = ({data}) => {
     datasets.push({
       label: `${row.dataset[0].name} Regression`,
       data: regressionData,
-      borderColor: '#9CA3AF',
-      backgroundColor: '#9CA3AF',
+      borderColor: regressionLineColor,
+      backgroundColor: regressionLineColor,
       borderWidth: 3,
       pointRadius: 0,
       pointHitRadius: 0,
