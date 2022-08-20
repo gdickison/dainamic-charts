@@ -4,7 +4,6 @@ import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { split } from "../../public/utils"
 
 const DelinquencyByNumberOfBorrowers = ({data}) => {
-console.log('num borrowers data', data)
   const barLabels = []
   const barDataOneBorrower = []
   const barDataMultiBorrower = []

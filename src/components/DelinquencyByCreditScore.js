@@ -189,7 +189,8 @@ const DelinquencyByCreditScore = ({data}) => {
           label: function(context){
             return `Delinquency rate: ${context.raw}%`
           }
-        }
+        },
+        boxPadding: 6
       }
     },
     scales: {
@@ -283,7 +284,8 @@ const DelinquencyByCreditScore = ({data}) => {
           label: function(context){
             return [`Share of Regional`, `Delinquency Rate:`, `${context.raw}%`]
           }
-        }
+        },
+        boxPadding: 6
       },
       rotation: 180
     },
