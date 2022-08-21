@@ -999,7 +999,7 @@ const Home = () => {
         <title>Dainamic</title>
       </Head>
       <header className="mx-6">
-        <h1 className='p-10 text-[3.5vw] text-left'>
+        <h1 className='py-10 px-4 text-[3.5vw] 3xl:text-6xl text-left'>
           Welcome to D<span className='text-yellow-300'>AI</span>NAMIC
         </h1>
       </header>
@@ -1025,7 +1025,7 @@ const Home = () => {
             <section className="flex flex-col px-0">
               <header className={`${showInputButton}`}>
                 <div>
-                  <p className="px-10 text-[1.6vw] italic">{`Selected ${selectedRegionsData.length === 1 ? 'Region' : 'Regions'}:`}</p>
+                  <p className="px-10 text-[1.6vw] 3xl:text-4xl italic">{`Selected ${selectedRegionsData.length === 1 ? 'Region' : 'Regions'}:`}</p>
                   <div className="mb-6 px-14 text-[1.2vw] italic">
                     {selectedRegionsData.map((region, idx) => {
                       return (
@@ -1035,7 +1035,7 @@ const Home = () => {
                   </div>
                 </div>
                 <div>
-                  <p className="px-10 text-[1.6vw] italic">Selected Dates</p>
+                  <p className="px-10 text-[1.6vw] 3xl:text-4xl italic">Selected Dates</p>
                   <div className="mb-6 px-14 text-[1.2vw] italic">
                     <p><span>{dateRange.startDate}</span> - <span>{dateRange.endDate}</span></p>
                   </div>
