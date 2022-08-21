@@ -68,6 +68,8 @@ import Alert from "../src/components/Alert"
 const Home = () => {
   const [isLoading, setLoading] = useState(false)
   const [isLoggedIn, setLoggedIn] = useState(false)
+  const [showOptionsModal, setShowOptionsModal] = useState("inline")
+  const [showChangeOptionsButton, setShowChangeOptionsButton] = useState("hidden")
   const [msaOptions, setMsaOptions] = useState()
   const [monthOptions, setMonthOptions] = useState()
   const [dateRange, setDateRange] = useState({})
@@ -84,8 +86,6 @@ const Home = () => {
   const [showAlert, setShowAlert] = useState(false)
   const [alertMessage, setAlertMessage] = useState("")
   // STATE FOR CHARTS
-  const [inputDisplay, setInputDisplay] = useState("inline")
-  const [showInputButton, setShowInputButton] = useState("hidden")
   const [featuredCharts, setFeaturedCharts] = useState()
   const [delinquencyByCreditScoreByPeriod, setDelinquencyByCreditScoreByPeriod] = useState()
   const [delinquencyByCreditScore, setDelinquencyByCreditScore] = useState()
@@ -172,7 +172,6 @@ const Home = () => {
 
   const handleSelectedRegionsChange = e => {
     e.preventDefault()
-    setInputDisplay(false)
     if(selectedRegions.length < 3){
       const updatedRegions = ([...selectedRegions, {msaCode: e.target.value, displayText: e.target[e.target.selectedIndex].dataset.display}])
       updatedRegions.sort((a, b) => a.msaCode - b.msaCode)
@@ -954,8 +953,8 @@ const Home = () => {
 }
 
   const getData = () => {
-    setInputDisplay("hidden")
-    setShowInputButton("flex")
+    setShowOptionsModal("hidden")
+    setShowChangeOptionsButton("flex")
     getMsaSummaryData()
     getPopulationByAgeData()
     getPopulationByIncome()
@@ -984,9 +983,9 @@ const Home = () => {
     getUnemploymentRateData()
   }
 
-  const showInputForm = () => {
-    setInputDisplay("inline")
-    setShowInputButton("hidden")
+  const toggleShowOptionsModal = () => {
+    setShowChangeOptionsButton("hidden")
+    setShowOptionsModal("inline")
   }
 
   if(isLoading) {
@@ -1014,16 +1013,16 @@ const Home = () => {
               removeRegion={removeRegion}
               dateRange={dateRange}
               getData={getData}
-              inputDisplay={inputDisplay}
-              showInputButton={showInputButton}
-              showInputForm={showInputForm}
+              showChangeOptionsButton={showChangeOptionsButton}
+              toggleShowOptionsModal={toggleShowOptionsModal}
+              showOptionsModal={showOptionsModal}
             />
           : <Loader loadiingText="Building the inputs..." />
         }
         {selectedRegionsData &&
           <section className="mb-10 space-y-4">
             <section className="flex flex-col px-0">
-              <header className={`${showInputButton}`}>
+              <header className={`${showChangeOptionsButton}`}>
                 <div>
                   <p className="px-10 text-[1.6vw] 3xl:text-4xl italic">{`Selected ${selectedRegionsData.length === 1 ? 'Region' : 'Regions'}:`}</p>
                   <div className="mb-6 px-14 text-[1.2vw] italic">
