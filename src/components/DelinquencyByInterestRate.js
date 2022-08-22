@@ -85,7 +85,7 @@ const DelinquencyByInterestRate = ({data}) => {
       label: `${row.dataset[0].name}`,
       data: lineData,
       borderColor: 'transparent',
-      borderWidth: 3,
+      borderWidth: 0,
       hoverBorderWidth: 3,
       hoverBorderColor: chartSolidColors[i],
       backgroundColor: chartSolidColors[i],
@@ -95,7 +95,8 @@ const DelinquencyByInterestRate = ({data}) => {
       pointHitRadius: 5,
       pointHoverRadius: 7,
       msa: row.dataset[0].msa,
-      pointStyle: pointStyles[i]
+      pointStyle: pointStyles[i],
+      showLine: true
     })
 
     const regressionData = []
@@ -143,6 +144,7 @@ const DelinquencyByInterestRate = ({data}) => {
         },
         onHover: function(event, legendItem, legend){
           const intChart = legend.chart
+          intChart.show(legendItem.datasetIndex)
           intChart.show(legendItem.datasetIndex + 1)
           intChart.update()
           intChart.setActiveElements([{datasetIndex: legendItem.datasetIndex, index: 0}])
@@ -151,6 +153,9 @@ const DelinquencyByInterestRate = ({data}) => {
           const intChart = legend.chart
           intChart.hide(legendItem.datasetIndex + 1)
           intChart.update()
+        },
+        onClick: function(){
+          return null
         }
       },
       tooltip: {

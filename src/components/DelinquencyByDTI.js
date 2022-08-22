@@ -30,7 +30,7 @@ const DelinquencyByDTI = ({data}) => {
     return {
       label: `${region[0].name}`,
       data: dataArray,
-      borderColor: chartSolidColors[idx],
+      borderColor: 'transparent',
       borderWidth: 0,
       hoverBorderWidth: 3,
       hoverBorderColor: chartSolidColors[idx],
@@ -41,7 +41,8 @@ const DelinquencyByDTI = ({data}) => {
       pointHitRadius: 5,
       pointHoverRadius: 7,
       msa: region[0].msa,
-      pointStyle: pointStyles[idx]
+      pointStyle: pointStyles[idx],
+      showLine: true
     }
   })
 
@@ -104,6 +105,7 @@ const DelinquencyByDTI = ({data}) => {
         },
         onHover: function(event, legendItem, legend){
           const dtiChart = legend.chart
+          dtiChart.show(legendItem.datasetIndex)
           dtiChart.show(legendItem.datasetIndex + lineData.length)
           dtiChart.update()
           dtiChart.setActiveElements([{datasetIndex: legendItem.datasetIndex, index: 0}])
@@ -112,6 +114,9 @@ const DelinquencyByDTI = ({data}) => {
           const dtiChart = legend.chart
           dtiChart.hide(legendItem.datasetIndex + lineData.length)
           dtiChart.update()
+        },
+        onClick: function(){
+          return null
         }
       },
       tooltip: {

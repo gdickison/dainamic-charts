@@ -30,7 +30,7 @@ const DelinquencyByLoanTerm = ({data}) => {
     return {
       label: `${region[0].name}`,
       data: dataArray,
-      borderColor: chartSolidColors[idx],
+      borderColor: 'transparent',
       borderWidth: 0,
       hoverBorderWidth: 3,
       hoverBorderColor: chartSolidColors[idx],
@@ -41,7 +41,8 @@ const DelinquencyByLoanTerm = ({data}) => {
       pointHitRadius: 5,
       pointHoverRadius: 7,
       msa: region[0].msa,
-      pointStyle: pointStyles[idx]
+      pointStyle: pointStyles[idx],
+      showLine: true
     }
   })
 
@@ -104,6 +105,7 @@ const DelinquencyByLoanTerm = ({data}) => {
         },
         onHover: function(event, legendItem, legend){
           const loanTermChart = legend.chart
+          loanTermChart.show(legendItem.datasetIndex)
           loanTermChart.show(legendItem.datasetIndex + lineData.length)
           loanTermChart.update()
           loanTermChart.setActiveElements([{datasetIndex: legendItem.datasetIndex, index: 0}])
@@ -112,6 +114,9 @@ const DelinquencyByLoanTerm = ({data}) => {
           const loanTermChart = legend.chart
           loanTermChart.hide(legendItem.datasetIndex + lineData.length)
           loanTermChart.update()
+        },
+        onClick: function(){
+          return null
         }
       },
       tooltip: {
