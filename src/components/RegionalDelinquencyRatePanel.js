@@ -19,7 +19,7 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
     return region.name
   })
 
-  const delinquencyChartData = {
+  const chartData = {
     labels: dataLabels,
     datasets: [
       {
@@ -36,7 +36,7 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
     ]
   }
 
-  const delinquencyChartOptions = {
+  const chartOptions = {
     responsive: true,
     aspectRatio: 2,
     interaction: {
@@ -167,13 +167,13 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
     }
   }
 
-  const fontSize = selectedRegionsData.length === 1 ? '1.5vw' : '1.2vw'
+  const fontSize = selectedRegionsData.length === 1 ? '1.5vw' : '1.4vw'
 
   return (
     <div className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
       <div className="flex items-center space-x-4">
         <img className="h-12" src="/history.svg" alt="" />
-        <h1 className="text-[1.6vw] font-bold py-4">
+        <h1 className="text-[1.6vw] 3xl:text-3xl font-bold py-4">
           Delinquency Rates
         </h1>
       </div>
@@ -181,10 +181,10 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
         <div className="flex flex-col justify-center w-2/5">
           {nationalDelinquencyRate
             ?  <div className="w-full flex justify-between mb-8">
-                <p className={`text-[${fontSize}]`}>
+                <p className={`text-[${fontSize}] 3xl:text-2xl`}>
                   National
                 </p>
-                <p className={`text-[${fontSize}]`}>
+                <p className={`text-[${fontSize}] 3xl:text-2xl`}>
                   {`${nationalDelinquencyRate}%`}
                 </p>
               </div>
@@ -193,8 +193,8 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
           {regionalData ? regionalData.map((region, idx) => {
             return (
               <div key={idx} className="w-full flex justify-between">
-                <p className={`text-[${fontSize}]`}>{(region.name).split(",")[0]}</p>
-                <p className={`text-[${fontSize}]`}>
+                <p className={`text-[${fontSize}] 3xl:text-2xl`}>{(region.name).split(",")[0]}</p>
+                <p className={`text-[${fontSize}] 3xl:text-2xl`}>
                   {`${region.delinquencyRate}%`}
                 </p>
               </div>
@@ -202,7 +202,7 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
           }) : <Loader loadiingText={"Getting regional delinquency data..."}/> }
         </div>
         <div className="flex justify-center w-1/2 p-4 shadow-lg bg-gray-50">
-          <Bar data={delinquencyChartData} options={delinquencyChartOptions} />
+          <Bar data={chartData} options={chartOptions} />
         </div>
       </div>
     </div>

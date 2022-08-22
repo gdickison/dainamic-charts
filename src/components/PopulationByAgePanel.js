@@ -131,7 +131,7 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
     <div className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
       <div className="flex items-center space-x-4">
         <img className="h-12" src="/population.svg" alt="" />
-        <h1 className="text-[1.6vw] font-bold py-4">
+        <h1 className="text-[1.6vw] 3xl:text-3xl font-bold py-4">
           Population % By Age
         </h1>
       </div>

@@ -122,13 +122,13 @@ const RegionalPopulationPanel = ({nationalPopulation, selectedRegionsData}) => {
     }
   }
 
-  const fontSize = selectedRegionsData.length === 1 ? '1.5vw' : '1.2vw'
+  const fontSize = selectedRegionsData.length === 1 ? '1.5vw' : '1.4vw'
 
   return (
     <div className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
       <div className="flex items-center space-x-4">
         <img className="h-12" src="/group.svg" alt="" />
-        <h1 className="text-[1.6vw] font-bold py-4">
+        <h1 className="text-[1.6vw] 3xl:text-3xl font-bold py-4">
           Regional Population
         </h1>
       </div>
@@ -136,10 +136,10 @@ const RegionalPopulationPanel = ({nationalPopulation, selectedRegionsData}) => {
         <div className="flex flex-col justify-center w-2/5">
           {nationalPopulation
             ?  <div className="w-full flex justify-between mb-8">
-                <p className={`text-[${fontSize}]`}>
+                <p className={`text-[${fontSize}] 3xl:text-2xl`}>
                   National
                 </p>
-                <p className={`text-[${fontSize}]`}>
+                <p className={`text-[${fontSize}] 3xl:text-2xl`}>
                   {(nationalPopulation.national_population).toLocaleString('en-US', {maximumFractionDigits: 0})}
                 </p>
               </div>
@@ -148,8 +148,8 @@ const RegionalPopulationPanel = ({nationalPopulation, selectedRegionsData}) => {
           {selectedRegionsData ? selectedRegionsData.map((region, idx) => {
             return (
               <div key={idx} className="w-full flex justify-between">
-                <p className={`text-[${fontSize}]`}>{(region.name).split(",")[0]}</p>
-                <p className={`text-[${fontSize}]`}>
+                <p className={`text-[${fontSize}] 3xl:text-2xl`}>{(region.name).split(",")[0]}</p>
+                <p className={`text-[${fontSize}] 3xl:text-2xl`}>
                   {(region.total_population).toLocaleString('en-US', {maximumFractionDigits: 0})}
                 </p>
               </div>

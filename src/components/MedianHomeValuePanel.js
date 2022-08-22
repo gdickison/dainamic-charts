@@ -158,13 +158,13 @@ const MedianHomeValuePanel = ({nationalMedianHomeValue, selectedRegionsData}) =>
     }
   }
 
-  const fontSize = selectedRegionsData.length === 1 ? '1.5vw' : '1.2vw'
+  const fontSize = selectedRegionsData.length === 1 ? '1.5vw' : '1.4vw'
 
   return (
     <div className="border-[1px] border-gray-200 rounded-md shadow-md p-6 mx-10 my-2">
       <div className="flex items-center space-x-4">
         <img className="h-12" src="/house.svg" alt="" />
-        <h1 className="text-[1.6vw] font-bold py-4">
+        <h1 className="text-[1.6vw] 3xl:text-3xl font-bold py-4">
           Median Home Value
         </h1>
       </div>
@@ -172,10 +172,10 @@ const MedianHomeValuePanel = ({nationalMedianHomeValue, selectedRegionsData}) =>
         <div className="flex flex-col justify-center w-2/5">
           {nationalMedianHomeValue
             ?  <div className="w-full flex justify-between mb-8">
-                <p className={`text-[${fontSize}]`}>
+                <p className={`text-[${fontSize}] 3xl:text-2xl`}>
                   National
                 </p>
-                <p className={`text-[${fontSize}]`}>
+                <p className={`text-[${fontSize}] 3xl:text-2xl`}>
                   {(nationalMedianHomeValue).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}
                 </p>
               </div>
@@ -184,8 +184,8 @@ const MedianHomeValuePanel = ({nationalMedianHomeValue, selectedRegionsData}) =>
           {selectedRegionsData ? selectedRegionsData.map((region, idx) => {
             return (
               <div key={idx} className="w-full flex justify-between">
-                <p className={`text-[${fontSize}]`}>{(region.name).split(",")[0]}</p>
-                <p className={`text-[${fontSize}]`}>
+                <p className={`text-[${fontSize}] 3xl:text-2xl`}>{(region.name).split(",")[0]}</p>
+                <p className={`text-[${fontSize}] 3xl:text-2xl`}>
                   {(region.median_home_value).toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0})}
                 </p>
               </div>

@@ -7,7 +7,7 @@ const FormInputs = ({handleDateChange, monthOptions, msaOptions, handleSelectedR
       </div>
       <div className={`${showOptionsModal}`}>
         <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none" >
-          <section className="w-4/5 flex flex-col items-center justify-center py-20 bg-white rounded-lg">
+          <section className="w-4/5 max-w-[1500px] flex flex-col items-center justify-center py-20 bg-white rounded-lg">
             <header className="relative -top-14 -left-96">
               <h1 className='text-3xl'>
                 Welcome to D<span className='text-yellow-300'>AI</span>NAMIC
