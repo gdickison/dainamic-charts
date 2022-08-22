@@ -1,6 +1,6 @@
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Line } from "react-chartjs-2"
-import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
+import { groupDataByMsa, chartSolidColors, chartFadedColors, pointStyles } from "../../public/utils"
 import { memo } from "react"
 
 const DelinquencyByHighBalance = ({data}) => {
@@ -10,12 +10,6 @@ const DelinquencyByHighBalance = ({data}) => {
     labels: [],
     datasets: []
   }
-
-  const pointStyles = [
-    'circle',
-    'rect',
-    'triangle'
-  ]
 
   groupedData.forEach((region, regionIdx) => {
     const highBalanceData = []
@@ -50,10 +44,10 @@ const DelinquencyByHighBalance = ({data}) => {
         backgroundColor: chartFadedColors[regionIdx],
         borderColor: chartFadedColors[regionIdx],
         borderWidth: 3,
-        hoverBorderWidth: 5,
-        pointRadius: 8,
+        hoverBorderWidth: 3,
+        pointRadius: 5,
         pointHitRadius: 5,
-        pointHoverRadius: 12,
+        pointHoverRadius: 7,
         pointStyle: pointStyles[regionIdx],
         data: highBalanceData,
         tooltip: highBalanceTooltip
@@ -63,10 +57,10 @@ const DelinquencyByHighBalance = ({data}) => {
         backgroundColor: chartSolidColors[regionIdx],
         borderColor: chartSolidColors[regionIdx],
         borderWidth: 3,
-        hoverBorderWidth: 5,
-        pointRadius: 8,
+        hoverBorderWidth: 3,
+        pointRadius: 5,
         pointHitRadius: 5,
-        pointHoverRadius: 12,
+        pointHoverRadius: 7,
         pointStyle: pointStyles[regionIdx],
         data: lowBalanceBuyerData,
         tooltip: lowBalanceBuyerTooltip

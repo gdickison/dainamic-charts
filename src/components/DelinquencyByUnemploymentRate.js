@@ -1,7 +1,7 @@
 import { memo} from "react"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import { Line } from "react-chartjs-2"
-import { getDateLabelsForChart, groupDataByMsa, chartFadedColors, chartSolidColors } from "../../public/utils"
+import { getDateLabelsForChart, groupDataByMsa, chartFadedColors, chartSolidColors, pointStyles } from "../../public/utils"
 
 const DelinquencyByUnemploymentRate = ({dateRange, unemploymentRateData, delinquencyRateData}) => {
     const unemploymentDataByMsa = Object.values(groupDataByMsa(unemploymentRateData, "msa"))
@@ -17,9 +17,10 @@ const DelinquencyByUnemploymentRate = ({dateRange, unemploymentRateData, delinqu
         borderColor: chartFadedColors[idx],
         backgroundColor: chartFadedColors[idx],
         pointRadius: 5,
-        pointHitRadius: 15,
-        pointHoverRadius: 12,
-        pointHoverBackgroundColor: chartSolidColors[idx]
+        pointHitRadius: 5,
+        pointHoverRadius: 7,
+        pointHoverBackgroundColor: chartSolidColors[idx],
+        pointStyle: pointStyles[idx]
       }
     })
 
@@ -36,8 +37,9 @@ const DelinquencyByUnemploymentRate = ({dateRange, unemploymentRateData, delinqu
         borderColor: chartSolidColors[idx],
         backgroundColor: chartSolidColors[idx],
         pointRadius: 5,
-        pointHitRadius: 15,
-        pointHoverRadius: 12
+        pointHitRadius: 5,
+        pointHoverRadius: 7,
+        pointStyle: pointStyles[idx]
       }
     })
 
@@ -56,9 +58,13 @@ const DelinquencyByUnemploymentRate = ({dateRange, unemploymentRateData, delinqu
       },
       plugins: {
         legend: {
-          display: true
+          display: true,
+          labels: {
+            usePointStyle: true
+          }
         },
         tooltip: {
+          usePointStyle: true,
           callbacks: {
             label: function(context){
               return `${context.dataset.label} ${context.raw}%`

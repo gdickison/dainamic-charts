@@ -1,7 +1,7 @@
 import outliers from "outliers"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 import ChartDescription from "./ChartDescription"
-import { getLinearRegression, groupDataByMsa, chartSolidColors, regressionLineColor } from "../../public/utils"
+import { getLinearRegression, groupDataByMsa, chartSolidColors, pointStyles, regressionLineColor } from "../../public/utils"
 import { Scatter } from "react-chartjs-2"
 import { memo } from "react"
 
@@ -57,12 +57,6 @@ const DelinquencyByInterestRate = ({data}) => {
     return {dataset, regressionX, regressionY}
   })
 
-  const pointStyles = [
-    'circle',
-    'rect',
-    'triangle'
-  ]
-
   const datasets = []
   dataForChart.map((row, i) => {
     const yArray = row.dataset.map(set => {
@@ -96,10 +90,10 @@ const DelinquencyByInterestRate = ({data}) => {
       hoverBorderColor: chartSolidColors[i],
       backgroundColor: chartSolidColors[i],
       hoverBackgroundColor: chartSolidColors[i],
-      pointRadius: 8,
+      pointRadius: 5,
       pointHoverBorderWidth: 3,
       pointHitRadius: 5,
-      pointHoverRadius: 8,
+      pointHoverRadius: 7,
       msa: row.dataset[0].msa,
       pointStyle: pointStyles[i]
     })

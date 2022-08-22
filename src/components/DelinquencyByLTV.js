@@ -1,5 +1,5 @@
 import { memo } from "react"
-import { getLinearRegression, groupDataByMsa, chartSolidColors, regressionLineColor } from "../../public/utils"
+import { getLinearRegression, groupDataByMsa, chartSolidColors, pointStyles, regressionLineColor } from "../../public/utils"
 import { Scatter } from "react-chartjs-2"
 import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
 
@@ -11,12 +11,6 @@ const DelinquencyByLTV = ({data}) => {
       item.delinquencyRate = parseFloat((Number(item.delinquent) / Number(item.total)) * 100).toFixed(2)
     })
   })
-
-  const pointStyles = [
-    'circle',
-    'rect',
-    'triangle'
-  ]
 
   const lineData = Object.values(groupedData).map((region, idx) => {
     const dataArray = []
@@ -45,7 +39,7 @@ const DelinquencyByLTV = ({data}) => {
       pointRadius: 5,
       pointHoverBorderWidth: 3,
       pointHitRadius: 5,
-      pointHoverRadius: 8,
+      pointHoverRadius: 7,
       msa: region[0].msa,
       pointStyle: pointStyles[idx],
       showLine: true

@@ -69,6 +69,12 @@ const chartSolidColors = [
   "rgba(245, 172, 39, 0.7)"
 ]
 
+const pointStyles = [
+  'circle',
+  'rect',
+  'triangle'
+]
+
 const regressionLineColor = '#94A3B8'
 
 export {
@@ -78,5 +84,6 @@ export {
   split,
   chartFadedColors,
   chartSolidColors,
+  pointStyles,
   regressionLineColor
 }
