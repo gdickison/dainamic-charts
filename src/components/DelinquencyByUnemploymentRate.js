@@ -1,5 +1,6 @@
 import { memo} from "react"
-import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
+import ChartTitle from "./ChartTitle"
+import ChartDescription from "./ChartDescription"
 import { Line } from "react-chartjs-2"
 import { getDateLabelsForChart, groupDataByMsa, chartFadedColors, chartSolidColors, pointStyles } from "../../public/utils"
 
@@ -117,10 +118,15 @@ const DelinquencyByUnemploymentRate = ({dateRange, unemploymentRateData, delinqu
 
   return (
     <div>
-      <ChartHeaderWithTooltip
-        chartName={"Delinquency by Unemployment Rate"}
-        msa={delinquencyRateStructuredData.length === 1 ? delinquencyRateData[0].name : "selected regions"}
-      />
+      <div className="my-4">
+        <ChartTitle
+          chartName={"Delinquency by Unemployment Rate"}
+          msa={delinquencyRateStructuredData.length === 1 ? delinquencyRateData[0].name : "Selected Regions"}
+        />
+        <ChartDescription
+          description={"For each month in the selected date range the unemployment rate for that month is shown, and the delinquency rate for loans that originaed in that month. Click on the legend to show/hide that data in the chart. Hover over the data points to see more detail."}
+        />
+      </div>
       {chartData &&
         <Line data={chartData} options={chartOptions}/>
       }

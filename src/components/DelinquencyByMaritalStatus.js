@@ -1,6 +1,7 @@
 import { Bar, Pie } from "react-chartjs-2"
 import { memo } from "react"
-import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
+import ChartTitle from "./ChartTitle"
+import ChartDescription from "./ChartDescription"
 import { split } from "./../../public/utils"
 
 const DelinquencyByMaritalStatus = ({data}) => {
@@ -215,11 +216,15 @@ const DelinquencyByMaritalStatus = ({data}) => {
 
   return (
     <div className="h-max">
-      <ChartHeaderWithTooltip
-        chartName={"Delinquency By Marital Status"}
-        msa={data.length === 1 ? data[0].name : "selected regions"}
-        tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to marital status. Delinquency is aggragated for all available dates rather than selected start and end dates."}
-      />
+      <div className="my-4">
+        <ChartTitle
+          chartName={"Delinquency By Marital Status"}
+          msa={data.length === 1 ? data[0].name : "Selected Regions"}
+        />
+        <ChartDescription
+          description={"Dainamic's model determines what part of a region's overall delinquency rate is attributable to marital status. For each region, the overall regional delinquecy rate is shown, the delinquency rates for married and unmarried, and the married and unmarried proportional shares of the overall regional delinquency rate. Marital status data is not broken down by month, so delinquency is aggragated for all available dates rather than selected start and end dates."}
+        />
+      </div>
       <div className="flex justify-around w-full">
         <div className="w-[36%] justify-evenly flex flex-col">
           {barChartData && barChartData.labels.map((label, i) => {

@@ -1,6 +1,7 @@
 import { Bar, Pie } from "react-chartjs-2"
 import { memo } from "react"
-import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
+import ChartTitle from "./ChartTitle"
+import ChartDescription from "./ChartDescription"
 import { split } from "../../public/utils"
 
 const DelinquencyByNumberOfBorrowers = ({data}) => {
@@ -234,11 +235,15 @@ const DelinquencyByNumberOfBorrowers = ({data}) => {
 
   return (
     <div className="h-max">
-      <ChartHeaderWithTooltip
-        chartName={"Delinquency By Number of Borrowers"}
-        msa={data.length === 1 ? data[0].region_name : "selected regions"}
-        tooltip={"All loans for each month are grouped by number of borrowers (1 or 2+). The number of loans with 3 or more borrowers are statistically insignificant and are included in the '2+' category. Click on the legend to show/hide datasets"}
-      />
+      <div className="my-4">
+        <ChartTitle
+          chartName={"Delinquency By Number of Borrowers"}
+          msa={data.length === 1 ? data[0].region_name : "Selected Regions"}
+        />
+        <ChartDescription
+          description={"Loans for the selected time period are aggregated and grouped by number of borrowers (1 or 2+). The number of loans with 3 or more borrowers are statistically insignificant and are included in the '2+' category. For each region, the overall regional delinquecy rate for the time period is shown, the delinquency rate for single or multiple borrowers, and the that category's proportional share of the overall regional delinquency rate. "}
+        />
+      </div>
       <div className="flex justify-around w-full">
         <div className="w-[36%] justify-evenly flex flex-col space-y-2">
           {barChartData && barChartData.labels.map((label, i) => {

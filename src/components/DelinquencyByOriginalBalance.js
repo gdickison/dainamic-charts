@@ -1,4 +1,4 @@
-import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
+import ChartTitle from "./ChartTitle"
 import ChartDescription from "./ChartDescription"
 import { Bar } from "react-chartjs-2"
 import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
@@ -148,14 +148,15 @@ const DelinquencyByOriginalBalance = ({data}) => {
 
   return (
     <div>
-      <ChartHeaderWithTooltip
-        chartName={"Delinquency By Original Balance"}
-        msa={datasets.length === 1 ? datasets[0].label : "selected regions"}
-        tooltip={"Original balances (OUPB) are grouped into the selected increment (default $50,000). Delinquent loans with a given OUPB are divided by the total loans at that OUPB to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given data point and are also excluded. Hover over the bars to see details"}
-      />
-      <ChartDescription
-        description={`Hover over a bar to see specific details. Click the legend to show and hide datasets.`}
-      />
+      <div className="my-4">
+        <ChartTitle
+          chartName={"Delinquency By Original Balance"}
+          msa={datasets.length === 1 ? datasets[0].label : "Selected Regions"}
+        />
+        <ChartDescription
+          description={"Original balances (OUPB) are grouped into the selected increment (default $50,000). Delinquent loans with a given OUPB are divided by the total loans at that OUPB to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given data point and are also excluded. As expected given economic differences between regions, some regions will not have any loans in a give OUPB increment. Hover over the bars to see details. Click the leged to show/hide a region in the chart"}
+        />
+      </div>
       <section className="mt-2 mb-8">
         <form action="#">
           <label className="text-xl mr-2" htmlFor="increment">Select Increment</label>

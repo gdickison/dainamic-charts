@@ -1,4 +1,5 @@
-import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
+import ChartTitle from "./ChartTitle"
+import ChartDescription from "./ChartDescription"
 import { getLinearRegression, groupDataByMsa, chartSolidColors, pointStyles, regressionLineColor } from "../../public/utils"
 import { memo } from "react"
 import { Scatter } from "react-chartjs-2"
@@ -192,11 +193,15 @@ const DelinquencyByLoanTerm = ({data}) => {
 
   return (
     <div>
-      <ChartHeaderWithTooltip
-        chartName={"Delinquency by Loan Term"}
-        msa={lineData.length === 1 ? lineData[0].label : "selected regions"}
-        tooltip={"Delinquent loans at the given term are divided by the total loans at that term to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
-      />
+      <div className="my-4">
+        <ChartTitle
+          chartName={"Delinquency by Loan Term"}
+          msa={lineData.length === 1 ? lineData[0].label : "Selected Regions"}
+        />
+        <ChartDescription
+          description={"Delinquent loans at the given term are divided by the total loans at that term to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the legend to see the data line and the regression line for that region. Hover over the data points to see more details"}
+        />
+      </div>
       {chartData &&
         <Scatter id={"loanTermChart"} data={chartData} options={chartOptions}/>
       }

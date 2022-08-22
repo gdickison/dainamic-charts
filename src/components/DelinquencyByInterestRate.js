@@ -1,5 +1,5 @@
 import outliers from "outliers"
-import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
+import ChartTitle from "./ChartTitle"
 import ChartDescription from "./ChartDescription"
 import { getLinearRegression, groupDataByMsa, chartSolidColors, pointStyles, regressionLineColor } from "../../public/utils"
 import { Scatter } from "react-chartjs-2"
@@ -233,14 +233,15 @@ const DelinquencyByInterestRate = ({data}) => {
     <div>
       {datasets &&
           <>
-            <ChartHeaderWithTooltip
-              chartName={"Delinquency by Interest Rate"}
-              msa={numRegions === 1 ? datasets[0].label : "selected regions"}
-              tooltip={"All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details"}
-            />
-            <ChartDescription
-              description={`Hover over the legend to see the datapoints and trend line for a region. Hover over a datapoint on the chart for specific details. Click the legend to show and hide datasets`}
-            />
+            <div className="my-4">
+              <ChartTitle
+                chartName={"Delinquency by Interest Rate"}
+                msa={numRegions === 1 ? datasets[0].label : "Selected Regions"}
+              />
+              <ChartDescription
+                description={`All loans during the selected date range are grouped into increments of .125%. Delinquent loans at the given rate are divided by the total loans at that rate to show the delinquency rate. Delinquency rates of 0% are not shown. Delinquency rates of 100% generally indicate an anomally based on a very small number of loans at the given rate and are also excluded. Hover over the data points to see details. Hover over the legend to see the datapoints and trend line for a region. Hover over a datapoint on the chart for specific details. Click the legend to show and hide datasets`}
+              />
+            </div>
             <div className="relative flex items-center">
               <Scatter id={"intChart"} className="my-6" data={{datasets}} options={chartOptions}/>
             </div>

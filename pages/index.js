@@ -1022,9 +1022,9 @@ const Home = () => {
         {selectedRegionsData &&
           <section className="mb-10 space-y-4">
             <section className="flex flex-col px-0">
-              <header className={`${showChangeOptionsButton}`}>
+              <header className={`${showChangeOptionsButton} my-6 3xl:my-8`}>
                 <div>
-                  <p className="px-10 text-[1.6vw] 3xl:text-4xl italic">{`Selected ${selectedRegionsData.length === 1 ? 'Region' : 'Regions'}:`}</p>
+                  <p className="px-10 text-[1.6vw] 3xl:text-3xl italic">{`Selected ${selectedRegionsData.length === 1 ? 'Region' : 'Regions'}:`}</p>
                   <div className="mb-6 px-14 text-[1.2vw] italic">
                     {selectedRegionsData.map((region, idx) => {
                       return (
@@ -1034,7 +1034,7 @@ const Home = () => {
                   </div>
                 </div>
                 <div>
-                  <p className="px-10 text-[1.6vw] 3xl:text-4xl italic">Selected Dates</p>
+                  <p className="px-10 text-[1.6vw] 3xl:text-3xl italic">Selected Dates</p>
                   <div className="mb-6 px-14 text-[1.2vw] italic">
                     <p><span>{dateRange.startDate}</span> - <span>{dateRange.endDate}</span></p>
                   </div>

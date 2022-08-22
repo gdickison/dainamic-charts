@@ -1,4 +1,5 @@
-import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
+import ChartTitle from "./ChartTitle"
+import ChartDescription from "./ChartDescription"
 import { Bar } from "react-chartjs-2"
 import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
 import { memo } from "react"
@@ -134,10 +135,15 @@ const DelinquencyByFTBStatus = ({data}) => {
 
   return (
     <div>
-      <ChartHeaderWithTooltip
-        chartName={'Delinquency by First Time Buyer Status'}
-        msa={groupedData.length === 1 ? groupedData[0][0].name : "selected regions"}
-      />
+      <div className="my-4">
+        <ChartTitle
+          chartName={'Delinquency by First Time Buyer Status'}
+          msa={groupedData.length === 1 ? groupedData[0][0].name : "Selected Regions"}
+        />
+        <ChartDescription
+          description={"This chart shows the delinquency rate for loans originated in a given month based on whether the loan was issued to a first-time home buyer."}
+        />
+      </div>
       {chartData &&
         <Bar data={chartData} options={chartOptions} />
       }

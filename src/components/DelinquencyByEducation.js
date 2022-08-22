@@ -1,6 +1,7 @@
 import { Bar, Pie } from "react-chartjs-2"
 import { memo } from "react"
-import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
+import ChartTitle from "./ChartTitle"
+import ChartDescription from "./ChartDescription"
 import { chartFadedColors, chartSolidColors, split } from "./../../public/utils"
 
 const DelinquencyByEducation = ({data}) => {
@@ -252,13 +253,14 @@ const DelinquencyByEducation = ({data}) => {
 
   return (
     <div className="h-max">
-      <ChartHeaderWithTooltip
+      <ChartTitle
         chartName={"Delinquency By Education"}
         msa={data.length === 1 ? data[0].name : "Selected Regions"}
-        tooltip={"Dainamic's model determines what portion of a region's overall delinquency rate is attributable to education level. Delinquency is aggragated for all available dates rather than selected start and end dates."}
       />
       <div>
-        <p className="italic text-sm text-gray-500">The Delinquency by Education Chart shows what part of a region's overall delinquency rate is attributable to each available level of education. For each region, the overall regional delinquecy rate is shown, the delinquency rate for each educational level, and the education level's proportional share of the overall regional delinquency rate. Education data is not broken down by month, so delinquency is aggragated for all available dates rather than selected start and end dates.</p>
+        <ChartDescription
+          description={"Dainamic's model determines what part of a region's overall delinquency rate is attributable to each available level of education. For each region, the overall regional delinquecy rate is shown, the delinquency rate for each educational level, and the education level's proportional share of the overall regional delinquency rate. Education data is not broken down by month, so delinquency is aggragated for all available dates rather than selected start and end dates."}
+        />
       </div>
       <div className="flex justify-around w-full">
         <div className="w-[36%] justify-evenly flex flex-col space-y-2">

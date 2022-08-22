@@ -1,6 +1,7 @@
 import { Fragment, memo } from "react"
 import { Bar } from "react-chartjs-2"
-import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
+import ChartTitle from "./ChartTitle"
+import ChartDescription from "./ChartDescription"
 import { chartFadedColors, chartSolidColors } from "../../public/utils"
 
 const DelinquencyByIndustry = ({data}) => {
@@ -142,11 +143,15 @@ const DelinquencyByIndustry = ({data}) => {
     <Fragment>
       {chartData &&
         <div>
-          <ChartHeaderWithTooltip
-            chartName={"Delinquency Rate by Industry"}
-            msa={data.length === 1 ? data[0].name : "selected regions"}
-            tooltip={"Dainamics' model determines what portion of a regions overall delinquency rate for the chosen period is attributable to employment in particular industries. Delinquency is aggragated for all available dates rather than selected start and end dates."}
-          />
+          <div className="my-4">
+            <ChartTitle
+              chartName={"Delinquency Rate by Industry"}
+              msa={data.length === 1 ? data[0].name : "Selected Regions"}
+            />
+            <ChartDescription
+              description={"Dainamic's model determines what portion of a region's overall delinquency rate for the chosen period is attributable to employment in particular industries. Delinquency is aggragated for all available dates rather than selected start and end dates. Hover over the legend to highlight that region. Click on the legend to show/hide that region in the chart. Hover over the data points to see more detail."}
+            />
+          </div>
           <Bar data={chartData} options={chartOptions} />
         </div>
       }

@@ -1,4 +1,5 @@
-import ChartHeaderWithTooltip from "./ChartHeaderWithTooltip"
+import ChartTitle from "./ChartTitle"
+import ChartDescription from "./ChartDescription"
 import { Line } from "react-chartjs-2"
 import { groupDataByMsa, chartSolidColors, chartFadedColors, pointStyles } from "../../public/utils"
 import { memo } from "react"
@@ -150,10 +151,15 @@ const DelinquencyByHighBalance = ({data}) => {
 
   return (
     <div>
-      <ChartHeaderWithTooltip
-        chartName={'Delinquency by High Balance Indicator Status'}
-        msa={groupedData.length === 1 ? groupedData[0][0].name : "selected regions"}
-      />
+      <div className="my-4">
+        <ChartTitle
+          chartName={'Delinquency by High Balance Indicator Status'}
+          msa={groupedData.length === 1 ? groupedData[0][0].name : "Selected Regions"}
+        />
+        <ChartDescription
+          description={""}
+        />
+      </div>
       {chartData &&
         <Line data={chartData} options={chartOptions} />
       }
