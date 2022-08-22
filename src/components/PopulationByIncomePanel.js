@@ -85,12 +85,10 @@ const PopulationByIncomePanel = ({populationByIncomeData, selectedRegionsData}) 
         bodyFont: {
           style: 'italic'
         },
+        boxPadding: 6,
         callbacks: {
-          title: function(context){
-            return `${context[0].dataset.label}`
-          },
-          beforeLabel: function(context){
-            return context.label
+          title: function(){
+            return null
           },
           label: function(context){
             return `${context.raw}%`

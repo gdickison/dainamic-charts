@@ -108,21 +108,7 @@ const PopulationByAgePanel = ({populationByAgeData, selectedRegionsData}) => {
         display: false
       },
       tooltip: {
-        position: "nearest",
-        bodyFont: {
-          style: 'italic'
-        },
-        callbacks: {
-          beforeTitle: function(context){
-            return `${context[0].dataset.label}`
-          },
-          beforeLabel: function(context){
-            return context.label
-          },
-          label: function(context){
-            return `${context.raw}%`
-          }
-        }
+        enabled: false
       }
     }
   }
