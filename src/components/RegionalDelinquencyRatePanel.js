@@ -47,30 +47,7 @@ const RegionalDelinquencyRatePanel = ({selectedRegionsData, regionalDelinquencyR
         display: false
       },
       tooltip: {
-        callbacks: {
-          title: function(){
-            return "Delinquency Rate"
-          },
-          beforeLabel: function(context){
-            return context.datasetIndex === 0 ? context.label.split(",")[0] : 'National'
-          },
-          label: function(context){
-            return `${context.raw}%`
-          }
-        },
-        backgroundColor: 'rgba(255, 255, 255, 1)',
-        bodyColor: 'rgba(0, 0, 0, 1)',
-        borderColor: '#2563EB',
-        titleColor: 'rgba(0, 0, 0, 1)',
-        titleFont: {
-          size: 14
-        },
-        bodyFont: {
-          size: 14,
-          style: 'italic'
-        },
-        borderWidth: 3,
-        boxPadding: 6
+        enabled: false
       },
       datalabels: {
         display: true,
