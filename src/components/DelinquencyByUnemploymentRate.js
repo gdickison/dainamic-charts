@@ -70,7 +70,8 @@ const DelinquencyByUnemploymentRate = ({dateRange, unemploymentRateData, delinqu
             label: function(context){
               return `${context.dataset.label} ${context.raw}%`
             }
-          }
+          },
+          boxPadding: 6
         }
       },
       scales: {

@@ -173,13 +173,8 @@ const DelinquencyByCreditScore = ({data}) => {
       },
       tooltip: {
         callbacks: {
-          beforeTitle: function(context){
-            return [
-              `${context[0].label}`
-            ]
-          },
-          title: function(context){
-            return `Credit score: ${context[0].dataset.label}`
+          title: function(){
+            return null
           },
           beforeLabel: function(context){
             return [
@@ -206,7 +201,9 @@ const DelinquencyByCreditScore = ({data}) => {
         },
         ticks: {
           callback: function(value, index, ticks){
-            return this.getLabelForValue(value).split('-')[0]
+            const region = this.getLabelForValue(value).indexOf("-") > -1 ? this.getLabelForValue(value).split("-")[0] : this.getLabelForValue(value).split(",")[0]
+            const state = this.getLabelForValue(value).split(", ")[1]
+            return `${region}, ${state}`
           },
           font: {
             weight: 'bold'
@@ -246,10 +243,9 @@ const DelinquencyByCreditScore = ({data}) => {
     plugins: {
       title: {
         text: function(chart){
-          return [
-            `${(chart.chart.getDatasetMeta(0).label).split('-')[0]}`,
-            `${(Number(chart.chart.getDatasetMeta(0)._dataset.tooltip.total)).toLocaleString("en-us")} Total Loans`
-          ]
+          const region = chart.chart.getDatasetMeta(0).label.indexOf("-") > -1 ? chart.chart.getDatasetMeta(0).label.split("-")[0] : chart.chart.getDatasetMeta(0).label.split(",")[0]
+          const state = chart.chart.getDatasetMeta(0).label.split(", ")[1]
+          return `${region}, ${state}`
         },
         position: 'bottom',
         display: true
@@ -263,17 +259,13 @@ const DelinquencyByCreditScore = ({data}) => {
       tooltip: {
         position: "nearest",
         callbacks: {
-          beforeTitle: function(context){
-            const [first, second] = split(context[0].dataset.label, (context[0].dataset.label).indexOf('-', 15))
-            return (context[0].dataset.label).length > 30 ? [first, second] : `${context[0].dataset.label}`
-          },
           title: function(context){
             return `${context[0].label}`
           },
           beforeLabel: function(context){
             return [
-              `Delinquent loans in region: ${context.dataset.tooltip.delinquent}`,
-              `Delinquent loans in range: ${context.dataIndex === 0
+              `Delinquent in region: ${context.dataset.tooltip.delinquent}`,
+              `Delinquent in range: ${context.dataIndex === 0
                 ? context.dataset.tooltip.fairDelinquent
                 : context.dataIndex === 1
                   ? context.dataset.tooltip.goodDelinquent
@@ -283,7 +275,7 @@ const DelinquencyByCreditScore = ({data}) => {
             ]
           },
           label: function(context){
-            return [`Share of Regional`, `Delinquency Rate:`, `${context.raw}%`]
+            return [`Share: ${context.raw}%`]
           }
         },
         boxPadding: 6

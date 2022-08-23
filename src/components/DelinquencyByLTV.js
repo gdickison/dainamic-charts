@@ -148,7 +148,8 @@ const DelinquencyByLTV = ({data}) => {
               rotation: 0
             }
           }
-        }
+        },
+        boxPadding: 6
       }
     },
     scales: {
