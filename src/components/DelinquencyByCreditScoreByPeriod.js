@@ -141,7 +141,8 @@ const DelinquencyByCreditScoreByPeriod = ({data}) => {
           label: function(context){
             return(`Delinquency rate: ${context.raw}%`)
           }
-        }
+        },
+        boxPadding: 6
       }
     },
     scales: {

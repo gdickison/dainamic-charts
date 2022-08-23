@@ -96,7 +96,8 @@ const DelinquencyByIndustry = ({data}) => {
           label: function(context){
             return `Delinquency Rate for ${context.label}: ${context.raw}%`
           }
-        }
+        },
+        boxPadding: 6
       }
     },
     scales: {

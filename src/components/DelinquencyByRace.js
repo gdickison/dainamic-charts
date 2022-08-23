@@ -146,19 +146,11 @@ const DelinquencyByRace = ({data}) => {
       },
       tooltip: {
         callbacks: {
-          beforeTitle: function(context){
-            const region = context[0].label.split("-")[0]
-            const state = context[0].label.split(", ")[1]
-            return `${region}, ${state}`
-          },
-          title: function(){
-            return ''
-          },
-          beforeLabel: function(context){
-            return `Regional Delinquency Rate: ${Number(context.dataset.tooltip[context.dataIndex].region_delinquency_rate).toFixed(2)}%`
+          title: function(context){
+            return context[0].dataset.label
           },
           label: function(context){
-            return `${context.dataset.label} delinquency rate: ${Number(context.raw).toFixed(2)}%`
+            return `Delinquency rate: ${Number(context.raw).toFixed(2)}%`
           }
         },
         boxPadding: 6,
@@ -177,7 +169,7 @@ const DelinquencyByRace = ({data}) => {
         },
         ticks: {
           callback: function(value){
-            const region = this.getLabelForValue(value).split("-")[0]
+            const region = this.getLabelForValue(value).indexOf("-") > -1 ? this.getLabelForValue(value).split("-")[0] : this.getLabelForValue(value).split(",")[0]
             const state = this.getLabelForValue(value).split(", ")[1]
             return `${region}, ${state}`
           },
@@ -254,7 +246,7 @@ const DelinquencyByRace = ({data}) => {
     plugins: {
       title: {
         text: function(chart){
-          const region = chart.chart.getDatasetMeta(0).label.split("-")[0]
+          const region = chart.chart.getDatasetMeta(0).label.indexOf("-") > -1 ? chart.chart.getDatasetMeta(0).label.split("-")[0] : chart.chart.getDatasetMeta(0).label.split(",")[0]
           const state = chart.chart.getDatasetMeta(0).label.split(", ")[1]
           return `${region}, ${state}`
         },
@@ -269,23 +261,11 @@ const DelinquencyByRace = ({data}) => {
       },
       tooltip: {
         callbacks: {
-          beforeTitle: function(context){
-            const region = context[0].dataset.label.split("-")[0]
-            const state = context[0].dataset.label.split(", ")[1]
-            return `${region}, ${state}`
-          },
-          title: function(){
-            return ''
-          },
-          beforeLabel: function(context){
-            return [
-              `Regional Delinquency Rate: ${Number(context.dataset.tooltip.totalDelinquent).toFixed(2)}%`,
-              '',
-              `${context.label}`
-            ]
+          title: function(context){
+            return context[0].label
           },
           label: function(context){
-            return [`Share of Regional`, `Delinquency Rate: ${Number(context.raw).toFixed(2)}%`]
+            return [`Share: ${Number(context.raw).toFixed(2)}%`]
           }
         },
         boxPadding: 6

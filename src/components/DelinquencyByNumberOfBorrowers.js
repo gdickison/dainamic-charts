@@ -84,26 +84,20 @@ const DelinquencyByNumberOfBorrowers = ({data}) => {
       },
       tooltip: {
         callbacks: {
-          beforeTitle: function(context){
-            return [
-              `${context[0].label}`,
-              `Regional Delinquency Rate: ${context[0].dataset.tooltip[context[0].dataIndex].region_delinquency_rate}%`,
-              ''
-            ]
-          },
           title: function(context){
             return `${context[0].dataset.label}`
           },
           beforeLabel: function(context){
             return [
-              `Total loans with ${context.dataset.label}: ${context.dataset.tooltip[context.dataIndex].borrower_total}`,
-              `Total delinquent loans with ${context.dataset.label}: ${context.dataset.tooltip[context.dataIndex].borrower_delinquent}`
+              `Total loans: ${context.dataset.tooltip[context.dataIndex].borrower_total}`,
+              `Delinquent loans: ${context.dataset.tooltip[context.dataIndex].borrower_delinquent}`
             ]
           },
           label: function(context){
             return `Delinquency rate: ${context.raw}%`
           }
-        }
+        },
+        boxPadding: 6
       }
     },
     scales: {
@@ -118,10 +112,9 @@ const DelinquencyByNumberOfBorrowers = ({data}) => {
         },
         ticks: {
           callback: function(value){
-            const labelArray = this.getLabelForValue(value).split(", ")
-            let label = labelArray[0].includes("--") ? labelArray[0].split("--") : labelArray[0].split("-")
-            label.push(labelArray[1])
-            return label
+            const region = this.getLabelForValue(value).indexOf("-") > -1 ? this.getLabelForValue(value).split("-")[0] : this.getLabelForValue(value).split(",")[0]
+            const state = this.getLabelForValue(value).split(", ")[1]
+            return `${region}, ${state}`
           },
           font: {
             weight: 'bold'
@@ -193,10 +186,9 @@ const DelinquencyByNumberOfBorrowers = ({data}) => {
     plugins: {
       title: {
         text: function(chart){
-          const labelArray = chart.chart.getDatasetMeta(0).label.split(", ")
-          let label = labelArray[0].includes("--") ? labelArray[0].split("--") : labelArray[0].split("-")
-          label.push(labelArray[1])
-          return label
+          const region = chart.chart.getDatasetMeta(0).label.indexOf("-") > -1 ? chart.chart.getDatasetMeta(0).label.split("-")[0] : chart.chart.getDatasetMeta(0).label.split(",")[0]
+          const state = chart.chart.getDatasetMeta(0).label.split(", ")[1]
+          return `${region}, ${state}`
         },
         position: 'bottom',
         display: true
@@ -209,23 +201,14 @@ const DelinquencyByNumberOfBorrowers = ({data}) => {
       },
       tooltip: {
         callbacks: {
-          beforeTitle: function(context){
-            const [first, second] = split(context[0].dataset.label, (context[0].dataset.label).indexOf('-', 15))
-            return (context[0].dataset.label).length > 30 ? [first, second] : `${context[0].dataset.label}`
-          },
           title: function(context){
             return `${context[0].label}`
           },
-          beforeLabel: function(context){
-            return [
-              `Total delinquent loans: ${context.dataset.tooltip.totalDelinquent}`,
-              `Delinquent ${context.label} borrower loans: ${context.dataIndex === 0 ? context.dataset.tooltip.oneBorrowerDelinquent : context.dataset.tooltip.multiBorrowerDelinquent}`
-            ]
-          },
           label: function(context){
-            return `Share of Regional Delinquency Rate: ${context.raw}%`
+            return `Share: ${context.raw}%`
           }
-        }
+        },
+        boxPadding: 6
       }
     },
     rotation: 180,

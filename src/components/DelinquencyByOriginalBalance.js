@@ -106,7 +106,8 @@ const DelinquencyByOriginalBalance = ({data}) => {
               return `Delinquecy rate for range: ${context.raw}%`
             }
           }
-        }
+        },
+        boxPadding: 6
       },
       scales: {
         y: {

@@ -143,7 +143,8 @@ const DelinquencyByLoanTerm = ({data}) => {
               rotation: 0
             }
           }
-        }
+        },
+        boxPadding: 6
       }
     },
     scales: {

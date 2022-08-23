@@ -201,7 +201,9 @@ const DelinquencyByCreditScore = ({data}) => {
         },
         ticks: {
           callback: function(value, index, ticks){
-            return this.getLabelForValue(value).split('-')[0]
+            const region = this.getLabelForValue(value).indexOf("-") > -1 ? this.getLabelForValue(value).split("-")[0] : this.getLabelForValue(value).split(",")[0]
+            const state = this.getLabelForValue(value).split(", ")[1]
+            return `${region}, ${state}`
           },
           font: {
             weight: 'bold'
@@ -241,10 +243,9 @@ const DelinquencyByCreditScore = ({data}) => {
     plugins: {
       title: {
         text: function(chart){
-          return [
-            `${(chart.chart.getDatasetMeta(0).label).split('-')[0]}`,
-            `${(Number(chart.chart.getDatasetMeta(0)._dataset.tooltip.total)).toLocaleString("en-us")} Total Loans`
-          ]
+          const region = chart.chart.getDatasetMeta(0).label.indexOf("-") > -1 ? chart.chart.getDatasetMeta(0).label.split("-")[0] : chart.chart.getDatasetMeta(0).label.split(",")[0]
+          const state = chart.chart.getDatasetMeta(0).label.split(", ")[1]
+          return `${region}, ${state}`
         },
         position: 'bottom',
         display: true
