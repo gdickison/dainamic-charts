@@ -173,8 +173,8 @@ const DelinquencyByCreditScore = ({data}) => {
       },
       tooltip: {
         callbacks: {
-          title: function(){
-            return null
+          title: function(context){
+            return context[0].dataset.label
           },
           beforeLabel: function(context){
             return [
