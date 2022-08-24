@@ -2,7 +2,6 @@ import { Bar, Pie } from "react-chartjs-2"
 import { memo } from "react"
 import ChartTitle from "./ChartTitle"
 import ChartDescription from "./ChartDescription"
-import { split } from "./../../public/utils"
 
 const DelinquencyByMaritalStatus = ({data}) => {
   const barLabels = []
@@ -111,7 +110,7 @@ const DelinquencyByMaritalStatus = ({data}) => {
           }
         },
         ticks: {
-          callback: function(value, index, ticks){
+          callback: function(value){
             return value + "%"
           },
           font: {
@@ -125,7 +124,7 @@ const DelinquencyByMaritalStatus = ({data}) => {
     }
   }
 
-  const pieChartData = data.map((region, i) => {
+  const pieChartData = data.map((region) => {
     return {
       labels: [
         'Married',
@@ -200,7 +199,7 @@ const DelinquencyByMaritalStatus = ({data}) => {
     <div className="h-max">
       <div className="my-4">
         <ChartTitle
-          chartName={"Delinquency By Marital Status"}
+          chartTitle={"Delinquency By Marital Status"}
           msa={data.length === 1 ? data[0].name : "Selected Regions"}
         />
         <ChartDescription
@@ -211,8 +210,8 @@ const DelinquencyByMaritalStatus = ({data}) => {
         <div className="w-[36%] justify-evenly flex flex-col">
           {barChartData && barChartData.labels.map((label, i) => {
             return (
-              <div className="flex flex-col text-sm space-y-2 p-4 shadow-lg bg-gray-50">
-                <p key={i} className="text-xl font-medium">{label.split(',')[0]}</p>
+              <div key={i} className="flex flex-col text-sm space-y-2 p-4 shadow-lg bg-gray-50">
+                <p className="text-xl font-medium">{label.split(',')[0]}</p>
                 <div className="w-full flex justify-between space-y-2">
                   <p>Regional Delinquency Rate:</p>
                   <p>{Number(barChartData.datasets[0].tooltip[i].region_delinquency_rate).toFixed(2)}%</p>

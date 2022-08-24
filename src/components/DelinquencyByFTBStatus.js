@@ -12,12 +12,12 @@ const DelinquencyByFTBStatus = ({data}) => {
     datasets: []
   }
 
-  groupedData.forEach((region, regionIdx) => {
+  groupedData.forEach((region, idx) => {
     const firstTimeBuyerData = []
     const firstTimeBuyerTooltip = []
     const multiTimeBuyerData = []
     const multiTimeBuyerTooltip = []
-    if(regionIdx === 0){
+    if(idx === 0){
       region.forEach((row, i) => {
         if(i % 2 === 0){
           ftbsBarChartData.labels.push((row.origination_date.split('T')[0]).toString())
@@ -42,7 +42,7 @@ const DelinquencyByFTBStatus = ({data}) => {
     ftbsBarChartData.datasets.push(
       {
         label: `1st Time Buyer - ${region[0].name.split(',')[0]}`,
-        backgroundColor: chartFadedColors[regionIdx],
+        backgroundColor: chartFadedColors[idx],
         borderColor: chartFadedColors[regionIdx],
         borderWidth: 1,
         data: firstTimeBuyerData,
@@ -100,7 +100,7 @@ const DelinquencyByFTBStatus = ({data}) => {
           }
         },
         ticks: {
-          callback: function(value, index, ticks){
+          callback: function(value){
             return `${value}%`
           },
           font: {
@@ -138,7 +138,7 @@ const DelinquencyByFTBStatus = ({data}) => {
     <div>
       <div className="my-4">
         <ChartTitle
-          chartName={'Delinquency by First Time Buyer Status'}
+          chartTitle={'Delinquency by First Time Buyer Status'}
           msa={groupedData.length === 1 ? groupedData[0][0].name : "Selected Regions"}
         />
         <ChartDescription

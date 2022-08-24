@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import Loader from "./Loader"
 
-const TempLogin = ({setLoggedIn, isLoggedIn}) => {
+const TempLogin = ({setLoggedIn}) => {
   const [credentials, setCredentials] = useState({})
   const [isLoading, setLoading] = useState(true)
 

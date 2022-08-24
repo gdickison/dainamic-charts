@@ -12,12 +12,12 @@ const DelinquencyByHighBalance = ({data}) => {
     datasets: []
   }
 
-  groupedData.forEach((region, regionIdx) => {
+  groupedData.forEach((region, idx) => {
     const highBalanceData = []
     const highBalanceTooltip = []
     const lowBalanceBuyerData = []
     const lowBalanceBuyerTooltip = []
-    if(regionIdx === 0){
+    if(idx === 0){
       region.forEach((row, i) => {
         if(i % 2 === 0){
           hbBarChartData.labels.push((row.origination_date.split('T')[0]).toString())
@@ -42,27 +42,27 @@ const DelinquencyByHighBalance = ({data}) => {
     hbBarChartData.datasets.push(
       {
         label: `High Balance Buyer - ${region[0].name.split(',')[0]}`,
-        backgroundColor: chartFadedColors[regionIdx],
-        borderColor: chartFadedColors[regionIdx],
+        backgroundColor: chartFadedColors[idx],
+        borderColor: chartFadedColors[idx],
         borderWidth: 3,
         hoverBorderWidth: 3,
         pointRadius: 5,
         pointHitRadius: 5,
         pointHoverRadius: 7,
-        pointStyle: pointStyles[regionIdx],
+        pointStyle: pointStyles[idx],
         data: highBalanceData,
         tooltip: highBalanceTooltip
       },
       {
         label: `Non-High Balance Buyer - ${region[0].name.split(',')[0]}`,
-        backgroundColor: chartSolidColors[regionIdx],
-        borderColor: chartSolidColors[regionIdx],
+        backgroundColor: chartSolidColors[idx],
+        borderColor: chartSolidColors[idx],
         borderWidth: 3,
         hoverBorderWidth: 3,
         pointRadius: 5,
         pointHitRadius: 5,
         pointHoverRadius: 7,
-        pointStyle: pointStyles[regionIdx],
+        pointStyle: pointStyles[idx],
         data: lowBalanceBuyerData,
         tooltip: lowBalanceBuyerTooltip
       }
@@ -116,7 +116,7 @@ const DelinquencyByHighBalance = ({data}) => {
           }
         },
         ticks: {
-          callback: function(value, index, ticks){
+          callback: function(value){
             return `${value}%`
           },
           font: {
@@ -153,7 +153,7 @@ const DelinquencyByHighBalance = ({data}) => {
     <div>
       <div className="my-4">
         <ChartTitle
-          chartName={'Delinquency by High Balance Indicator Status'}
+          chartTitle={'Delinquency by High Balance Indicator Status'}
           msa={groupedData.length === 1 ? groupedData[0][0].name : "Selected Regions"}
         />
         <ChartDescription

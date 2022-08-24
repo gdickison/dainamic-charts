@@ -47,7 +47,7 @@ const DelinquencyByLoanTerm = ({data}) => {
     }
   })
 
-  const regressionData = Object.values(groupedData).map((region, idx) => {
+  const regressionData = Object.values(groupedData).map((region) => {
     const regressionX = []
     const regressionY = []
 
@@ -196,7 +196,7 @@ const DelinquencyByLoanTerm = ({data}) => {
     <div>
       <div className="my-4">
         <ChartTitle
-          chartName={"Delinquency by Loan Term"}
+          chartTitle={"Delinquency by Loan Term"}
           msa={lineData.length === 1 ? lineData[0].label : "Selected Regions"}
         />
         <ChartDescription

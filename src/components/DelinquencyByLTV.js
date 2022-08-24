@@ -47,7 +47,7 @@ const DelinquencyByLTV = ({data}) => {
     }
   })
 
-  const regressionData = Object.values(groupedData).map((region, idx) => {
+  const regressionData = Object.values(groupedData).map((region) => {
     const regressionX = []
     const regressionY = []
 
@@ -101,7 +101,7 @@ const DelinquencyByLTV = ({data}) => {
       legend: {
         display: true,
         labels: {
-          filter: function(item, chart) {
+          filter: function(item) {
             return !item.text.includes('Regression');
           },
           font: {
@@ -201,7 +201,7 @@ const DelinquencyByLTV = ({data}) => {
     <div>
       <div className="my-4">
         <ChartTitle
-          chartName={"Delinquency by Loan-to-Value"}
+          chartTitle={"Delinquency by Loan-to-Value"}
           msa={lineData.length === 1 ? lineData[0].label : "Selected Regions"}
         />
         <ChartDescription

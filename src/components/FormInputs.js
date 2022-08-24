@@ -1,4 +1,6 @@
-const FormInputs = ({handleDateChange, monthOptions, msaOptions, handleSelectedRegionsChange, selectedRegions, removeRegion, dateRange, getData, showChangeOptionsButton, toggleShowOptionsModal, showOptionsModal}) => {
+import Alert from "./Alert";
+
+const FormInputs = ({handleDateChange, monthOptions, msaOptions, handleSelectedRegionsChange, selectedRegions, removeRegion, dateRange, getData, showChangeOptionsButton, toggleShowOptionsModal, showOptionsModal, showAlert, alertMessage, closeAlert}) => {
 
   return (
     <>
@@ -70,13 +72,19 @@ const FormInputs = ({handleDateChange, monthOptions, msaOptions, handleSelectedR
             {(!dateRange.startDate || !dateRange.endDate || selectedRegions.length === 0) &&
               <div className="h-12 my-8 text-[1.7vw] 3xl:text-3xl">Select a start date, end date, and MSA to see results</div>
             }
-            {dateRange.startDate && dateRange.endDate && selectedRegions.length > 0 &&
+            {dateRange.startDate && dateRange.endDate && selectedRegions.length > 0 && !showAlert &&
               <button className="my-8 rounded-md p-2 px-6 bg-blue-600 hover:bg-blue-800 text-gray-100 text-[1.7vw] 3xl:text-3xl" onClick={getData}>See Results</button>
             }
           </section>
         </div>
         <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
       </div>
+      {showAlert &&
+        <Alert
+          message={alertMessage}
+          closeAlert={closeAlert}
+        />
+      }
     </>
   );
 }

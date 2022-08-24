@@ -146,7 +146,7 @@ const DelinquencyByIndustry = ({data}) => {
         <div>
           <div className="my-4">
             <ChartTitle
-              chartName={"Delinquency Rate by Industry"}
+              chartTitle={"Delinquency Rate by Industry"}
               msa={data.length === 1 ? data[0].name : "Selected Regions"}
             />
             <ChartDescription

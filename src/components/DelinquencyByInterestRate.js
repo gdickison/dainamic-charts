@@ -134,7 +134,7 @@ const DelinquencyByInterestRate = ({data}) => {
       legend: {
         display: true,
         labels: {
-          filter: function(item, chart) {
+          filter: function(item) {
             return !item.text.includes('Regression');
           },
           font: {
@@ -196,7 +196,7 @@ const DelinquencyByInterestRate = ({data}) => {
           }
         },
         ticks: {
-          callback: function(value, index, ticks){
+          callback: function(value){
             return value + "%"
           },
           font: {
@@ -216,7 +216,7 @@ const DelinquencyByInterestRate = ({data}) => {
           }
         },
         ticks: {
-          callback: function(value, index, ticks){
+          callback: function(value){
             return value + "%"
           },
           font: {
@@ -236,7 +236,7 @@ const DelinquencyByInterestRate = ({data}) => {
           <>
             <div className="my-4">
               <ChartTitle
-                chartName={"Delinquency by Interest Rate"}
+                chartTitle={"Delinquency by Interest Rate"}
                 msa={numRegions === 1 ? datasets[0].label : "Selected Regions"}
               />
               <ChartDescription

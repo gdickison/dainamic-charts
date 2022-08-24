@@ -2,7 +2,6 @@ import { Bar, Pie } from "react-chartjs-2"
 import { memo } from "react"
 import ChartTitle from "./ChartTitle"
 import ChartDescription from "./ChartDescription"
-import { split } from "../../public/utils"
 
 const DelinquencyByNumberOfBorrowers = ({data}) => {
   const barLabels = []
@@ -131,7 +130,7 @@ const DelinquencyByNumberOfBorrowers = ({data}) => {
           }
         },
         ticks: {
-          callback: function(value, index, ticks){
+          callback: function(value){
             return value + "%"
           },
           font: {
@@ -145,7 +144,7 @@ const DelinquencyByNumberOfBorrowers = ({data}) => {
     }
   }
 
-  const pieChartData = data.map((region, i) => {
+  const pieChartData = data.map((region) => {
     return {
       labels: [
         '1 Borrower',
@@ -220,7 +219,7 @@ const DelinquencyByNumberOfBorrowers = ({data}) => {
     <div className="h-max">
       <div className="my-4">
         <ChartTitle
-          chartName={"Delinquency By Number of Borrowers"}
+          chartTitle={"Delinquency By Number of Borrowers"}
           msa={data.length === 1 ? data[0].region_name : "Selected Regions"}
         />
         <ChartDescription
@@ -231,8 +230,8 @@ const DelinquencyByNumberOfBorrowers = ({data}) => {
         <div className="w-[36%] justify-evenly flex flex-col space-y-2">
           {barChartData && barChartData.labels.map((label, i) => {
             return (
-              <div className="flex flex-col space-y-1 p-4 shadow-lg bg-gray-50">
-                <p key={i} className="pl-3 py-2 text-lg font-medium">{label}</p>
+              <div key={i} className="flex flex-col space-y-1 p-4 shadow-lg bg-gray-50">
+                <p className="pl-3 py-2 text-lg font-medium">{label}</p>
                 <ul className="pl-5 text-sm">
                   <li>Regional Delinquency Rate: {barChartData.datasets[0].tooltip[i].region_delinquency_rate}%</li>
                   <li>Delinquency Rate for loans with 1 borrower: {barChartData.datasets[0].tooltip[i].borrower_delinquency_rate}%</li>

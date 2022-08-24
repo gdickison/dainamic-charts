@@ -11,8 +11,8 @@ const DelinquencyByCreditScoreByPeriod = ({data}) => {
     datasets: []
   }
 
-  groupedData.map((group, groupIdx) => {
-    if(groupIdx === 0){
+  groupedData.map((group, i) => {
+    if(i === 0){
       group.map(row => {
         delinquencyRateFeatureData.labels.push((row.origination_date.split('T')[0]).toString())
       })
@@ -57,7 +57,7 @@ const DelinquencyByCreditScoreByPeriod = ({data}) => {
     )
 
     delinquencyRateFeatureData.datasets.map((dataSet) => {
-      group.map((row, idx) => {
+      group.map((row) => {
         if(dataSet.label.indexOf(`580-669 - ${group[0].name.split(',')[0]}`) !== -1){
           dataSet.data.push(((row.fair_delinquent / row.fair_total) * 100).toFixed(2))
           dataSet.tooltip.push({
@@ -156,7 +156,7 @@ const DelinquencyByCreditScoreByPeriod = ({data}) => {
           }
         },
         ticks: {
-          callback: function(value, index, ticks){
+          callback: function(value){
             return `${value}%`
           },
           font: {
@@ -194,7 +194,7 @@ const DelinquencyByCreditScoreByPeriod = ({data}) => {
     <div>
       <div>
         <ChartTitle
-          chartName={"Delinquency Rate by Credit Score and Origination Date"}
+          chartTitle={"Delinquency Rate by Credit Score and Origination Date"}
           msa={"Selected Regions"}
         />
         <ChartDescription

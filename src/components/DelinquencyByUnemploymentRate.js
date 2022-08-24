@@ -121,7 +121,7 @@ const DelinquencyByUnemploymentRate = ({dateRange, unemploymentRateData, delinqu
     <div>
       <div className="my-4">
         <ChartTitle
-          chartName={"Delinquency by Unemployment Rate"}
+          chartTitle={"Delinquency by Unemployment Rate"}
           msa={delinquencyRateStructuredData.length === 1 ? delinquencyRateData[0].name : "Selected Regions"}
         />
         <ChartDescription

@@ -1,7 +1,7 @@
 import ChartTitle from "./ChartTitle"
 import ChartDescription from "./ChartDescription"
 import { Bar, Doughnut } from "react-chartjs-2"
-import { chartSolidColors, chartFadedColors, split } from "../../public/utils"
+import { chartSolidColors, chartFadedColors } from "../../public/utils"
 import { memo } from "react"
 
 const DelinquencyByCreditScore = ({data}) => {
@@ -200,7 +200,7 @@ const DelinquencyByCreditScore = ({data}) => {
           }
         },
         ticks: {
-          callback: function(value, index, ticks){
+          callback: function(value){
             const region = this.getLabelForValue(value).indexOf("-") > -1 ? this.getLabelForValue(value).split("-")[0] : this.getLabelForValue(value).split(",")[0]
             const state = this.getLabelForValue(value).split(", ")[1]
             return `${region}, ${state}`
@@ -223,7 +223,7 @@ const DelinquencyByCreditScore = ({data}) => {
           }
         },
         ticks: {
-          callback: function(value, index, ticks){
+          callback: function(value){
             return value + "%"
           },
           font: {
@@ -291,7 +291,7 @@ const DelinquencyByCreditScore = ({data}) => {
       {barChartStructuredData && pieChartStructuredData &&
         <div className="h-max">
           <ChartTitle
-            chartName={"Delinquency Rate by Credit Score"}
+            chartTitle={"Delinquency Rate by Credit Score"}
             msa={data.length === 1 ? data[0].region_name : "Selected Regions"}
           />
           <ChartDescription
@@ -301,8 +301,8 @@ const DelinquencyByCreditScore = ({data}) => {
             <div className="w-1/3 justify-evenly flex flex-col">
               {barChartStructuredData && barChartStructuredData.labels.map((label, i) => {
                 return (
-                  <div className="flex flex-col space-y-1 p-4 shadow-lg bg-gray-50">
-                    <p key={i} className="pl-3 py-2 text-xl font-medium">{label.split(',')[0]}</p>
+                  <div key={i} className="flex flex-col space-y-1 p-4 shadow-lg bg-gray-50">
+                    <p className="pl-3 py-2 text-xl font-medium">{label.split(',')[0]}</p>
                     <ul className="pl-5 text-base space-y-2">
                       <li>In the {label} Region <span className="font-semibold">{Number(barChartStructuredData.datasets[0].tooltip[i].regionalTotal).toLocaleString()}</span> loans were originated from {startDate} through {endDate}</li>
                       <li>Of those loans <span className="font-semibold">{Number(barChartStructuredData.datasets[0].tooltip[i].regionalDelinquent).toLocaleString()}</span> are delinquent, resulting in a Regional Delinquency Rate of <span className="font-semibold">{barChartStructuredData.datasets[0].tooltip[i].regionalDelinquencyRate}%</span></li>

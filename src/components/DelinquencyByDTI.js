@@ -13,7 +13,7 @@ const DelinquencyByDTI = ({data}) => {
     })
   })
 
-  const lineData = Object.values(groupedData).map((region, idx) => {
+  const lineData = Object.values(groupedData).map((region, i) => {
     const dataArray = []
     for(const row of region){
       if(row.total > 2 && row.delinquencyRate > 0 && row.delinquencyRate < 100){
@@ -34,20 +34,20 @@ const DelinquencyByDTI = ({data}) => {
       borderColor: 'transparent',
       borderWidth: 0,
       hoverBorderWidth: 3,
-      hoverBorderColor: chartSolidColors[idx],
-      backgroundColor: chartSolidColors[idx],
-      hoverBackgroundColor: chartSolidColors[idx],
+      hoverBorderColor: chartSolidColors[i],
+      backgroundColor: chartSolidColors[i],
+      hoverBackgroundColor: chartSolidColors[i],
       pointRadius: 5,
       pointHoverBorderWidth: 3,
       pointHitRadius: 5,
       pointHoverRadius: 7,
       msa: region[0].msa,
-      pointStyle: pointStyles[idx],
+      pointStyle: pointStyles[i],
       showLine: true
     }
   })
 
-  const regressionData = Object.values(groupedData).map((region, idx) => {
+  const regressionData = Object.values(groupedData).map((region) => {
     const regressionX = []
     const regressionY = []
 
@@ -96,7 +96,7 @@ const DelinquencyByDTI = ({data}) => {
       legend: {
         display: true,
         labels: {
-          filter: function(item, chart) {
+          filter: function(item) {
             return !item.text.includes('Regression');
           },
           font: {
@@ -198,7 +198,7 @@ const DelinquencyByDTI = ({data}) => {
         <>
           <div className="my-4">
             <ChartTitle
-              chartName={"Delinquency by Debt-to-Income"}
+              chartTitle={"Delinquency by Debt-to-Income"}
               msa={lineData.length === 1 ? lineData[0].label : "Selected Regions"}
             />
             <ChartDescription

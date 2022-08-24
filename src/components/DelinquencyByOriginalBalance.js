@@ -2,7 +2,6 @@ import ChartTitle from "./ChartTitle"
 import ChartDescription from "./ChartDescription"
 import { Bar } from "react-chartjs-2"
 import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
-
 import { useState, memo } from "react"
 
 const DelinquencyByOriginalBalance = ({data}) => {
@@ -147,11 +146,19 @@ const DelinquencyByOriginalBalance = ({data}) => {
     }
   )
 
+  const increments = [
+    10000,
+    25000,
+    50000,
+    75000,
+    100000
+  ]
+
   return (
     <div>
       <div className="my-4">
         <ChartTitle
-          chartName={"Delinquency By Original Balance"}
+          chartTitle={"Delinquency By Original Balance"}
           msa={datasets.length === 1 ? datasets[0].label : "Selected Regions"}
         />
         <ChartDescription
@@ -163,10 +170,16 @@ const DelinquencyByOriginalBalance = ({data}) => {
           <label className="text-xl mr-2" htmlFor="increment">Select Increment</label>
           <select className="mx-2 w-max text-center md:text-left md:px-2 border-2 border-blue-400 bg-white rounded-md text-xl" name="increment" id="increment" defaultValue={divisor} onChange={handleChange}>
             <option disabled></option>
-            <option key="10000" value="10000">$10,000</option>
-            <option key="25000" value="25000">$25,000</option>
-            <option key="50000" value="50000">$50,000</option>
-            <option key="100000" value="100000">$100,000</option>
+            {increments.map(increment => {
+              return (
+                <option
+                  key={increment.toString()}
+                  value={increment.toString()}
+                >
+                  {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(increment)}
+                </option>
+              )
+            })}
           </select>
         </form>
       </section>

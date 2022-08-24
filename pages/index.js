@@ -63,7 +63,6 @@ import DelinquencyByUnemploymentRate from "../src/components/DelinquencyByUnempl
 
 import TempLogin from "../src/components/TempLogin"
 import TopFeatures from "../src/components/TopFeatures"
-import Alert from "../src/components/Alert"
 
 const Home = () => {
   const [isLoading, setLoading] = useState(false)
@@ -183,7 +182,7 @@ const Home = () => {
     }
   }
 
-  const CloseAlert = () => {
+  const closeAlert = () => {
     setShowAlert(false)
   }
 
@@ -220,7 +219,7 @@ const Home = () => {
     data = data.response
 
     if(status === 404){
-      console.log("There was an error")
+      console.log("There was an error getting the region summary data")
     } else if(status === 200){
       setSelectedRegionsData(data)
     }
@@ -242,7 +241,7 @@ const Home = () => {
     data = data.response
 
     if(status === 404){
-      console.log("There was an error")
+      console.log("There was an error getting national population data")
     } else if(status === 200){
       setNationalPopulation(data)
     }
@@ -264,7 +263,7 @@ const Home = () => {
     data = data.response
 
     if(status === 404){
-      console.log("There was an error")
+      console.log("There was an error getting national median household income data")
     } else if(status === 200){
       setNationalMedianHouseholdIncome(data.national_median_household_income)
     }
@@ -286,7 +285,7 @@ const Home = () => {
     data = data.response
 
     if(status === 404){
-      console.log("There was an error")
+      console.log("There was an error getting national median home value data")
     } else if(status === 200){
       setNationalMedianHomeValue(data.national_median_home_value)
     }
@@ -323,7 +322,7 @@ const Home = () => {
     })
 
     if(status === 404){
-      console.log("There was an error")
+      console.log("There was an error getting the regional delinquency rate")
     } else if(status === 200){
       setRegionalDelinquencyRates(data)
     }
@@ -351,7 +350,7 @@ const Home = () => {
     data = data.response
 
     if(status === 404){
-      console.log("There was an error")
+      console.log("There was an error getting the national delinquency rate")
     } else if(status === 200){
       setNationalDelinquencyRate(((data.delinquent_natl / data.total_natl) * 100).toFixed(2))
     }
@@ -409,7 +408,7 @@ const Home = () => {
     data = data.response
 
     if(status === 404){
-      console.log("There was an error getting the population by age")
+      console.log("There was an error getting the population by income data")
     } else if(status === 200) {
       setPopulationByIncomeData(data)
     }
@@ -437,7 +436,7 @@ const Home = () => {
     let data = await response.json()
     data = data.response
     if(status === 404){
-      console.log("There was an error getting the population by age")
+      console.log("There was an error getting the top features data")
     } else if(status === 200) {
       data.forEach(row => {
         const uniqueFeatures = Object.keys(row)
@@ -471,7 +470,7 @@ const Home = () => {
       msaCodes: msaCodes
     })
 
-    const endpoint = `/api/get_loan_status_by_credit_score_per_period`
+    const endpoint = `/api/get_delinquency_by_credit_score_per_period`
     const options = {
       method: 'POST',
       headers: {
@@ -485,7 +484,7 @@ const Home = () => {
     let data = await response.json()
     data = data.response
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the credit score data")
     } else if(status === 200) {
       setDelinquencyByCreditScoreByPeriod(data)
     }
@@ -502,7 +501,7 @@ const Home = () => {
       msaCodes: msaCodes
     })
 
-    const endpoint = `/api/get_loan_status_by_credit_score`
+    const endpoint = `/api/get_delinquency_by_credit_score`
     const options = {
       method: 'POST',
       headers: {
@@ -516,7 +515,7 @@ const Home = () => {
     let data = await response.json()
     data = data.response
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the credit score data")
     } else if(status === 200) {
       setDelinquencyByCreditScore(data)
     }
@@ -547,7 +546,7 @@ const Home = () => {
     let data = await response.json()
     data = data.response
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the DTI data")
     } else if(status === 200) {
       setDelinquencyByDTI(data)
     }
@@ -576,7 +575,7 @@ const Home = () => {
     let data = await response.json()
     data = data.response
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the education data")
     } else if(status === 200){
       setDelinquencyByEducation(data)
     }
@@ -607,7 +606,7 @@ const Home = () => {
     let data = await response.json()
     data = data.response
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the FTBS data")
     } else if(status === 200){
       setDelinquencyByFTBS(data)
     }
@@ -638,7 +637,7 @@ const Home = () => {
     let data = await response.json()
     data = data.response
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the high balance data")
     } else if(status === 200){
       setDelinquencyByHighBalance(data)
     }
@@ -668,7 +667,7 @@ const Home = () => {
     data = data.response
 
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the industry data")
     } else if(status === 200){
       setDelinquencyByIndustry(data)
     }
@@ -699,7 +698,7 @@ const Home = () => {
     let data = await response.json()
     data = data.response
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the interest rate data")
     } else if(status === 200){
       setDelinquencyByInterestRate(data)
     }
@@ -730,7 +729,7 @@ const Home = () => {
     let data = await response.json()
     data = data.response
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the original balance data")
     } else if(status === 200){
       setDelinquencyByOriginalBalance(data)
     }
@@ -759,7 +758,7 @@ const Home = () => {
     let data = await response.json()
     data = data.response
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the loan term data")
     } else if(status === 200){
       setDelinquencyByLoanTerm(data)
     }
@@ -788,7 +787,7 @@ const Home = () => {
     let data = await response.json()
     data = data.response
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the LTV data")
     } else if(status === 200){
       setDelinquencyByLTV(data)
     }
@@ -819,7 +818,7 @@ const Home = () => {
     data = data.response
 
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the marital status data")
     } else if(status === 200){
       setDelinquencyByMaritalStatus(data)
     }
@@ -850,7 +849,7 @@ const Home = () => {
     data = data.response
 
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the race data")
     } else if(status === 200){
       setDelinquencyByRace(data)
     }
@@ -882,7 +881,7 @@ const Home = () => {
     data = data.response
 
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the number of borrowers data")
     } else if(status === 200){
       setDelinquencyByNumberOfBorrowers(data)
     }
@@ -914,7 +913,7 @@ const Home = () => {
     data = data.response
 
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the unemployment data")
     } else if(status === 200){
       setUnemploymentRateData(data)
     }
@@ -946,7 +945,7 @@ const Home = () => {
     data = data.response
 
     if(status === 404){
-      console.log("There was an error getting the data")
+      console.log("There was an error getting the delinquency rate data")
     } else if(status === 200){
       setDelinquencyRateData(data)
   }
@@ -1016,6 +1015,9 @@ const Home = () => {
               showChangeOptionsButton={showChangeOptionsButton}
               toggleShowOptionsModal={toggleShowOptionsModal}
               showOptionsModal={showOptionsModal}
+              showAlert={showAlert}
+              alertMessage={alertMessage}
+              closeAlert={closeAlert}
             />
           : <Loader loadiingText="Building the inputs..." />
         }
@@ -1261,12 +1263,6 @@ const Home = () => {
         setLoggedIn={setLoggedIn}
       />
       }
-      {showAlert &&
-          <Alert
-            message={alertMessage}
-            closeAlert={CloseAlert}
-          />
-        }
     </div>
   )
 }
