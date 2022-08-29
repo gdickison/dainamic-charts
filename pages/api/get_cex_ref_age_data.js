@@ -7,7 +7,7 @@ export default async function queryCreditScorePerPeriod(req, res) {
   await client
     .query(`SELECT
         *
-      FROM banking_app.cex_sex`)
+      FROM banking_app.cex_ref_avg_age`)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
     .catch(error => console.log("There is an error getting cex data: ", error))
