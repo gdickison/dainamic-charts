@@ -1,3 +1,5 @@
+import Head from "next/head"
+
 import '../styles/globals.css'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -21,7 +23,14 @@ function MyApp({ Component, pageProps }) {
       router.events.off('routeChangeComplete', handleRouteChange)
     }
   }, [router.events])
-  return <Component {...pageProps} />
+  return (
+    <>
+      <Head>
+        <title>Dainamic</title>
+      </Head>
+      <Component {...pageProps} />
+    </>
+  )
 }
 
 export default MyApp
