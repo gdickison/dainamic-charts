@@ -36,7 +36,7 @@ ChartJS.defaults.set('plugins.datalabels', {
   display: false
 })
 
-import FormInputs from "../src/components/FormInputs"
+import MortgageFormInputs from "../src/components/MortgageFormInputs"
 import Loader from "../src/components/Loader"
 import RegionalDelinquencyRatePanel from "../src/components/RegionalDelinquencyRatePanel"
 import RegionalPopulationPanel from "../src/components/RegionalPopulationPanel"
@@ -990,9 +990,6 @@ const Mortgage = () => {
 
   return (
     <div className="max-w-[1600px] mx-auto">
-      {/* <Head>
-        <title>Dainamic</title>
-      </Head> */}
       <header className="mx-6">
         <h1 className='py-10 px-4 text-[3.5vw] 3xl:text-6xl text-left'>
           Welcome to D<span className='text-yellow-300'>AI</span>NAMIC
@@ -1000,7 +997,7 @@ const Mortgage = () => {
       </header>
       <main className="h-screen">
         {msaOptions && monthOptions
-          ? <FormInputs
+          ? <MortgageFormInputs
               handleDateChange={handleDateChange}
               monthOptions={monthOptions}
               msaOptions={msaOptions}
