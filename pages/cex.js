@@ -2,6 +2,7 @@ import { useEffect, useState, memo } from "react"
 
 import CexFormInputs from "../src/components/CexFormInputs"
 import Loader from "../src/components/Loader"
+import CexSampleSize from "../src/components/CexSampleSize"
 
 const cex = () => {
   const [isLoading, setLoading] = useState(false)
@@ -11,6 +12,8 @@ const cex = () => {
   const [monthOptions, setMonthOptions] = useState()
   const [dateRange, setDateRange] = useState({})
   const [selectedRegions, setSelectedRegions] = useState([])
+
+  const [sampleSizeData, setSampleSizeData] = useState()
 
   //*******************************************************************//
   //                                                                   //
@@ -31,11 +34,11 @@ const cex = () => {
     const status = response.status
     let data = await response.json()
     data = data.response
-    data.unshift({region: '0', region_name: 'All Regions'})
 
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
+      console.log('data', data)
       setRegionOptions(data)
     }
   }
@@ -54,15 +57,16 @@ const cex = () => {
     const status = response.status
     let data = await response.json()
     data = data.response
-
-    const months = data.map(row => {
-      return `${row.month_name.trim()} ${row.year}`
+    data.forEach(row => {
+      const readableDate =  new Date(row.date)
+      row.displayDate = readableDate.toLocaleDateString('en-us', {year: "numeric", month: "long", timeZone: "UTC"})
     })
 
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      setMonthOptions(months)
+      console.log('data', data)
+      setMonthOptions(data)
     }
   }
 
@@ -92,9 +96,50 @@ const cex = () => {
     setSelectedRegions(newCompRegions)
   }
 
+  //*******************************************************************//
+  //                                                                   //
+  //                            PULL DATA                              //
+  //                                                                   //
+  //*******************************************************************//
+
+  const getSampleSize = async () => {
+    const regions = selectedRegions.map(region => {
+      return region.regionCode
+    })
+
+    const JSONdata = JSON.stringify({
+      regions,
+      startDate: dateRange.startDate.split('T')[0],
+      endDate: dateRange.endDate.split('T')[0]
+    })
+console.log('JSONdata', JSONdata)
+    const endpoint = `/api/cex_sample_size`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status !== 200){
+      console.log("There was an error getting the sample size data")
+    } else if(status === 200){
+      setSampleSizeData(data)
+      console.log('sample size data', data)
+    }
+  }
+
   const getData = () => {
     setShowOptionsModal("hidden")
     setShowChangeOptionsButton("flex")
+    getSampleSize()
   }
 
 
@@ -110,6 +155,8 @@ const cex = () => {
 
   return (
     <div className="max-w-[1600px] mx-auto">
+  {console.log('selectedRegions', selectedRegions)}
+  {console.log('dateRange', dateRange)}
       <header className="mx-6">
         <h1 className='py-10 px-4 text-[3.5vw] 3xl:text-6xl text-left'>
           Welcome to D<span className='text-yellow-300'>AI</span>NAMIC
@@ -131,6 +178,12 @@ const cex = () => {
               showOptionsModal={showOptionsModal}
             />
           : <Loader loadiingText="Building the inputs..." />
+        }
+        {sampleSizeData &&
+          <CexSampleSize
+            dateRange={dateRange}
+            sampleSizeData={sampleSizeData}
+          />
         }
       </main>
     </div>

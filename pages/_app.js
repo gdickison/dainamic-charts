@@ -6,6 +6,42 @@ import { useRouter } from 'next/router'
 
 import * as ga from '../lib/ga'
 
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  ArcElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+} from "chart.js"
+
+import ChartDataLabels from "chartjs-plugin-datalabels"
+import annotationPlugin from "chartjs-plugin-annotation"
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  ArcElement,
+  BarElement,
+  Filler,
+  Title,
+  Tooltip,
+  Legend,
+  ChartDataLabels,
+  annotationPlugin
+)
+
+ChartJS.defaults.set('plugins.datalabels', {
+  display: false
+})
+
 function MyApp({ Component, pageProps }) {
   const router = useRouter()
 

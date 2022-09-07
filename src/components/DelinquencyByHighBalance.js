@@ -1,11 +1,11 @@
 import ChartTitle from "./ChartTitle"
 import ChartDescription from "./ChartDescription"
 import { Line } from "react-chartjs-2"
-import { groupDataByMsa, chartSolidColors, chartFadedColors, pointStyles } from "../../public/utils"
+import { groupDataByRegion, chartSolidColors, chartFadedColors, pointStyles } from "../../public/utils"
 import { memo } from "react"
 
 const DelinquencyByHighBalance = ({data}) => {
-  const groupedData = Object.values(groupDataByMsa(data, "msa"))
+  const groupedData = Object.values(groupDataByRegion(data, "msa"))
 
   const hbBarChartData = {
     labels: [],

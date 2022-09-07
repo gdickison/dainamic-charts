@@ -1,11 +1,11 @@
 import { memo } from "react"
-import { getLinearRegression, groupDataByMsa, chartSolidColors, pointStyles, regressionLineColor } from "../../public/utils"
+import { getLinearRegression, groupDataByRegion, chartSolidColors, pointStyles, regressionLineColor } from "../../public/utils"
 import { Scatter } from "react-chartjs-2"
 import ChartTitle from "./ChartTitle"
 import ChartDescription from "./ChartDescription"
 
 const DelinquencyByLTV = ({data}) => {
-  const groupedData = groupDataByMsa(data, "msa")
+  const groupedData = groupDataByRegion(data, "msa")
 
   Object.values(groupedData).forEach(row => {
     row.forEach(item => {

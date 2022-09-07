@@ -1,7 +1,7 @@
 import ChartTitle from "./ChartTitle"
 import ChartDescription from "./ChartDescription"
 import { Bar } from "react-chartjs-2"
-import { groupDataByMsa, chartSolidColors, chartFadedColors } from "../../public/utils"
+import { groupDataByRegion, chartSolidColors, chartFadedColors } from "../../public/utils"
 import { useState, memo } from "react"
 
 const DelinquencyByOriginalBalance = ({data}) => {
@@ -19,7 +19,7 @@ const DelinquencyByOriginalBalance = ({data}) => {
     return o.original_upb; }));
   const numBrackets = Math.floor(Number((maxupb / divisor) + 1))
 
-  const groupedData = groupDataByMsa(data, "msa")
+  const groupedData = groupDataByRegion(data, "msa")
   for(let i = 0; i < numBrackets; i++){
     const bracket = `$${(Math.ceil(Number((minupb + (i * divisor)) / divisor) - 1) * divisor).toLocaleString()} - $${((Math.ceil(Number((minupb + (i * divisor)) / divisor)) * divisor) - 1).toLocaleString()}`
     Object.values(groupedData).map(group => {

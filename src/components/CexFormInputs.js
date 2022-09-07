@@ -40,7 +40,7 @@ const CexFormInputs = ({
                     <option disabled></option>
                     {monthOptions && monthOptions.map(month => {
                       return (
-                        <option key={month} value={month}>{month}</option>
+                        <option key={month.date} value={month.date}>{month.displayDate}</option>
                       )
                     })}
                   </select>
@@ -51,7 +51,7 @@ const CexFormInputs = ({
                     <option disabled></option>
                     {monthOptions && monthOptions.map(month => {
                       return (
-                        <option key={month} value={month}>{month}</option>
+                        <option key={month.date} value={month.date}>{month.displayDate}</option>
                       )
                     })}
                   </select>
@@ -74,10 +74,10 @@ const CexFormInputs = ({
                   {selectedRegions.length > 0 &&
                     selectedRegions.map(region => {
                       return (
-                        <p key={region.msaCode} className="flex items-center w-max text-center m-1 border-2 border-gray-300 px-2 bg-gray-200 text-[1.4vw] 3xl:text-2xl leading-8 space-x-4">
+                        <p key={region.regionCode} className="flex items-center w-max text-center m-1 border-2 border-gray-300 px-2 bg-gray-200 text-[1.4vw] 3xl:text-2xl leading-8 space-x-4">
                           <span>{region.displayText}</span>
                           <span className="h-6 w-6 group hover:cursor-pointer" onClick={removeRegion}>
-                            <img id={region.msaCode} src="/close.svg" alt="remove region" />
+                            <img id={region.regionCode} src="/close.svg" alt="remove region" />
                           </span>
                         </p>
                       )

@@ -7,7 +7,9 @@ export default async function queryRegionalSampleSizeByMonthData(req, res) {
   await client
     .query(`SELECT
         *
-      FROM banking_app.cex_sample_size_by_region_month`)
+      FROM banking_app.cex_sample_size_by_region_month
+      WHERE region_name IN (${req.body.regions})
+        AND year `)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
     .catch(error => console.log("There is an error getting cex sample size data: ", error))

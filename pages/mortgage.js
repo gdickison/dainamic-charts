@@ -1,40 +1,5 @@
 // import Head from "next/head"
 import { useEffect, useState, memo } from "react"
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  ArcElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-} from "chart.js"
-
-import ChartDataLabels from "chartjs-plugin-datalabels"
-import annotationPlugin from "chartjs-plugin-annotation"
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  ArcElement,
-  BarElement,
-  Filler,
-  Title,
-  Tooltip,
-  Legend,
-  ChartDataLabels,
-  annotationPlugin
-)
-
-ChartJS.defaults.set('plugins.datalabels', {
-  display: false
-})
 
 import MortgageFormInputs from "../src/components/MortgageFormInputs"
 import Loader from "../src/components/Loader"

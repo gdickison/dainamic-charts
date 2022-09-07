@@ -9,7 +9,7 @@ const getDateLabelsForChart = (start, end) => {
   return generatedLabels
 }
 
-function groupDataByMsa(list, key){
+function groupDataByRegion(list, key){
   return list.reduce(function(rv, x){
     (rv[x[key]] = rv[x[key]] || []).push(x)
     return rv
@@ -51,8 +51,8 @@ const chartFadedColors = [
   "rgba(255, 0, 0, 0.3)",
   "rgba(0, 83, 255, 0.3)",
   "rgba(0, 180, 0, 0.3)",
-  "rgba(255, 225, 0, 0.3)",
   "rgba(255, 130, 0, 0.3)",
+  "rgba(255, 225, 0, 0.5)",
   "rgba(51, 177, 255, 0.3)",
   "rgba(56, 245, 39, 0.3)",
   "rgba(245, 172, 39, 0.3)"
@@ -62,8 +62,8 @@ const chartSolidColors = [
   "rgba(255, 0, 0, 0.7)",
   "rgba(0, 83, 255, 0.7)",
   "rgba(0, 180, 0, 0.7)",
-  "rgba(255, 225, 0, 0.7)",
   "rgba(255, 130, 0, 0.7)",
+  "rgba(255, 225, 0, 0.7)",
   "rgba(51, 177, 255, 0.7)",
   "rgba(56, 245, 39, 0.7)",
   "rgba(245, 172, 39, 0.7)"
@@ -72,14 +72,15 @@ const chartSolidColors = [
 const pointStyles = [
   'circle',
   'rect',
-  'triangle'
+  'triangle',
+  'rectRot'
 ]
 
 const regressionLineColor = '#94A3B8'
 
 export {
   getDateLabelsForChart,
-  groupDataByMsa,
+  groupDataByRegion,
   getLinearRegression,
   split,
   chartFadedColors,
