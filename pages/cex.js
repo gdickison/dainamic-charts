@@ -1,8 +1,9 @@
-import { useEffect, useState, memo } from "react"
+import { useEffect, useState } from "react"
 
 import CexFormInputs from "../src/components/CexFormInputs"
 import Loader from "../src/components/Loader"
 import CexSampleSize from "../src/components/CexSampleSize"
+import CexSampleAge from "../src/components/CexSampleAge"
 
 const cex = () => {
   const [isLoading, setLoading] = useState(false)
@@ -14,6 +15,7 @@ const cex = () => {
   const [selectedRegions, setSelectedRegions] = useState([])
 
   const [sampleSizeData, setSampleSizeData] = useState()
+  const [sampleAgeData, setSampleAgeData] = useState()
 
   //*******************************************************************//
   //                                                                   //
@@ -38,7 +40,6 @@ const cex = () => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      console.log('data', data)
       setRegionOptions(data)
     }
   }
@@ -65,7 +66,6 @@ const cex = () => {
     if(status === 404){
       console.log("There was an error")
     } else if(status === 200){
-      console.log('data', data)
       setMonthOptions(data)
     }
   }
@@ -112,7 +112,7 @@ const cex = () => {
       startDate: dateRange.startDate.split('T')[0],
       endDate: dateRange.endDate.split('T')[0]
     })
-console.log('JSONdata', JSONdata)
+
     const endpoint = `/api/cex_sample_size`
 
     const options = {
@@ -132,7 +132,39 @@ console.log('JSONdata', JSONdata)
       console.log("There was an error getting the sample size data")
     } else if(status === 200){
       setSampleSizeData(data)
-      console.log('sample size data', data)
+    }
+  }
+
+  const getSampleAge = async () => {
+    const regions = selectedRegions.map(region => {
+      return region.regionCode
+    })
+
+    const JSONdata = JSON.stringify({
+      regions,
+      startDate: dateRange.startDate.split('T')[0],
+      endDate: dateRange.endDate.split('T')[0]
+    })
+
+    const endpoint = `/api/cex_sample_age`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status !== 200){
+      console.log("There was an error getting the sample age data")
+    } else if(status === 200){
+      setSampleAgeData(data)
     }
   }
 
@@ -140,6 +172,7 @@ console.log('JSONdata', JSONdata)
     setShowOptionsModal("hidden")
     setShowChangeOptionsButton("flex")
     getSampleSize()
+    getSampleAge()
   }
 
 
@@ -152,11 +185,8 @@ console.log('JSONdata', JSONdata)
     return <Loader/>
   }
 
-
   return (
     <div className="max-w-[1600px] mx-auto">
-  {console.log('selectedRegions', selectedRegions)}
-  {console.log('dateRange', dateRange)}
       <header className="mx-6">
         <h1 className='py-10 px-4 text-[3.5vw] 3xl:text-6xl text-left'>
           Welcome to D<span className='text-yellow-300'>AI</span>NAMIC
@@ -179,12 +209,20 @@ console.log('JSONdata', JSONdata)
             />
           : <Loader loadiingText="Building the inputs..." />
         }
-        {sampleSizeData &&
-          <CexSampleSize
-            dateRange={dateRange}
-            sampleSizeData={sampleSizeData}
-          />
-        }
+        <div className="space-y-6">
+          {sampleSizeData &&
+            <CexSampleSize
+              dateRange={dateRange}
+              sampleSizeData={sampleSizeData}
+            />
+          }
+          {sampleAgeData &&
+            <CexSampleAge
+              dateRange={dateRange}
+              sampleAgeData={sampleAgeData}
+            />
+          }
+        </div>
       </main>
     </div>
   )

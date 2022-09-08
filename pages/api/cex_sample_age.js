@@ -6,16 +6,11 @@ export default async function querySampleSize(req, res) {
 
   await client
     .query(`SELECT
-        date,
-        region,
-        region_name,
-        sample_size
-      FROM banking_app.cex_sample_size
+        *
+      FROM banking_app.cex_sample_age
       WHERE date BETWEEN '${req.body.startDate}'::date AND '${req.body.endDate}'::date
-        AND region != 0
-      GROUP BY date, region, region_name, sample_size
-      ORDER BY region`)
+        AND region != 0`)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
-    .catch(error => console.log("There is an error getting cex sample size data: ", error))
+    .catch(error => console.log("There is an error getting cex sample age data: ", error))
 }

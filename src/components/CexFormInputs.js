@@ -18,7 +18,7 @@ const CexFormInputs = ({
         <button className="mb-6 rounded-md py-2 px-6 bg-blue-600 hover:bg-blue-800 text-gray-100 text-[1.5vw] 3xl:text-3xl" onClick={toggleShowOptionsModal}>Change Selected Options</button>
       </div>
       <div className={`${showOptionsModal}`}>
-        <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none" >
+        <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-x-0 z-50 outline-none focus:outline-none" >
           <section className="w-4/5 max-w-[1500px] flex flex-col items-center justify-center py-20 bg-white rounded-lg">
             <header className="relative -top-14 space-y-6">
               <div className="text-center">
@@ -57,7 +57,7 @@ const CexFormInputs = ({
                   </select>
                 </div>
               </div>
-              <div className="pr-4 space-y-4">
+              {/* <div className="pr-4 space-y-4">
                 <label className="text-[1.7vw] 3xl:text-3xl mx-2" htmlFor="msaCode">Select Regions </label>
                 <select className="w-full mx-2 text-left px-2 border-2 border-blue-400 bg-white rounded-md text-[1.7vw] 3xl:text-3xl" id="msaCode" name="msaCode" defaultValue="" onChange={handleSelectedRegionsChange}>
                   <option disabled></option>
@@ -84,14 +84,20 @@ const CexFormInputs = ({
                     })
                   }
                 </div>
-              </div>
+              </div> */}
             </form>
-            {(!dateRange.startDate || !dateRange.endDate || selectedRegions.length === 0) &&
-              <div className="h-12 my-8 text-[1.7vw] 3xl:text-3xl">Select a start date, end date, and region to see results</div>
+            {(!dateRange.startDate || !dateRange.endDate) &&
+              <div className="h-12 my-8 text-[1.7vw] 3xl:text-3xl">Select a start and end date</div>
             }
-            {dateRange.startDate && dateRange.endDate && selectedRegions.length > 0 &&
+            {/* {(!dateRange.startDate || !dateRange.endDate || selectedRegions.length === 0) &&
+              <div className="h-12 my-8 text-[1.7vw] 3xl:text-3xl">Select a start date, end date, and region to see results</div>
+            } */}
+            {dateRange.startDate && dateRange.endDate &&
               <button className="my-8 rounded-md p-2 px-6 bg-blue-600 hover:bg-blue-800 text-gray-100 text-[1.7vw] 3xl:text-3xl" onClick={getData}>See Results</button>
             }
+            {/* {dateRange.startDate && dateRange.endDate && selectedRegions.length > 0 &&
+              <button className="my-8 rounded-md p-2 px-6 bg-blue-600 hover:bg-blue-800 text-gray-100 text-[1.7vw] 3xl:text-3xl" onClick={getData}>See Results</button>
+            } */}
           </section>
         </div>
         <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>

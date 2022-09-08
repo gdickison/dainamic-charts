@@ -1,3 +1,7 @@
+function getAverage(array){
+  return (array.reduce((a, b) => Number(a) + Number(b)) / array.length).toFixed(2)
+}
+
 const getDateLabelsForChart = (start, end) => {
   let start_date = new Date(start)
   let end_date = new Date(end)
@@ -41,6 +45,10 @@ function getLinearRegression(y,x){
   return lr;
 }
 
+function getQuarter(date = new Date()) {
+  return Math.floor(date.getMonth() / 3 + 1);
+}
+
 function split(str, index) {
   const result = [str.slice(0, index), str.slice(index)];
 
@@ -79,9 +87,11 @@ const pointStyles = [
 const regressionLineColor = '#94A3B8'
 
 export {
+  getAverage,
   getDateLabelsForChart,
   groupDataByRegion,
   getLinearRegression,
+  getQuarter,
   split,
   chartFadedColors,
   chartSolidColors,

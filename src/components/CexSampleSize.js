@@ -81,7 +81,7 @@ const CexSampleSize = ({dateRange, sampleSizeData}) => {
       },
       x: {
         title: {
-          display: true,
+          display: false,
           text: "Survey Month",
           padding: 20,
           font: {
@@ -105,13 +105,18 @@ const CexSampleSize = ({dateRange, sampleSizeData}) => {
 
   return (
     <div>
-      {chartData &&
-        <div className="flex justify-center w-1/2 p-4 shadow-lg bg-gray-50">
-          <Line data={chartData} options={chartOptions} />
-        </div>
-      }
+      <div className="relative my-4 mx-12">
+        <h1 className="inline text-2xl">Survey Sample Size</h1>
+      </div>
+      <div className="flex justify-center">
+        {chartData &&
+          <div className="flex justify-center w-1/2 p-4 shadow-lg bg-gray-50">
+            <Line data={chartData} options={chartOptions} />
+          </div>
+        }
+      </div>
     </div>
   )
 }
 
-export default CexSampleSize
+export default memo(CexSampleSize)
