@@ -2,6 +2,10 @@ function getAverage(array){
   return (array.reduce((a, b) => Number(a) + Number(b)) / array.length).toFixed(2)
 }
 
+function getPercentage(part, whole){
+  return ((Number(part) / Number(whole)) * 100).toFixed(2)
+}
+
 const getDateLabelsForChart = (start, end) => {
   let start_date = new Date(start)
   let end_date = new Date(end)
@@ -88,6 +92,7 @@ const regressionLineColor = '#94A3B8'
 
 export {
   getAverage,
+  getPercentage,
   getDateLabelsForChart,
   groupDataByRegion,
   getLinearRegression,

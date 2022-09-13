@@ -2,9 +2,9 @@ import { memo } from "react"
 import { Line } from "react-chartjs-2"
 import { getDateLabelsForChart, groupDataByRegion, chartFadedColors, chartSolidColors, pointStyles } from "../../public/utils"
 
-const CexSampleSize = ({dateRange, sampleSizeData}) => {
+const CexSampleSize = ({dateRange, data}) => {
   const labels = getDateLabelsForChart(dateRange.startDate, dateRange.endDate)
-  const regionalData = Object.values(groupDataByRegion(sampleSizeData, "region_name"))
+  const regionalData = Object.values(groupDataByRegion(data, "region_name"))
   const structuredData = regionalData.map((region, idx) => {
 
     const data = region.map(row => {
@@ -33,12 +33,12 @@ const CexSampleSize = ({dateRange, sampleSizeData}) => {
     responsive: true,
     aspectRatio: 2.5,
     interaction: {
-      mode: 'index'
+      mode: 'point'
     },
     plugins: {
       title: {
         display: true,
-        text: "Sample Size",
+        text: "All Regions",
         font: {
           size: 16
         }
@@ -104,8 +104,8 @@ const CexSampleSize = ({dateRange, sampleSizeData}) => {
   }
 
   return (
-    <div>
-      <div className="relative my-4 mx-12">
+    <div className="mx-6">
+      <div className="relative my-4">
         <h1 className="inline text-2xl">Survey Sample Size</h1>
       </div>
       <div className="flex justify-center">

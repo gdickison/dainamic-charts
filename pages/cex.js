@@ -4,6 +4,7 @@ import CexFormInputs from "../src/components/CexFormInputs"
 import Loader from "../src/components/Loader"
 import CexSampleSize from "../src/components/CexSampleSize"
 import CexSampleAge from "../src/components/CexSampleAge"
+import CexSampleSex from "../src/components/CexSampleSex"
 
 const cex = () => {
   const [isLoading, setLoading] = useState(false)
@@ -16,6 +17,7 @@ const cex = () => {
 
   const [sampleSizeData, setSampleSizeData] = useState()
   const [sampleAgeData, setSampleAgeData] = useState()
+  const [sampleSexData, setSampleSexData] = useState()
 
   //*******************************************************************//
   //                                                                   //
@@ -168,11 +170,45 @@ const cex = () => {
     }
   }
 
+  const getSampleSex = async () => {
+    const regions = selectedRegions.map(region => {
+      return region.regionCode
+    })
+
+    const JSONdata = JSON.stringify({
+      regions,
+      startDate: dateRange.startDate.split('T')[0],
+      endDate: dateRange.endDate.split('T')[0]
+    })
+
+    const endpoint = `/api/cex_sample_sex`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status !== 200){
+      console.log("There was an error getting the sample sex data")
+    } else if(status === 200){
+      setSampleSexData(data)
+    }
+  }
+
   const getData = () => {
     setShowOptionsModal("hidden")
     setShowChangeOptionsButton("flex")
     getSampleSize()
     getSampleAge()
+    getSampleSex()
   }
 
 
@@ -213,13 +249,19 @@ const cex = () => {
           {sampleSizeData &&
             <CexSampleSize
               dateRange={dateRange}
-              sampleSizeData={sampleSizeData}
+              data={sampleSizeData}
             />
           }
           {sampleAgeData &&
             <CexSampleAge
               dateRange={dateRange}
-              sampleAgeData={sampleAgeData}
+              data={sampleAgeData}
+            />
+          }
+          {sampleSexData &&
+            <CexSampleSex
+              dateRange={dateRange}
+              data={sampleSexData}
             />
           }
         </div>

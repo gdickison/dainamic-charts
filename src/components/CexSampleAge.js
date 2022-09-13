@@ -1,65 +1,206 @@
 import { memo } from "react"
-import { Line } from "react-chartjs-2"
-import { getDateLabelsForChart, groupDataByRegion, chartFadedColors, chartSolidColors } from "../../public/utils"
+import { Bar } from "react-chartjs-2"
+import { getDateLabelsForChart, groupDataByRegion, chartFadedColors, chartSolidColors, pointStyles } from "../../public/utils"
+import ChartDescription from "./ChartDescription"
 
-const CexSampleAge = ({dateRange, sampleAgeData}) => {
-
+const CexSampleAge = ({dateRange, data}) => {
   const labels = getDateLabelsForChart(dateRange.startDate, dateRange.endDate)
-  const regionalData = Object.values(groupDataByRegion(sampleAgeData, "region_name"))
-
+  const regionalData = Object.values(groupDataByRegion(data, "region_name"))
   const avgAgeData = regionalData.map((region, idx) => {
+
     const label = region[idx].region_name
+
     const sampleAvgAge = region.map(row => {
-      return row.sample_avg_age
+      return parseFloat(Number(row.sample_avg_age)).toFixed(1)
+    })
+
+    const sample_19_25 = region.map(row => {
+      return parseFloat((Number(row.sample_19_25) / (Number(row.total_sample) - Number(row.sample_18_under))) * 100).toFixed(1)
+    })
+
+    const sample_19_25_tooltip = region.map(row => {
+      return row.sample_19_25
+    })
+
+    const sample_26_35 = region.map(row => {
+      return parseFloat((Number(row.sample_26_35) / (Number(row.total_sample) - Number(row.sample_18_under))) * 100).toFixed(1)
+    })
+
+    const sample_26_35_tooltip = region.map(row => {
+      return row.sample_26_35
+    })
+
+    const sample_36_45 = region.map(row => {
+      return parseFloat((Number(row.sample_36_45) / (Number(row.total_sample) - Number(row.sample_18_under))) * 100).toFixed(1)
+    })
+
+    const sample_36_45_tooltip = region.map(row => {
+      return row.sample_36_45
+    })
+
+    const sample_46_55 = region.map(row => {
+      return parseFloat((Number(row.sample_46_55) / (Number(row.total_sample) - Number(row.sample_18_under))) * 100).toFixed(1)
+    })
+
+    const sample_46_55_tooltip = region.map(row => {
+      return row.sample_46_55
+    })
+
+    const sample_56_65 = region.map(row => {
+      return parseFloat((Number(row.sample_56_65) / (Number(row.total_sample) - Number(row.sample_18_under))) * 100).toFixed(1)
+    })
+
+    const sample_56_65_tooltip = region.map(row => {
+      return row.sample_56_65
+    })
+
+    const sample_66_75 = region.map(row => {
+      return parseFloat((Number(row.sample_66_75) / (Number(row.total_sample) - Number(row.sample_18_under))) * 100).toFixed(1)
+    })
+
+    const sample_66_75_tooltip = region.map(row => {
+      return row.sample_66_75
+    })
+
+    const sample_76_85 = region.map(row => {
+      return parseFloat((Number(row.sample_76_85) / (Number(row.total_sample) - Number(row.sample_18_under))) * 100).toFixed(1)
+    })
+
+    const sample_76_85_tooltip = region.map(row => {
+      return row.sample_76_85
+    })
+
+    const sample_over_85 = region.map(row => {
+      return parseFloat((Number(row.sample_over_85) / (Number(row.total_sample) - Number(row.sample_18_under))) * 100).toFixed(1)
+    })
+
+    const sample_over_85_tooltip = region.map(row => {
+      return row.sample_over_85
     })
 
     const spouseAvgAge = region.map(row => {
       return row.spouse_avg_age
     })
 
-    return {label, sampleAvgAge, spouseAvgAge}
+    return {label,
+      sampleAvgAge,
+      spouseAvgAge,
+      sample_19_25,
+      sample_26_35,
+      sample_36_45,
+      sample_46_55,
+      sample_56_65,
+      sample_66_75,
+      sample_76_85,
+      sample_over_85,
+      sample_19_25_tooltip,
+      sample_26_35_tooltip,
+      sample_36_45_tooltip,
+      sample_46_55_tooltip,
+      sample_56_65_tooltip,
+      sample_66_75_tooltip,
+      sample_76_85_tooltip,
+      sample_over_85_tooltip
+    }
   })
 
-  const rawChartData = avgAgeData.map((region, idx) => {
-    return [{
-      label: `${region.label} Avg Age`,
-      data: region.sampleAvgAge,
-      backgroundColor: chartFadedColors[1],
-      borderColor: chartSolidColors[1],
-      pointRadius: 5,
-      pointHitRadius: 5,
-      pointHoverRadius: 7,
-      pointHoverBackgroundColor: chartSolidColors[1],
+  const rawChartData = avgAgeData.map((region) => {
+    return [
+      {
+      label: '19-25',
+      order: 2,
+      data: region.sample_19_25,
+      tooltip: region.sample_19_25_tooltip,
+      backgroundColor: chartFadedColors[0],
+      hoverBackgroundColor: chartSolidColors[0],
       title: region.label
     },
     {
-      label: `${region.label} Avg Spouse Age`,
-      data: region.spouseAvgAge,
-      backgroundColor: chartFadedColors[0],
-      borderColor: chartSolidColors[0],
+      label: '26-35',
+      order: 2,
+      data: region.sample_26_35,
+      tooltip: region.sample_26_35_tooltip,
+      backgroundColor: chartFadedColors[1],
+      hoverBackgroundColor: chartSolidColors[1],
+    },
+    {
+      label: '36-45',
+      order: 2,
+      data: region.sample_36_45,
+      tooltip: region.sample_36_45_tooltip,
+      backgroundColor: chartFadedColors[2],
+      hoverBackgroundColor: chartSolidColors[2],
+    },
+    {
+      label: '46-55',
+      order: 2,
+      data: region.sample_46_55,
+      tooltip: region.sample_46_55_tooltip,
+      backgroundColor: chartFadedColors[3],
+      hoverBackgroundColor: chartSolidColors[3],
+    },
+    {
+      label: '56-65',
+      order: 2,
+      data: region.sample_56_65,
+      tooltip: region.sample_56_65_tooltip,
+      backgroundColor: chartFadedColors[4],
+      hoverBackgroundColor: chartSolidColors[4],
+    },
+    {
+      label: '66-75',
+      order: 2,
+      data: region.sample_66_75,
+      tooltip: region.sample_66_75_tooltip,
+      backgroundColor: chartFadedColors[5],
+      hoverBackgroundColor: chartSolidColors[5],
+    },
+    {
+      label: '76-85',
+      order: 2,
+      data: region.sample_76_85,
+      tooltip: region.sample_76_85_tooltip,
+      backgroundColor: chartFadedColors[6],
+      hoverBackgroundColor: chartSolidColors[6],
+    },
+    {
+      label: '86 & Over',
+      order: 2,
+      data: region.sample_over_85,
+      tooltip: region.sample_over_85_tooltip,
+      backgroundColor: chartFadedColors[7],
+      hoverBackgroundColor: chartSolidColors[7],
+    },
+    {
+      label: 'Avg Age',
+      order: 1,
+      data: region.sampleAvgAge,
+      tooltip: region.sampleAvgAge,
+      backgroundColor: 'black',
+      borderColor: 'black',
+      borderDash: [5,5],
       pointRadius: 5,
       pointHitRadius: 5,
       pointHoverRadius: 7,
-      pointHoverBackgroundColor: chartSolidColors[0]
-    }]
+      type: 'line',
+      yAxisID: 'avg_age'
+      }
+    ]
   })
 
   const chartOptions = {
     responsive: true,
     aspectRatio: 2.5,
     interaction: {
-      mode: 'index'
+      intersect: false
     },
     plugins: {
       title: {
-        display: false,
-        text: "Respondent Average Age",
-        font: {
-          size: 16
-        }
+        display: false
       },
       legend: {
         display: true,
+        title: 'Age Brackets',
         labels: {
           usePointStyle: true
         }
@@ -68,7 +209,10 @@ const CexSampleAge = ({dateRange, sampleAgeData}) => {
         usePointStyle: true,
         callbacks: {
           label: function(context){
-            return `${context.dataset.label}: ${context.raw}`
+            const tip = context.datasetIndex === 8
+              ? `${context.dataset.label}: ${context.raw}`
+              : `Age: ${context.dataset.label}: ${context.raw}% (${context.dataset.tooltip[context.datasetIndex]})`
+            return tip
           }
         },
         boxPadding: 6
@@ -76,9 +220,10 @@ const CexSampleAge = ({dateRange, sampleAgeData}) => {
     },
     scales: {
       y: {
+        stacked: true,
         title: {
           display: true,
-          text: "Average Age",
+          text: "Age Bracket %",
           padding: 20,
           font: {
             size: 16
@@ -91,10 +236,30 @@ const CexSampleAge = ({dateRange, sampleAgeData}) => {
           font: {
             size: 12
           },
-          stepSize: 1
+          stepSize: 10
+        },
+        max: 100,
+        grid: {
+          display: false
+        }
+      },
+      avg_age: {
+        position: 'right',
+        beginAtZero: false,
+        title: {
+          display: true,
+          text: 'Average Age',
+          padding: 20,
+          font: {
+            size: 16
+          }
+        },
+        grid: {
+          display: false
         }
       },
       x: {
+        stacked: true,
         title: {
           display: false,
           text: "Survey Month",
@@ -119,24 +284,26 @@ const CexSampleAge = ({dateRange, sampleAgeData}) => {
   }
 
   return (
-    <div>
-      <div className="relative my-4 mx-12">
-        <h1 className="inline text-2xl">Average Age of Respondents</h1>
+    <div className="mx-6">
+      <div className="relative my-4">
+        <h1 className="inline text-2xl">Age of Respondents</h1>
       </div>
-      <div className="grid grid-cols-2 gap-2">
-        {rawChartData && rawChartData.map(row => {
-
-          const barChartData = {
+      <ChartDescription
+        description={`This chart shows respondents' age brackets as a percentage of all respondents, as well as the average age of the respondents. Hover over the bar chart to see the percentage for a particular age bracket, and the number of respondents in that age bracket.`}
+      />
+      <div className="grid grid-cols-2 gap-x-2 gap-y-6">
+        {rawChartData && rawChartData.map((row, idx) => {
+          const chartData = {
             labels: labels,
             datasets: row
           }
           return (
-            <div>
+            <div key={idx}>
               <div className="flex justify-center">
                 <h1 className="font-semibold">{row[0].title}</h1>
               </div>
               <div className="flex justify-center p-4 shadow-lg bg-gray-50">
-                <Line data={barChartData} options={chartOptions}/>
+                <Bar data={chartData} options={chartOptions}/>
               </div>
             </div>
           )
