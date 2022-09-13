@@ -20,13 +20,13 @@ const Home = () => {
               <NavCard
                 title="Mortgage Data"
                 page="/mortgage"
-                icon="/fannie_mae_logo.png"
+                icon="/mortgage_data.svg"
                 description="Based on Fannie Mae's Single-Family Loan Performance Data"
               />
               <NavCard
                 title="Consumer Expenditure Survey Data"
                 page="/cex"
-                icon="/bls_logo.svg"
+                icon="/cex_data.svg"
                 description="Based on the US Bureau of Labor Statistics Consumer Expenditure Survey"
               />
             </div>
