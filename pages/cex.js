@@ -5,6 +5,7 @@ import Loader from "../src/components/Loader"
 import CexSampleSize from "../src/components/CexSampleSize"
 import CexSampleAge from "../src/components/CexSampleAge"
 import CexSampleSex from "../src/components/CexSampleSex"
+import CexSampleMaritalStatus from "../src/components/CexSampleMaritalStatus"
 
 const cex = () => {
   const [isLoading, setLoading] = useState(false)
@@ -18,6 +19,7 @@ const cex = () => {
   const [sampleSizeData, setSampleSizeData] = useState()
   const [sampleAgeData, setSampleAgeData] = useState()
   const [sampleSexData, setSampleSexData] = useState()
+  const [sampleMaritalStatusData, setSampleMaritalStatusData] = useState()
 
   //*******************************************************************//
   //                                                                   //
@@ -203,12 +205,46 @@ const cex = () => {
     }
   }
 
+  const getSampleMaritalStatus = async () => {
+    const regions = selectedRegions.map(region => {
+      return region.regionCode
+    })
+
+    const JSONdata = JSON.stringify({
+      regions,
+      startDate: dateRange.startDate.split('T')[0],
+      endDate: dateRange.endDate.split('T')[0]
+    })
+
+    const endpoint = `/api/cex_sample_marital_status`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status !== 200){
+      console.log("There was an error getting the sample marital status data")
+    } else if(status === 200){
+      setSampleMaritalStatusData(data)
+    }
+  }
+
   const getData = () => {
     setShowOptionsModal("hidden")
     setShowChangeOptionsButton("flex")
     getSampleSize()
     getSampleAge()
     getSampleSex()
+    getSampleMaritalStatus()
   }
 
 
@@ -262,6 +298,12 @@ const cex = () => {
             <CexSampleSex
               dateRange={dateRange}
               data={sampleSexData}
+            />
+          }
+          {sampleMaritalStatusData &&
+            <CexSampleMaritalStatus
+              dateRange={dateRange}
+              data={sampleMaritalStatusData}
             />
           }
         </div>
