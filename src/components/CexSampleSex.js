@@ -1,6 +1,6 @@
 import { memo } from "react"
 import { Bar } from "react-chartjs-2"
-import { getPercentage, getDateLabelsForChart, groupDataByRegion, chartFadedColors, chartSolidColors, pointStyles } from "../../public/utils"
+import { getPercentage, getDateLabelsForChart, groupDataByRegion, cexFadedColors, cexSolidColors } from "../../public/utils"
 import ChartDescription from "./ChartDescription"
 
 const CexSampleSex = ({dateRange, data}) => {
@@ -26,16 +26,16 @@ const CexSampleSex = ({dateRange, data}) => {
     return [{
       label: 'Male',
       data: region.maleRespondents,
-      backgroundColor: chartFadedColors[idx],
-      hoverBorderColor: chartSolidColors[idx],
+      backgroundColor: cexFadedColors[idx],
+      hoverBorderColor: cexSolidColors[idx],
       hoverBorderWidth: 3,
       title: region.label
     },
     {
       label: 'Female',
       data: region.femaleRespondents,
-      backgroundColor: chartSolidColors[idx],
-      hoverBorderColor: chartFadedColors[idx],
+      backgroundColor: cexSolidColors[idx],
+      hoverBorderColor: cexFadedColors[idx],
       hoverBorderWidth: 3
     }]
   })

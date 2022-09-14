@@ -430,7 +430,7 @@ const cex = () => {
             <div className="border-2">
               <div className="mx-6">
               <div className="relative my-4">
-                <h1 className="inline text-2xl">Household Earners</h1>
+                <h1 className="inline text-3xl">Household Earners</h1>
               </div>
               </div>
               <CexSampleEarners

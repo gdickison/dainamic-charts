@@ -1,6 +1,6 @@
 import { memo } from "react"
 import { Line } from "react-chartjs-2"
-import { getDateLabelsForChart, groupDataByRegion, chartFadedColors, chartSolidColors, pointStyles } from "../../public/utils"
+import { getDateLabelsForChart, groupDataByRegion, cexFadedColors, cexSolidColors, pointStyles } from "../../public/utils"
 
 const CexSampleSize = ({dateRange, data}) => {
   const labels = getDateLabelsForChart(dateRange.startDate, dateRange.endDate)
@@ -14,12 +14,12 @@ const CexSampleSize = ({dateRange, data}) => {
     return {
       label: region[idx].region_name,
       data: data,
-      borderColor: chartFadedColors[idx],
-      backgroundColor: chartFadedColors[idx],
+      borderColor: cexFadedColors[idx],
+      backgroundColor: cexFadedColors[idx],
       pointRadius: 5,
       pointHitRadius: 5,
       pointHoverRadius: 7,
-      pointHoverBackgroundColor: chartSolidColors[idx],
+      pointHoverBackgroundColor: cexSolidColors[idx],
       pointStyle: pointStyles[idx]
     }
   })

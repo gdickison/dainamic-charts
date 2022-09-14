@@ -60,6 +60,28 @@ function split(str, index) {
 }
 
 const chartFadedColors = [
+  "rgba(255, 0, 0, 0.3)",
+  "rgba(0, 83, 255, 0.3)",
+  "rgba(0, 180, 0, 0.3)",
+  "rgba(255, 225, 0, 0.3)",
+  "rgba(255, 130, 0, 0.3)",
+  "rgba(51, 177, 255, 0.3)",
+  "rgba(56, 245, 39, 0.3)",
+  "rgba(245, 172, 39, 0.3)"
+]
+
+const chartSolidColors = [
+  "rgba(255, 0, 0, 0.7)",
+  "rgba(0, 83, 255, 0.7)",
+  "rgba(0, 180, 0, 0.7)",
+  "rgba(255, 225, 0, 0.7)",
+  "rgba(255, 130, 0, 0.7)",
+  "rgba(51, 177, 255, 0.7)",
+  "rgba(56, 245, 39, 0.7)",
+  "rgba(245, 172, 39, 0.7)"
+]
+
+const cexFadedColors = [
   'rgb(31,120,180, 0.5)',
   'rgb(51,160,44, 0.5)',
   'rgb(227,26,28, 0.5)',
@@ -70,7 +92,7 @@ const chartFadedColors = [
   'rgb(177,89,40, 0.5)'
 ]
 
-const chartSolidColors = [
+const cexSolidColors = [
   'rgb(31,120,180, 0.9)',
   'rgb(51,160,44, 0.9)',
   'rgb(227,26,28, 0.9)',
@@ -100,6 +122,8 @@ export {
   split,
   chartFadedColors,
   chartSolidColors,
+  cexFadedColors,
+  cexSolidColors,
   pointStyles,
   regressionLineColor
 }

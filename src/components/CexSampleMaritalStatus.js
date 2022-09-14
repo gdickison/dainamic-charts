@@ -1,6 +1,6 @@
 import { memo } from "react"
 import { Bar } from "react-chartjs-2"
-import { getDateLabelsForChart, groupDataByRegion, chartFadedColors, chartSolidColors } from "../../public/utils"
+import { getDateLabelsForChart, groupDataByRegion, cexFadedColors, cexSolidColors } from "../../public/utils"
 import ChartDescription from "./ChartDescription"
 
 const CexSampleMaritalStatus = ({dateRange, data}) => {
@@ -71,37 +71,37 @@ const CexSampleMaritalStatus = ({dateRange, data}) => {
       label: 'Married',
       data: region.percentMarried,
       tooltip: region.married,
-      backgroundColor: chartFadedColors[0],
-      hoverBackgroundColor: chartSolidColors[0],
+      backgroundColor: cexFadedColors[0],
+      hoverBackgroundColor: cexSolidColors[0],
       title: region.label
     },
     {
       label: 'Separated',
       data: region.percentSeparated,
       tooltip: region.separated,
-      backgroundColor: chartFadedColors[1],
-      hoverBackgroundColor: chartSolidColors[1],
+      backgroundColor: cexFadedColors[1],
+      hoverBackgroundColor: cexSolidColors[1],
     },
     {
       label: 'Divorced',
       data: region.percentDivorced,
       tooltip: region.divorced,
-      backgroundColor: chartFadedColors[2],
-      hoverBackgroundColor: chartSolidColors[2],
+      backgroundColor: cexFadedColors[2],
+      hoverBackgroundColor: cexSolidColors[2],
     },
     {
       label: 'Widowed',
       data: region.percentWidowed,
       tooltip: region.widowed,
-      backgroundColor: chartFadedColors[3],
-      hoverBackgroundColor: chartSolidColors[3],
+      backgroundColor: cexFadedColors[3],
+      hoverBackgroundColor: cexSolidColors[3],
     },
     {
       label: 'Never Married',
       data: region.percentNeverMarried,
       tooltip: region.neverMarried,
-      backgroundColor: chartFadedColors[4],
-      hoverBackgroundColor: chartSolidColors[4],
+      backgroundColor: cexFadedColors[4],
+      hoverBackgroundColor: cexSolidColors[4],
     }
     ]
   })

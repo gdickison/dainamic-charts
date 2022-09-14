@@ -1,6 +1,6 @@
 import { memo } from "react"
 import { Bar } from "react-chartjs-2"
-import { getDateLabelsForChart, groupDataByRegion, chartFadedColors, chartSolidColors } from "../../public/utils"
+import { getDateLabelsForChart, groupDataByRegion, cexFadedColors, cexSolidColors } from "../../public/utils"
 import ChartDescription from "./ChartDescription"
 
 const CexSampleRace = ({dateRange, data}) => {
@@ -81,44 +81,44 @@ const CexSampleRace = ({dateRange, data}) => {
         label: 'White',
         data: region.percentWhite,
         tooltip: region.white,
-        backgroundColor: chartFadedColors[0],
-        hoverBackgroundColor: chartSolidColors[0],
+        backgroundColor: cexFadedColors[0],
+        hoverBackgroundColor: cexSolidColors[0],
         title: region.label
       },
       {
         label: 'Black',
         data: region.percentBlack,
         tooltip: region.black,
-        backgroundColor: chartFadedColors[1],
-        hoverBackgroundColor: chartSolidColors[1],
+        backgroundColor: cexFadedColors[1],
+        hoverBackgroundColor: cexSolidColors[1],
       },
       {
         label: 'Asian',
         data: region.percentAsian,
         tooltip: region.asian,
-        backgroundColor: chartFadedColors[3],
-        hoverBackgroundColor: chartSolidColors[3],
+        backgroundColor: cexFadedColors[3],
+        hoverBackgroundColor: cexSolidColors[3],
       },
       {
         label: 'Mixed',
         data: region.percentMixed,
         tooltip: region.mixed,
-        backgroundColor: chartFadedColors[5],
-        hoverBackgroundColor: chartSolidColors[5],
+        backgroundColor: cexFadedColors[5],
+        hoverBackgroundColor: cexSolidColors[5],
       },
       {
         label: 'Pacific Islander',
         data: region.percentPacificIslander,
         tooltip: region.pacificIslander,
-        backgroundColor: chartFadedColors[4],
-        hoverBackgroundColor: chartSolidColors[4],
+        backgroundColor: cexFadedColors[4],
+        hoverBackgroundColor: cexSolidColors[4],
       },
       {
         label: 'Native American',
         data: region.percentNativeAmerican,
         tooltip: region.nativeAmerican,
-        backgroundColor: chartFadedColors[2],
-        hoverBackgroundColor: chartSolidColors[2],
+        backgroundColor: cexFadedColors[2],
+        hoverBackgroundColor: cexSolidColors[2],
       }
     ]
   })

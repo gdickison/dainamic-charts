@@ -1,6 +1,6 @@
 import { memo } from "react"
 import { Bar } from "react-chartjs-2"
-import { getDateLabelsForChart, groupDataByRegion, chartFadedColors, chartSolidColors } from "../../public/utils"
+import { getDateLabelsForChart, groupDataByRegion, cexFadedColors, cexSolidColors } from "../../public/utils"
 import ChartDescription from "./ChartDescription"
 
 const CexSampleAge = ({dateRange, data}) => {
@@ -111,8 +111,8 @@ const CexSampleAge = ({dateRange, data}) => {
       order: 2,
       data: region.sample_19_25,
       tooltip: region.sample_19_25_tooltip,
-      backgroundColor: chartFadedColors[0],
-      hoverBackgroundColor: chartSolidColors[0],
+      backgroundColor: cexFadedColors[0],
+      hoverBackgroundColor: cexSolidColors[0],
       title: region.label
     },
     {
@@ -120,56 +120,56 @@ const CexSampleAge = ({dateRange, data}) => {
       order: 2,
       data: region.sample_26_35,
       tooltip: region.sample_26_35_tooltip,
-      backgroundColor: chartFadedColors[1],
-      hoverBackgroundColor: chartSolidColors[1],
+      backgroundColor: cexFadedColors[1],
+      hoverBackgroundColor: cexSolidColors[1],
     },
     {
       label: '36-45',
       order: 2,
       data: region.sample_36_45,
       tooltip: region.sample_36_45_tooltip,
-      backgroundColor: chartFadedColors[2],
-      hoverBackgroundColor: chartSolidColors[2],
+      backgroundColor: cexFadedColors[2],
+      hoverBackgroundColor: cexSolidColors[2],
     },
     {
       label: '46-55',
       order: 2,
       data: region.sample_46_55,
       tooltip: region.sample_46_55_tooltip,
-      backgroundColor: chartFadedColors[3],
-      hoverBackgroundColor: chartSolidColors[3],
+      backgroundColor: cexFadedColors[3],
+      hoverBackgroundColor: cexSolidColors[3],
     },
     {
       label: '56-65',
       order: 2,
       data: region.sample_56_65,
       tooltip: region.sample_56_65_tooltip,
-      backgroundColor: chartFadedColors[4],
-      hoverBackgroundColor: chartSolidColors[4],
+      backgroundColor: cexFadedColors[4],
+      hoverBackgroundColor: cexSolidColors[4],
     },
     {
       label: '66-75',
       order: 2,
       data: region.sample_66_75,
       tooltip: region.sample_66_75_tooltip,
-      backgroundColor: chartFadedColors[5],
-      hoverBackgroundColor: chartSolidColors[5],
+      backgroundColor: cexFadedColors[5],
+      hoverBackgroundColor: cexSolidColors[5],
     },
     {
       label: '76-85',
       order: 2,
       data: region.sample_76_85,
       tooltip: region.sample_76_85_tooltip,
-      backgroundColor: chartFadedColors[6],
-      hoverBackgroundColor: chartSolidColors[6],
+      backgroundColor: cexFadedColors[6],
+      hoverBackgroundColor: cexSolidColors[6],
     },
     {
       label: '86 & Over',
       order: 2,
       data: region.sample_over_85,
       tooltip: region.sample_over_85_tooltip,
-      backgroundColor: chartFadedColors[7],
-      hoverBackgroundColor: chartSolidColors[7],
+      backgroundColor: cexFadedColors[7],
+      hoverBackgroundColor: cexSolidColors[7],
     },
     {
       label: 'Avg Age',

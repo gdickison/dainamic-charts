@@ -1,6 +1,6 @@
 import { memo } from "react"
 import { Bar } from "react-chartjs-2"
-import { getDateLabelsForChart, groupDataByRegion, chartFadedColors, chartSolidColors } from "../../public/utils"
+import { getDateLabelsForChart, groupDataByRegion, cexFadedColors, cexSolidColors } from "../../public/utils"
 import ChartDescription from "./ChartDescription"
 
 const CexSampleEducation = ({dateRange, data}) => {
@@ -79,44 +79,44 @@ const CexSampleEducation = ({dateRange, data}) => {
       label: '< High School Diploma',
       data: region.percentLessThanHSDiploma,
       tooltip: region.lessThanHSDiploma,
-      backgroundColor: chartFadedColors[0],
-      hoverBackgroundColor: chartSolidColors[0],
+      backgroundColor: cexFadedColors[0],
+      hoverBackgroundColor: cexSolidColors[0],
       title: region.label
     },
     {
       label: 'High School Diploma',
       data: region.percentHsDiploma,
       tooltip: region.hsDiploma,
-      backgroundColor: chartFadedColors[1],
-      hoverBackgroundColor: chartSolidColors[1],
+      backgroundColor: cexFadedColors[1],
+      hoverBackgroundColor: cexSolidColors[1],
     },
     {
       label: 'Some College',
       data: region.percentSomeCollege,
       tooltip: region.someCollege,
-      backgroundColor: chartFadedColors[2],
-      hoverBackgroundColor: chartSolidColors[2],
+      backgroundColor: cexFadedColors[2],
+      hoverBackgroundColor: cexSolidColors[2],
     },
     {
       label: "Associate's Degree",
       data: region.percentAssocDegree,
       tooltip: region.assocDegree,
-      backgroundColor: chartFadedColors[3],
-      hoverBackgroundColor: chartSolidColors[3],
+      backgroundColor: cexFadedColors[3],
+      hoverBackgroundColor: cexSolidColors[3],
     },
     {
       label: "Bachelor's Degree",
       data: region.percentBachDegree,
       tooltip: region.bachDegree,
-      backgroundColor: chartFadedColors[4],
-      hoverBackgroundColor: chartSolidColors[4],
+      backgroundColor: cexFadedColors[4],
+      hoverBackgroundColor: cexSolidColors[4],
     },
     {
       label: 'Post Grad Degree',
       data: region.percentPostGradDegree,
       tooltip: region.postGradDegree,
-      backgroundColor: chartFadedColors[5],
-      hoverBackgroundColor: chartSolidColors[5],
+      backgroundColor: cexFadedColors[5],
+      hoverBackgroundColor: cexSolidColors[5],
     },
     ]
   })
