@@ -1,4 +1,4 @@
-CREATE VIEW banking_app.cex_sample_race AS
+CREATE VIEW banking_app.cex_sample_earners AS
 SELECT
 	"QINTRVYR" ::INTEGER AS year,
 	"QINTRVMO" ::INTEGER AS month,
@@ -14,32 +14,23 @@ SELECT
 		WHEN "REGION" = '4' THEN 'West'
 		WHEN "REGION" IS NULL OR "REGION" = '' THEN 'none'
 	END AS region_name,
-	COUNT("NEWID") AS "total_sample",
-  COUNT("RACE2") AS "total_spouse",
-  CAST(COUNT("NEWID") FILTER (WHERE "REF_RACE" = '1') AS NUMERIC) AS "sample_white",
-  ROUND((CAST((COUNT("NEWID") FILTER (WHERE "REF_RACE" = '1')) AS NUMERIC) / COUNT("NEWID")), 4) * 100 AS "percent_sample_white",
-  CAST(COUNT("RACE2") FILTER (WHERE "RACE2" = '1') AS NUMERIC) AS "spouse_white",
-  ROUND((CAST((COUNT("RACE2") FILTER (WHERE "RACE2" = '1')) AS NUMERIC) / COUNT("RACE2")), 4) * 100 AS "percent_spouse_white",
-  CAST(COUNT("NEWID") FILTER (WHERE "REF_RACE" = '2') AS NUMERIC) AS "sample_black",
-  ROUND((CAST((COUNT("NEWID") FILTER (WHERE "REF_RACE" = '2')) AS NUMERIC) / COUNT("NEWID")), 4) * 100 AS "percent_sample_black",
-  CAST(COUNT("RACE2") FILTER (WHERE "RACE2" = '2') AS NUMERIC) AS "spouse_black",
-  ROUND((CAST((COUNT("RACE2") FILTER (WHERE "RACE2" = '2')) AS NUMERIC) / COUNT("RACE2")), 4) * 100 AS "percent_spouse_black",
-  CAST(COUNT("NEWID") FILTER (WHERE "REF_RACE" = '3') AS NUMERIC) AS "sample_native_american",
-  ROUND((CAST((COUNT("NEWID") FILTER (WHERE "REF_RACE" = '3')) AS NUMERIC) / COUNT("NEWID")), 4) * 100 AS "percent_sample_native_american",
-  CAST(COUNT("RACE2") FILTER (WHERE "RACE2" = '3') AS NUMERIC) AS "spouse_native_american",
-  ROUND((CAST((COUNT("RACE2") FILTER (WHERE "RACE2" = '3')) AS NUMERIC) / COUNT("RACE2")), 4) * 100 AS "percent_spouse_native_american",
-  CAST(COUNT("NEWID") FILTER (WHERE "REF_RACE" = '4') AS NUMERIC) AS "sample_asian",
-  ROUND((CAST((COUNT("NEWID") FILTER (WHERE "REF_RACE" = '4')) AS NUMERIC) / COUNT("NEWID")), 4) * 100 AS "percent_sample_asian",
-  CAST(COUNT("RACE2") FILTER (WHERE "RACE2" = '4') AS NUMERIC) AS "spouse_asian",
-  ROUND((CAST((COUNT("RACE2") FILTER (WHERE "RACE2" = '4')) AS NUMERIC) / COUNT("RACE2")), 4) * 100 AS "percent_spouse_asian",
-  CAST(COUNT("NEWID") FILTER (WHERE "REF_RACE" = '5') AS NUMERIC) AS "sample_pacific_islander",
-  ROUND((CAST((COUNT("NEWID") FILTER (WHERE "REF_RACE" = '5')) AS NUMERIC) / COUNT("NEWID")), 4) * 100 AS "percent_sample_pacific_islander",
-  CAST(COUNT("RACE2") FILTER (WHERE "RACE2" = '5') AS NUMERIC) AS "spouse_pacific_islander",
-  ROUND((CAST((COUNT("RACE2") FILTER (WHERE "RACE2" = '5')) AS NUMERIC) / COUNT("RACE2")), 4) * 100 AS "percent_spouse_pacific_islander",
-  CAST(COUNT("NEWID") FILTER (WHERE "REF_RACE" = '6') AS NUMERIC) AS "sample_mixed",
-  ROUND((CAST((COUNT("NEWID") FILTER (WHERE "REF_RACE" = '6')) AS NUMERIC) / COUNT("NEWID")), 4) * 100 AS "percent_sample_mixed",
-  CAST(COUNT("RACE2") FILTER (WHERE "RACE2" = '6') AS NUMERIC) AS "spouse_mixed",
-  ROUND((CAST((COUNT("RACE2") FILTER (WHERE "RACE2" = '6')) AS NUMERIC) / COUNT("RACE2")), 4) * 100 AS "percent_spouse_mixed"
+	COUNT("NEWID") AS total_sample,
+  COUNT("NEWID") FILTER(WHERE "EARNCOMP" = '1') AS ref_only,
+  ROUND(CAST(COUNT("NEWID") FILTER (WHERE "EARNCOMP" = '1') AS NUMERIC)/COUNT("NEWID"), 4) * 100 AS percent_ref_only,
+  COUNT("NEWID") FILTER(WHERE "EARNCOMP" = '2') AS ref_and_spouse,
+  ROUND(CAST(COUNT("NEWID") FILTER (WHERE "EARNCOMP" = '2') AS NUMERIC)/COUNT("NEWID"), 4) * 100 AS percent_ref_and_spouse,
+  COUNT("NEWID") FILTER(WHERE "EARNCOMP" = '3') AS ref_and_spouse_and_others,
+  ROUND(CAST(COUNT("NEWID") FILTER (WHERE "EARNCOMP" = '3') AS NUMERIC)/COUNT("NEWID"), 4) * 100 AS percent_ref_and_spouse_and_others,
+  COUNT("NEWID") FILTER(WHERE "EARNCOMP" = '4') AS ref_and_others,
+  ROUND(CAST(COUNT("NEWID") FILTER (WHERE "EARNCOMP" = '4') AS NUMERIC)/COUNT("NEWID"), 4) * 100 AS percent_ref_and_others,
+  COUNT("NEWID") FILTER(WHERE "EARNCOMP" = '5') AS spouse_only,
+  ROUND(CAST(COUNT("NEWID") FILTER (WHERE "EARNCOMP" = '5') AS NUMERIC)/COUNT("NEWID"), 4) * 100 AS percent_spouse_only,
+  COUNT("NEWID") FILTER(WHERE "EARNCOMP" = '6') AS spouse_and_others,
+  ROUND(CAST(COUNT("NEWID") FILTER (WHERE "EARNCOMP" = '6') AS NUMERIC)/COUNT("NEWID"), 4) * 100 AS percent_spouse_and_others,
+  COUNT("NEWID") FILTER(WHERE "EARNCOMP" = '7') AS others_only,
+  ROUND(CAST(COUNT("NEWID") FILTER (WHERE "EARNCOMP" = '7') AS NUMERIC)/COUNT("NEWID"), 4) * 100 AS percent_others_only,
+  COUNT("NEWID") FILTER(WHERE "EARNCOMP" = '8') AS no_earners,
+  ROUND(CAST(COUNT("NEWID") FILTER (WHERE "EARNCOMP" = '8') AS NUMERIC)/COUNT("NEWID"), 4) * 100 AS percent_no_earners
 FROM data_import.cex_pumd_fmli
 GROUP BY "QINTRVYR", "QINTRVMO", "REGION"
 ORDER BY year, date, region

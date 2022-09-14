@@ -11,7 +11,7 @@ const CexSampleEducation = ({dateRange, data}) => {
     const label = region[idx].region_name
 
     const lessThanHSDiploma = region.map(row => {
-      return row.sample_none + row.sample_less_than_hs + row.sample_some_hs
+      return Number(row.sample_none) + Number(row.sample_less_than_hs) + Number(row.sample_some_hs)
     })
 
     const percentLessThanHSDiploma = region.map(row => {
@@ -143,7 +143,7 @@ const CexSampleEducation = ({dateRange, data}) => {
           label: function(context){
             const tip = context.datasetIndex === 8
               ? `${context.dataset.label}: ${context.raw}`
-              : `${context.dataset.label}: ${context.raw}% (${context.dataset.tooltip[context.datasetIndex]})`
+              : `${context.dataset.label}: ${context.raw}% (${context.dataset.tooltip[context.dataIndex]})`
             return tip
           }
         },

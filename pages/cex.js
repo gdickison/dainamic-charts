@@ -8,6 +8,7 @@ import CexSampleSex from "../src/components/CexSampleSex"
 import CexSampleMaritalStatus from "../src/components/CexSampleMaritalStatus"
 import CexSampleEducation from "../src/components/CexSampleEducation"
 import CexSampleRace from "../src/components/CexSampleRace"
+import CexSampleEarners from "../src/components/CexSampleEarners"
 
 const cex = () => {
   const [isLoading, setLoading] = useState(false)
@@ -24,6 +25,7 @@ const cex = () => {
   const [sampleMaritalStatusData, setSampleMaritalStatusData] = useState()
   const [sampleEducationData, setSampleEducationData] = useState()
   const [sampleRaceData, setSampleRaceData] = useState()
+  const [sampleEarnersData, setSampleEarnersData] = useState()
 
   //*******************************************************************//
   //                                                                   //
@@ -308,6 +310,39 @@ const cex = () => {
     }
   }
 
+  const getSampleEarners = async () => {
+    const regions = selectedRegions.map(region => {
+      return region.regionCode
+    })
+
+    const JSONdata = JSON.stringify({
+      regions,
+      startDate: dateRange.startDate.split('T')[0],
+      endDate: dateRange.endDate.split('T')[0]
+    })
+
+    const endpoint = `/api/cex_sample_earners`
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+
+    const response = await fetch(endpoint, options)
+    const status = response.status
+    let data = await response.json()
+    data = data.response
+
+    if(status !== 200){
+      console.log("There was an error getting the sample earners data")
+    } else if(status === 200){
+      setSampleEarnersData(data)
+    }
+  }
+
   const getData = () => {
     setShowOptionsModal("hidden")
     setShowChangeOptionsButton("flex")
@@ -317,6 +352,7 @@ const cex = () => {
     getSampleMaritalStatus()
     getSampleEducation()
     getSampleRace()
+    getSampleEarners()
   }
 
 
@@ -389,6 +425,19 @@ const cex = () => {
               dateRange={dateRange}
               data={sampleRaceData}
             />
+          }
+          {sampleEarnersData &&
+            <div className="border-2">
+              <div className="mx-6">
+              <div className="relative my-4">
+                <h1 className="inline text-2xl">Household Earners</h1>
+              </div>
+              </div>
+              <CexSampleEarners
+                dateRange={dateRange}
+                data={sampleEarnersData}
+              />
+            </div>
           }
         </div>
       </main>

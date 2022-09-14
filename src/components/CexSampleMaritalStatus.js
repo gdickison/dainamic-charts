@@ -128,7 +128,7 @@ const CexSampleMaritalStatus = ({dateRange, data}) => {
           label: function(context){
             const tip = context.datasetIndex === 8
               ? `${context.dataset.label}: ${context.raw}`
-              : `${context.dataset.label}: ${context.raw}% (${context.dataset.tooltip[context.datasetIndex]})`
+              : `${context.dataset.label}: ${context.raw}% (${context.dataset.tooltip[context.dataIndex]})`
             return tip
           }
         },
