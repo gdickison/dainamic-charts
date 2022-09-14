@@ -6,7 +6,6 @@ import ChartDescription from "./ChartDescription"
 const CexSampleEarners = ({dateRange, data}) => {
   const labels = getDateLabelsForChart(dateRange.startDate, dateRange.endDate)
   const regionalData = Object.values(groupDataByRegion(data, "region_name"))
-console.log('regionalData', regionalData)
 
   const earnerData = regionalData.map((region, idx) => {
     const label = region[idx].region_name
@@ -278,7 +277,6 @@ console.log('regionalData', regionalData)
   })
 
   const rawEarningPowerByEarners = earnerData.map(region => {
-console.log('region', region)
     return [
       {
         label: 'Ref Person Only',
@@ -406,10 +404,7 @@ console.log('region', region)
         usePointStyle: true,
         callbacks: {
           label: function(context){
-            const tip = context.datasetIndex === 8
-              ? `${context.dataset.label}: ${context.raw}`
-              : `${context.dataset.label}: ${context.raw}% (${context.dataset.tooltip[context.dataIndex]})`
-            return tip
+            return `${context.dataset.label}: ${context.raw}% (${context.dataset.tooltip[context.dataIndex]})`
           }
         },
         boxPadding: 6
@@ -485,10 +480,7 @@ console.log('region', region)
         usePointStyle: true,
         callbacks: {
           label: function(context){
-            const tip = context.datasetIndex === 8
-              ? `${context.dataset.label}: ${context.raw}`
-              : `${context.dataset.label}: ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(context.raw)} (${context.dataset.tooltip[context.dataIndex]})`
-            return tip
+            return `${context.dataset.label}: ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(context.raw)} (${context.dataset.tooltip[context.dataIndex]})`
           }
         },
         boxPadding: 6

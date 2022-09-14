@@ -397,10 +397,17 @@ const cex = () => {
             />
           }
           {sampleAgeData &&
-            <CexSampleAge
-              dateRange={dateRange}
-              data={sampleAgeData}
-            />
+            <div className="py-6 my-6 mx-4 border-2 rounded-lg">
+              <div className="mx-6">
+              <div className="relative my-4">
+                <h1 className="inline text-3xl">Age</h1>
+              </div>
+              </div>
+              <CexSampleAge
+                dateRange={dateRange}
+                data={sampleAgeData}
+              />
+            </div>
           }
           {sampleSexData &&
             <CexSampleSex
@@ -427,7 +434,7 @@ const cex = () => {
             />
           }
           {sampleEarnersData &&
-            <div className="border-2">
+            <div className="py-6 my-6 mx-4 border-2 rounded-lg">
               <div className="mx-6">
               <div className="relative my-4">
                 <h1 className="inline text-3xl">Household Earners</h1>
