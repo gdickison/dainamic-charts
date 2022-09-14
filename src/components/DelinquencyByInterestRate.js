@@ -1,7 +1,7 @@
 import outliers from "outliers"
 import ChartTitle from "./ChartTitle"
 import ChartDescription from "./ChartDescription"
-import { getLinearRegression, groupDataByMsa, chartSolidColors, pointStyles, regressionLineColor } from "../../public/utils"
+import { getLinearRegression, groupDataByRegion, chartSolidColors, pointStyles, regressionLineColor } from "../../public/utils"
 import { Scatter } from "react-chartjs-2"
 import { memo } from "react"
 
@@ -10,7 +10,7 @@ const DelinquencyByInterestRate = ({data}) => {
     row.interest_rate = (Math.round(row.interest_rate * 8) / 8).toFixed(3)
   }
 
-  const groupedData = groupDataByMsa(data, "msa")
+  const groupedData = groupDataByRegion(data, "msa")
 
   const numRegions = Object.keys(groupedData).length
   const rawChartData = []

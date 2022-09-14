@@ -13,7 +13,7 @@
     "chart.js": "^3.7.1",
     "chartjs-plugin-annotation": "^2.0.0",
     "chartjs-plugin-datalabels": "^2.0.0",
-    "next": "12.1.6",
+    "next": "^12.3.0",
     "outliers": "^0.0.3",
     "pg": "^8.3.3",
     "react": "18.1.0",

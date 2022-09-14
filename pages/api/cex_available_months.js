@@ -1,14 +1,14 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import pool from '../../src/client'
 
-export default async function queryNationalMaritalData(req, res) {
+export default async function queryCexAvailableMonths(req, res) {
   const client = await pool.connect()
 
   await client
     .query(`SELECT
         *
-      FROM banking_app.cex_marital_data_by_nation_month`)
+      FROM banking_app.cex_available_months`)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
-    .catch(error => console.log("There is an error getting cex marital data: ", error))
+    .catch(error => console.log("There is an error getting available months: ", error))
 }

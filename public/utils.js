@@ -1,3 +1,11 @@
+function getAverage(array){
+  return (array.reduce((a, b) => Number(a) + Number(b)) / array.length).toFixed(2)
+}
+
+function getPercentage(part, whole){
+  return ((Number(part) / Number(whole)) * 100).toFixed(2)
+}
+
 const getDateLabelsForChart = (start, end) => {
   let start_date = new Date(start)
   let end_date = new Date(end)
@@ -9,7 +17,7 @@ const getDateLabelsForChart = (start, end) => {
   return generatedLabels
 }
 
-function groupDataByMsa(list, key){
+function groupDataByRegion(list, key){
   return list.reduce(function(rv, x){
     (rv[x[key]] = rv[x[key]] || []).push(x)
     return rv
@@ -41,6 +49,10 @@ function getLinearRegression(y,x){
   return lr;
 }
 
+function getQuarter(date = new Date()) {
+  return Math.floor(date.getMonth() / 3 + 1);
+}
+
 function split(str, index) {
   const result = [str.slice(0, index), str.slice(index)];
 
@@ -69,21 +81,49 @@ const chartSolidColors = [
   "rgba(245, 172, 39, 0.7)"
 ]
 
+const cexFadedColors = [
+  'rgb(31,120,180, 0.5)',
+  'rgb(51,160,44, 0.5)',
+  'rgb(227,26,28, 0.5)',
+  'rgb(253,191,111, 0.5)',
+  'rgb(106,61,154, 0.5)',
+  'rgb(255,127,0, 0.5)',
+  'rgb(255,255,100, 0.5)',
+  'rgb(177,89,40, 0.5)'
+]
+
+const cexSolidColors = [
+  'rgb(31,120,180, 0.9)',
+  'rgb(51,160,44, 0.9)',
+  'rgb(227,26,28, 0.9)',
+  'rgb(253,191,111, 0.9)',
+  'rgb(106,61,154, 0.9)',
+  'rgb(255,127,0, 0.9)',
+  'rgb(255,255,100, 0.9)',
+  'rgb(177,89,40, 0.9)'
+]
+
 const pointStyles = [
   'circle',
   'rect',
-  'triangle'
+  'triangle',
+  'rectRot'
 ]
 
 const regressionLineColor = '#94A3B8'
 
 export {
+  getAverage,
+  getPercentage,
   getDateLabelsForChart,
-  groupDataByMsa,
+  groupDataByRegion,
   getLinearRegression,
+  getQuarter,
   split,
   chartFadedColors,
   chartSolidColors,
+  cexFadedColors,
+  cexSolidColors,
   pointStyles,
   regressionLineColor
 }

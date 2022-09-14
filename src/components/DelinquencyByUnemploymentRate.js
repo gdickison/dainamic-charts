@@ -1,11 +1,11 @@
-import { memo} from "react"
+import { memo } from "react"
 import ChartTitle from "./ChartTitle"
 import ChartDescription from "./ChartDescription"
 import { Line } from "react-chartjs-2"
-import { getDateLabelsForChart, groupDataByMsa, chartFadedColors, chartSolidColors, pointStyles } from "../../public/utils"
+import { getDateLabelsForChart, groupDataByRegion, chartFadedColors, chartSolidColors, pointStyles } from "../../public/utils"
 
 const DelinquencyByUnemploymentRate = ({dateRange, unemploymentRateData, delinquencyRateData}) => {
-    const unemploymentDataByMsa = Object.values(groupDataByMsa(unemploymentRateData, "msa"))
+    const unemploymentDataByMsa = Object.values(groupDataByRegion(unemploymentRateData, "msa"))
 
     const unemploymentRateStructuredData = unemploymentDataByMsa.map((region, idx) => {
       const unemploymentRateDataRaw = region.map(row => {
@@ -25,7 +25,7 @@ const DelinquencyByUnemploymentRate = ({dateRange, unemploymentRateData, delinqu
       }
     })
 
-    const delinquencyDataByMsa = Object.values(groupDataByMsa(delinquencyRateData, "msa"))
+    const delinquencyDataByMsa = Object.values(groupDataByRegion(delinquencyRateData, "msa"))
 
     const delinquencyRateStructuredData = delinquencyDataByMsa.map((region, idx) => {
       const delinquencyRateDataRaw = region.map(row => {
