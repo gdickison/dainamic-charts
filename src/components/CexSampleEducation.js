@@ -1,5 +1,5 @@
 import { memo } from "react"
-import { Bar } from "react-chartjs-2"
+import { Bar, Line } from "react-chartjs-2"
 import { getDateLabelsForChart, groupDataByRegion, cexFadedColors, cexSolidColors } from "../../public/utils"
 import ChartDescription from "./ChartDescription"
 
@@ -9,7 +9,7 @@ const CexSampleEducation = ({dateRange, data}) => {
 
   const educationData = regionalData.map((region, idx) => {
     const label = region[idx].region_name
-console.log('row', region)
+
     const ctMaleDiplOrLess = region.map(row => {
       return row.ct_male_dipl_or_less
     })
@@ -86,16 +86,45 @@ console.log('row', region)
       return parseFloat(row.pct_female_post).toFixed(1)
     })
 
-// avg_inc_female_dipl_or_less
-// avg_inc_male_dipl_or_less
-// inc_female_assoc
-// inc_female_bach
-// inc_female_post
-// inc_female_some_coll
-// inc_male_assoc
-// inc_male_bach
-// inc_male_post
-// inc_male_some_coll
+    const incFemaleDiplOrLess = region.map(row => {
+      return parseFloat(row.avg_inc_female_dipl_or_less).toFixed(0)
+    })
+
+    const incFemaleSomeColl = region.map(row => {
+      return parseFloat(row.inc_female_some_coll).toFixed(0)
+    })
+
+    const incFemaleAssoc = region.map(row => {
+      return parseFloat(row.inc_female_assoc).toFixed(0)
+    })
+
+    const incFemaleBach = region.map(row => {
+      return parseFloat(row.inc_female_bach).toFixed(0)
+    })
+
+    const incFemalePost = region.map(row => {
+      return parseFloat(row.inc_female_post).toFixed(0)
+    })
+
+    const incMaleDiplOrLess = region.map(row => {
+      return parseFloat(row.avg_inc_male_dipl_or_less).toFixed(0)
+    })
+
+    const incMaleSomeColl = region.map(row => {
+      return parseFloat(row.inc_male_some_coll).toFixed(0)
+    })
+
+    const incMaleAssoc = region.map(row => {
+      return parseFloat(row.inc_male_assoc).toFixed(0)
+    })
+
+    const incMaleBach = region.map(row => {
+      return parseFloat(row.inc_male_bach).toFixed(0)
+    })
+
+    const incMalePost = region.map(row => {
+      return parseFloat(row.inc_male_post).toFixed(0)
+    })
 
     return {
       label,
@@ -118,11 +147,21 @@ console.log('row', region)
       ctFemaleBach,
       pctFemaleBach,
       ctFemalePostGrad,
-      pctFemalePostGrad
+      pctFemalePostGrad,
+      incFemaleDiplOrLess,
+      incFemaleSomeColl,
+      incFemaleAssoc,
+      incFemaleBach,
+      incFemalePost,
+      incMaleDiplOrLess,
+      incMaleSomeColl,
+      incMaleAssoc,
+      incMaleBach,
+      incMalePost
     }
   })
 
-  const rawChartData = educationData.map((region) => {
+  const edLevelChartData = educationData.map((region) => {
     return [
       {
         label: 'High School Diploma Or Less',
@@ -209,7 +248,89 @@ console.log('row', region)
     ]
   })
 
-  const chartOptions = {
+  const incByFemaleEdLevelChartData = educationData.map(region => {
+    return [
+      {
+        label: 'High School Diploma Or Less',
+        data: region.incFemaleDiplOrLess,
+        backgroundColor: cexFadedColors[1],
+        borderColor: cexFadedColors[1],
+        hoverBackgroundColor: cexSolidColors[1],
+        title: region.label
+      },
+      {
+        label: 'Some College',
+        data: region.incFemaleSomeColl,
+        backgroundColor: cexFadedColors[2],
+        borderColor: cexFadedColors[2],
+        hoverBackgroundColor: cexSolidColors[2]
+      },
+      {
+        label: "Associate's Degree",
+        data: region.incFemaleAssoc,
+        backgroundColor: cexFadedColors[3],
+        borderColor: cexFadedColors[3],
+        hoverBackgroundColor: cexSolidColors[3]
+      },
+      {
+        label: "Bachelor's Degree",
+        data: region.incFemaleBach,
+        backgroundColor: cexFadedColors[4],
+        borderColor: cexFadedColors[4],
+        hoverBackgroundColor: cexSolidColors[4]
+      },
+      {
+        label: 'Post Grad Degree',
+        data: region.incFemalePost,
+        backgroundColor: cexFadedColors[5],
+        borderColor: cexFadedColors[5],
+        hoverBackgroundColor: cexSolidColors[5]
+      },
+    ]
+  })
+
+  const incByMaleEdLevelChartData = educationData.map(region => {
+    return [
+      {
+        label: 'High School Diploma Or Less',
+        data: region.incMaleDiplOrLess,
+        backgroundColor: cexFadedColors[1],
+        borderColor: cexFadedColors[1],
+        hoverBackgroundColor: cexSolidColors[1],
+        title: region.label
+      },
+      {
+        label: 'Some College',
+        data: region.incMaleSomeColl,
+        backgroundColor: cexFadedColors[2],
+        borderColor: cexFadedColors[2],
+        hoverBackgroundColor: cexSolidColors[2]
+      },
+      {
+        label: "Associate's Degree",
+        data: region.incMaleAssoc,
+        backgroundColor: cexFadedColors[3],
+        borderColor: cexFadedColors[3],
+        hoverBackgroundColor: cexSolidColors[3]
+      },
+      {
+        label: "Bachelor's Degree",
+        data: region.incMaleBach,
+        backgroundColor: cexFadedColors[4],
+        borderColor: cexFadedColors[4],
+        hoverBackgroundColor: cexSolidColors[4]
+      },
+      {
+        label: 'Post Grad Degree',
+        data: region.incMalePost,
+        backgroundColor: cexFadedColors[5],
+        borderColor: cexFadedColors[5],
+        hoverBackgroundColor: cexSolidColors[5]
+      },
+    ]
+  })
+
+  const barChartOptions = {
     responsive: true,
     aspectRatio: 2.5,
     interaction: {
@@ -294,31 +415,162 @@ console.log('row', region)
     }
   }
 
-  return (
-    <div className="mx-6">
-      <div className="relative my-4">
-        <h1 className="inline text-2xl">Education Level of Respondents</h1>
-      </div>
-      <ChartDescription
-        description={`This chart shows the education level as a percentage of all respondents. The left bar is men, the right bar is women. Hover over the bar chart to see the percentage for a particular education level, and the number of respondents with that education.`}
-      />
-      <div className="grid grid-cols-2 gap-x-2 gap-y-6">
-        {rawChartData && rawChartData.map((row, idx) => {
-          const chartData = {
-            labels: labels,
-            datasets: row
+  const lineChartOptions = {
+    responsive: true,
+    aspectRatio: 2.5,
+    interaction: {
+      intersect: false
+    },
+    plugins: {
+      title: {
+        display: false
+      },
+      legend: {
+        display: true,
+        title: 'Ed Level',
+        labels: {
+          usePointStyle: true
+        },
+        align: "end"
+      },
+      tooltip: {
+        usePointStyle: true,
+        callbacks: {
+          title: function(context){
+            return context[0].dataset.label
+          },
+          label: function(context){
+            return `${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(context.raw)}`
           }
-          return (
-            <div key={idx}>
-              <div className="flex justify-center">
-                <h1 className="font-semibold">{row[0].title}</h1>
+        },
+        boxPadding: 6
+      }
+    },
+    scales: {
+      y: {
+        title: {
+          display: true,
+          text: "Income",
+          padding: 20,
+          font: {
+            size: 16
+          }
+        },
+        ticks: {
+          callback: function(value){
+            return `${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(value)}`
+          },
+          font: {
+            size: 12
+          }
+        },
+        grid: {
+          display: false
+        }
+      },
+      x: {
+        title: {
+          display: false,
+          text: "Survey Month",
+          padding: 20,
+          font: {
+            size: 16
+          }
+        },
+        ticks: {
+          callback: function(value){
+            return `${this.getLabelForValue(value)}`
+          },
+          font: {
+            size: 12
+          }
+        },
+        grid: {
+          display: false
+        }
+      }
+    }
+  }
+
+  return (
+    <div className="mx-6 space-y-12">
+      <div>
+        <div className="relative my-4">
+          <h1 className="inline text-2xl">Education Level of Respondents</h1>
+        </div>
+        <ChartDescription
+          description={`This chart shows the education level for both men and women as a percentage of all male and female respondents. The left bar is men, the right bar is women. Hover over the bar chart to see the percentage for a particular education level, and the number of respondents with that education.`}
+        />
+        <div className="grid grid-cols-2 gap-x-2 gap-y-6">
+          {edLevelChartData && edLevelChartData.map((row, idx) => {
+            const chartData = {
+              labels: labels,
+              datasets: row
+            }
+            return (
+              <div key={idx}>
+                <div className="flex justify-center">
+                  <h1 className="font-semibold">{row[0].title}</h1>
+                </div>
+                <div className="flex justify-center p-4 shadow-lg bg-gray-50">
+                  <Bar data={chartData} options={barChartOptions}/>
+                </div>
               </div>
-              <div className="flex justify-center p-4 shadow-lg bg-gray-50">
-                <Bar data={chartData} options={chartOptions}/>
+            )
+          })}
+        </div>
+      </div>
+      <div>
+        <div className="relative my-4">
+          <h1 className="inline text-2xl">Income By Female Education Level</h1>
+        </div>
+        <ChartDescription
+          description={`This chart shows the average family pretax income of households (over the previous 12 months) relative to female education level. This does not take into account the education of any male household members.`}
+        />
+        <div className="grid grid-cols-2 gap-x-2 gap-y-6">
+          {incByFemaleEdLevelChartData && incByFemaleEdLevelChartData.map((row, idx) => {
+            const chartData = {
+              labels: labels,
+              datasets: row
+            }
+            return (
+              <div key={idx}>
+                <div className="flex justify-center">
+                  <h1 className="font-semibold">{row[0].title}</h1>
+                </div>
+                <div className="flex justify-center p-4 shadow-lg bg-gray-50">
+                  <Line data={chartData} options={lineChartOptions}/>
+                </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
+      </div>
+      <div>
+        <div className="relative my-4">
+          <h1 className="inline text-2xl">Income By Male Education Level</h1>
+        </div>
+        <ChartDescription
+          description={`This chart shows the average family pretax income of households (over the previous 12 months) relative to male education level. This does not take into account the education of any female household members.`}
+        />
+        <div className="grid grid-cols-2 gap-x-2 gap-y-6">
+          {incByMaleEdLevelChartData && incByMaleEdLevelChartData.map((row, idx) => {
+            const chartData = {
+              labels: labels,
+              datasets: row
+            }
+            return (
+              <div key={idx}>
+                <div className="flex justify-center">
+                  <h1 className="font-semibold">{row[0].title}</h1>
+                </div>
+                <div className="flex justify-center p-4 shadow-lg bg-gray-50">
+                  <Line data={chartData} options={lineChartOptions}/>
+                </div>
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
   )
