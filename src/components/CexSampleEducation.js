@@ -9,115 +9,203 @@ const CexSampleEducation = ({dateRange, data}) => {
 
   const educationData = regionalData.map((region, idx) => {
     const label = region[idx].region_name
-
-    const lessThanHSDiploma = region.map(row => {
-      return Number(row.sample_none) + Number(row.sample_less_than_hs) + Number(row.sample_some_hs)
+console.log('row', region)
+    const ctMaleDiplOrLess = region.map(row => {
+      return row.ct_male_dipl_or_less
     })
 
-    const percentLessThanHSDiploma = region.map(row => {
-      return parseFloat(((Number(row.sample_none) + Number(row.sample_less_than_hs) + Number(row.sample_some_hs)) / Number(row.total_sample)) * 100).toFixed(1)
+    const pctMaleDiplOrLess = region.map(row => {
+      return parseFloat(row.pct_male_dipl_or_less).toFixed(1)
     })
 
-    const hsDiploma = region.map(row => {
-      return row.sample_hs_diploma
+    const ctMaleSomeColl = region.map(row => {
+      return row.ct_male_some_coll
     })
 
-    const percentHsDiploma = region.map(row => {
-      return parseFloat(row.percent_sample_hs_diploma).toFixed(1)
+    const pctMaleSomeColl = region.map(row => {
+      return parseFloat(row.pct_male_some_coll).toFixed(1)
     })
 
-    const someCollege = region.map(row => {
-      return row.sample_some_college
+    const ctMaleAssoc = region.map(row => {
+      return row.ct_male_assoc
     })
 
-    const percentSomeCollege = region.map(row => {
-      return parseFloat(row.percent_sample_some_college).toFixed(1)
+    const pctMaleAssoc = region.map(row => {
+      return parseFloat(row.pct_male_assoc).toFixed(1)
+    })
+    const ctMaleBach = region.map(row => {
+      return row.ct_male_bach
     })
 
-    const assocDegree = region.map(row => {
-      return row.sample_associate
+    const pctMaleBach = region.map(row => {
+      return parseFloat(row.pct_male_bach).toFixed(1)
+    })
+    const ctMalePostGrad = region.map(row => {
+      return row.ct_male_post
     })
 
-    const percentAssocDegree = region.map(row => {
-      return parseFloat(row.percent_sample_associate).toFixed(1)
-    })
-    const bachDegree = region.map(row => {
-      return row.sample_bachelors
+    const pctMalePostGrad = region.map(row => {
+      return parseFloat(row.pct_male_post).toFixed(1)
     })
 
-    const percentBachDegree = region.map(row => {
-      return parseFloat(row.percent_sample_bachelors).toFixed(1)
-    })
-    const postGradDegree = region.map(row => {
-      return row.sample_post_grad_degree
+    const ctFemaleDiplOrLess = region.map(row => {
+      return row.ct_female_dipl_or_less
     })
 
-    const percentPostGradDegree = region.map(row => {
-      return parseFloat(row.percent_sample_post_grad_degree).toFixed(1)
+    const pctFemaleDiplOrLess = region.map(row => {
+      return parseFloat(row.pct_female_dipl_or_less).toFixed(1)
     })
+
+    const ctFemaleSomeColl = region.map(row => {
+      return row.ct_female_some_coll
+    })
+
+    const pctFemaleSomeColl = region.map(row => {
+      return parseFloat(row.pct_female_some_coll).toFixed(1)
+    })
+
+    const ctFemaleAssoc = region.map(row => {
+      return row.ct_female_assoc
+    })
+
+    const pctFemaleAssoc = region.map(row => {
+      return parseFloat(row.pct_female_assoc).toFixed(1)
+    })
+    const ctFemaleBach = region.map(row => {
+      return row.ct_female_bach
+    })
+
+    const pctFemaleBach = region.map(row => {
+      return parseFloat(row.pct_female_bach).toFixed(1)
+    })
+    const ctFemalePostGrad = region.map(row => {
+      return row.ct_female_post
+    })
+
+    const pctFemalePostGrad = region.map(row => {
+      return parseFloat(row.pct_female_post).toFixed(1)
+    })
+
+// avg_inc_female_dipl_or_less
+// avg_inc_male_dipl_or_less
+// inc_female_assoc
+// inc_female_bach
+// inc_female_post
+// inc_female_some_coll
+// inc_male_assoc
+// inc_male_bach
+// inc_male_post
+// inc_male_some_coll
 
     return {
       label,
-      lessThanHSDiploma,
-      percentLessThanHSDiploma,
-      hsDiploma,
-      percentHsDiploma,
-      someCollege,
-      percentSomeCollege,
-      assocDegree,
-      percentAssocDegree,
-      bachDegree,
-      percentBachDegree,
-      postGradDegree,
-      percentPostGradDegree
+      ctMaleDiplOrLess,
+      pctMaleDiplOrLess,
+      ctMaleSomeColl,
+      pctMaleSomeColl,
+      ctMaleAssoc,
+      pctMaleAssoc,
+      ctMaleBach,
+      pctMaleBach,
+      ctMalePostGrad,
+      pctMalePostGrad,
+      ctFemaleDiplOrLess,
+      pctFemaleDiplOrLess,
+      ctFemaleSomeColl,
+      pctFemaleSomeColl,
+      ctFemaleAssoc,
+      pctFemaleAssoc,
+      ctFemaleBach,
+      pctFemaleBach,
+      ctFemalePostGrad,
+      pctFemalePostGrad
     }
   })
 
   const rawChartData = educationData.map((region) => {
     return [
       {
-      label: '< High School Diploma',
-      data: region.percentLessThanHSDiploma,
-      tooltip: region.lessThanHSDiploma,
-      backgroundColor: cexFadedColors[0],
-      hoverBackgroundColor: cexSolidColors[0],
-      title: region.label
-    },
-    {
-      label: 'High School Diploma',
-      data: region.percentHsDiploma,
-      tooltip: region.hsDiploma,
-      backgroundColor: cexFadedColors[1],
-      hoverBackgroundColor: cexSolidColors[1],
-    },
-    {
-      label: 'Some College',
-      data: region.percentSomeCollege,
-      tooltip: region.someCollege,
-      backgroundColor: cexFadedColors[2],
-      hoverBackgroundColor: cexSolidColors[2],
-    },
-    {
-      label: "Associate's Degree",
-      data: region.percentAssocDegree,
-      tooltip: region.assocDegree,
-      backgroundColor: cexFadedColors[3],
-      hoverBackgroundColor: cexSolidColors[3],
-    },
-    {
-      label: "Bachelor's Degree",
-      data: region.percentBachDegree,
-      tooltip: region.bachDegree,
-      backgroundColor: cexFadedColors[4],
-      hoverBackgroundColor: cexSolidColors[4],
-    },
-    {
-      label: 'Post Grad Degree',
-      data: region.percentPostGradDegree,
-      tooltip: region.postGradDegree,
-      backgroundColor: cexFadedColors[5],
-      hoverBackgroundColor: cexSolidColors[5],
-    },
+        label: 'High School Diploma Or Less',
+        data: region.pctMaleDiplOrLess,
+        tooltip: region.ctMaleDiplOrLess,
+        backgroundColor: cexFadedColors[1],
+        hoverBackgroundColor: cexSolidColors[1],
+        title: region.label,
+        stack: 'Stack 0'
+      },
+      {
+        label: 'High School Diploma Or Less',
+        data: region.pctFemaleDiplOrLess,
+        tooltip: region.ctFemaleDiplOrLess,
+        backgroundColor: cexFadedColors[1],
+        hoverBackgroundColor: cexSolidColors[1],
+        title: region.label,
+        stack: 'Stack 1'
+      },
+      {
+        label: 'Some College',
+        data: region.pctMaleSomeColl,
+        tooltip: region.ctMaleSomeColl,
+        backgroundColor: cexFadedColors[2],
+        hoverBackgroundColor: cexSolidColors[2],
+        stack: 'Stack 0'
+      },
+      {
+        label: 'Some College',
+        data: region.pctFemaleSomeColl,
+        tooltip: region.ctFemaleSomeColl,
+        backgroundColor: cexFadedColors[2],
+        hoverBackgroundColor: cexSolidColors[2],
+        stack: 'Stack 1'
+      },
+      {
+        label: "Associate's Degree",
+        data: region.pctMaleAssoc,
+        tooltip: region.ctMaleAssoc,
+        backgroundColor: cexFadedColors[3],
+        hoverBackgroundColor: cexSolidColors[3],
+        stack: 'Stack 0'
+      },
+      {
+        label: "Associate's Degree",
+        data: region.pctFemaleAssoc,
+        tooltip: region.ctFemaleAssoc,
+        backgroundColor: cexFadedColors[3],
+        hoverBackgroundColor: cexSolidColors[3],
+        stack: 'Stack 1'
+      },
+      {
+        label: "Bachelor's Degree",
+        data: region.pctMaleBach,
+        tooltip: region.ctMaleBach,
+        backgroundColor: cexFadedColors[4],
+        hoverBackgroundColor: cexSolidColors[4],
+        stack: 'Stack 0'
+      },
+      {
+        label: "Bachelor's Degree",
+        data: region.pctFemaleBach,
+        tooltip: region.ctFemaleBach,
+        backgroundColor: cexFadedColors[4],
+        hoverBackgroundColor: cexSolidColors[4],
+        stack: 'Stack 1'
+      },
+      {
+        label: 'Post Grad Degree',
+        data: region.pctMalePostGrad,
+        tooltip: region.ctMalePostGrad,
+        backgroundColor: cexFadedColors[5],
+        hoverBackgroundColor: cexSolidColors[5],
+        stack: 'Stack 0'
+      },
+      {
+        label: 'Post Grad Degree',
+        data: region.pctFemalePostGrad,
+        tooltip: region.ctFemalePostGrad,
+        backgroundColor: cexFadedColors[5],
+        hoverBackgroundColor: cexSolidColors[5],
+        stack: 'Stack 1'
+      }
     ]
   })
 
@@ -133,18 +221,24 @@ const CexSampleEducation = ({dateRange, data}) => {
       },
       legend: {
         display: true,
+        align: "end",
         labels: {
-          usePointStyle: true
+          usePointStyle: true,
+          filter: function(item){
+            if((item.datasetIndex + 1) % 2 == 0){
+              return item.text
+            }
+          }
         }
       },
       tooltip: {
         usePointStyle: true,
         callbacks: {
+          title: function(context){
+            return context[0].dataset.stack == 'Stack 0' ? 'Men' : 'Women'
+          },
           label: function(context){
-            const tip = context.datasetIndex === 8
-              ? `${context.dataset.label}: ${context.raw}`
-              : `${context.dataset.label}: ${context.raw}% (${context.dataset.tooltip[context.dataIndex]})`
-            return tip
+            return `${context.dataset.label}: ${context.raw}% (${context.dataset.tooltip[context.dataIndex]})`
           }
         },
         boxPadding: 6
@@ -206,7 +300,7 @@ const CexSampleEducation = ({dateRange, data}) => {
         <h1 className="inline text-2xl">Education Level of Respondents</h1>
       </div>
       <ChartDescription
-        description={`This chart shows respondents' education level as a percentage of all respondents. Hover over the bar chart to see the percentage for a particular education level, and the number of respondents with that education.`}
+        description={`This chart shows the education level as a percentage of all respondents. The left bar is men, the right bar is women. Hover over the bar chart to see the percentage for a particular education level, and the number of respondents with that education.`}
       />
       <div className="grid grid-cols-2 gap-x-2 gap-y-6">
         {rawChartData && rawChartData.map((row, idx) => {

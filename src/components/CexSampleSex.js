@@ -121,7 +121,7 @@ const CexSampleSex = ({dateRange, data}) => {
   }
 
   return (
-    <div className="mx-6">
+    <div className="mx-6 space-y-12">
       <div className="relative my-4">
         <h1 className="inline text-2xl">Sex of Respondents</h1>
       </div>
@@ -130,10 +130,6 @@ const CexSampleSex = ({dateRange, data}) => {
       />
       <div className="grid grid-cols-2 gap-x-2 gap-y-6">
         {rawChartData && rawChartData.map((row, idx) => {
-          const lineChartData = {
-            labels: labels,
-            datasets: row
-          }
           const barChartData = {
             labels: labels,
             datasets: row
