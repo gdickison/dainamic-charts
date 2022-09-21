@@ -415,7 +415,7 @@ ORDER BY year, date, region
 -- GROUP BY "QINTRVYR", "QINTRVMO", "REGION"
 -- ORDER BY year, date, region
 
--- total amount of family income before taxes in the last 12 months by sex and education level
+-- total amount of family income before taxes in the last 12 months by sex and education level, and by highest degree
 CREATE VIEW banking_app.cex_ed_level_sex_inc AS
 SELECT
   "QINTRVYR" ::INTEGER AS year,
@@ -433,6 +433,7 @@ SELECT
 		WHEN "REGION" IS NULL OR "REGION" = '' THEN 'none'
 	END AS region_name,
   ROUND(AVG("FINCBTAX" ::DECIMAL)) AS avg_inc,
+  -- INCOME BY ED LEVEL BY SEX
   -- DIPLOMA OR LESS
   -- male with dipl or less
 	COUNT("NEWID") FILTER (
@@ -443,7 +444,7 @@ SELECT
     )) AS NUMERIC) / COUNT("NEWID") FILTER (WHERE "SEX_REF" = '1' OR "SEX2" = '1')), 4) * 100 AS pct_male_dipl_or_less,
 	ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (
     WHERE (("SEX_REF" = '1' AND "EDUC_REF" <= '12' AND "EDUC_REF" != '') OR ("SEX2" = '1' AND "EDUCA2" <= '12' AND "EDUCA2" != ''))
-    ), 2) AS avg_inc_male_dipl_or_less,
+    ), 2) AS inc_male_dipl_or_less,
   -- female with dipl or less
 	COUNT("NEWID") FILTER (
     WHERE (("SEX_REF" = '2' AND "EDUC_REF" <= '12' AND "EDUC_REF" != '') OR ("SEX2" = '2' AND "EDUCA2" <= '12' AND "EDUCA2" != ''))
@@ -453,7 +454,7 @@ SELECT
     )) AS NUMERIC) / COUNT("NEWID") FILTER (WHERE "SEX_REF" = '2' OR "SEX2" = '2')), 4) * 100 AS pct_female_dipl_or_less,
 	ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (
     WHERE (("SEX_REF" = '2' AND "EDUC_REF" <= '12' AND "EDUC_REF" != '') OR ("SEX2" = '2' AND "EDUCA2" <= '12' AND "EDUCA2" != ''))
-    ), 2) AS avg_inc_female_dipl_or_less,
+    ), 2) AS inc_female_dipl_or_less,
   -- SOME COLLEGE
   -- male has some college
   COUNT("NEWID") FILTER (
@@ -534,7 +535,43 @@ SELECT
     )) AS NUMERIC) / COUNT("NEWID") FILTER (WHERE "SEX_REF" = '2' OR "SEX2" = '2')), 4) *100 AS pct_female_post,
   ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (
     WHERE ("SEX_REF" = '2' AND "EDUC_REF" = '16' OR "SEX2" = '2' AND "EDUCA2" = '16')
-    ), 2) AS inc_female_post
+    ), 2) AS inc_female_post,
+  -- INCOME BY HIGHEST ED LEVEL
+  -- highest = diploma or less
+	COUNT("NEWID") FILTER (
+    WHERE GREATEST("EDUC_REF", "EDUCA2") IN ('00', '10', '11', '12')) AS ct_hi_dipl_or_less,
+  ROUND((CAST((COUNT("NEWID") FILTER (
+    WHERE GREATEST("EDUC_REF", "EDUCA2") IN ('00', '10', '11', '12'))) AS NUMERIC) / COUNT("NEWID")), 4) *100 AS pct_hi_dipl_or_less,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (
+    WHERE GREATEST("EDUC_REF", "EDUCA2") IN ('00', '10', '11', '12')), 2) AS inc_hi_dipl_or_less,
+  -- highest = some college
+  COUNT("NEWID") FILTER (
+    WHERE GREATEST("EDUC_REF", "EDUCA2") = '13') AS ct_hi_some_coll,
+  ROUND((CAST((COUNT("NEWID") FILTER (
+    WHERE GREATEST("EDUC_REF", "EDUCA2") = '13')) AS NUMERIC) / COUNT("NEWID")), 4) *100 AS pct_hi_some_coll,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (
+    WHERE GREATEST("EDUC_REF", "EDUCA2") = '13'), 2) AS inc_hi_some_coll,
+  -- highest = associate's degree
+  COUNT("NEWID") FILTER (
+    WHERE GREATEST("EDUC_REF", "EDUCA2") = '14') AS ct_hi_assoc,
+  ROUND((CAST((COUNT("NEWID") FILTER (
+    WHERE GREATEST("EDUC_REF", "EDUCA2") = '14')) AS NUMERIC) / COUNT("NEWID")), 4) *100 AS pct_hi_assoc,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (
+    WHERE GREATEST("EDUC_REF", "EDUCA2") = '14'), 2) AS inc_hi_assoc,
+  -- highest = bachelor's degree
+  COUNT("NEWID") FILTER (
+    WHERE GREATEST("EDUC_REF", "EDUCA2") = '15') AS ct_hi_bach,
+  ROUND((CAST((COUNT("NEWID") FILTER (
+    WHERE GREATEST("EDUC_REF", "EDUCA2") = '15')) AS NUMERIC) / COUNT("NEWID")), 4) *100 AS pct_hi_bach,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (
+    WHERE GREATEST("EDUC_REF", "EDUCA2") = '15'), 2) AS inc_hi_bach,
+  -- highest = post grad degree
+  COUNT("NEWID") FILTER (
+    WHERE GREATEST("EDUC_REF", "EDUCA2") = '16') AS ct_hi_post_grad,
+  ROUND((CAST((COUNT("NEWID") FILTER (
+    WHERE GREATEST("EDUC_REF", "EDUCA2") = '16')) AS NUMERIC) / COUNT("NEWID")), 4) *100 AS pct_hi_post_grad,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (
+    WHERE GREATEST("EDUC_REF", "EDUCA2") = '16'), 2) AS inc_hi_post_grad
 FROM data_import.cex_pumd_fmli
 GROUP BY "QINTRVYR", "QINTRVMO", "REGION"
 ORDER BY year, date, region

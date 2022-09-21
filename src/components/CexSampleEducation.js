@@ -87,7 +87,7 @@ const CexSampleEducation = ({dateRange, data}) => {
     })
 
     const incFemaleDiplOrLess = region.map(row => {
-      return parseFloat(row.avg_inc_female_dipl_or_less).toFixed(0)
+      return parseFloat(row.inc_female_dipl_or_less).toFixed(0)
     })
 
     const incFemaleSomeColl = region.map(row => {
@@ -102,12 +102,12 @@ const CexSampleEducation = ({dateRange, data}) => {
       return parseFloat(row.inc_female_bach).toFixed(0)
     })
 
-    const incFemalePost = region.map(row => {
+    const incFemalePostGrad = region.map(row => {
       return parseFloat(row.inc_female_post).toFixed(0)
     })
 
     const incMaleDiplOrLess = region.map(row => {
-      return parseFloat(row.avg_inc_male_dipl_or_less).toFixed(0)
+      return parseFloat(row.inc_male_dipl_or_less).toFixed(0)
     })
 
     const incMaleSomeColl = region.map(row => {
@@ -126,8 +126,61 @@ const CexSampleEducation = ({dateRange, data}) => {
       return parseFloat(row.inc_male_post).toFixed(0)
     })
 
+    const ctHighDiplOrLess = region.map(row => {
+      return row.ct_hi_dipl_or_less
+    })
+    const ctHighSomeColl = region.map(row => {
+      return row.ct_hi_some_coll
+    })
+    const ctHighAssoc = region.map(row => {
+      return row.ct_hi_assoc
+    })
+    const ctHighBach = region.map(row => {
+      return row.ct_hi_bach
+    })
+    const ctHighPostGrad = region.map(row => {
+      return row.ct_hi_post_grad
+    })
+
+    const pctHighDiplOrLess = region.map(row => {
+      return parseFloat(row.pct_hi_dipl_or_less).toFixed(1)
+    })
+    const pctHighSomeColl = region.map(row => {
+      return parseFloat(row.pct_hi_some_coll).toFixed(1)
+    })
+    const pctHighAssoc = region.map(row => {
+      return parseFloat(row.pct_hi_assoc).toFixed(1)
+    })
+    const pctHighBach = region.map(row => {
+      return parseFloat(row.pct_hi_bach).toFixed(1)
+    })
+    const pctHighPostGrad = region.map(row => {
+      return parseFloat(row.pct_hi_post_grad).toFixed(1)
+    })
+
+    const incHighDiplOrLess = region.map(row => {
+      return parseFloat(row.inc_hi_dipl_or_less).toFixed(0)
+    })
+
+    const incHighSomeColl = region.map(row => {
+      return parseFloat(row.inc_hi_some_coll).toFixed(0)
+    })
+
+    const incHighAssoc = region.map(row => {
+      return parseFloat(row.inc_hi_assoc).toFixed(0)
+    })
+
+    const incHighBach = region.map(row => {
+      return parseFloat(row.inc_hi_bach).toFixed(0)
+    })
+
+    const incHighPostGrad = region.map(row => {
+      return parseFloat(row.inc_hi_post_grad).toFixed(0)
+    })
+
     return {
       label,
+      // ed level by sex
       ctMaleDiplOrLess,
       pctMaleDiplOrLess,
       ctMaleSomeColl,
@@ -148,16 +201,33 @@ const CexSampleEducation = ({dateRange, data}) => {
       pctFemaleBach,
       ctFemalePostGrad,
       pctFemalePostGrad,
+      // income by ed level by sex
       incFemaleDiplOrLess,
       incFemaleSomeColl,
       incFemaleAssoc,
       incFemaleBach,
-      incFemalePost,
+      incFemalePostGrad,
       incMaleDiplOrLess,
       incMaleSomeColl,
       incMaleAssoc,
       incMaleBach,
-      incMalePost
+      incMalePost,
+      // pct and inc by highest ed level in household
+      ctHighDiplOrLess,
+      ctHighSomeColl,
+      ctHighAssoc,
+      ctHighBach,
+      ctHighPostGrad,
+      pctHighDiplOrLess,
+      pctHighSomeColl,
+      pctHighAssoc,
+      pctHighBach,
+      pctHighPostGrad,
+      incHighDiplOrLess,
+      incHighSomeColl,
+      incHighAssoc,
+      incHighBach,
+      incHighPostGrad
     }
   })
 
@@ -281,7 +351,7 @@ const CexSampleEducation = ({dateRange, data}) => {
       },
       {
         label: 'Post Grad Degree',
-        data: region.incFemalePost,
+        data: region.incFemalePostGrad,
         backgroundColor: cexFadedColors[5],
         borderColor: cexFadedColors[5],
         hoverBackgroundColor: cexSolidColors[5]
@@ -330,7 +400,89 @@ const CexSampleEducation = ({dateRange, data}) => {
     ]
   })
 
-  const barChartOptions = {
+  const highestEdLevelChartData = educationData.map(region => {
+    return [
+      {
+        label: 'High School Diploma Or Less',
+        data: region.pctHighDiplOrLess,
+        tooltip: region.ctHighDiplOrLess,
+        backgroundColor: cexFadedColors[1],
+        hoverBackgroundColor: cexSolidColors[1],
+        title: region.label
+      },
+      {
+        label: 'Some College',
+        data: region.pctHighSomeColl,
+        tooltip: region.ctHighSomeColl,
+        backgroundColor: cexFadedColors[2],
+        hoverBackgroundColor: cexSolidColors[2]
+      },
+{
+        label: "Associate's Degree",
+        data: region.pctHighAssoc,
+        tooltip: region.ctHighAssoc,
+        backgroundColor: cexFadedColors[3],
+        hoverBackgroundColor: cexSolidColors[3]
+      },
+{
+        label: "Bachelor's Degree",
+        data: region.pctHighBach,
+        tooltip: region.ctHighBach,
+        backgroundColor: cexFadedColors[4],
+        hoverBackgroundColor: cexSolidColors[4]
+      },
+{
+        label: 'Post Grad Degree',
+        data: region.pctHighPostGrad,
+        tooltip: region.ctHighPostGrad,
+        backgroundColor: cexFadedColors[5],
+        hoverBackgroundColor: cexSolidColors[5]
+      },
+    ]
+  })
+
+  const incByHighEdLevelChartData = educationData.map(region => {
+    return [
+      {
+        label: 'High School Diploma Or Less',
+        data: region.incHighDiplOrLess,
+        backgroundColor: cexFadedColors[1],
+        borderColor: cexFadedColors[1],
+        hoverBackgroundColor: cexSolidColors[1],
+        title: region.label
+      },
+      {
+        label: 'Some College',
+        data: region.incHighSomeColl,
+        backgroundColor: cexFadedColors[2],
+        borderColor: cexFadedColors[2],
+        hoverBackgroundColor: cexSolidColors[2]
+      },
+      {
+        label: "Associate's Degree",
+        data: region.incHighAssoc,
+        backgroundColor: cexFadedColors[3],
+        borderColor: cexFadedColors[3],
+        hoverBackgroundColor: cexSolidColors[3]
+      },
+      {
+        label: "Bachelor's Degree",
+        data: region.incHighBach,
+        backgroundColor: cexFadedColors[4],
+        borderColor: cexFadedColors[4],
+        hoverBackgroundColor: cexSolidColors[4]
+      },
+      {
+        label: 'Post Grad Degree',
+        data: region.incHighPostGrad,
+        backgroundColor: cexFadedColors[5],
+        borderColor: cexFadedColors[5],
+        hoverBackgroundColor: cexSolidColors[5]
+      },
+    ]
+  })
+
+  const doubleBarChartOptions = {
     responsive: true,
     aspectRatio: 2.5,
     interaction: {
@@ -357,6 +509,86 @@ const CexSampleEducation = ({dateRange, data}) => {
         callbacks: {
           title: function(context){
             return context[0].dataset.stack == 'Stack 0' ? 'Men' : 'Women'
+          },
+          label: function(context){
+            return `${context.dataset.label}: ${context.raw}% (${context.dataset.tooltip[context.dataIndex]})`
+          }
+        },
+        boxPadding: 6
+      }
+    },
+    scales: {
+      y: {
+        stacked: true,
+        title: {
+          display: true,
+          text: "Education Level %",
+          padding: 20,
+          font: {
+            size: 16
+          }
+        },
+        ticks: {
+          callback: function(value){
+            return `${value}`
+          },
+          font: {
+            size: 12
+          },
+          stepSize: 10
+        },
+        max: 100,
+        grid: {
+          display: false
+        }
+      },
+      x: {
+        stacked: true,
+        title: {
+          display: false,
+          text: "Survey Month",
+          padding: 20,
+          font: {
+            size: 16
+          }
+        },
+        ticks: {
+          callback: function(value){
+            return `${this.getLabelForValue(value)}`
+          },
+          font: {
+            size: 12
+          }
+        },
+        grid: {
+          display: false
+        }
+      }
+    }
+  }
+
+  const singleBarChartOptions = {
+    responsive: true,
+    aspectRatio: 2.5,
+    interaction: {
+      intersect: false
+    },
+    plugins: {
+      title: {
+        display: false
+      },
+      legend: {
+        display: true,
+        align: "end",
+        labels: {
+          usePointStyle: true
+        }
+      },
+      tooltip: {
+        usePointStyle: true,
+        callbacks: {
+          title: function(context){
+            return ''
           },
           label: function(context){
             return `${context.dataset.label}: ${context.raw}% (${context.dataset.tooltip[context.dataIndex]})`
@@ -513,13 +745,14 @@ const CexSampleEducation = ({dateRange, data}) => {
                   <h1 className="font-semibold">{row[0].title}</h1>
                 </div>
                 <div className="flex justify-center p-4 shadow-lg bg-gray-50">
-                  <Bar data={chartData} options={barChartOptions}/>
+                  <Bar data={chartData} options={doubleBarChartOptions}/>
                 </div>
               </div>
             )
           })}
         </div>
       </div>
+
       <div>
         <div className="relative my-4">
           <h1 className="inline text-2xl">Income By Female Education Level</h1>
@@ -546,6 +779,7 @@ const CexSampleEducation = ({dateRange, data}) => {
           })}
         </div>
       </div>
+
       <div>
         <div className="relative my-4">
           <h1 className="inline text-2xl">Income By Male Education Level</h1>
@@ -570,6 +804,62 @@ const CexSampleEducation = ({dateRange, data}) => {
               </div>
             )
           })}
+        </div>
+      </div>
+
+      <div>
+        <div className="relative my-4">
+          <h1 className="inline text-2xl">Highest Education Level in Household</h1>
+        </div>
+        <ChartDescription
+          description={`This chart shows the highest education level in the household. Hover over the bar chart to see the percentage for a particular education level, and the number of households with that education level.`}
+        />
+        <div className="grid grid-cols-2 gap-x-2 gap-y-6">
+          {highestEdLevelChartData && highestEdLevelChartData.map((row, idx) => {
+            const chartData = {
+              labels: labels,
+              datasets: row
+            }
+            return (
+              <div key={idx}>
+                <div className="flex justify-center">
+                  <h1 className="font-semibold">{row[0].title}</h1>
+                </div>
+                <div className="flex justify-center p-4 shadow-lg bg-gray-50">
+                  <Bar data={chartData} options={singleBarChartOptions}/>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      <div>
+        <div>
+          <div className="relative my-4">
+            <h1 className="inline text-2xl">Income By Highest Education Level in Household</h1>
+          </div>
+          <ChartDescription
+            description={`This chart shows the average family pretax income of households (over the previous 12 months) relative to the highest education level in the household. This does not take into account which household member has the degree (it may be both).`}
+          />
+          <div className="grid grid-cols-2 gap-x-2 gap-y-6">
+            {incByHighEdLevelChartData && incByHighEdLevelChartData.map((row, idx) => {
+              const chartData = {
+                labels: labels,
+                datasets: row
+              }
+              return (
+                <div key={idx}>
+                  <div className="flex justify-center">
+                    <h1 className="font-semibold">{row[0].title}</h1>
+                  </div>
+                  <div className="flex justify-center p-4 shadow-lg bg-gray-50">
+                    <Line data={chartData} options={lineChartOptions}/>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         </div>
       </div>
     </div>

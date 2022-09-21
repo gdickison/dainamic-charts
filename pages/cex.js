@@ -257,7 +257,7 @@ const cex = () => {
       endDate: dateRange.endDate.split('T')[0]
     })
 
-    const endpoint = `/api/cex_sample_education`
+    const endpoint = `/api/cex_education`
 
     const options = {
       method: 'POST',
