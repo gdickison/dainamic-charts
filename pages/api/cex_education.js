@@ -7,7 +7,7 @@ export default async function querySampleEducation(req, res) {
   await client
     .query(`SELECT
         *
-      FROM banking_app.cex_sample_education
+      FROM banking_app.cex_education
       WHERE date BETWEEN '${req.body.startDate}'::date AND '${req.body.endDate}'::date
         AND region != 0`)
     .then(response => res.status(200).json({response: response.rows}))

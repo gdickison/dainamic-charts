@@ -6,7 +6,7 @@ import CexSampleSize from "../src/components/CexSampleSize"
 import CexSampleAge from "../src/components/CexSampleAge"
 import CexSampleSex from "../src/components/CexSampleSex"
 import CexSampleMaritalStatus from "../src/components/CexSampleMaritalStatus"
-import CexSampleEducation from "../src/components/CexSampleEducation"
+import CexEducation from "../src/components/CexEducation"
 import CexSampleRace from "../src/components/CexSampleRace"
 import CexSampleEarners from "../src/components/CexSampleEarners"
 
@@ -18,6 +18,8 @@ const cex = () => {
   const [monthOptions, setMonthOptions] = useState()
   const [dateRange, setDateRange] = useState({})
   const [selectedRegions, setSelectedRegions] = useState([])
+
+  const [openTab, setOpenTab] = useState("age");
 
   const [sampleSizeData, setSampleSizeData] = useState()
   const [sampleAgeData, setSampleAgeData] = useState()
@@ -255,7 +257,7 @@ const cex = () => {
       endDate: dateRange.endDate.split('T')[0]
     })
 
-    const endpoint = `/api/cex_sample_education`
+    const endpoint = `/api/cex_education`
 
     const options = {
       method: 'POST',
@@ -396,56 +398,160 @@ const cex = () => {
               data={sampleSizeData}
             />
           }
-          {sampleAgeData &&
-            <div className="py-6 my-6 mx-4 border-2 rounded-lg">
-              <div className="mx-6">
-              <div className="relative my-4">
-                <h1 className="inline text-3xl">Age</h1>
+          <div className="container mx-auto">
+            <div className="flex flex-col items-center justify-center mt-12">
+              {sampleSizeData &&
+                <ul className="flex space-x-2">
+                  <li>
+                    <a
+                      href="#"
+                      onClick={() => setOpenTab("age")}
+                      className={`inline-block px-6 border-2 border-gray-300 py-2 text-2xl ${openTab === "age" ? 'text-white bg-blue-600 border-blue-600' : 'text-gray-600 bg-white hover:bg-gray-300'} rounded shadow-md`}
+                    >
+                      Age
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      onClick={() => setOpenTab("sex")}
+                      className={`inline-block px-6 border-2 border-gray-300 py-2 text-2xl ${openTab === "sex" ? 'text-white bg-blue-600 border-blue-600' : 'text-gray-600 bg-white hover:bg-gray-300'} rounded shadow-md`}
+                    >
+                      Sex
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      onClick={() => setOpenTab("marital")}
+                      className={`inline-block px-6 border-2 border-gray-300 py-2 text-2xl ${openTab === "marital" ? 'text-white bg-blue-600 border-blue-600' : 'text-gray-600 bg-white hover:bg-gray-300'} rounded shadow-md`}
+                    >
+                      Marital Status
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      onClick={() => setOpenTab("education")}
+                      className={`inline-block px-6 border-2 border-gray-300 py-2 text-2xl ${openTab === "education" ? 'text-white bg-blue-600 border-blue-600' : 'text-gray-600 bg-white hover:bg-gray-300'} rounded shadow-md`}
+                    >
+                      Education
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      onClick={() => setOpenTab("race")}
+                      className={`inline-block px-6 border-2 border-gray-300 py-2 text-2xl ${openTab === "race" ? 'text-white bg-blue-600 border-blue-600' : 'text-gray-600 bg-white hover:bg-gray-300'} rounded shadow-md`}
+                    >
+                      Race
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      onClick={() => setOpenTab("earner")}
+                      className={`inline-block px-6 border-2 border-gray-300 py-2 text-2xl ${openTab === "earner" ? 'text-white bg-blue-600 border-blue-600' : 'text-gray-600 bg-white hover:bg-gray-300'} rounded shadow-md`}
+                    >
+                      Earner
+                    </a>
+                  </li>
+                </ul>
+              }
+              <div className="p-3 mt-6 bg-white border w-full">
+                <div className={openTab === "age" ? "block" : "hidden"}>
+                  {sampleAgeData &&
+                    <div className="py-6 my-6 mx-4 border-2 rounded-lg">
+                      <div className="mx-6">
+                        <div className="relative my-4">
+                          <h1 className="inline text-3xl">Age</h1>
+                        </div>
+                      </div>
+                      <CexSampleAge
+                        dateRange={dateRange}
+                        data={sampleAgeData}
+                      />
+                    </div>
+                  }
+                </div>
+                <div className={openTab === "sex" ? "block" : "hidden"}>
+                  {sampleSexData &&
+                    <div className="py-6 my-6 mx-4 border-2 rounded-lg">
+                      <div className="mx-6">
+                        <div className="relative my-4">
+                          <h1 className="inline text-3xl">Sex</h1>
+                        </div>
+                      </div>
+                      <CexSampleSex
+                        dateRange={dateRange}
+                        data={sampleSexData}
+                      />
+                    </div>
+                  }
+                </div>
+                <div className={openTab === "marital" ? "block" : "hidden"}>
+                  {sampleMaritalStatusData &&
+                    <div className="py-6 my-6 mx-4 border-2 rounded-lg">
+                      <div className="mx-6">
+                        <div className="relative my-4">
+                          <h1 className="inline text-3xl">Marital Status</h1>
+                        </div>
+                      </div>
+                      <CexSampleMaritalStatus
+                        dateRange={dateRange}
+                        data={sampleMaritalStatusData}
+                      />
+                    </div>
+                  }
+                </div>
+                <div className={openTab === "education" ? "block" : "hidden"}>
+                  {sampleEducationData &&
+                    <div className="py-6 my-6 mx-4 border-2 rounded-lg">
+                      <div className="mx-6">
+                        <div className="relative my-4">
+                          <h1 className="inline text-3xl">Education</h1>
+                        </div>
+                      </div>
+                      <CexEducation
+                        dateRange={dateRange}
+                        data={sampleEducationData}
+                      />
+                    </div>
+                  }
+                </div>
+                <div className={openTab === "race" ? "block" : "hidden"}>
+                  {sampleRaceData &&
+                    <div className="py-6 my-6 mx-4 border-2 rounded-lg">
+                      <div className="mx-6">
+                        <div className="relative my-4">
+                          <h1 className="inline text-3xl">Race</h1>
+                        </div>
+                      </div>
+                      <CexSampleRace
+                        dateRange={dateRange}
+                        data={sampleRaceData}
+                      />
+                    </div>
+                  }
+                </div>
+                <div className={openTab === "earner" ? "block" : "hidden"}>
+                  {sampleEarnersData &&
+                    <div className="py-6 my-6 mx-4 border-2 rounded-lg">
+                      <div className="mx-6">
+                      <div className="relative my-4">
+                        <h1 className="inline text-3xl">Household Earners</h1>
+                      </div>
+                      </div>
+                      <CexSampleEarners
+                        dateRange={dateRange}
+                        data={sampleEarnersData}
+                      />
+                    </div>
+                  }
+                </div>
               </div>
-              </div>
-              <CexSampleAge
-                dateRange={dateRange}
-                data={sampleAgeData}
-              />
             </div>
-          }
-          {sampleSexData &&
-            <CexSampleSex
-              dateRange={dateRange}
-              data={sampleSexData}
-            />
-          }
-          {sampleMaritalStatusData &&
-            <CexSampleMaritalStatus
-              dateRange={dateRange}
-              data={sampleMaritalStatusData}
-            />
-          }
-          {sampleEducationData &&
-            <CexSampleEducation
-              dateRange={dateRange}
-              data={sampleEducationData}
-            />
-          }
-          {sampleRaceData &&
-            <CexSampleRace
-              dateRange={dateRange}
-              data={sampleRaceData}
-            />
-          }
-          {sampleEarnersData &&
-            <div className="py-6 my-6 mx-4 border-2 rounded-lg">
-              <div className="mx-6">
-              <div className="relative my-4">
-                <h1 className="inline text-3xl">Household Earners</h1>
-              </div>
-              </div>
-              <CexSampleEarners
-                dateRange={dateRange}
-                data={sampleEarnersData}
-              />
-            </div>
-          }
+          </div>
         </div>
       </main>
     </div>

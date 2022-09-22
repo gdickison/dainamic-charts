@@ -106,7 +106,7 @@ const CexSampleSize = ({dateRange, data}) => {
   return (
     <div className="mx-6">
       <div className="relative my-4">
-        <h1 className="inline text-2xl">Survey Sample Size</h1>
+        <h1 className="inline text-3xl">Survey Sample Size</h1>
       </div>
       <div className="flex justify-center">
         {chartData &&
