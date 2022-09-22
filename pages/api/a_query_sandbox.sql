@@ -726,3 +726,40 @@ SELECT
 FROM data_import.cex_pumd_fmli
 GROUP BY "QINTRVYR", "QINTRVMO", "REGION"
 ORDER BY year, date, region
+
+
+CREATE VIEW banking_app.cex_marital_status AS
+SELECT
+	"QINTRVYR" ::INTEGER AS year,
+	"QINTRVMO" ::INTEGER AS month,
+	TO_DATE (CONCAT ("QINTRVYR", "QINTRVMO"), 'YYYYMM') AS date,
+	CASE
+		WHEN "REGION" IS NOT NULL AND "REGION" != '' THEN "REGION" ::INTEGER
+		WHEN "REGION" IS NULL OR "REGION" = '' THEN 0
+	END AS region,
+	CASE
+		WHEN "REGION" = '1' THEN 'Northeast'
+		WHEN "REGION" = '2' THEN 'Midwest'
+		WHEN "REGION" = '3' THEN 'South'
+		WHEN "REGION" = '4' THEN 'West'
+		WHEN "REGION" IS NULL OR "REGION" = '' THEN 'none'
+	END AS region_name,
+	COUNT("NEWID") AS total_sample,
+  COUNT("NEWID") FILTER(WHERE "MARITAL1" = '1') AS ct_married,
+  ROUND(CAST(COUNT("NEWID") FILTER (WHERE "MARITAL1" = '1') AS NUMERIC)/COUNT("NEWID"), 4) * 100 AS pct_married,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE "MARITAL1" = '1'), 2) AS inc_married,
+  COUNT("NEWID") FILTER(WHERE "MARITAL1" = '2') AS ct_widowed,
+  ROUND(CAST(COUNT("NEWID") FILTER (WHERE "MARITAL1" = '2') AS NUMERIC)/COUNT("NEWID"), 4) * 100 AS pct_widowed,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE "MARITAL1" = '2'), 2) AS inc_widowed,
+  COUNT("NEWID") FILTER(WHERE "MARITAL1" = '3') AS ct_divorced,
+  ROUND(CAST(COUNT("NEWID") FILTER (WHERE "MARITAL1" = '3') AS NUMERIC)/COUNT("NEWID"), 4) * 100 AS pct_divorced,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE "MARITAL1" = '3'), 2) AS inc_divorced,
+  COUNT("NEWID") FILTER(WHERE "MARITAL1" = '4') AS ct_separated,
+  ROUND(CAST(COUNT("NEWID") FILTER (WHERE "MARITAL1" = '4') AS NUMERIC)/COUNT("NEWID"), 4) * 100 AS pct_separated,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE "MARITAL1" = '4'), 2) AS inc_separated,
+  COUNT("NEWID") FILTER(WHERE "MARITAL1" = '5') AS ct_never_married,
+  ROUND(CAST(COUNT("NEWID") FILTER (WHERE "MARITAL1" = '5') AS NUMERIC)/COUNT("NEWID"), 4) * 100 AS pct_never_married,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE "MARITAL1" = '5'), 2) AS inc_never_married
+FROM data_import.cex_pumd_fmli
+GROUP BY "QINTRVYR", "QINTRVMO", "REGION"
+ORDER BY year, date, region

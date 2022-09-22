@@ -5,7 +5,7 @@ import Loader from "../src/components/Loader"
 import CexSampleSize from "../src/components/CexSampleSize"
 import CexSampleAge from "../src/components/CexSampleAge"
 import CexSampleSex from "../src/components/CexSampleSex"
-import CexSampleMaritalStatus from "../src/components/CexSampleMaritalStatus"
+import CexMaritalStatus from "../src/components/CexMaritalStatus"
 import CexEducation from "../src/components/CexEducation"
 import CexSampleRace from "../src/components/CexSampleRace"
 import CexSampleEarners from "../src/components/CexSampleEarners"
@@ -24,7 +24,7 @@ const cex = () => {
   const [sampleSizeData, setSampleSizeData] = useState()
   const [sampleAgeData, setSampleAgeData] = useState()
   const [sampleSexData, setSampleSexData] = useState()
-  const [sampleMaritalStatusData, setSampleMaritalStatusData] = useState()
+  const [cexMaritalStatusData, setCexMaritalStatusData] = useState()
   const [sampleEducationData, setSampleEducationData] = useState()
   const [sampleRaceData, setSampleRaceData] = useState()
   const [sampleEarnersData, setSampleEarnersData] = useState()
@@ -213,7 +213,7 @@ const cex = () => {
     }
   }
 
-  const getSampleMaritalStatus = async () => {
+  const getCexMaritalStatus = async () => {
     const regions = selectedRegions.map(region => {
       return region.regionCode
     })
@@ -224,7 +224,7 @@ const cex = () => {
       endDate: dateRange.endDate.split('T')[0]
     })
 
-    const endpoint = `/api/cex_sample_marital_status`
+    const endpoint = `/api/cex_marital_status`
 
     const options = {
       method: 'POST',
@@ -242,7 +242,7 @@ const cex = () => {
     if(status !== 200){
       console.log("There was an error getting the sample marital status data")
     } else if(status === 200){
-      setSampleMaritalStatusData(data)
+      setCexMaritalStatusData(data)
     }
   }
 
@@ -351,7 +351,7 @@ const cex = () => {
     getSampleSize()
     getSampleAge()
     getSampleSex()
-    getSampleMaritalStatus()
+    getCexMaritalStatus()
     getSampleEducation()
     getSampleRace()
     getSampleEarners()
@@ -458,7 +458,7 @@ const cex = () => {
                   </li>
                 </ul>
               }
-              <div className="p-3 mt-6 bg-white border w-full">
+              <div className="mt-6 bg-white w-full">
                 <div className={openTab === "age" ? "block" : "hidden"}>
                   {sampleAgeData &&
                     <div className="py-6 my-6 mx-4 border-2 rounded-lg">
@@ -490,16 +490,16 @@ const cex = () => {
                   }
                 </div>
                 <div className={openTab === "marital" ? "block" : "hidden"}>
-                  {sampleMaritalStatusData &&
+                  {cexMaritalStatusData &&
                     <div className="py-6 my-6 mx-4 border-2 rounded-lg">
                       <div className="mx-6">
                         <div className="relative my-4">
                           <h1 className="inline text-3xl">Marital Status</h1>
                         </div>
                       </div>
-                      <CexSampleMaritalStatus
+                      <CexMaritalStatus
                         dateRange={dateRange}
-                        data={sampleMaritalStatusData}
+                        data={cexMaritalStatusData}
                       />
                     </div>
                   }

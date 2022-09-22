@@ -7,7 +7,7 @@ export default async function querySampleMaritalStatus(req, res) {
   await client
     .query(`SELECT
         *
-      FROM banking_app.cex_sample_marital_status
+      FROM banking_app.cex_marital_status
       WHERE date BETWEEN '${req.body.startDate}'::date AND '${req.body.endDate}'::date
         AND region != 0`)
     .then(response => res.status(200).json({response: response.rows}))
