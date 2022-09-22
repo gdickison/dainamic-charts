@@ -416,7 +416,7 @@ ORDER BY year, date, region
 -- ORDER BY year, date, region
 
 -- total amount of family income before taxes in the last 12 months by sex and education level, and by highest degree
-CREATE VIEW banking_app.cex_ed_level_sex_inc AS
+CREATE VIEW banking_app.cex_education AS
 SELECT
   "QINTRVYR" ::INTEGER AS year,
 	"QINTRVMO" ::INTEGER AS month,
@@ -634,6 +634,95 @@ SELECT
     WHERE GREATEST("EDUC_REF", "EDUCA2") = '16')) AS NUMERIC) / COUNT("NEWID")), 4) *100 AS pct_hi_post_grad,
   ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (
     WHERE GREATEST("EDUC_REF", "EDUCA2") = '16'), 2) AS inc_hi_post_grad
+FROM data_import.cex_pumd_fmli
+GROUP BY "QINTRVYR", "QINTRVMO", "REGION"
+ORDER BY year, date, region
+
+
+
+
+-- ATTEMPT TO REFACTOR THE DEGREE COMBINATIONS
+SELECT
+	"QINTRVYR" ::INTEGER AS year,
+	"QINTRVMO" ::INTEGER AS month,
+	TO_DATE (CONCAT ("QINTRVYR", "QINTRVMO"), 'YYYYMM') AS date,
+	CASE
+		WHEN "REGION" IS NOT NULL AND "REGION" != '' THEN "REGION" ::INTEGER
+		WHEN "REGION" IS NULL OR "REGION" = '' THEN 0
+	END AS region,
+	CASE
+		WHEN "REGION" = '1' THEN 'Northeast'
+		WHEN "REGION" = '2' THEN 'Midwest'
+		WHEN "REGION" = '3' THEN 'South'
+		WHEN "REGION" = '4' THEN 'West'
+		WHEN "REGION" IS NULL OR "REGION" = '' THEN 'none'
+	END AS region_name,
+	COUNT("NEWID") AS total_sample,
+  COUNT("EDUCA2") AS total_spouse,
+  COUNT("SEX_REF") AS male,
+  COUNT("SEX2") AS female,
+  ROUND(AVG("FINCBTAX" ::DECIMAL)) AS avg_inc,
+  -- INCOME BY DEGREE COMBINATION
+  -- BOTH HAVE HS DIPLOMA OR LESS
+	COUNT("NEWID") FILTER (WHERE ("EDUC_REF" <= '12' AND "EDUC_REF" != '') AND ("EDUCA2" <= '12' AND "EDUCA2" !='')) AS ct_both_dipl_or_less,
+  ROUND((CAST((COUNT("NEWID") FILTER (WHERE ("EDUC_REF" <= '12' AND "EDUC_REF" != '') AND ("EDUCA2" <= '12' AND "EDUCA2" !=''))) AS NUMERIC) / COUNT("EDUCA2")), 4) * 100 AS pct_both_dipl_or_less,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE ("EDUC_REF" <= '12' AND "EDUC_REF" != '') AND ("EDUCA2" <= '12' AND "EDUCA2" !='')), 2) AS inc_both_dipl_or_less,
+  -- ONE HAS DIPLOMA OR LESS AND ONE HAS SOME COLL
+	COUNT("NEWID") FILTER (WHERE ("EDUC_REF" <= '12' AND "EDUC_REF" != '' AND "EDUCA2" = '13') OR ("EDUCA2" <= '12' AND "EDUCA2" != '' AND "EDUC_REF" = '13')) AS ct_dipl_or_less_some_coll,
+  ROUND((CAST((COUNT("NEWID") FILTER (WHERE ("EDUC_REF" <= '12' AND "EDUC_REF" != '' AND "EDUCA2" = '13') OR ("EDUCA2" <= '12' AND "EDUCA2" != '' AND "EDUC_REF" = '13'))) AS NUMERIC) / COUNT("EDUCA2")), 4) * 100 AS pct_dipl_or_less_some_coll,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE ("EDUC_REF" <= '12' AND "EDUC_REF" != '' AND "EDUCA2" = '13') OR ("EDUCA2" <= '12' AND "EDUCA2" != '' AND "EDUC_REF" = '13')), 2) AS inc_dipl_or_less_some_coll,
+  -- ONE HAS DIPLOMA OR LESS AND ONE HAS ASSOC
+	COUNT("NEWID") FILTER (WHERE ("EDUC_REF" <= '12' AND "EDUC_REF" != '' AND "EDUCA2" = '14') OR ("EDUCA2" <= '12' AND "EDUCA2" != '' AND "EDUC_REF" = '14')) AS ct_dipl_or_less_assoc,
+  ROUND((CAST((COUNT("NEWID") FILTER (WHERE ("EDUC_REF" <= '12' AND "EDUC_REF" != '' AND "EDUCA2" = '14') OR ("EDUCA2" <= '12' AND "EDUCA2" != '' AND "EDUC_REF" = '14'))) AS NUMERIC) / COUNT("EDUCA2")), 4) * 100 AS pct_dipl_or_less_assoc,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE ("EDUC_REF" <= '12' AND "EDUC_REF" != '' AND "EDUCA2" = '14') OR ("EDUCA2" <= '12' AND "EDUCA2" != '' AND "EDUC_REF" = '14')), 2) AS inc_dipl_or_less_assoc,
+  -- ONE HAS DIPLOMA OR LESS AND ONE HAS BACH
+	COUNT("NEWID") FILTER (WHERE ("EDUC_REF" <= '12' AND "EDUC_REF" != '' AND "EDUCA2" = '15') OR ("EDUCA2" <= '12' AND "EDUCA2" != '' AND "EDUC_REF" = '15')) AS ct_dipl_or_less_bach,
+  ROUND((CAST((COUNT("NEWID") FILTER (WHERE ("EDUC_REF" <= '12' AND "EDUC_REF" != '' AND "EDUCA2" = '15') OR ("EDUCA2" <= '12' AND "EDUCA2" != '' AND "EDUC_REF" = '15'))) AS NUMERIC) / COUNT("EDUCA2")), 4) * 100 AS pct_dipl_or_less_bach,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE ("EDUC_REF" <= '12' AND "EDUC_REF" != '' AND "EDUCA2" = '15') OR ("EDUCA2" <= '12' AND "EDUCA2" != '' AND "EDUC_REF" = '15')), 2) AS inc_dipl_or_less_bach,
+  -- ONE HAS DIPLOMA OR LESS AND ONE HAS POST GRAD
+	COUNT("NEWID") FILTER (WHERE ("EDUC_REF" <= '12' AND "EDUC_REF" != '' AND "EDUCA2" = '16') OR ("EDUCA2" <= '12' AND "EDUCA2" != '' AND "EDUC_REF" = '16')) AS ct_dipl_or_less_post,
+  ROUND((CAST((COUNT("NEWID") FILTER (WHERE ("EDUC_REF" <= '12' AND "EDUC_REF" != '' AND "EDUCA2" = '16') OR ("EDUCA2" <= '12' AND "EDUCA2" != '' AND "EDUC_REF" = '16'))) AS NUMERIC) / COUNT("EDUCA2")), 4) * 100 AS pct_dipl_or_less_post,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE ("EDUC_REF" <= '12' AND "EDUC_REF" != '' AND "EDUCA2" = '16') OR ("EDUCA2" <= '12' AND "EDUCA2" != '' AND "EDUC_REF" = '16')), 2) AS inc_dipl_or_less_post,
+  -- BOTH HAVE SOME COLLEGE
+  COUNT("NEWID") FILTER (WHERE "EDUC_REF" = '13' AND "EDUCA2" = '13') AS ct_both_some_coll,
+	ROUND((CAST((COUNT("NEWID") FILTER (WHERE "EDUC_REF" = '13' AND "EDUCA2" = '13')) AS NUMERIC) / COUNT("EDUCA2")), 4) * 100 AS pct_both_some_coll,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE "EDUC_REF" = '13' AND "EDUCA2" = '13'), 2) AS inc_both_some_coll,
+  -- ONE HAS SOME COLLEGE AND ONE HAS ASSOC
+  COUNT("NEWID") FILTER (WHERE ("EDUC_REF" = '13' AND "EDUCA2" = '14') OR ("EDUC_REF" = '14' AND "EDUCA2" = '13')) AS ct_some_coll_assoc,
+	ROUND((CAST((COUNT("NEWID") FILTER (WHERE ("EDUC_REF" = '13' AND "EDUCA2" = '14') OR ("EDUC_REF" = '14' AND "EDUCA2" = '13'))) AS NUMERIC) / COUNT("EDUCA2")), 4) * 100 AS pct_some_coll_assoc,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE ("EDUC_REF" = '13' AND "EDUCA2" = '14') OR ("EDUC_REF" = '14' AND "EDUCA2" = '13')), 2) AS inc_some_coll_assoc,
+  -- ONE HAS SOME COLLEGE AND ONE HAS BACH
+  COUNT("NEWID") FILTER (WHERE ("EDUC_REF" = '13' AND "EDUCA2" = '15') OR ("EDUC_REF" = '15' AND "EDUCA2" = '13')) AS ct_some_coll_bach,
+	ROUND((CAST((COUNT("NEWID") FILTER (WHERE ("EDUC_REF" = '13' AND "EDUCA2" = '15') OR ("EDUC_REF" = '15' AND "EDUCA2" = '13'))) AS NUMERIC) / COUNT("EDUCA2")), 4) * 100 AS pct_some_coll_bach,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE ("EDUC_REF" = '13' AND "EDUCA2" = '15') OR ("EDUC_REF" = '15' AND "EDUCA2" = '13')), 2) AS inc_some_coll_bach,
+  -- ONE HAS SOME COLLEGE AND ONE HAS POST GRAD
+  COUNT("NEWID") FILTER (WHERE ("EDUC_REF" = '13' AND "EDUCA2" = '16') OR ("EDUC_REF" = '16' AND "EDUCA2" = '13')) AS ct_some_coll_post,
+	ROUND((CAST((COUNT("NEWID") FILTER (WHERE ("EDUC_REF" = '13' AND "EDUCA2" = '16') OR ("EDUC_REF" = '16' AND "EDUCA2" = '13'))) AS NUMERIC) / COUNT("EDUCA2")), 4) * 100 AS pct_some_coll_post,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE ("EDUC_REF" = '13' AND "EDUCA2" = '16') OR ("EDUC_REF" = '16' AND "EDUCA2" = '13')), 2) AS inc_some_coll_post,
+  -- BOTH HAVE ASSOC
+  COUNT("NEWID") FILTER (WHERE "EDUC_REF" = '14' AND "EDUCA2" = '14') AS ct_both_assoc,
+	ROUND((CAST((COUNT("NEWID") FILTER (WHERE "EDUC_REF" = '14' AND "EDUCA2" = '14')) AS NUMERIC) / COUNT("EDUCA2")), 4) * 100 AS pct_both_assoc,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE "EDUC_REF" = '14' AND "EDUCA2" = '14'), 2) AS inc_both_assoc,
+  -- ONE HAS ASSOC AND ONE HAS BACH
+  COUNT("NEWID") FILTER (WHERE ("EDUC_REF" = '14' AND "EDUCA2" = '15') OR ("EDUC_REF" = '15' AND "EDUCA2" = '14')) AS ct_assoc_bach,
+	ROUND((CAST((COUNT("NEWID") FILTER (WHERE ("EDUC_REF" = '14' AND "EDUCA2" = '15') OR ("EDUC_REF" = '15' AND "EDUCA2" = '14'))) AS NUMERIC) / COUNT("EDUCA2")), 4) * 100 AS pct_assoc_bach,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE ("EDUC_REF" = '14' AND "EDUCA2" = '15') OR ("EDUC_REF" = '15' AND "EDUCA2" = '14')), 2) AS inc_assoc_bach,
+  -- ONE HAS ASSOC AND ONE HAS POST GRAD
+  COUNT("NEWID") FILTER (WHERE ("EDUC_REF" = '14' AND "EDUCA2" = '16') OR ("EDUC_REF" = '16' AND "EDUCA2" = '14')) AS ct_assoc_post,
+	ROUND((CAST((COUNT("NEWID") FILTER (WHERE ("EDUC_REF" = '14' AND "EDUCA2" = '16') OR ("EDUC_REF" = '16' AND "EDUCA2" = '14'))) AS NUMERIC) / COUNT("EDUCA2")), 4) * 100 AS pct_assoc_post,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE ("EDUC_REF" = '14' AND "EDUCA2" = '16') OR ("EDUC_REF" = '16' AND "EDUCA2" = '14')), 2) AS inc_assoc_post,
+  -- BOTH HAVE BACH
+  COUNT("NEWID") FILTER (WHERE "EDUC_REF" = '15' AND "EDUCA2" = '15') AS ct_both_bach,
+	ROUND((CAST((COUNT("NEWID") FILTER (WHERE "EDUC_REF" = '15' AND "EDUCA2" = '15')) AS NUMERIC) / COUNT("EDUCA2")), 4) * 100 AS pct_both_bach,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE "EDUC_REF" = '15' AND "EDUCA2" = '15'), 2) AS inc_both_bach,
+  -- ONE BACH AND ONE POST GRAD
+  COUNT("NEWID") FILTER (WHERE ("EDUC_REF" = '15' AND "EDUCA2" = '16') OR ("EDUC_REF" = '16' AND "EDUCA2" = '15')) AS ct_bach_post,
+	ROUND((CAST((COUNT("NEWID") FILTER (WHERE ("EDUC_REF" = '15' AND "EDUCA2" = '16') OR ("EDUC_REF" = '16' AND "EDUCA2" = '15'))) AS NUMERIC) / COUNT("EDUCA2")), 4) * 100 AS pct_bach_post,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE ("EDUC_REF" = '15' AND "EDUCA2" = '16') OR ("EDUC_REF" = '16' AND "EDUCA2" = '15')), 2) AS inc_bach_post,
+  -- BOTH POST GRAD
+  COUNT("NEWID") FILTER (WHERE "EDUC_REF" = '16' AND "EDUCA2" = '16') AS ct_both_post,
+	ROUND((CAST((COUNT("NEWID") FILTER (WHERE "EDUC_REF" = '16' AND "EDUCA2" = '16')) AS NUMERIC) / COUNT("EDUCA2")), 4) * 100 AS pct_both_post,
+  ROUND(AVG("FINCBTAX" ::DECIMAL) FILTER (WHERE "EDUC_REF" = '16' AND "EDUCA2" = '16'), 2) AS inc_both_post
 FROM data_import.cex_pumd_fmli
 GROUP BY "QINTRVYR", "QINTRVMO", "REGION"
 ORDER BY year, date, region

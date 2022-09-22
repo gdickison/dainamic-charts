@@ -1,9 +1,9 @@
 import { memo } from "react"
 import { Bar, Line } from "react-chartjs-2"
-import { getDateLabelsForChart, groupDataByRegion, cexFadedColors, cexSolidColors } from "../../public/utils"
+import { getDateLabelsForChart, groupDataByRegion, cexFadedColors, cexSolidColors, cexTwelveFadedColors, cexTwelveSolidColors } from "../../public/utils"
 import ChartDescription from "./ChartDescription"
 
-const CexSampleEducation = ({dateRange, data}) => {
+const CexEducation = ({dateRange, data}) => {
   const labels = getDateLabelsForChart(dateRange.startDate, dateRange.endDate)
   const regionalData = Object.values(groupDataByRegion(data, "region_name"))
 
@@ -237,8 +237,8 @@ const CexSampleEducation = ({dateRange, data}) => {
         label: 'High School Diploma Or Less',
         data: region.pctMaleDiplOrLess,
         tooltip: region.ctMaleDiplOrLess,
-        backgroundColor: cexFadedColors[1],
-        hoverBackgroundColor: cexSolidColors[1],
+        backgroundColor: cexFadedColors[0],
+        hoverBackgroundColor: cexSolidColors[0],
         title: region.label,
         stack: 'Stack 0'
       },
@@ -246,8 +246,8 @@ const CexSampleEducation = ({dateRange, data}) => {
         label: 'High School Diploma Or Less',
         data: region.pctFemaleDiplOrLess,
         tooltip: region.ctFemaleDiplOrLess,
-        backgroundColor: cexFadedColors[1],
-        hoverBackgroundColor: cexSolidColors[1],
+        backgroundColor: cexFadedColors[0],
+        hoverBackgroundColor: cexSolidColors[0],
         title: region.label,
         stack: 'Stack 1'
       },
@@ -255,64 +255,64 @@ const CexSampleEducation = ({dateRange, data}) => {
         label: 'Some College',
         data: region.pctMaleSomeColl,
         tooltip: region.ctMaleSomeColl,
-        backgroundColor: cexFadedColors[2],
-        hoverBackgroundColor: cexSolidColors[2],
+        backgroundColor: cexFadedColors[1],
+        hoverBackgroundColor: cexSolidColors[1],
         stack: 'Stack 0'
       },
       {
         label: 'Some College',
         data: region.pctFemaleSomeColl,
         tooltip: region.ctFemaleSomeColl,
-        backgroundColor: cexFadedColors[2],
-        hoverBackgroundColor: cexSolidColors[2],
+        backgroundColor: cexFadedColors[1],
+        hoverBackgroundColor: cexSolidColors[1],
         stack: 'Stack 1'
       },
       {
         label: "Associate's Degree",
         data: region.pctMaleAssoc,
         tooltip: region.ctMaleAssoc,
-        backgroundColor: cexFadedColors[3],
-        hoverBackgroundColor: cexSolidColors[3],
+        backgroundColor: cexFadedColors[2],
+        hoverBackgroundColor: cexSolidColors[2],
         stack: 'Stack 0'
       },
       {
         label: "Associate's Degree",
         data: region.pctFemaleAssoc,
         tooltip: region.ctFemaleAssoc,
-        backgroundColor: cexFadedColors[3],
-        hoverBackgroundColor: cexSolidColors[3],
+        backgroundColor: cexFadedColors[2],
+        hoverBackgroundColor: cexSolidColors[2],
         stack: 'Stack 1'
       },
       {
         label: "Bachelor's Degree",
         data: region.pctMaleBach,
         tooltip: region.ctMaleBach,
-        backgroundColor: cexFadedColors[4],
-        hoverBackgroundColor: cexSolidColors[4],
+        backgroundColor: cexFadedColors[3],
+        hoverBackgroundColor: cexSolidColors[3],
         stack: 'Stack 0'
       },
       {
         label: "Bachelor's Degree",
         data: region.pctFemaleBach,
         tooltip: region.ctFemaleBach,
-        backgroundColor: cexFadedColors[4],
-        hoverBackgroundColor: cexSolidColors[4],
+        backgroundColor: cexFadedColors[3],
+        hoverBackgroundColor: cexSolidColors[3],
         stack: 'Stack 1'
       },
       {
         label: 'Post Grad Degree',
         data: region.pctMalePostGrad,
         tooltip: region.ctMalePostGrad,
-        backgroundColor: cexFadedColors[5],
-        hoverBackgroundColor: cexSolidColors[5],
+        backgroundColor: cexFadedColors[4],
+        hoverBackgroundColor: cexSolidColors[4],
         stack: 'Stack 0'
       },
       {
         label: 'Post Grad Degree',
         data: region.pctFemalePostGrad,
         tooltip: region.ctFemalePostGrad,
-        backgroundColor: cexFadedColors[5],
-        hoverBackgroundColor: cexSolidColors[5],
+        backgroundColor: cexFadedColors[4],
+        hoverBackgroundColor: cexSolidColors[4],
         stack: 'Stack 1'
       }
     ]
@@ -323,38 +323,38 @@ const CexSampleEducation = ({dateRange, data}) => {
       {
         label: 'High School Diploma Or Less',
         data: region.incFemaleDiplOrLess,
-        backgroundColor: cexFadedColors[1],
-        borderColor: cexFadedColors[1],
-        hoverBackgroundColor: cexSolidColors[1],
+        backgroundColor: cexFadedColors[0],
+        borderColor: cexFadedColors[0],
+        hoverBackgroundColor: cexSolidColors[0],
         title: region.label
       },
       {
         label: 'Some College',
         data: region.incFemaleSomeColl,
+        backgroundColor: cexFadedColors[1],
+        borderColor: cexFadedColors[1],
+        hoverBackgroundColor: cexSolidColors[1]
+      },
+      {
+        label: "Associate's Degree",
+        data: region.incFemaleAssoc,
         backgroundColor: cexFadedColors[2],
         borderColor: cexFadedColors[2],
         hoverBackgroundColor: cexSolidColors[2]
       },
       {
-        label: "Associate's Degree",
-        data: region.incFemaleAssoc,
+        label: "Bachelor's Degree",
+        data: region.incFemaleBach,
         backgroundColor: cexFadedColors[3],
         borderColor: cexFadedColors[3],
         hoverBackgroundColor: cexSolidColors[3]
       },
       {
-        label: "Bachelor's Degree",
-        data: region.incFemaleBach,
+        label: 'Post Grad Degree',
+        data: region.incFemalePostGrad,
         backgroundColor: cexFadedColors[4],
         borderColor: cexFadedColors[4],
         hoverBackgroundColor: cexSolidColors[4]
-      },
-      {
-        label: 'Post Grad Degree',
-        data: region.incFemalePostGrad,
-        backgroundColor: cexFadedColors[5],
-        borderColor: cexFadedColors[5],
-        hoverBackgroundColor: cexSolidColors[5]
       },
     ]
   })
@@ -364,38 +364,38 @@ const CexSampleEducation = ({dateRange, data}) => {
       {
         label: 'High School Diploma Or Less',
         data: region.incMaleDiplOrLess,
-        backgroundColor: cexFadedColors[1],
-        borderColor: cexFadedColors[1],
-        hoverBackgroundColor: cexSolidColors[1],
+        backgroundColor: cexFadedColors[0],
+        borderColor: cexFadedColors[0],
+        hoverBackgroundColor: cexSolidColors[0],
         title: region.label
       },
       {
         label: 'Some College',
         data: region.incMaleSomeColl,
+        backgroundColor: cexFadedColors[1],
+        borderColor: cexFadedColors[1],
+        hoverBackgroundColor: cexSolidColors[1]
+      },
+      {
+        label: "Associate's Degree",
+        data: region.incMaleAssoc,
         backgroundColor: cexFadedColors[2],
         borderColor: cexFadedColors[2],
         hoverBackgroundColor: cexSolidColors[2]
       },
       {
-        label: "Associate's Degree",
-        data: region.incMaleAssoc,
+        label: "Bachelor's Degree",
+        data: region.incMaleBach,
         backgroundColor: cexFadedColors[3],
         borderColor: cexFadedColors[3],
         hoverBackgroundColor: cexSolidColors[3]
       },
       {
-        label: "Bachelor's Degree",
-        data: region.incMaleBach,
+        label: 'Post Grad Degree',
+        data: region.incMalePost,
         backgroundColor: cexFadedColors[4],
         borderColor: cexFadedColors[4],
         hoverBackgroundColor: cexSolidColors[4]
-      },
-      {
-        label: 'Post Grad Degree',
-        data: region.incMalePost,
-        backgroundColor: cexFadedColors[5],
-        borderColor: cexFadedColors[5],
-        hoverBackgroundColor: cexSolidColors[5]
       },
     ]
   })
@@ -406,37 +406,37 @@ const CexSampleEducation = ({dateRange, data}) => {
         label: 'High School Diploma Or Less',
         data: region.pctHighDiplOrLess,
         tooltip: region.ctHighDiplOrLess,
-        backgroundColor: cexFadedColors[1],
-        hoverBackgroundColor: cexSolidColors[1],
+        backgroundColor: cexFadedColors[0],
+        hoverBackgroundColor: cexSolidColors[0],
         title: region.label
       },
       {
         label: 'Some College',
         data: region.pctHighSomeColl,
         tooltip: region.ctHighSomeColl,
-        backgroundColor: cexFadedColors[2],
-        hoverBackgroundColor: cexSolidColors[2]
+        backgroundColor: cexFadedColors[1],
+        hoverBackgroundColor: cexSolidColors[1]
       },
 {
         label: "Associate's Degree",
         data: region.pctHighAssoc,
         tooltip: region.ctHighAssoc,
-        backgroundColor: cexFadedColors[3],
-        hoverBackgroundColor: cexSolidColors[3]
+        backgroundColor: cexFadedColors[2],
+        hoverBackgroundColor: cexSolidColors[2]
       },
 {
         label: "Bachelor's Degree",
         data: region.pctHighBach,
         tooltip: region.ctHighBach,
-        backgroundColor: cexFadedColors[4],
-        hoverBackgroundColor: cexSolidColors[4]
+        backgroundColor: cexFadedColors[3],
+        hoverBackgroundColor: cexSolidColors[3]
       },
 {
         label: 'Post Grad Degree',
         data: region.pctHighPostGrad,
         tooltip: region.ctHighPostGrad,
-        backgroundColor: cexFadedColors[5],
-        hoverBackgroundColor: cexSolidColors[5]
+        backgroundColor: cexFadedColors[4],
+        hoverBackgroundColor: cexSolidColors[4]
       },
     ]
   })
@@ -446,38 +446,38 @@ const CexSampleEducation = ({dateRange, data}) => {
       {
         label: 'High School Diploma Or Less',
         data: region.incHighDiplOrLess,
-        backgroundColor: cexFadedColors[1],
-        borderColor: cexFadedColors[1],
-        hoverBackgroundColor: cexSolidColors[1],
+        backgroundColor: cexFadedColors[0],
+        borderColor: cexFadedColors[0],
+        hoverBackgroundColor: cexSolidColors[0],
         title: region.label
       },
       {
         label: 'Some College',
         data: region.incHighSomeColl,
+        backgroundColor: cexFadedColors[1],
+        borderColor: cexFadedColors[1],
+        hoverBackgroundColor: cexSolidColors[1]
+      },
+      {
+        label: "Associate's Degree",
+        data: region.incHighAssoc,
         backgroundColor: cexFadedColors[2],
         borderColor: cexFadedColors[2],
         hoverBackgroundColor: cexSolidColors[2]
       },
       {
-        label: "Associate's Degree",
-        data: region.incHighAssoc,
+        label: "Bachelor's Degree",
+        data: region.incHighBach,
         backgroundColor: cexFadedColors[3],
         borderColor: cexFadedColors[3],
         hoverBackgroundColor: cexSolidColors[3]
       },
       {
-        label: "Bachelor's Degree",
-        data: region.incHighBach,
+        label: 'Post Grad Degree',
+        data: region.incHighPostGrad,
         backgroundColor: cexFadedColors[4],
         borderColor: cexFadedColors[4],
         hoverBackgroundColor: cexSolidColors[4]
-      },
-      {
-        label: 'Post Grad Degree',
-        data: region.incHighPostGrad,
-        backgroundColor: cexFadedColors[5],
-        borderColor: cexFadedColors[5],
-        hoverBackgroundColor: cexSolidColors[5]
       },
     ]
   })
@@ -866,4 +866,4 @@ const CexSampleEducation = ({dateRange, data}) => {
   )
 }
 
-export default memo(CexSampleEducation)
+export default memo(CexEducation)

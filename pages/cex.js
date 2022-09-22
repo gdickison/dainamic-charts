@@ -6,7 +6,7 @@ import CexSampleSize from "../src/components/CexSampleSize"
 import CexSampleAge from "../src/components/CexSampleAge"
 import CexSampleSex from "../src/components/CexSampleSex"
 import CexSampleMaritalStatus from "../src/components/CexSampleMaritalStatus"
-import CexSampleEducation from "../src/components/CexSampleEducation"
+import CexEducation from "../src/components/CexEducation"
 import CexSampleRace from "../src/components/CexSampleRace"
 import CexSampleEarners from "../src/components/CexSampleEarners"
 
@@ -512,7 +512,7 @@ const cex = () => {
                           <h1 className="inline text-3xl">Education</h1>
                         </div>
                       </div>
-                      <CexSampleEducation
+                      <CexEducation
                         dateRange={dateRange}
                         data={sampleEducationData}
                       />
