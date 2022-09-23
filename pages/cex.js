@@ -7,7 +7,7 @@ import CexSampleAge from "../src/components/CexSampleAge"
 import CexSampleSex from "../src/components/CexSampleSex"
 import CexMaritalStatus from "../src/components/CexMaritalStatus"
 import CexEducation from "../src/components/CexEducation"
-import CexSampleRace from "../src/components/CexSampleRace"
+import CexRace from "../src/components/CexRace"
 import CexSampleEarners from "../src/components/CexSampleEarners"
 
 const cex = () => {
@@ -21,13 +21,13 @@ const cex = () => {
 
   const [openTab, setOpenTab] = useState("age");
 
-  const [sampleSizeData, setSampleSizeData] = useState()
-  const [sampleAgeData, setSampleAgeData] = useState()
-  const [sampleSexData, setSampleSexData] = useState()
+  const [cexSampleSizeData, setCexSampleSizeData] = useState()
+  const [cexAgeData, setCexAgeData] = useState()
+  const [cexSexData, setCexSexData] = useState()
   const [cexMaritalStatusData, setCexMaritalStatusData] = useState()
-  const [sampleEducationData, setSampleEducationData] = useState()
-  const [sampleRaceData, setSampleRaceData] = useState()
-  const [sampleEarnersData, setSampleEarnersData] = useState()
+  const [cexEducationData, setCexEducationData] = useState()
+  const [cexRaceData, setCexRaceData] = useState()
+  const [cexEarnersData, setCexEarnersData] = useState()
 
   //*******************************************************************//
   //                                                                   //
@@ -143,7 +143,7 @@ const cex = () => {
     if(status !== 200){
       console.log("There was an error getting the sample size data")
     } else if(status === 200){
-      setSampleSizeData(data)
+      setCexSampleSizeData(data)
     }
   }
 
@@ -176,7 +176,7 @@ const cex = () => {
     if(status !== 200){
       console.log("There was an error getting the sample age data")
     } else if(status === 200){
-      setSampleAgeData(data)
+      setCexAgeData(data)
     }
   }
 
@@ -209,7 +209,7 @@ const cex = () => {
     if(status !== 200){
       console.log("There was an error getting the sample sex data")
     } else if(status === 200){
-      setSampleSexData(data)
+      setCexSexData(data)
     }
   }
 
@@ -246,7 +246,7 @@ const cex = () => {
     }
   }
 
-  const getSampleEducation = async () => {
+  const getCexEducation = async () => {
     const regions = selectedRegions.map(region => {
       return region.regionCode
     })
@@ -275,11 +275,11 @@ const cex = () => {
     if(status !== 200){
       console.log("There was an error getting the sample education data")
     } else if(status === 200){
-      setSampleEducationData(data)
+      setCexEducationData(data)
     }
   }
 
-  const getSampleRace = async () => {
+  const getCexRace = async () => {
     const regions = selectedRegions.map(region => {
       return region.regionCode
     })
@@ -290,7 +290,7 @@ const cex = () => {
       endDate: dateRange.endDate.split('T')[0]
     })
 
-    const endpoint = `/api/cex_sample_race`
+    const endpoint = `/api/cex_race`
 
     const options = {
       method: 'POST',
@@ -308,7 +308,7 @@ const cex = () => {
     if(status !== 200){
       console.log("There was an error getting the sample race data")
     } else if(status === 200){
-      setSampleRaceData(data)
+      setCexRaceData(data)
     }
   }
 
@@ -341,7 +341,7 @@ const cex = () => {
     if(status !== 200){
       console.log("There was an error getting the sample earners data")
     } else if(status === 200){
-      setSampleEarnersData(data)
+      setCexEarnersData(data)
     }
   }
 
@@ -352,8 +352,8 @@ const cex = () => {
     getSampleAge()
     getSampleSex()
     getCexMaritalStatus()
-    getSampleEducation()
-    getSampleRace()
+    getCexEducation()
+    getCexRace()
     getSampleEarners()
   }
 
@@ -392,15 +392,15 @@ const cex = () => {
           : <Loader loadiingText="Building the inputs..." />
         }
         <div className="space-y-6">
-          {sampleSizeData &&
+          {cexSampleSizeData &&
             <CexSampleSize
               dateRange={dateRange}
-              data={sampleSizeData}
+              data={cexSampleSizeData}
             />
           }
           <div className="container mx-auto">
             <div className="flex flex-col items-center justify-center mt-12">
-              {sampleSizeData &&
+              {cexSampleSizeData &&
                 <ul className="flex space-x-2">
                   <li>
                     <a
@@ -460,7 +460,7 @@ const cex = () => {
               }
               <div className="mt-6 bg-white w-full">
                 <div className={openTab === "age" ? "block" : "hidden"}>
-                  {sampleAgeData &&
+                  {cexAgeData &&
                     <div className="py-6 my-6 mx-4 border-2 rounded-lg">
                       <div className="mx-6">
                         <div className="relative my-4">
@@ -469,13 +469,13 @@ const cex = () => {
                       </div>
                       <CexSampleAge
                         dateRange={dateRange}
-                        data={sampleAgeData}
+                        data={cexAgeData}
                       />
                     </div>
                   }
                 </div>
                 <div className={openTab === "sex" ? "block" : "hidden"}>
-                  {sampleSexData &&
+                  {cexSexData &&
                     <div className="py-6 my-6 mx-4 border-2 rounded-lg">
                       <div className="mx-6">
                         <div className="relative my-4">
@@ -484,7 +484,7 @@ const cex = () => {
                       </div>
                       <CexSampleSex
                         dateRange={dateRange}
-                        data={sampleSexData}
+                        data={cexSexData}
                       />
                     </div>
                   }
@@ -505,7 +505,7 @@ const cex = () => {
                   }
                 </div>
                 <div className={openTab === "education" ? "block" : "hidden"}>
-                  {sampleEducationData &&
+                  {cexEducationData &&
                     <div className="py-6 my-6 mx-4 border-2 rounded-lg">
                       <div className="mx-6">
                         <div className="relative my-4">
@@ -514,28 +514,28 @@ const cex = () => {
                       </div>
                       <CexEducation
                         dateRange={dateRange}
-                        data={sampleEducationData}
+                        data={cexEducationData}
                       />
                     </div>
                   }
                 </div>
                 <div className={openTab === "race" ? "block" : "hidden"}>
-                  {sampleRaceData &&
+                  {cexRaceData &&
                     <div className="py-6 my-6 mx-4 border-2 rounded-lg">
                       <div className="mx-6">
                         <div className="relative my-4">
                           <h1 className="inline text-3xl">Race</h1>
                         </div>
                       </div>
-                      <CexSampleRace
+                      <CexRace
                         dateRange={dateRange}
-                        data={sampleRaceData}
+                        data={cexRaceData}
                       />
                     </div>
                   }
                 </div>
                 <div className={openTab === "earner" ? "block" : "hidden"}>
-                  {sampleEarnersData &&
+                  {cexEarnersData &&
                     <div className="py-6 my-6 mx-4 border-2 rounded-lg">
                       <div className="mx-6">
                       <div className="relative my-4">
@@ -544,7 +544,7 @@ const cex = () => {
                       </div>
                       <CexSampleEarners
                         dateRange={dateRange}
-                        data={sampleEarnersData}
+                        data={cexEarnersData}
                       />
                     </div>
                   }
