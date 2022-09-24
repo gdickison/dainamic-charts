@@ -3,7 +3,7 @@ import { Bar } from "react-chartjs-2"
 import { getPercentage, getDateLabelsForChart, groupDataByRegion, cexFadedColors, cexSolidColors } from "../../public/utils"
 import ChartDescription from "./ChartDescription"
 
-const CexSampleSex = ({dateRange, data}) => {
+const CexSex = ({dateRange, data}) => {
 
   const labels = getDateLabelsForChart(dateRange.startDate, dateRange.endDate)
   const regionalData = Object.values(groupDataByRegion(data, "region_name"))
@@ -150,4 +150,4 @@ const CexSampleSex = ({dateRange, data}) => {
   )
 }
 
-export default memo(CexSampleSex)
+export default memo(CexSex)

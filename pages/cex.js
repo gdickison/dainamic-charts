@@ -3,12 +3,12 @@ import { useEffect, useState } from "react"
 import CexFormInputs from "../src/components/CexFormInputs"
 import Loader from "../src/components/Loader"
 import CexSampleSize from "../src/components/CexSampleSize"
-import CexSampleAge from "../src/components/CexSampleAge"
-import CexSampleSex from "../src/components/CexSampleSex"
+import CexAge from "../src/components/CexAge"
+import CexSex from "../src/components/CexSex"
 import CexMaritalStatus from "../src/components/CexMaritalStatus"
 import CexEducation from "../src/components/CexEducation"
 import CexRace from "../src/components/CexRace"
-import CexSampleEarners from "../src/components/CexSampleEarners"
+import CexEarners from "../src/components/CexEarners"
 
 const cex = () => {
   const [isLoading, setLoading] = useState(false)
@@ -147,7 +147,7 @@ const cex = () => {
     }
   }
 
-  const getSampleAge = async () => {
+  const getCexAge = async () => {
     const regions = selectedRegions.map(region => {
       return region.regionCode
     })
@@ -158,7 +158,7 @@ const cex = () => {
       endDate: dateRange.endDate.split('T')[0]
     })
 
-    const endpoint = `/api/cex_sample_age`
+    const endpoint = `/api/cex_age`
 
     const options = {
       method: 'POST',
@@ -180,7 +180,7 @@ const cex = () => {
     }
   }
 
-  const getSampleSex = async () => {
+  const getCexSex = async () => {
     const regions = selectedRegions.map(region => {
       return region.regionCode
     })
@@ -191,7 +191,7 @@ const cex = () => {
       endDate: dateRange.endDate.split('T')[0]
     })
 
-    const endpoint = `/api/cex_sample_sex`
+    const endpoint = `/api/cex_sex`
 
     const options = {
       method: 'POST',
@@ -312,7 +312,7 @@ const cex = () => {
     }
   }
 
-  const getSampleEarners = async () => {
+  const getCexEarners = async () => {
     const regions = selectedRegions.map(region => {
       return region.regionCode
     })
@@ -323,7 +323,7 @@ const cex = () => {
       endDate: dateRange.endDate.split('T')[0]
     })
 
-    const endpoint = `/api/cex_sample_earners`
+    const endpoint = `/api/cex_earners`
 
     const options = {
       method: 'POST',
@@ -349,12 +349,12 @@ const cex = () => {
     setShowOptionsModal("hidden")
     setShowChangeOptionsButton("flex")
     getSampleSize()
-    getSampleAge()
-    getSampleSex()
+    getCexAge()
+    getCexSex()
     getCexMaritalStatus()
     getCexEducation()
     getCexRace()
-    getSampleEarners()
+    getCexEarners()
   }
 
 
@@ -467,7 +467,7 @@ const cex = () => {
                           <h1 className="inline text-3xl">Age</h1>
                         </div>
                       </div>
-                      <CexSampleAge
+                      <CexAge
                         dateRange={dateRange}
                         data={cexAgeData}
                       />
@@ -482,7 +482,7 @@ const cex = () => {
                           <h1 className="inline text-3xl">Sex</h1>
                         </div>
                       </div>
-                      <CexSampleSex
+                      <CexSex
                         dateRange={dateRange}
                         data={cexSexData}
                       />
@@ -542,7 +542,7 @@ const cex = () => {
                         <h1 className="inline text-3xl">Household Earners</h1>
                       </div>
                       </div>
-                      <CexSampleEarners
+                      <CexEarners
                         dateRange={dateRange}
                         data={cexEarnersData}
                       />

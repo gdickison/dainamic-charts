@@ -1,16 +1,16 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import pool from '../../src/client'
 
-export default async function querySampleSex(req, res) {
+export default async function querySampleAge(req, res) {
   const client = await pool.connect()
 
   await client
     .query(`SELECT
         *
-      FROM banking_app.cex_sample_sex
+      FROM banking_app.cex_age
       WHERE date BETWEEN '${req.body.startDate}'::date AND '${req.body.endDate}'::date
         AND region != 0`)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
-    .catch(error => console.log("There is an error getting cex sample sex data: ", error))
+    .catch(error => console.log("There is an error getting cex sample age data: ", error))
 }

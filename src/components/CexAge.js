@@ -3,7 +3,7 @@ import { Bar, Line } from "react-chartjs-2"
 import { getDateLabelsForChart, groupDataByRegion, cexFadedColors, cexSolidColors } from "../../public/utils"
 import ChartDescription from "./ChartDescription"
 
-const CexSampleAge = ({dateRange, data}) => {
+const CexAge = ({dateRange, data}) => {
   const labels = getDateLabelsForChart(dateRange.startDate, dateRange.endDate)
   const regionalData = Object.values(groupDataByRegion(data, "region_name"))
   const avgAgeData = regionalData.map((region, idx) => {
@@ -532,4 +532,4 @@ const CexSampleAge = ({dateRange, data}) => {
   )
 }
 
-export default memo(CexSampleAge)
+export default memo(CexAge)
