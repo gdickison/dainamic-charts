@@ -29,6 +29,12 @@ const Home = () => {
                 icon="/cex_data.svg"
                 description="Based on the US Bureau of Labor Statistics Consumer Expenditure Survey"
               />
+              <NavCard
+                title="UBPR Data"
+                page="/ubpr"
+                icon="/bank.svg"
+                description="Based on the FFIEC Uniform Banking Performance Report"
+              />
             </div>
           </main>
         </>
