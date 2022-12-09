@@ -2,17 +2,19 @@ import { useState, memo } from "react"
 import UbprFormInputs from "../src/components/UbprFormInputs"
 import UbprBarChart from "../src/components/UbprBarChart"
 import UbprBankSummary from "../src/components/UbprBankSummary"
-import { rconOptions } from "../public/utils"
+import { rconOptions, ubprOptions } from "../public/utils"
 
 const UBPR = () => {
   const [ubprBankData, setUbprBankData] = useState()
   const [ubprRconData, setUbprRconData] = useState()
+  const [ubprCreditConcentrationData, setUbprCreditConcentrationData] = useState()
   const [nameParam, setNameParam] = useState('')
   const [specializationParam, setSpecializationParam] = useState('')
   const [cityParam, setCityParam] = useState('')
   const [stateParam, setStateParam] = useState('')
   const [fdicRegionParam, setFdicRegionParam] = useState('')
   const [selectedRcons, setSelectedRcons] = useState([])
+  const [selectedUbprs, setSelectedUbprs] = useState([])
 
   const handleNameParamChange = e => {
     e.preventDefault()
@@ -51,6 +53,7 @@ const UBPR = () => {
   const getUbprBankData = async () => {
     const bankEndpoint = `/api/get_ubpr_institution`
     const rconEndpoint = `/api/get_ubpr_rcon`
+    const creditConcentrationEndpoint = `/api/get_ubpr_credit_concentrations`
     const JSONdata = JSON.stringify({
       nameParam,
       specializationParam,
@@ -72,24 +75,29 @@ const UBPR = () => {
     setUbprBankData(banks)
 
     const bankIds = banks.map(bank => bank.BANK_ID)
-    const rconOptions = {
+    const ubprOptions = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ bankIds })
     }
-    let rcon = await fetch(rconEndpoint, rconOptions).then(response => response.json())
+
+    let rcon = await fetch(rconEndpoint, ubprOptions).then(response => response.json())
     rcon = rcon.response
-
     const rconData = spliceIntoChunks(rcon, rcon.length / banks.length)
-
     setUbprRconData(rconData)
+
+    let creditConcentration = await fetch(creditConcentrationEndpoint, ubprOptions).then(response => response.json())
+    creditConcentration = creditConcentration.response
+    const ubprData = spliceIntoChunks(creditConcentration, creditConcentration.length / banks.length)
+    setUbprCreditConcentrationData(ubprData)
   }
 
   const getData = async () => {
     setUbprBankData(null)
     setUbprRconData(null)
+    setUbprCreditConcentrationData(null)
     getUbprBankData()
   }
 
@@ -105,6 +113,18 @@ const UBPR = () => {
     const newRcons = selectedRcons.filter(rcon => rcon !== e.target.id)
     setSelectedRcons(newRcons)
   }
+  const handleSelectedUbprChange = e => {
+    e.preventDefault()
+    const updatedUbprs = ([...selectedUbprs, e.target.value])
+    updatedUbprs.sort((a, b) => a.ubpr - b.ubpr)
+    setSelectedUbprs(updatedUbprs)
+  }
+
+  const removeUbpr = e => {
+    e.preventDefault()
+    const newUbprs = selectedUbprs.filter(ubpr => ubpr !== e.target.id)
+    setSelectedUbprs(newUbprs)
+  }
 
   return (
     <div>
@@ -119,10 +139,13 @@ const UBPR = () => {
         handleSelectedRconChange={handleSelectedRconChange}
         selectedRcons={selectedRcons}
         removeRcon={removeRcon}
+        ubprOptions={ubprOptions}
+        handleSelectedUbprChange={handleSelectedUbprChange}
+        selectedUbprs={selectedUbprs}
+        removeUbpr={removeUbpr}
       />
       <section className="m-4 space-y-10">
-      {console.log('ubprBankData', ubprBankData)}
-        {ubprBankData && ubprRconData &&
+        {ubprBankData && ubprRconData && ubprCreditConcentrationData &&
           ubprBankData.map((bank, i) => {
             return (
               <div className="border-t-2 border-t-gray-400" key={i}>
@@ -138,6 +161,21 @@ const UBPR = () => {
                           <UbprBarChart
                             bankData={bank}
                             statsData={ubprRconData[i]}
+                            selectedMetric={rcon}
+                          />
+                        </div>
+                      )
+                    })
+                  }
+                </div>
+                <div className="flex flex-wrap">
+                  {selectedUbprs &&
+                    selectedUbprs.map((rcon, idx) => {
+                      return (
+                        <div key={idx} className="w-1/2">
+                          <UbprBarChart
+                            bankData={bank}
+                            statsData={ubprCreditConcentrationData[i]}
                             selectedMetric={rcon}
                           />
                         </div>

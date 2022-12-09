@@ -8,16 +8,20 @@ const UbprFormInputs = ({
   rconOptions,
   handleSelectedRconChange,
   selectedRcons,
-  removeRcon
+  removeRcon,
+  ubprOptions,
+  handleSelectedUbprChange,
+  selectedUbprs,
+  removeUbpr
 }) => {
   return (
-    <div>
+    <div className="mx-auto">
       <div className="m-6">
         <h1 className="text-xl">Search & Filter</h1>
         <h2 className="text-lg">Choose at least one criteria</h2>
         <p>Use the filters to find a target bank or banks, then select metrics to display data for the selected banks</p>
       </div>
-      <form className="flex-col w-[60%] min-w-[60%] space-y-4" action="#">
+      <form className="flex-col w-[80%] min-w-[60%] space-y-4" action="#">
         <div className="flex">
           <div className="flex flex-col w-1/4 space-y-4">
             <label className="text-xl mx-6" htmlFor="bankName">Bank Name </label>
@@ -41,36 +45,70 @@ const UbprFormInputs = ({
             <p className="mx-6 text-sm">Use with Specialization to get a manageable number of results</p>
           </div>
         </div>
-        <div className="pr-4 space-y-4">
-          <label className="text-xl mx-6" htmlFor="rcon">Metrics (RCON)</label>
-          <select className="w-full mx-6 text-left px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="rcon" name="rcon" defaultValue="" onChange={handleSelectedRconChange}>
-            <option disabled></option>
-            {rconOptions && rconOptions.map(rcon => {
-              return (
-                <option key={rcon} value={rcon} data-display={`${rcon}`}>{rcon}</option>
-              )
-            })}
-          </select>
-        </div>
-        <div className="space-y-4">
-          <div className="text-xl mx-6">Selected Metrics</div>
-          <div className="min-h-[2rem] m-6 border-2 border-blue-400 p-1 bg-white rounded-md">
-            {selectedRcons.length > 0 &&
-              selectedRcons.map(rcon => {
-                return (
-                  <p key={rcon} className="flex items-center w-max text-center m-1 border-2 border-gray-300 px-2 bg-gray-200 text-xl leading-8 space-x-4">
-                    <span>{rcon}</span>
-                    <span className="h-6 w-6 group hover:cursor-pointer" onClick={removeRcon}>
-                      <img id={rcon} src="/close.svg" alt="remove metric" />
-                    </span>
-                  </p>
-                )
-              })
-            }
+        <div className="flex justify-between">
+          <div className="w-1/3">
+            <div className="pr-4 space-y-4">
+              <label className="text-xl mx-6" htmlFor="ubpr">RCON Metrics</label>
+              <select className="w-full mx-6 text-left px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="rcon" name="rcon" defaultValue="" onChange={handleSelectedRconChange}>
+                <option disabled></option>
+                {rconOptions && rconOptions.map(rcon => {
+                  return (
+                    <option key={rcon} value={rcon} data-display={`${rcon}`}>{rcon}</option>
+                  )
+                })}
+              </select>
+            </div>
+            <div className="space-y-4">
+              <div className="text-xl mx-6">Selected RCON Metrics</div>
+              <div className="min-h-[2rem] m-6 border-2 border-blue-400 p-1 bg-white rounded-md">
+                {selectedRcons.length > 0 &&
+                  selectedRcons.map(rcon => {
+                    return (
+                      <p key={rcon} className="flex items-center w-max text-center m-1 border-2 border-gray-300 px-2 bg-gray-200 text-xl leading-8 space-x-4">
+                        <span>{rcon}</span>
+                        <span className="h-6 w-6 group hover:cursor-pointer" onClick={removeRcon}>
+                          <img id={rcon} src="/close.svg" alt="remove metric" />
+                        </span>
+                      </p>
+                    )
+                  })
+                }
+              </div>
+            </div>
+          </div>
+          <div className="w-1/3">
+            <div className="pr-4 space-y-4">
+              <label className="text-xl mx-6" htmlFor="rcon">UBPR Metrics</label>
+              <select className="w-full mx-6 text-left px-2 border-2 border-blue-400 bg-white rounded-md text-xl" id="ubpr" name="ubpr" defaultValue="" onChange={handleSelectedUbprChange}>
+                <option disabled></option>
+                {ubprOptions && ubprOptions.map(ubpr => {
+                  return (
+                    <option key={ubpr} value={ubpr} data-display={`${ubpr}`}>{ubpr}</option>
+                  )
+                })}
+              </select>
+            </div>
+            <div className="space-y-4">
+              <div className="text-xl mx-6">Selected UBPR Metrics</div>
+              <div className="min-h-[2rem] m-6 border-2 border-blue-400 p-1 bg-white rounded-md">
+                {selectedUbprs.length > 0 &&
+                  selectedUbprs.map(ubpr => {
+                    return (
+                      <p key={ubpr} className="flex items-center w-max text-center m-1 border-2 border-gray-300 px-2 bg-gray-200 text-xl leading-8 space-x-4">
+                        <span>{ubpr}</span>
+                        <span className="h-6 w-6 group hover:cursor-pointer" onClick={removeUbpr}>
+                          <img id={ubpr} src="/close.svg" alt="remove metric" />
+                        </span>
+                      </p>
+                    )
+                  })
+                }
+              </div>
+            </div>
           </div>
         </div>
       </form>
-      <button className="my-8 mx-6 rounded-md p-2 px-6 bg-blue-600 hover:bg-blue-800 text-gray-100 text-[1.7vw] 3xl:text-3xl" onClick={getData}>See Results</button>
+      <button className="w-52 my-8 mx-6 rounded-md p-2 px-6 bg-blue-600 hover:bg-blue-800 text-gray-100 text-[1.7vw] 3xl:text-3xl" onClick={getData}>See Results</button>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { Bar } from "react-chartjs-2";
-import { rconCodesNames } from "../../public/utils";
+import { rconCodesNames, ubprCodesNames } from "../../public/utils";
 
 const UbprBarChart = ({bankData, statsData, selectedMetric}) => {
   const rawChartData = statsData
@@ -36,7 +36,9 @@ const UbprBarChart = ({bankData, statsData, selectedMetric}) => {
     }]
   }
 
-  const chartTitle = rconCodesNames.filter(rcon => rcon.code === selectedMetric)[0].text
+  const chartTitle = Object.keys(statsData[0]).some(key => key === 'RCON1288')
+    ? rconCodesNames.filter(rcon => rcon.code === selectedMetric)[0].text
+    : ubprCodesNames.filter(ubpr => ubpr.code === selectedMetric)[0].text
 
   const barChartOptions = {
     responsive: true,

@@ -308,3 +308,59 @@ FROM data_import.ubpr_rcci r
 		ON r."IDRSSD" = i."FED_RSSD"
 WHERE i."ACTIVE" = '1'
 ORDER BY "QUARTER"
+
+SELECT
+  "ID RSSD" AS "BANK_ID",
+  CASE
+    WHEN "Reporting Period" LIKE '3/31/2019%' THEN '2019-1'
+    WHEN "Reporting Period" LIKE '6/30/2019%' THEN '2019-2'
+    WHEN "Reporting Period" LIKE '9/30/2019%' THEN '2019-3'
+    WHEN "Reporting Period" LIKE '12/31/2019%' THEN '2019-4'
+    WHEN "Reporting Period" LIKE '3/31/2020%' THEN '2020-1'
+    WHEN "Reporting Period" LIKE '6/30/2020%' THEN '2020-2'
+    WHEN "Reporting Period" LIKE '9/30/2020%' THEN '2020-3'
+    WHEN "Reporting Period" LIKE '12/31/2020%' THEN '2020-4'
+    WHEN "Reporting Period" LIKE '3/31/2021%' THEN '2021-1'
+    WHEN "Reporting Period" LIKE '6/30/2021%' THEN '2021-2'
+    WHEN "Reporting Period" LIKE '9/30/2021%' THEN '2021-3'
+    WHEN "Reporting Period" LIKE '12/31/2021%' THEN '2021-4'
+    WHEN "Reporting Period" LIKE '3/31/2022%' THEN '2022-1'
+    WHEN "Reporting Period" LIKE '6/30/2022%' THEN '2022-2'
+    WHEN "Reporting Period" LIKE '9/30/2022%' THEN '2022-3'
+  END AS "QUARTER"
+  "UBPRD490",
+  "UBPRD646",
+  "UBPRD647",
+  "UBPRD648",
+  "UBPRD649",
+  "UBPRD650",
+  "UBPRE392",
+  "UBPRE632",
+  "UBPRE657",
+  "UBPRE658",
+  "UBPRE663",
+  "UBPRE880",
+  "UBPRE881",
+  "UBPRE882",
+  "UBPRE883",
+  "UBPRE884",
+  "UBPRE885",
+  "UBPRE886",
+  "UBPRE887",
+  "UBPRE888",
+  "UBPRE889",
+  "UBPRE890",
+  "UBPRE891",
+  "UBPRE892",
+  "UBPRE893",
+  "UBPRE894",
+  "UBPRE895",
+  "UBPRFB78",
+  "UBPRFB79",
+  "UBPRFB80",
+  "UBPRFB81",
+  "UBPRFB82",
+  "UBPRFB83",
+  "UBPRNL33"
+FROM data_import.ubpr_credit_concentrations
+ORDER BY "BANK_ID";
