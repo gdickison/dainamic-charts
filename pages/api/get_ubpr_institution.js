@@ -10,6 +10,7 @@ export default async function queryUbprInstitution(req, res){
       WHERE LOWER("NAME") LIKE LOWER('%${req.body.nameParam}%')
         AND LOWER("SPECGRPN") LIKE LOWER('%${req.body.specializationParam}%')
         AND LOWER("STNAME") LIKE LOWER('%${req.body.stateParam}%')
+        AND LOWER("FDICREGN") LIKE LOWER('%${req.body.fdicRegionParam}%')
         AND LOWER("CITY") LIKE LOWER('%${req.body.cityParam}%')
       ORDER BY "BANK_ID"`)
     .then(response => res.status(200).json({response: response.rows}))

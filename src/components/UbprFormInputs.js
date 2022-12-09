@@ -3,6 +3,7 @@ const UbprFormInputs = ({
   handleSpecializationParamChange,
   handleCityParamChange,
   handleStateParamChange,
+  handleFdicRegionChange,
   getData,
   rconOptions,
   handleSelectedRconChange,
@@ -33,6 +34,11 @@ const UbprFormInputs = ({
           <div className="flex flex-col w-1/4 space-y-4">
             <label className="text-xl mx-6" htmlFor="specialization">Specialization </label>
             <input className="border-2 border-blue-500 mx-6 px-2" type="text" id="specialization" onChange={handleSpecializationParamChange}/>
+          </div>
+          <div className="flex flex-col w-1/4 space-y-4">
+            <label className="text-xl mx-6" htmlFor="bankFdicRegion">FDIC Region </label>
+            <input className="border-2 border-blue-500 mx-6 px-2" type="text" id="bankFdicRegion" onChange={handleFdicRegionChange}/>
+            <p className="mx-6 text-sm">Use with Specialization to get a manageable number of results</p>
           </div>
         </div>
         <div className="pr-4 space-y-4">

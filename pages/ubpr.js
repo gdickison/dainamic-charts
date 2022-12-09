@@ -11,6 +11,7 @@ const UBPR = () => {
   const [specializationParam, setSpecializationParam] = useState('')
   const [cityParam, setCityParam] = useState('')
   const [stateParam, setStateParam] = useState('')
+  const [fdicRegionParam, setFdicRegionParam] = useState('')
   const [selectedRcons, setSelectedRcons] = useState([])
 
   const handleNameParamChange = e => {
@@ -33,6 +34,11 @@ const UBPR = () => {
     setCityParam(e.target.value)
   }
 
+  const handleFdicRegionChange = e => {
+    e.preventDefault()
+    setFdicRegionParam(e.target.value)
+  }
+
   const spliceIntoChunks = (arr, chunkSize) => {
     const res = [];
     while (arr.length > 0) {
@@ -49,6 +55,7 @@ const UBPR = () => {
       nameParam,
       specializationParam,
       stateParam,
+      fdicRegionParam,
       cityParam
     })
 
@@ -106,6 +113,7 @@ const UBPR = () => {
         handleSpecializationParamChange={handleSpecializationParamChange}
         handleCityParamChange= {handleCityParamChange}
         handleStateParamChange={handleStateParamChange}
+        handleFdicRegionChange={handleFdicRegionChange}
         getData={getData}
         rconOptions={rconOptions}
         handleSelectedRconChange={handleSelectedRconChange}
@@ -113,6 +121,7 @@ const UBPR = () => {
         removeRcon={removeRcon}
       />
       <section className="m-4 space-y-10">
+      {console.log('ubprBankData', ubprBankData)}
         {ubprBankData && ubprRconData &&
           ubprBankData.map((bank, i) => {
             return (
