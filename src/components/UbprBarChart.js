@@ -1,18 +1,17 @@
 import { memo } from "react";
 import { Bar } from "react-chartjs-2";
 import ChartDescription from "./ChartDescription";
+import { rconCodesNames } from "../../public/utils";
 
-const UbprBarChart = ({bankData, statsData}) => {
+const UbprBarChart = ({bankData, statsData, selectedMetric}) => {
   const rawChartData = statsData
-console.log('rawChartData', rawChartData)
-console.log('bankData', bankData)
 
   const labels = rawChartData.map(bank => {
     return bank.QUARTER
   })
 
   const dataArray = rawChartData.map(bank => {
-    return bank.RCON5368
+    return bank[selectedMetric]
   })
 
   const chartData = {
@@ -30,6 +29,8 @@ console.log('bankData', bankData)
     }]
   }
 
+  const chartTitle = rconCodesNames.filter(rcon => rcon.code === selectedMetric)[0].text
+
   const singleBarChartOptions = {
     responsive: true,
     aspectRatio: 2.5,
@@ -39,7 +40,7 @@ console.log('bankData', bankData)
     plugins: {
       title: {
         display: true,
-        text: 'ALL OTHER LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES: SECURED BY JUNIOR LIENS'
+        text: `${chartTitle}`
       },
       legend: {
         display: false,
@@ -65,7 +66,7 @@ console.log('bankData', bankData)
       y: {
         stacked: true,
         title: {
-          display: true,
+          display: false,
           text: "Number of Loans",
           padding: 20,
           font: {
@@ -111,14 +112,12 @@ console.log('bankData', bankData)
     }
   }
 
-console.log('labels', labels)
-console.log('dataArray', dataArray)
   return (
     <div className="mx-6 space-y-12">
       <div>
-        <div className="relative my-4">
+        {/* <div className="relative my-4">
           <h1 className="inline text-2xl">UBPR Bar Chart Title</h1>
-        </div>
+        </div> */}
         {/* <ChartDescription
           description={`This chart shows respondents' age brackets as a percentage of the entire sample, as well as the average age of the respondents. Hover over the bar chart to see the percentage for a particular age bracket, and the number of respondents in that age bracket.`}
         /> */}

@@ -1,7 +1,6 @@
 const UbprBankSummary = ({bankData}) => {
   return (
     <div>
-{console.log('bankData', bankData)}
       <div className="m-2 border-2 border-gray-400 p-2 flex flex-row gap-8 w-max">
         <div className="">
           <address>
@@ -15,12 +14,12 @@ const UbprBankSummary = ({bankData}) => {
         </div>
 
         <div className="">
-        <p><span>Deposits:</span> <span>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.DEP * 1000)}</span></p>
+          <p><span>Deposits:</span> <span>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.DEP * 1000)}</span></p>
           <p><span>Equity:</span> <span>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.EQ * 1000)}</span></p>
           <p><span>Return on Equity:</span> <span>{new Intl.NumberFormat('defalut', {style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2}).format(bankData.ROE / 100)}</span></p>
 
           <p><span>Assets:</span> <span>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.ASSET * 1000)}</span></p>
-          <p><span>Return on Assets:</span> <span>{new Intl.NumberFormat('defalut', {style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2}).format(bankData.ROA / 10)}</span></p>
+          <p><span>Return on Assets:</span> <span>{new Intl.NumberFormat('defalut', {style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2}).format(bankData.ROA / 100)}</span></p>
 
           <p><span>Net Income:</span> <span>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.NETINC * 1000)}</span></p>
         </div>

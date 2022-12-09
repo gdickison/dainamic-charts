@@ -2,6 +2,7 @@ import { useState, memo } from "react"
 import UbprFormInputs from "../src/components/UbprFormInputs"
 import UbprBarChart from "../src/components/UbprBarChart"
 import UbprBankSummary from "../src/components/UbprBankSummary"
+import { rconOptions } from "../public/utils"
 
 const UBPR = () => {
   const [ubprBankData, setUbprBankData] = useState()
@@ -10,6 +11,7 @@ const UBPR = () => {
   const [specializationParam, setSpecializationParam] = useState('')
   const [cityParam, setCityParam] = useState('')
   const [stateParam, setStateParam] = useState('')
+  const [selectedRcons, setSelectedRcons] = useState([])
 
   const handleNameParamChange = e => {
     e.preventDefault()
@@ -84,6 +86,19 @@ const UBPR = () => {
     getUbprBankData()
   }
 
+  const handleSelectedRconChange = e => {
+    e.preventDefault()
+    const updatedRcons = ([...selectedRcons, e.target.value])
+    updatedRcons.sort((a, b) => a.rcon - b.rcon)
+    setSelectedRcons(updatedRcons)
+  }
+
+  const removeRcon = e => {
+    e.preventDefault()
+    const newRcons = selectedRcons.filter(rcon => rcon !== e.target.id)
+    setSelectedRcons(newRcons)
+  }
+
   return (
     <div>
       <UbprFormInputs
@@ -92,22 +107,33 @@ const UBPR = () => {
         handleCityParamChange= {handleCityParamChange}
         handleStateParamChange={handleStateParamChange}
         getData={getData}
+        rconOptions={rconOptions}
+        handleSelectedRconChange={handleSelectedRconChange}
+        selectedRcons={selectedRcons}
+        removeRcon={removeRcon}
       />
       <section className="m-6">
         {ubprBankData && ubprRconData &&
           ubprBankData.map((bank, i) => {
             return (
-              <div>
-{console.log('bank', bank)}
-{console.log('i', i)}
+              <div key={i}>
                 <h1 className="inline text-2xl">{bank.NAME} - {bank.BANK_ID}</h1>
                 <UbprBankSummary
                   bankData={bank}
                 />
-                <UbprBarChart
-                  bankData={bank}
-                  statsData={ubprRconData[i]}
-                />
+                {selectedRcons &&
+                  selectedRcons.map((rcon, idx) => {
+                    return (
+                      <div key={idx}>
+                        <UbprBarChart
+                          bankData={bank}
+                          statsData={ubprRconData[i]}
+                          selectedMetric={rcon}
+                        />
+                      </div>
+                    )
+                  })
+                }
               </div>
             )
           })
