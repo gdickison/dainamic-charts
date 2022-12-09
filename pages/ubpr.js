@@ -1,8 +1,10 @@
 import { useState, memo } from "react"
 import UbprFormInputs from "../src/components/UbprFormInputs"
+import UbprBarChart from "../src/components/UbprBarChart"
+import UbprBankSummary from "../src/components/UbprBankSummary"
 
 const UBPR = () => {
-  const [ubprData, setUbprData] = useState()
+  const [ubprBankData, setUbprBankData] = useState()
   const [ubprRconData, setUbprRconData] = useState()
   const [nameParam, setNameParam] = useState('')
   const [specializationParam, setSpecializationParam] = useState('')
@@ -29,7 +31,16 @@ const UBPR = () => {
     setCityParam(e.target.value)
   }
 
-  const getUbprInstitutionData = async () => {
+  const spliceIntoChunks = (arr, chunkSize) => {
+    const res = [];
+    while (arr.length > 0) {
+        const chunk = arr.splice(0, chunkSize);
+        res.push(chunk);
+    }
+    return res;
+  }
+
+  const getUbprBankData = async () => {
     const bankEndpoint = `/api/get_ubpr_institution`
     const rconEndpoint = `/api/get_ubpr_rcon`
     const JSONdata = JSON.stringify({
@@ -49,6 +60,7 @@ const UBPR = () => {
 
     let banks = await fetch(bankEndpoint, bankOptions).then(response => response.json())
     banks = banks.response
+    setUbprBankData(banks)
 
     const bankIds = banks.map(bank => bank.BANK_ID)
     const rconOptions = {
@@ -61,14 +73,15 @@ const UBPR = () => {
     let rcon = await fetch(rconEndpoint, rconOptions).then(response => response.json())
     rcon = rcon.response
 
-    setUbprData(banks)
-    setUbprRconData(rcon)
+    const rconData = spliceIntoChunks(rcon, rcon.length / banks.length)
+
+    setUbprRconData(rconData)
   }
 
   const getData = async () => {
-    setUbprData(null)
+    setUbprBankData(null)
     setUbprRconData(null)
-    getUbprInstitutionData()
+    getUbprBankData()
   }
 
   return (
@@ -80,61 +93,26 @@ const UBPR = () => {
         handleStateParamChange={handleStateParamChange}
         getData={getData}
       />
-      <h1>UBPR DATA GOES HERE</h1>
-      {ubprData &&
-        <div>
-{console.log('ubprData', ubprData)}
-          {ubprData.map((row, i) => {
+      <section className="m-6">
+        {ubprBankData && ubprRconData &&
+          ubprBankData.map((bank, i) => {
             return (
-              <div key={i} className="m-2 border-2 border-gray-400 p-2 flex flex-row gap-4">
-                <div className="w-1/5">
-                  <h1>{row.NAME}</h1>
-                  <h1>ID: {row.BANK_ID}</h1>
-                  <address>
-                    <p>{row.ADDRESS}</p>
-                    <p><span>{row.CITY}, </span><span>{row.STNAME}</span><span> {row.ZIP}</span></p>
-                  </address>
-                  <a href={`https://${row.WEBADDR}`} target="_blank">{row.WEBADDR}</a>
-                </div>
-                <div className="w-1/5">
-                  <p><span>FDIC Region:</span> <span>{row.FDICREGN}</span></p>
-                  <p><span>Banking Class:</span> <span>{row.BKCLASS}</span></p>
-                  <p><span>Specialization:</span> <span>{row.SPECGRPN}</span></p>
-                  {/* <p><span>Updated:</span> <span>{row.DATEUPDT}</span></p> */}
-                </div>
-                <div className="w-1/5">
-                  <p><span>Equity:</span> <span>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(row.EQ * 1000)}</span></p>
-                </div>
+              <div>
+{console.log('bank', bank)}
+{console.log('i', i)}
+                <h1 className="inline text-2xl">{bank.NAME} - {bank.BANK_ID}</h1>
+                <UbprBankSummary
+                  bankData={bank}
+                />
+                <UbprBarChart
+                  bankData={bank}
+                  statsData={ubprRconData[i]}
+                />
               </div>
             )
-          })}
-          {ubprData.map((row, i) => {
-            return (Object.entries(row).map(([key, value], idx) => {
-              return (
-                <div>
-                  <p key={`${i}-${idx}`}>{key} - {value}</p>
-                </div>
-              )
-            }))
-          })}
-        </div>
-      }
-      {ubprRconData &&
-        <div>
-{console.log('ubprRconData', ubprRconData)}
-          {ubprRconData.map((row, i) => {
-            return (Object.entries(row).map(([key, value], idx) => {
-              {/* if(value !== null){ */}
-                return (
-                  <div>
-                    <p key={`${i}-${idx}`}>{key} - {value}</p>
-                  </div>
-                )
-              {/* } */}
-            }))
-          })}
-        </div>
-      }
+          })
+        }
+      </section>
     </div>
   )
 }

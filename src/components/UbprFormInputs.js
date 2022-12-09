@@ -100,7 +100,7 @@ const UbprFormInputs = ({
           </div> */}
         </div>
       </form>
-      <button className="my-8 rounded-md p-2 px-6 bg-blue-600 hover:bg-blue-800 text-gray-100 text-[1.7vw] 3xl:text-3xl" onClick={getData}>See Results</button>
+      <button className="my-8 mx-6 rounded-md p-2 px-6 bg-blue-600 hover:bg-blue-800 text-gray-100 text-[1.7vw] 3xl:text-3xl" onClick={getData}>See Results</button>
     </div>
   )
 }

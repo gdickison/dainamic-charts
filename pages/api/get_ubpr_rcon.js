@@ -2,7 +2,7 @@ import pool from "../../src/client";
 
 export default async function queryUbprRcon(req, res){
   const client = await pool.connect()
-console.log('req.body', req.body)
+
   await client
     .query(`SELECT
         *
