@@ -1,6 +1,5 @@
 import { memo } from "react";
 import { Bar } from "react-chartjs-2";
-import ChartDescription from "./ChartDescription";
 import { rconCodesNames } from "../../public/utils";
 
 const UbprBarChart = ({bankData, statsData, selectedMetric}) => {
@@ -13,6 +12,14 @@ const UbprBarChart = ({bankData, statsData, selectedMetric}) => {
   const dataArray = rawChartData.map(bank => {
     return bank[selectedMetric]
   })
+
+  function nullData(arr){
+    return arr.every(element => element === null)
+  }
+
+  function zeroData(arr){
+    return arr.every(element => element === "0")
+  }
 
   const chartData = {
     labels: labels,
@@ -30,8 +37,9 @@ const UbprBarChart = ({bankData, statsData, selectedMetric}) => {
   }
 
   const chartTitle = rconCodesNames.filter(rcon => rcon.code === selectedMetric)[0].text
+  const chartSubtitle = selectedMetric
 
-  const singleBarChartOptions = {
+  const barChartOptions = {
     responsive: true,
     aspectRatio: 2.5,
     interaction: {
@@ -40,14 +48,15 @@ const UbprBarChart = ({bankData, statsData, selectedMetric}) => {
     plugins: {
       title: {
         display: true,
-        text: `${chartTitle}`
+        text: `${chartTitle} - ${selectedMetric}`,
+        font: {
+          size: 16,
+          weight: 'normal'
+        },
+        padding: 16
       },
       legend: {
-        display: false,
-        align: "end",
-        labels: {
-          usePointStyle: true
-        }
+        display: false
       },
       tooltip: {
         usePointStyle: true,
@@ -56,45 +65,38 @@ const UbprBarChart = ({bankData, statsData, selectedMetric}) => {
             return ''
           },
           label: function(context){
-            return `${context.dataset.label}: ${context.raw}`
+            return `${Number(context.raw).toLocaleString()}`
           }
         },
-        boxPadding: 6
+        boxPadding: 6,
+        displayColors: false
       }
     },
     scales: {
       y: {
         stacked: true,
         title: {
-          display: false,
-          text: "Number of Loans",
-          padding: 20,
-          font: {
-            size: 16
-          }
+          display: false
         },
         ticks: {
           callback: function(value){
-            return `${value}`
+            return `${value.toLocaleString()}`
           },
           font: {
             size: 12
-          },
-          // stepSize: 10
+          }
         },
-        // max: 100,
         grid: {
-          display: false
+          display: true
         }
       },
       x: {
         stacked: true,
         title: {
-          display: false,
+          display: true,
           text: "Quarter",
-          padding: 20,
           font: {
-            size: 16
+            size: 14
           }
         },
         ticks: {
@@ -115,48 +117,27 @@ const UbprBarChart = ({bankData, statsData, selectedMetric}) => {
   return (
     <div className="mx-6 space-y-12">
       <div>
-        {/* <div className="relative my-4">
-          <h1 className="inline text-2xl">UBPR Bar Chart Title</h1>
-        </div> */}
-        {/* <ChartDescription
-          description={`This chart shows respondents' age brackets as a percentage of the entire sample, as well as the average age of the respondents. Hover over the bar chart to see the percentage for a particular age bracket, and the number of respondents in that age bracket.`}
-        /> */}
         <div className="grid grid-cols-2 gap-x-2 gap-y-6">
-          {/* {rawAgeBracketData && rawAgeBracketData.map((row, idx) => {
-            const chartData = {
-              labels: labels,
-              datasets: row
+          <div>
+            {nullData(dataArray)
+              ? <div className="flex flex-col gap-2 px-4 py-8 m-2 shadow-lg bg-gray-50">
+                  <h1 className="text-center">{barChartOptions.plugins.title.text}</h1>
+                  <h2 className="text-center">No data available</h2>
+                </div>
+              : zeroData(dataArray)
+                ? <div className="flex flex-col gap-2 px-4 py-8 m-2 shadow-lg bg-gray-50">
+                    <h1 className="text-center">{barChartOptions.plugins.title.text}</h1>
+                    <h2 className="text-center">This institution does not have loans in this category</h2>
+                  </div>
+                : <div className="flex justify-center p-4 m-2 shadow-lg bg-gray-50">
+                    <Bar data={chartData} options={barChartOptions}/>
+                  </div>
             }
-            return ( */}
-              <div>
-                <div className="flex justify-center">
-                  {/* <h1 className="font-semibold">{row[0].title}</h1> */}
-                </div>
-                <div className="flex justify-center p-4 shadow-lg bg-gray-50">
-                  <Bar data={chartData} options={singleBarChartOptions}/>
-                </div>
-              </div>
-            {/* )
-          })} */}
+          </div>
         </div>
       </div>
     </div>
   )
 }
 
-export default UbprBarChart
-
-// {ubprRconData.map((row, i) => {
-//   return row.map((quarter) => {
-//     return (Object.entries(quarter).map(([key, value], idx) => {
-//       if(value !== null){
-//         return (
-//           <div key={`${i}-${idx}`}>
-//             <p>{key} - {value}</p>
-//           </div>
-//         )
-//       }
-//     }))
-
-//   })
-// })}
+export default memo(UbprBarChart)
