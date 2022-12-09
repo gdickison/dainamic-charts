@@ -112,28 +112,30 @@ const UBPR = () => {
         selectedRcons={selectedRcons}
         removeRcon={removeRcon}
       />
-      <section className="m-6">
+      <section className="m-4 space-y-10">
         {ubprBankData && ubprRconData &&
           ubprBankData.map((bank, i) => {
             return (
-              <div key={i}>
-                <h1 className="inline text-2xl">{bank.NAME} - {bank.BANK_ID}</h1>
+              <div className="border-t-2 border-t-gray-400" key={i}>
+                <h1 className="mx-2 my-4 text-2xl">{bank.NAME} - {bank.BANK_ID}</h1>
                 <UbprBankSummary
                   bankData={bank}
                 />
-                {selectedRcons &&
-                  selectedRcons.map((rcon, idx) => {
-                    return (
-                      <div key={idx}>
-                        <UbprBarChart
-                          bankData={bank}
-                          statsData={ubprRconData[i]}
-                          selectedMetric={rcon}
-                        />
-                      </div>
-                    )
-                  })
-                }
+                <div className="flex flex-wrap">
+                  {selectedRcons &&
+                    selectedRcons.map((rcon, idx) => {
+                      return (
+                        <div key={idx} className="w-1/2">
+                          <UbprBarChart
+                            bankData={bank}
+                            statsData={ubprRconData[i]}
+                            selectedMetric={rcon}
+                          />
+                        </div>
+                      )
+                    })
+                  }
+                </div>
               </div>
             )
           })

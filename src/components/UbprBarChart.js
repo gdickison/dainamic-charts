@@ -37,7 +37,6 @@ const UbprBarChart = ({bankData, statsData, selectedMetric}) => {
   }
 
   const chartTitle = rconCodesNames.filter(rcon => rcon.code === selectedMetric)[0].text
-  const chartSubtitle = selectedMetric
 
   const barChartOptions = {
     responsive: true,
@@ -115,27 +114,21 @@ const UbprBarChart = ({bankData, statsData, selectedMetric}) => {
   }
 
   return (
-    <div className="mx-6 space-y-12">
-      <div>
-        <div className="grid grid-cols-2 gap-x-2 gap-y-6">
-          <div>
-            {nullData(dataArray)
-              ? <div className="flex flex-col gap-2 px-4 py-8 m-2 shadow-lg bg-gray-50">
-                  <h1 className="text-center">{barChartOptions.plugins.title.text}</h1>
-                  <h2 className="text-center">No data available</h2>
-                </div>
-              : zeroData(dataArray)
-                ? <div className="flex flex-col gap-2 px-4 py-8 m-2 shadow-lg bg-gray-50">
-                    <h1 className="text-center">{barChartOptions.plugins.title.text}</h1>
-                    <h2 className="text-center">This institution does not have loans in this category</h2>
-                  </div>
-                : <div className="flex justify-center p-4 m-2 shadow-lg bg-gray-50">
-                    <Bar data={chartData} options={barChartOptions}/>
-                  </div>
-            }
+    <div>
+      {nullData(dataArray)
+        ? <div className="flex flex-col gap-2 px-4 py-8 m-2 shadow-lg bg-gray-50">
+            <h1 className="text-center">{barChartOptions.plugins.title.text}</h1>
+            <h2 className="text-center">No data available</h2>
           </div>
-        </div>
-      </div>
+        : zeroData(dataArray)
+          ? <div className="flex flex-col gap-2 px-4 py-8 m-2 shadow-lg bg-gray-50">
+              <h1 className="text-center">{barChartOptions.plugins.title.text}</h1>
+              <h2 className="text-center">This institution does not have loans in this category</h2>
+            </div>
+          : <div className="flex justify-center p-4 m-2 shadow-lg bg-gray-50">
+              <Bar data={chartData} options={barChartOptions}/>
+            </div>
+      }
     </div>
   )
 }

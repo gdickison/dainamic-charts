@@ -13,7 +13,6 @@ export default async function queryUbprInstitution(req, res){
         AND LOWER("CITY") LIKE LOWER('%${req.body.cityParam}%')
       ORDER BY "BANK_ID"`)
     .then(response => res.status(200).json({response: response.rows}))
-    // .then(response => console.log('response', response))
     .then(client.release())
     .catch(error => console.log("There was an error getting ubpr data: ", error))
 }

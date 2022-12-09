@@ -20,63 +20,20 @@ const UbprFormInputs = ({
         <div className="flex">
           <div className="flex flex-col w-1/4 space-y-4">
             <label className="text-xl mx-6" htmlFor="bankName">Bank Name </label>
-            <input className="border-2 border-blue-500 mx-6" type="text" id="bankName" onChange={handleNameParamChange}/>
-            {/* <select className="mx-2 text-center border-2 border-blue-400 bg-white rounded-md text-[1.7vw] 3xl:text-3xl" id="bankName" name="bankName" defaultValue="">
-              <option disabled></option>
-              {monthOptions && monthOptions.map(month => {
-                return (
-                  <option key={month} value={month}>{month}</option>
-                )
-              })}
-            </select> */}
+            <input className="border-2 border-blue-500 mx-6 px-2" type="text" id="bankName" onChange={handleNameParamChange}/>
           </div>
           <div className="flex flex-col w-1/4 space-y-4">
             <label className="text-xl mx-6" htmlFor="bankCity">City </label>
-            <input className="border-2 border-blue-500 mx-6" type="text" id="bankCity" onChange={handleCityParamChange}/>
-            {/* <select className="mx-2 text-center border-2 border-blue-400 bg-white rounded-md text-[1.7vw] 3xl:text-3xl" id="bankName" name="bankName" defaultValue="">
-              <option disabled></option>
-              {monthOptions && monthOptions.map(month => {
-                return (
-                  <option key={month} value={month}>{month}</option>
-                )
-              })}
-            </select> */}
+            <input className="border-2 border-blue-500 mx-6 px-2" type="text" id="bankCity" onChange={handleCityParamChange}/>
           </div>
           <div className="flex flex-col w-1/4 space-y-4">
             <label className="text-xl mx-6" htmlFor="bankState">State </label>
-            <input className="border-2 border-blue-500 mx-6" type="text" id="bankState" onChange={handleStateParamChange}/>
-            {/* <select className="mx-2 text-center border-2 border-blue-400 bg-white rounded-md text-[1.7vw] 3xl:text-3xl" id="bankName" name="bankName" defaultValue="">
-              <option disabled></option>
-              {monthOptions && monthOptions.map(month => {
-                return (
-                  <option key={month} value={month}>{month}</option>
-                )
-              })}
-            </select> */}
+            <input className="border-2 border-blue-500 mx-6 px-2" type="text" id="bankState" onChange={handleStateParamChange}/>
           </div>
           <div className="flex flex-col w-1/4 space-y-4">
             <label className="text-xl mx-6" htmlFor="specialization">Specialization </label>
-            <input className="border-2 border-blue-500 mx-6" type="text" id="specialization" onChange={handleSpecializationParamChange}/>
-            {/* <select className="mx-2 text-center border-2 border-blue-400 bg-white rounded-md text-[1.7vw] 3xl:text-3xl" id="bankName" name="bankName" defaultValue="">
-              <option disabled></option>
-              {monthOptions && monthOptions.map(month => {
-                return (
-                  <option key={month} value={month}>{month}</option>
-                )
-              })}
-            </select> */}
+            <input className="border-2 border-blue-500 mx-6 px-2" type="text" id="specialization" onChange={handleSpecializationParamChange}/>
           </div>
-          {/* <div className="flex flex-col w-1/2 space-y-4">
-            <label className="text-[1.7vw] 3xl:text-3xl mx-2"  htmlFor="endDate">Select an end date: </label>
-            <select className="mx-2 text-center border-2 border-blue-400 bg-white rounded-md text-[1.7vw] 3xl:text-3xl" id="endDate" name="endDate" defaultValue="" onChange={handleDateChange}>
-              <option disabled></option>
-              {monthOptions && monthOptions.map(month => {
-                return (
-                  <option key={month} value={month}>{month}</option>
-                )
-              })}
-            </select>
-          </div> */}
         </div>
         <div className="pr-4 space-y-4">
           <label className="text-xl mx-6" htmlFor="rcon">Metrics (RCON)</label>
