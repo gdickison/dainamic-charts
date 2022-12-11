@@ -69,7 +69,7 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
             return ''
           },
           label: function(context){
-            return `${Number(context.raw).toLocaleString()}`
+            return `${Number(context.raw).toLocaleString()}${dataFlag === "rcon" ? '' : '%'}`
           }
         },
         boxPadding: 6,
@@ -84,7 +84,7 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
         },
         ticks: {
           callback: function(value){
-            return `${value.toLocaleString()}`
+            return `${value.toLocaleString()}${dataFlag === "rcon" ? '' : '%'}`
           },
           font: {
             size: 12
@@ -121,16 +121,16 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
   return (
     <div>
       {nullData(dataArray)
-        ? <div className="flex flex-col gap-2 px-4 py-8 m-2 shadow-lg bg-gray-50">
+        ? <div className="ubpr-no-data">
             <h1 className="text-center">{barChartOptions.plugins.title.text}</h1>
             <h2 className="text-center">No data available</h2>
           </div>
         : zeroData(dataArray)
-          ? <div className="flex flex-col gap-2 px-4 py-8 m-2 shadow-lg bg-gray-50">
+          ? <div className="ubpr-no-data">
               <h1 className="text-center">{barChartOptions.plugins.title.text}</h1>
               <h2 className="text-center">This institution does not have loans in this category</h2>
             </div>
-          : <div className="flex justify-center p-4 m-2 shadow-lg bg-gray-50">
+          : <div className="ubpr-bar-chart">
               <Bar data={chartData} options={barChartOptions}/>
             </div>
       }

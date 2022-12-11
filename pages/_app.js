@@ -1,8 +1,11 @@
 import Head from "next/head"
 
 import '../styles/globals.css'
+import '../styles/ubpr-page.css'
 import '../styles/ubpr-inputs.css'
 import '../styles/ubpr-bank-summary.css'
+import '../styles/ubpr-bar-charts.css'
+
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 

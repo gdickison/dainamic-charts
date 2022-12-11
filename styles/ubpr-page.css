@@ -1,0 +1,19 @@
+.ubpr-charts {
+  display: flex;
+  flex-direction: row;
+}
+
+.ubpr-charts-col {
+  width: 50%;
+}
+
+.ubpr-charts h1 {
+  text-align: center;
+  font-size: 2rem;
+}
+
+@media screen and (max-width: 1600px) {
+  .ubpr-charts h1 {
+    font-size: 2vw;
+  }
+}

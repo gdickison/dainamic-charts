@@ -152,37 +152,45 @@ const UBPR = () => {
                 <UbprBankSummary
                   bankData={bank}
                 />
-                <div className="flex flex-wrap">
-                  {selectedRcons &&
-                    selectedRcons.map((rcon, idx) => {
-                      return (
-                        <div key={idx} className="w-1/2">
-                          <UbprBarChart
-                            bankData={bank}
-                            dataFlag={"rcon"}
-                            statsData={ubprRconData[i]}
-                            selectedMetric={rcon}
-                          />
-                        </div>
-                      )
-                    })
-                  }
-                </div>
-                <div className="flex flex-wrap">
-                  {selectedUbprs &&
-                    selectedUbprs.map((rcon, idx) => {
-                      return (
-                        <div key={idx} className="w-1/2">
-                          <UbprBarChart
-                            bankData={bank}
-                            dataFlag={"ubpr"}
-                            statsData={ubprCreditConcentrationData[i]}
-                            selectedMetric={rcon}
-                          />
-                        </div>
-                      )
-                    })
-                  }
+                <div className="ubpr-charts">
+                  <div className="ubpr-charts-col">
+                    {selectedRcons &&
+                      <h1>Loans & Leases (RCON)</h1>
+                    }
+                    {selectedRcons &&
+                      selectedRcons.map((rcon, idx) => {
+                        return (
+                          <div key={idx} className="">
+                            <UbprBarChart
+                              bankData={bank}
+                              dataFlag={"rcon"}
+                              statsData={ubprRconData[i]}
+                              selectedMetric={rcon}
+                            />
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
+                  <div className="ubpr-charts-col">
+                    {selectedUbprs &&
+                      <h1>Credit Concetrations (UBPR)</h1>
+                    }
+                    {selectedUbprs &&
+                      selectedUbprs.map((rcon, idx) => {
+                        return (
+                          <div key={idx} className="">
+                            <UbprBarChart
+                              bankData={bank}
+                              dataFlag={"ubpr"}
+                              statsData={ubprCreditConcentrationData[i]}
+                              selectedMetric={rcon}
+                            />
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
                 </div>
               </div>
             )
