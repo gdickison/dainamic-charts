@@ -2,7 +2,7 @@ import { memo } from "react";
 import { Bar } from "react-chartjs-2";
 import { rconCodesNames, ubprCodesNames } from "../../public/utils";
 
-const UbprBarChart = ({bankData, statsData, selectedMetric}) => {
+const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
   const rawChartData = statsData
 
   const labels = rawChartData.map(bank => {
@@ -21,22 +21,25 @@ const UbprBarChart = ({bankData, statsData, selectedMetric}) => {
     return arr.every(element => element === "0")
   }
 
+  const backgroundColor = dataFlag === "rcon" ? 'rgba(255, 99, 132, 0.3)' : 'rgba(54, 162, 235, 0.3)'
+  const borderColor = dataFlag === "rcon" ? 'rgb(255, 99, 132)' : 'rgb(54, 162, 235)'
+
   const chartData = {
     labels: labels,
     datasets: [{
       label: 'chart',
       data: dataArray,
       backgroundColor: [
-        'rgba(255, 99, 132, 0.2)'
+        `${backgroundColor}`
       ],
       borderColor: [
-        'rgb(255, 99, 132)'
+        `${borderColor}`
       ],
       borderWidth: 1
     }]
   }
 
-  const chartTitle = Object.keys(statsData[0]).some(key => key === 'RCON1288')
+  const chartTitle = dataFlag === "rcon"
     ? rconCodesNames.filter(rcon => rcon.code === selectedMetric)[0].text
     : ubprCodesNames.filter(ubpr => ubpr.code === selectedMetric)[0].text
 

@@ -1,26 +1,57 @@
 const UbprBankSummary = ({bankData}) => {
   return (
     <div>
-      <div className="m-2 border-2 border-gray-400 p-2 flex flex-row gap-8 w-1/2 justify-between">
-        <div className="px-2">
+      <div className="name-address">
+        <div className="name-id">
+          <h1>{bankData.NAME}</h1>
+          <p>I.D. {bankData.BANK_ID}</p>
+        </div>
+      </div>
+      <div className="classification-card-container">
+        <div className="classification-card">
+          <h2>Location</h2>
           <address>
             <p>{bankData.ADDRESS}</p>
             <p><span>{bankData.CITY}, </span><span>{bankData.STNAME}</span><span> {bankData.ZIP}</span></p>
+            <a href={`https://${(bankData.WEBADDR).replace(/^[^w]*/, '')}`} target="_blank">{(bankData.WEBADDR).replace(/^[^w]*/, '')}</a>
           </address>
-          <a href={`https://${bankData.WEBADDR}`} target="_blank">{bankData.WEBADDR}</a>
-          <p><span>FDIC Region:</span> <span>{bankData.FDICREGN}</span></p>
-          <p><span>Banking Class:</span> <span>{bankData.BKCLASS}</span></p>
-          <p><span>Specialization:</span> <span>{bankData.SPECGRPN}</span></p>
+          <h2>FDIC Region</h2>
+          <p>{bankData.FDICREGN}</p>
+          <h2>Banking Class</h2>
+          <p>{bankData.BKCLASS}</p>
+          <h2>Specialization</h2>
+          <p>{(bankData.SPECGRPN).replace(' Specialization', '')}</p>
         </div>
-        <div className="px-2">
-          <p><span>Deposits:</span> <span>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.DEP * 1000)}</span></p>
-          <p><span>Equity:</span> <span>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.EQ * 1000)}</span></p>
-          <p><span>Return on Equity:</span> <span>{new Intl.NumberFormat('defalut', {style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2}).format(bankData.ROE / 100)}</span></p>
+        <div className="financial-card">
+          <div>
+            <h2>Deposits</h2>
+            <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.DEP * 1000)}</p>
+          </div>
+          <div>
+            <h2>Net Income</h2>
+            <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.NETINC * 1000)}</p>
 
-          <p><span>Assets:</span> <span>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.ASSET * 1000)}</span></p>
-          <p><span>Return on Assets:</span> <span>{new Intl.NumberFormat('defalut', {style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2}).format(bankData.ROA / 100)}</span></p>
-
-          <p><span>Net Income:</span> <span>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.NETINC * 1000)}</span></p>
+          </div>
+        </div>
+        <div className="financial-card">
+          <div>
+            <h2>Equity</h2>
+            <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.EQ * 1000)}</p>
+          </div>
+          <div>
+            <h2>Return on Equity</h2>
+            <p>{new Intl.NumberFormat('defalut', {style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2}).format(bankData.ROE / 100)}</p>
+          </div>
+        </div>
+        <div className="financial-card">
+          <div>
+            <h2>Assets</h2>
+            <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.ASSET * 1000)}</p>
+          </div>
+          <div>
+            <h2>Return on Assets</h2>
+            <p>{new Intl.NumberFormat('defalut', {style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2}).format(bankData.ROA / 100)}</p>
+          </div>
         </div>
       </div>
     </div>

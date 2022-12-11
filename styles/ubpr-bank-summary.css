@@ -1,0 +1,87 @@
+.name-address {
+  display: flex;
+  align-items: center;
+}
+
+.name-id {
+  display: flex;
+  flex-direction: column;
+  padding-inline: 0.75rem;
+}
+
+.name-id > h1 {
+  font-size: 3rem;
+}
+
+.name-id > p {
+  font-size: 1.5rem;
+}
+
+.classification-card-container {
+  display: flex;
+}
+
+.classification-card,
+.financial-card {
+  margin: 0.5rem;
+  border: 2px solid #9ca3af;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 25%;
+  aspect-ratio: 1;
+}
+
+.classification-card h2 {
+  text-decoration: underline;
+}
+
+.classification-card p {
+  font-size: 1.5rem;
+  font-style: normal;
+}
+
+.classification-card {
+  text-align: center;
+}
+
+.financial-card {
+  margin: 0.5rem;
+  border: 2px solid #9ca3af;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 25%;
+}
+
+.financial-card h2 {
+  font-size: 1.5rem;
+  text-align: center;
+  text-decoration: underline;
+}
+
+.financial-card p {
+  font-size: 2.5rem;
+  text-align: center;
+}
+
+.classification-card,
+.financial-card {
+  padding-block: 1rem;
+}
+
+@media screen and (max-width: 1600px) {
+  .financial-card p {
+    font-size: 2.5vw;
+  }
+
+  .name-id h1 {
+    font-size: 3vw;
+  }
+
+  .name-id p {
+    font-size: 1.5vw;
+  }
+}

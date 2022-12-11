@@ -1,0 +1,101 @@
+.ubpr-form label {
+  font-size: 1.75rem;
+}
+
+.bank-input-group {
+  display: flex;
+  flex-wrap: wrap;
+  border: 2px solid #9ca3af;
+  margin-inline: 1.5rem;
+  padding-inline: 1.5rem;
+  padding-block: 2rem;
+  justify-content: flex-start;
+}
+
+.bank-input {
+  display: flex;
+  flex-direction: column;
+  width: 17%;
+  margin-inline: 1rem;
+}
+
+.bank-input input {
+  border: 2px solid #3b82f6;
+  padding-inline: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.metric-input-group {
+  display: flex;
+}
+
+.metric-input {
+  width: 50%;
+  margin: 1.5rem;
+  padding-inline: 1.5rem;
+  padding-block: 2rem;
+  border: 2px solid #9ca3af;
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-input h1 {
+  font-size: 2rem;
+}
+
+.metric-input h1,
+.metric-input label,
+#rcon-selected-metrics,
+#ubpr-selected-metrics {
+  margin-inline: 1rem;
+}
+
+.metric-input select {
+  width: 100%;
+  margin-inline: 1rem;
+  text-align: left;
+  padding-inline: 0.5rem;
+  border: 2px solid #3b82f6;
+  background-color: #fff;
+  font-size: 1.5rem;
+}
+
+#rcon-selected-metrics,
+#ubpr-selected-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  border: 2px solid #3b82f6;
+  background-color: #fff;
+  margin-inline: 1rem;
+  padding-inline: 0.5rem;
+  min-height: 3rem;
+}
+
+#rcon-selected-metrics p,
+#ubpr-selected-metrics p {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  min-width: min-content;
+  text-align: center;
+  margin: 0.25rem;
+  padding-inline: 0.5rem;
+  border: 2px solid #d1d5db;
+  background-color: #e5e7eb;
+  line-height: 2rem;
+}
+
+@media screen and (max-width: 1600px) {
+  .ubpr-form label {
+    font-size: 1.75vw;
+  }
+
+  .bank-input input {
+    font-size: 1.25vw;
+  }
+
+
+  .metric-input h1 {
+    font-size: 2vw;
+  }
+}

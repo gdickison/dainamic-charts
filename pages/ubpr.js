@@ -127,7 +127,7 @@ const UBPR = () => {
   }
 
   return (
-    <div>
+    <div className="max-w-[1600px] mx-auto">
       <UbprFormInputs
         handleNameParamChange={handleNameParamChange}
         handleSpecializationParamChange={handleSpecializationParamChange}
@@ -148,8 +148,7 @@ const UBPR = () => {
         {ubprBankData && ubprRconData && ubprCreditConcentrationData &&
           ubprBankData.map((bank, i) => {
             return (
-              <div className="border-t-2 border-t-gray-400" key={i}>
-                <h1 className="mx-2 my-4 text-2xl">{bank.NAME} - {bank.BANK_ID}</h1>
+              <div className="border-2 border-gray-400" key={i}>
                 <UbprBankSummary
                   bankData={bank}
                 />
@@ -160,6 +159,7 @@ const UBPR = () => {
                         <div key={idx} className="w-1/2">
                           <UbprBarChart
                             bankData={bank}
+                            dataFlag={"rcon"}
                             statsData={ubprRconData[i]}
                             selectedMetric={rcon}
                           />
@@ -175,6 +175,7 @@ const UBPR = () => {
                         <div key={idx} className="w-1/2">
                           <UbprBarChart
                             bankData={bank}
+                            dataFlag={"ubpr"}
                             statsData={ubprCreditConcentrationData[i]}
                             selectedMetric={rcon}
                           />
