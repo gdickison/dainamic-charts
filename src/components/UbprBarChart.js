@@ -4,13 +4,13 @@ import { rconCodesNames, ubprCodesNames } from "../../public/utils";
 
 const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
   const rawChartData = statsData
-
+console.log('statsData', statsData)
   const labels = rawChartData.map(bank => {
     return bank.QUARTER
   })
 
   const dataArray = rawChartData.map(bank => {
-    return bank[selectedMetric]
+    return dataFlag === "rcon" ? bank[selectedMetric] : bank[selectedMetric]/10
   })
 
   function nullData(arr){
