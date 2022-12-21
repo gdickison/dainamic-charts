@@ -3,9 +3,11 @@ import pool from "../../src/client";
 export default async function queryUbprRcon(req, res){
   const client = await pool.connect()
 
+  const rcons = `"${req.body.selectedRcons.join('","')}"`
   await client
     .query(`SELECT
-        *
+        "QUARTER",
+        ${rcons}
       FROM banking_app.upbr_rcci_rcon
       WHERE ("BANK_ID") IN (${req.body.bankIds})
       ORDER BY "BANK_ID", "QUARTER"`)

@@ -1,4 +1,4 @@
-import { useState, memo } from "react"
+import { useState, useEffect } from "react"
 import UbprFormInputs from "../src/components/UbprFormInputs"
 import UbprBarChart from "../src/components/UbprBarChart"
 import UbprBankSummary from "../src/components/UbprBankSummary"
@@ -15,6 +15,13 @@ const UBPR = () => {
   const [fdicRegionParam, setFdicRegionParam] = useState('')
   const [selectedRcons, setSelectedRcons] = useState([])
   const [selectedUbprs, setSelectedUbprs] = useState([])
+  const [quarters, setQuarters] = useState()
+  const [quarterRange, setQuarterRange] = useState({})
+  const [showAlert, setShowAlert] = useState(false)
+
+  const closeAlert = () => {
+    setShowAlert(false)
+  }
 
   const handleNameParamChange = e => {
     e.preventDefault()
@@ -50,6 +57,29 @@ const UBPR = () => {
     return res;
   }
 
+  const getQuarters = async () => {
+    const quartersEndpoint = `/api/get_ubpr_quarters`
+    const quartersOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    let quartersResponse = await fetch(quartersEndpoint, quartersOptions).then(response => response.json())
+    quartersResponse = quartersResponse.response.map(row => Object.values(row))
+    setQuarters(quartersResponse)
+  }
+
+  useEffect(() => {
+    getQuarters()
+  }, [])
+
+  const handleQuarterChange = e => {
+    e.preventDefault()
+    setQuarterRange({...quarterRange, [e.target.name]: e.target.value})
+  }
+
   const getUbprBankData = async () => {
     const bankEndpoint = `/api/get_ubpr_institution`
     const rconEndpoint = `/api/get_ubpr_rcon`
@@ -75,23 +105,38 @@ const UBPR = () => {
     setUbprBankData(banks)
 
     const bankIds = banks.map(bank => bank.BANK_ID)
+    const rconOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ bankIds, selectedRcons })
+    }
     const ubprOptions = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ bankIds })
+      body: JSON.stringify({ bankIds, quarterRange, selectedUbprs })
     }
 
-    let rcon = await fetch(rconEndpoint, ubprOptions).then(response => response.json())
-    rcon = rcon.response
-    const rconData = spliceIntoChunks(rcon, rcon.length / banks.length)
-    setUbprRconData(rconData)
+    if(selectedRcons.length > 0){
+      let rcon = await fetch(rconEndpoint, rconOptions).then(response => response.json())
+      rcon = rcon.response
+      const rconData = spliceIntoChunks(rcon, rcon.length / banks.length)
+      setUbprRconData(rconData)
+    }
 
-    let creditConcentration = await fetch(creditConcentrationEndpoint, ubprOptions).then(response => response.json())
-    creditConcentration = creditConcentration.response
-    const ubprData = spliceIntoChunks(creditConcentration, creditConcentration.length / banks.length)
-    setUbprCreditConcentrationData(ubprData)
+    if(selectedUbprs.length > 0 && (quarterRange.startQuarter === undefined || quarterRange.endQuarter === undefined)) {
+      setShowAlert(true)
+    }
+
+    if(selectedUbprs.length > 0 && quarterRange.startQuarter && quarterRange.endQuarter){
+      let creditConcentration = await fetch(creditConcentrationEndpoint, ubprOptions).then(response => response.json())
+      creditConcentration = creditConcentration.response
+      const ubprData = spliceIntoChunks(creditConcentration, creditConcentration.length / banks.length)
+      setUbprCreditConcentrationData(ubprData)
+    }
   }
 
   const getData = async () => {
@@ -143,9 +188,13 @@ const UBPR = () => {
         handleSelectedUbprChange={handleSelectedUbprChange}
         selectedUbprs={selectedUbprs}
         removeUbpr={removeUbpr}
+        quarters={quarters}
+        handleQuarterChange={handleQuarterChange}
+        showAlert={showAlert}
+        closeAlert={closeAlert}
       />
       <section className="m-4 space-y-10">
-        {ubprBankData && ubprRconData && ubprCreditConcentrationData &&
+        {ubprBankData &&
           ubprBankData.map((bank, i) => {
             return (
               <div className="border-2 border-gray-400" key={i}>
@@ -154,10 +203,10 @@ const UBPR = () => {
                 />
                 <div className="ubpr-charts">
                   <div className="ubpr-charts-col">
-                    {selectedRcons &&
+                    {selectedRcons && ubprRconData &&
                       <h1>Loans & Leases (RCON)</h1>
                     }
-                    {selectedRcons &&
+                    {selectedRcons && ubprRconData &&
                       selectedRcons.map((rcon, idx) => {
                         return (
                           <div key={idx} className="">
@@ -173,10 +222,10 @@ const UBPR = () => {
                     }
                   </div>
                   <div className="ubpr-charts-col">
-                    {selectedUbprs &&
+                    {selectedUbprs && ubprCreditConcentrationData &&
                       <h1>Credit Concetrations (UBPR)</h1>
                     }
-                    {selectedUbprs &&
+                    {selectedUbprs && ubprCreditConcentrationData &&
                       selectedUbprs.map((rcon, idx) => {
                         return (
                           <div key={idx} className="">
