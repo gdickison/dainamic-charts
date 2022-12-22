@@ -16,7 +16,9 @@ const UBPR = () => {
   const [selectedRcons, setSelectedRcons] = useState([])
   const [selectedUbprs, setSelectedUbprs] = useState([])
   const [quarters, setQuarters] = useState()
-  const [quarterRange, setQuarterRange] = useState({})
+  const [startingQuarter, setStartingQuarter] = useState()
+  const [endingQuarter, setEndingQuarter] = useState()
+
   const [showAlert, setShowAlert] = useState(false)
 
   const closeAlert = () => {
@@ -65,9 +67,13 @@ const UBPR = () => {
         'Content-Type': 'application/json'
       }
     }
-
     let quartersResponse = await fetch(quartersEndpoint, quartersOptions).then(response => response.json())
-    quartersResponse = quartersResponse.response.map(row => Object.values(row))
+    quartersResponse = quartersResponse.response.map(row => {
+      return ({
+        value: row.QUARTER,
+        label: row.QUARTER
+      })
+    })
     setQuarters(quartersResponse)
   }
 
@@ -75,9 +81,12 @@ const UBPR = () => {
     getQuarters()
   }, [])
 
-  const handleQuarterChange = e => {
-    e.preventDefault()
-    setQuarterRange({...quarterRange, [e.target.name]: e.target.value})
+  function handleStartingQuarterChange (startingQuarter) {
+    setStartingQuarter(startingQuarter)
+  }
+
+  function handleEndingQuarterChange(endingQuarter){
+    setEndingQuarter(endingQuarter)
   }
 
   const getUbprBankData = async () => {
@@ -132,14 +141,14 @@ const UBPR = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ bankIds, quarterRange, ubprCodes })
+      body: JSON.stringify({ bankIds, startingQuarter, endingQuarter, ubprCodes })
     }
 
-    if(selectedUbprs.length > 0 && (quarterRange.startQuarter === undefined || quarterRange.endQuarter === undefined)) {
+    if(selectedUbprs.length > 0 && (startingQuarter === undefined || endingQuarter === undefined)) {
       setShowAlert(true)
     }
 
-    if(selectedUbprs.length > 0 && quarterRange.startQuarter && quarterRange.endQuarter){
+    if(selectedUbprs.length > 0 && startingQuarter && endingQuarter){
       let creditConcentration = await fetch(creditConcentrationEndpoint, ubprOptions).then(response => response.json())
       creditConcentration = creditConcentration.response
       const ubprData = spliceIntoChunks(creditConcentration, creditConcentration.length / banks.length)
@@ -176,7 +185,10 @@ const UBPR = () => {
         handleSelectedUbprChange={handleSelectedUbprChange}
         selectedUbprs={selectedUbprs}
         quarters={quarters}
-        handleQuarterChange={handleQuarterChange}
+        handleStartingQuarterChange={handleStartingQuarterChange}
+        startingQuarter={startingQuarter}
+        handleEndingQuarterChange={handleEndingQuarterChange}
+        endingQuarter={endingQuarter}
         showAlert={showAlert}
         closeAlert={closeAlert}
         rconOptionsList={rconSelectOptions}

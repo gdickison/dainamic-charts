@@ -12,7 +12,10 @@ const UbprFormInputs = ({
   selectedRcons,
   handleSelectedUbprChange,
   selectedUbprs,
-  handleQuarterChange,
+  handleStartingQuarterChange,
+  startingQuarter,
+  handleEndingQuarterChange,
+  endingQuarter,
   quarters,
   showAlert,
   closeAlert,
@@ -78,27 +81,29 @@ const UbprFormInputs = ({
                   isMulti
                 />
               </div>
-              <div className="pr-4 space-y-4">
-                <label htmlFor="rcon">Select Starting Quarter</label>
-                <select className="mx-2 text-center border-2 border-blue-400 bg-white rounded-md text-[1.7vw] 3xl:text-3xl" id="startQuarter" name="startQuarter" defaultValue="" onChange={handleQuarterChange}>
-                  <option disabled></option>
-                  {quarters && quarters.map(quarter => {
-                    return (
-                      <option key={quarter} value={quarter}>{quarter}</option>
-                    )
-                  })}
-                </select>
-              </div>
-              <div className="pr-4 space-y-4">
-                <label htmlFor="rcon">Select Ending Quarter</label>
-                <select className="mx-2 text-center border-2 border-blue-400 bg-white rounded-md text-[1.7vw] 3xl:text-3xl" id="endQuarter" name="endQuarter" defaultValue="" onChange={handleQuarterChange}>
-                  <option disabled></option>
-                  {quarters && quarters.map(quarter => {
-                    return (
-                      <option key={quarter} value={quarter}>{quarter}</option>
-                    )
-                  })}
-                </select>
+              <div className="flex">
+                <div className="pr-4 space-y-4 w-1/2">
+                  <label htmlFor="rcon">Select Starting Quarter</label>
+                  <Select
+                    className="mx-4"
+                    options={quarters}
+                    placeholder="Select starting quarter"
+                    value={startingQuarter}
+                    onChange={handleStartingQuarterChange}
+                    isSearchable={true}
+                  />
+                </div>
+                <div className="pr-4 space-y-4 w-1/2">
+                  <label htmlFor="rcon">Select Ending Quarter</label>
+                  <Select
+                    className="mx-4"
+                    options={quarters}
+                    placeholder="Select ending quarter"
+                    value={endingQuarter}
+                    onChange={handleEndingQuarterChange}
+                    isSearchable={true}
+                  />
+                </div>
               </div>
             </div>
           </div>
