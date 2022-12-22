@@ -29,9 +29,10 @@ const UbprFormInputs = ({
       <div className="mx-auto my-6">
         <form className="ubpr-form" action="#">
           <div className="bank-input-group">
-            <div className="bank-input">
+            <div className="metric-input">
               <label htmlFor="bankName">Bank Name </label>
               <Select
+                className="mx-4"
                 options={bankNameOptions}
                 placeholder="Search banks by name (you may select more than one)"
                 value={selectedBanks}
@@ -40,7 +41,7 @@ const UbprFormInputs = ({
                 isMulti
               />
             </div>
-            <div className="bank-input">
+            {/* <div className="bank-input">
               <label htmlFor="bankCity">City </label>
               <input type="text" id="bankCity" onChange={handleCityParamChange}/>
             </div>
@@ -55,7 +56,7 @@ const UbprFormInputs = ({
             <div className="bank-input">
               <label htmlFor="bankFdicRegion">FDIC Region </label>
               <input type="text" id="bankFdicRegion" onChange={handleFdicRegionChange}/>
-            </div>
+            </div> */}
           </div>
           <div className="metric-input-group">
             <div className="metric-input space-y-2">
