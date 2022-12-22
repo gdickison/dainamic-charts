@@ -1,16 +1,14 @@
 import { memo } from "react";
 import { Bar } from "react-chartjs-2";
-import { rconCodesNames, ubprCodesNames } from "../../public/utils";
 
 const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
   const rawChartData = statsData
-
   const labels = rawChartData.map(bank => {
     return bank.QUARTER
   })
 
   const dataArray = rawChartData.map(bank => {
-    return dataFlag === "rcon" ? bank[selectedMetric] : bank[selectedMetric]/10
+    return dataFlag === "rcon" ? bank[selectedMetric.value] : bank[selectedMetric.value]/10
   })
 
   function nullData(arr){
@@ -18,7 +16,7 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
   }
 
   function zeroData(arr){
-    return arr.every(element => element === "0")
+    return arr.every(element => element === "0" || element === 0)
   }
 
   const backgroundColor = dataFlag === "rcon" ? 'rgba(255, 99, 132, 0.3)' : 'rgba(54, 162, 235, 0.3)'
@@ -39,9 +37,7 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
     }]
   }
 
-  const chartTitle = dataFlag === "rcon"
-    ? rconCodesNames.filter(rcon => rcon.code === selectedMetric)[0].text
-    : ubprCodesNames.filter(ubpr => ubpr.code === selectedMetric)[0].text
+  const chartTitle = selectedMetric.label
 
   const barChartOptions = {
     responsive: true,
@@ -52,7 +48,7 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
     plugins: {
       title: {
         display: true,
-        text: `${chartTitle} - ${selectedMetric}`,
+        text: `${chartTitle}`,
         font: {
           size: 16,
           weight: 'normal'
