@@ -2,7 +2,6 @@ import Alert from "./Alert"
 import Select from "react-select"
 
 const UbprFormInputs = ({
-  handleNameParamChange,
   handleSpecializationParamChange,
   handleCityParamChange,
   handleStateParamChange,
@@ -20,7 +19,10 @@ const UbprFormInputs = ({
   showAlert,
   closeAlert,
   rconOptionsList,
-  ubprOptionsList
+  ubprOptionsList,
+  bankNameOptions,
+  selectedBanks,
+  handleSelectedBankChange
 }) => {
   return (
     <>
@@ -29,7 +31,14 @@ const UbprFormInputs = ({
           <div className="bank-input-group">
             <div className="bank-input">
               <label htmlFor="bankName">Bank Name </label>
-              <input type="text" id="bankName" onChange={handleNameParamChange}/>
+              <Select
+                options={bankNameOptions}
+                placeholder="Search banks by name (you may select more than one)"
+                value={selectedBanks}
+                onChange={handleSelectedBankChange}
+                isSearchable={true}
+                isMulti
+              />
             </div>
             <div className="bank-input">
               <label htmlFor="bankCity">City </label>

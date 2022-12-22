@@ -10,7 +10,7 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
   const dataArray = rawChartData.map(bank => {
     return dataFlag === "rcon" ? bank[selectedMetric.value] : bank[selectedMetric.value]/10
   })
-console.log('dataArray', dataArray)
+
   function nullData(arr){
     return arr.every(element => element === null)
   }

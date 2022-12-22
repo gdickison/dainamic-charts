@@ -9,7 +9,7 @@ export default async function queryUbprRcon(req, res){
         "QUARTER",
         ${ubprs}
       FROM banking_app.ubpr_credit_concentrations
-      WHERE ("BANK_ID") IN (${req.body.bankIds})
+      WHERE ("BANK_ID") IN (${req.body.bankIdParam})
         AND "QUARTER" BETWEEN '${req.body.startingQuarter.value}' AND '${req.body.endingQuarter.value}'
       ORDER BY "BANK_ID", "QUARTER"`)
     .then(response => res.status(200).json({response: response.rows}))

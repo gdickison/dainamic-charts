@@ -9,7 +9,7 @@ export default async function queryUbprRcon(req, res){
         "QUARTER",
         ${rcons}
       FROM banking_app.upbr_rcci_rcon
-      WHERE ("BANK_ID") IN (${req.body.bankIds})
+      WHERE ("BANK_ID") IN (${req.body.bankIdParam})
       ORDER BY "BANK_ID", "QUARTER"`)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())

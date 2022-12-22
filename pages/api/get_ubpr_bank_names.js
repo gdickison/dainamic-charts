@@ -5,14 +5,9 @@ export default async function queryUbprInstitution(req, res){
 
   await client
     .query(`SELECT
-        *
+        DISTINCT "NAME", "BANK_ID"
       FROM banking_app.ubpr_institution
-      WHERE "BANK_ID" IN (${req.body.bankIdParam})
-        AND LOWER("SPECGRPN") LIKE LOWER('%${req.body.specializationParam}%')
-        AND LOWER("STNAME") LIKE LOWER('%${req.body.stateParam}%')
-        AND LOWER("FDICREGN") LIKE LOWER('%${req.body.fdicRegionParam}%')
-        AND LOWER("CITY") LIKE LOWER('%${req.body.cityParam}%')
-      ORDER BY "BANK_ID"`)
+      ORDER BY "NAME"`)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
     .catch(error => console.log("There was an error getting ubpr data: ", error))
