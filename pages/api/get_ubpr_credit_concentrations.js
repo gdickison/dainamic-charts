@@ -3,7 +3,7 @@ import pool from "../../src/client";
 export default async function queryUbprRcon(req, res){
   const client = await pool.connect()
 
-  const ubprs = `"${req.body.selectedUbprs.join('","')}"`
+  const ubprs = `"${req.body.ubprCodes.join('","')}"`
   await client
     .query(`SELECT
         "QUARTER",

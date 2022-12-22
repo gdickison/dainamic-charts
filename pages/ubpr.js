@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import UbprFormInputs from "../src/components/UbprFormInputs"
 import UbprBarChart from "../src/components/UbprBarChart"
 import UbprBankSummary from "../src/components/UbprBankSummary"
-import { rconOptions, ubprOptions } from "../public/utils"
+import { rconSelectOptions, ubprSelectOptions } from "../public/utils"
 
 const UBPR = () => {
   const [ubprBankData, setUbprBankData] = useState()
@@ -81,9 +81,8 @@ const UBPR = () => {
   }
 
   const getUbprBankData = async () => {
+    // get basic bank information
     const bankEndpoint = `/api/get_ubpr_institution`
-    const rconEndpoint = `/api/get_ubpr_rcon`
-    const creditConcentrationEndpoint = `/api/get_ubpr_credit_concentrations`
     const JSONdata = JSON.stringify({
       nameParam,
       specializationParam,
@@ -105,19 +104,17 @@ const UBPR = () => {
     setUbprBankData(banks)
 
     const bankIds = banks.map(bank => bank.BANK_ID)
+
+    // get rcon data
+    const rconEndpoint = `/api/get_ubpr_rcon`
+    const rconCodes = selectedRcons.map(rcon => rcon.value)
+
     const rconOptions = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ bankIds, selectedRcons })
-    }
-    const ubprOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ bankIds, quarterRange, selectedUbprs })
+      body: JSON.stringify({ bankIds, rconCodes })
     }
 
     if(selectedRcons.length > 0){
@@ -125,6 +122,17 @@ const UBPR = () => {
       rcon = rcon.response
       const rconData = spliceIntoChunks(rcon, rcon.length / banks.length)
       setUbprRconData(rconData)
+    }
+
+    // get ubpr data
+    const creditConcentrationEndpoint = `/api/get_ubpr_credit_concentrations`
+    const ubprCodes = selectedUbprs.map(ubpr => ubpr.value)
+    const ubprOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ bankIds, quarterRange, ubprCodes })
     }
 
     if(selectedUbprs.length > 0 && (quarterRange.startQuarter === undefined || quarterRange.endQuarter === undefined)) {
@@ -146,29 +154,12 @@ const UBPR = () => {
     getUbprBankData()
   }
 
-  const handleSelectedRconChange = e => {
-    e.preventDefault()
-    const updatedRcons = ([...selectedRcons, e.target.value])
-    updatedRcons.sort((a, b) => a.rcon - b.rcon)
-    setSelectedRcons(updatedRcons)
+  function handleSelectedRconChange(data){
+    setSelectedRcons(data)
   }
 
-  const removeRcon = e => {
-    e.preventDefault()
-    const newRcons = selectedRcons.filter(rcon => rcon !== e.target.id)
-    setSelectedRcons(newRcons)
-  }
-  const handleSelectedUbprChange = e => {
-    e.preventDefault()
-    const updatedUbprs = ([...selectedUbprs, e.target.value])
-    updatedUbprs.sort((a, b) => a.ubpr - b.ubpr)
-    setSelectedUbprs(updatedUbprs)
-  }
-
-  const removeUbpr = e => {
-    e.preventDefault()
-    const newUbprs = selectedUbprs.filter(ubpr => ubpr !== e.target.id)
-    setSelectedUbprs(newUbprs)
+  function handleSelectedUbprChange (data) {
+    setSelectedUbprs(data)
   }
 
   return (
@@ -180,18 +171,16 @@ const UBPR = () => {
         handleStateParamChange={handleStateParamChange}
         handleFdicRegionChange={handleFdicRegionChange}
         getData={getData}
-        rconOptions={rconOptions}
         handleSelectedRconChange={handleSelectedRconChange}
         selectedRcons={selectedRcons}
-        removeRcon={removeRcon}
-        ubprOptions={ubprOptions}
         handleSelectedUbprChange={handleSelectedUbprChange}
         selectedUbprs={selectedUbprs}
-        removeUbpr={removeUbpr}
         quarters={quarters}
         handleQuarterChange={handleQuarterChange}
         showAlert={showAlert}
         closeAlert={closeAlert}
+        rconOptionsList={rconSelectOptions}
+        ubprOptionsList={ubprSelectOptions}
       />
       <section className="m-4 space-y-10">
         {ubprBankData &&
@@ -203,10 +192,10 @@ const UBPR = () => {
                 />
                 <div className="ubpr-charts">
                   <div className="ubpr-charts-col">
-                    {selectedRcons && ubprRconData &&
+                    {ubprRconData &&
                       <h1>Loans & Leases (RCON)</h1>
                     }
-                    {selectedRcons && ubprRconData &&
+                    {ubprRconData &&
                       selectedRcons.map((rcon, idx) => {
                         return (
                           <div key={idx} className="">
@@ -222,10 +211,10 @@ const UBPR = () => {
                     }
                   </div>
                   <div className="ubpr-charts-col">
-                    {selectedUbprs && ubprCreditConcentrationData &&
+                    {ubprCreditConcentrationData &&
                       <h1>Credit Concetrations (UBPR)</h1>
                     }
-                    {selectedUbprs && ubprCreditConcentrationData &&
+                    {ubprCreditConcentrationData &&
                       selectedUbprs.map((rcon, idx) => {
                         return (
                           <div key={idx} className="">
