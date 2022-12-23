@@ -54,6 +54,7 @@ SELECT
   "CLCODE",
   "DATEUPDT",
   "ASSET",
+  CAST("ASSET" AS BIGINT) AS "ASSET_INT",
   "ROAPTX",
   "ROA",
   "DEPDOM",
@@ -61,7 +62,9 @@ SELECT
   "EQ",
   "ROE",
   "NETINC",
-  "SPECGRPN"
+  "SPECGRPN",
+  CAST("INSCOML" AS INTEGER),
+  CAST("OFFICES" AS INTEGER)
 FROM data_import.ubpr_institutions
 WHERE "ACTIVE" = '1'
 ORDER BY "BANK_ID";

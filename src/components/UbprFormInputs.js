@@ -2,10 +2,6 @@ import Alert from "./Alert"
 import Select from "react-select"
 
 const UbprFormInputs = ({
-  handleSpecializationParamChange,
-  handleCityParamChange,
-  handleStateParamChange,
-  handleFdicRegionChange,
   getData,
   handleSelectedRconChange,
   selectedRcons,
@@ -17,12 +13,26 @@ const UbprFormInputs = ({
   endingQuarter,
   quarters,
   showAlert,
+  alertMessage,
   closeAlert,
   rconOptionsList,
   ubprOptionsList,
   bankNameOptions,
   selectedBanks,
-  handleSelectedBankChange
+  handleSelectedBankChange,
+  peerGroupAssetOptions,
+  selectedAssetOption,
+  handlePeerGroupAssetOptionChange,
+  peerGroupHighOfficesOptions,
+  peerGroupLowOfficesOptions,
+  selectedNumberOfOffices,
+  handleNumberOfOfficesChange,
+  peerGroupLocationOptions,
+  selectedLocation,
+  handleSelectedLocationChange,
+  peerGroupStateOptions,
+  selectedPeerGroupState,
+  handleSelectedPeerGroupStateChange,
 }) => {
   return (
     <>
@@ -30,43 +40,88 @@ const UbprFormInputs = ({
         <form className="ubpr-form" action="#">
           <div className="bank-input-group">
             <div className="metric-input">
-              <label htmlFor="bankName">Bank Name </label>
+              <label htmlFor="bankName">Bank Name</label>
               <Select
                 className="mx-4"
                 options={bankNameOptions}
-                placeholder="Search banks by name (you may select more than one)"
+                placeholder="Search for one or more banks by name"
                 value={selectedBanks}
                 onChange={handleSelectedBankChange}
                 isSearchable={true}
                 isMulti
               />
             </div>
-            {/* <div className="bank-input">
-              <label htmlFor="bankCity">City </label>
-              <input type="text" id="bankCity" onChange={handleCityParamChange}/>
+            <p className="my-auto text-2xl">OR</p>
+            <div className="metric-input">
+              <label htmlFor="peerGroup">Peer Group by Assets</label>
+              <Select
+                className="mx-4"
+                options={peerGroupAssetOptions}
+                placeholder="Select insured commercial banks by assets"
+                value={selectedAssetOption}
+                onChange={handlePeerGroupAssetOptionChange}
+                isSearchable
+                isClearable
+              />
+              {selectedAssetOption && (selectedAssetOption.value === "BETWEEN 100000 AND 300000" || selectedAssetOption.value === "BETWEEN 50000 AND 100000") &&
+                <Select
+                  className="mx-4"
+                  options={peerGroupHighOfficesOptions}
+                  placeholder="Select number of offices"
+                  value={selectedNumberOfOffices}
+                  onChange={handleNumberOfOfficesChange}
+                  isSearchable
+                  isClearable
+                />
+              }
+              {selectedAssetOption && selectedAssetOption.value === "< 50000" &&
+                <Select
+                  className="mx-4"
+                  options={peerGroupLowOfficesOptions}
+                  placeholder="Select number of offices"
+                  value={selectedNumberOfOffices}
+                  onChange={handleNumberOfOfficesChange}
+                  isSearchable
+                  isClearable
+                  required
+                />
+              }
+              {selectedAssetOption && (selectedAssetOption.value === "BETWEEN 100000 AND 300000" || selectedAssetOption.value === "BETWEEN 50000 AND 100000" || selectedAssetOption.value === "< 50000") &&
+                <Select
+                  className="mx-4"
+                  options={peerGroupLocationOptions}
+                  placeholder="Select metro or non-metro location"
+                  value={selectedLocation}
+                  onChange={handleSelectedLocationChange}
+                  isSearchable
+                  isClearable
+                  required
+                />
+              }
             </div>
-            <div className="bank-input">
-              <label htmlFor="bankState">State </label>
-              <input type="text" id="bankState" onChange={handleStateParamChange}/>
+            <p className="my-auto text-2xl">OR</p>
+            <div className="metric-input">
+              <label htmlFor="peerGroup">Peer Group by State</label>
+              <Select
+                className="mx-4"
+                options={peerGroupStateOptions}
+                placeholder="Select all insured commercial banks in..."
+                value={selectedPeerGroupState}
+                onChange={handleSelectedPeerGroupStateChange}
+                isSearchable
+                isClearable
+              />
             </div>
-            <div className="bank-input">
-              <label htmlFor="specialization">Specialization </label>
-              <input type="text" id="specialization" onChange={handleSpecializationParamChange}/>
-            </div>
-            <div className="bank-input">
-              <label htmlFor="bankFdicRegion">FDIC Region </label>
-              <input type="text" id="bankFdicRegion" onChange={handleFdicRegionChange}/>
-            </div> */}
           </div>
           <div className="metric-input-group">
             <div className="metric-input space-y-2">
               <h1>Loans and Leases (RCON)</h1>
               <div className="pr-4 space-y-4">
-                <label htmlFor="ubpr">RCON Metrics</label>
+                {/* <label htmlFor="ubpr">RCON Metrics</label> */}
                 <Select
                   className="mx-4"
                   options={rconOptionsList}
-                  placeholder="Search by code or keyword (you may select more than one)"
+                  placeholder="Search for one or more RCON codes or keywords"
                   value={selectedRcons}
                   onChange={handleSelectedRconChange}
                   isSearchable={true}
@@ -80,11 +135,11 @@ const UbprFormInputs = ({
             <div className="metric-input space-y-2">
               <h1>Credit Concentrations (UBPR)</h1>
               <div className="pr-4 space-y-4">
-                <label htmlFor="rcon">UBPR Metrics</label>
+                {/* <label htmlFor="rcon">UBPR Metrics</label> */}
                 <Select
                   className="mx-4"
                   options={ubprOptionsList}
-                  placeholder="Search by code or keyword (you may select more than one)"
+                  placeholder="Search for one or more UBPR codes or keywords"
                   value={selectedUbprs}
                   onChange={handleSelectedUbprChange}
                   isSearchable={true}
@@ -122,7 +177,7 @@ const UbprFormInputs = ({
       </div>
       {showAlert &&
         <Alert
-          message={"Select start and end quarters for credit concentration metrics"}
+          message={alertMessage}
           closeAlert={closeAlert}
         />
       }

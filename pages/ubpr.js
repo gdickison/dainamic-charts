@@ -2,7 +2,15 @@ import { useState, useEffect } from "react"
 import UbprFormInputs from "../src/components/UbprFormInputs"
 import UbprBarChart from "../src/components/UbprBarChart"
 import UbprBankSummary from "../src/components/UbprBankSummary"
-import { rconSelectOptions, ubprSelectOptions } from "../public/utils"
+import {
+  rconSelectOptions,
+  ubprSelectOptions,
+  peerGroupAssetOptions,
+  peerGroupHighOfficesOptions,
+  peerGroupLowOfficesOptions,
+  peerGroupLocationOptions,
+  peerGroupStateOptions
+ } from "../public/utils"
 
 const UBPR = () => {
   const [ubprBankData, setUbprBankData] = useState()
@@ -21,14 +29,40 @@ const UBPR = () => {
   const [bankNames, setBankNames] = useState()
   const [selectedBanks, setSelectedBanks] = useState([])
 
+  const [selectedAssetOption, setSelectedAssetOption] = useState(null)
+
+  const [selectedNumberOfOffices, setSelectedNumberOfOffices] = useState(null)
+  const [selectedLocation, setSelectedLocation] = useState(null)
+
+  const [selectedPeerGroupState, setSelectedPeerGroupState] = useState(null)
+
   const [showAlert, setShowAlert] = useState(false)
+  const [alertMessage, setAlertMessage] = useState('')
 
   const closeAlert = () => {
     setShowAlert(false)
+    setAlertMessage('')
   }
 
   function handleSelectedBankChange(selectedBanks){
     setSelectedBanks(selectedBanks)
+  }
+
+  function handlePeerGroupAssetOptionChange(selectedAssetOption){
+    setSelectedAssetOption(selectedAssetOption)
+    setSelectedNumberOfOffices(null)
+  }
+
+  function handleNumberOfOfficesChange(selectedNumberOfOffices){
+    setSelectedNumberOfOffices(selectedNumberOfOffices)
+  }
+
+  function handleSelectedLocationChange(selectedLocation){
+    setSelectedLocation(selectedLocation)
+  }
+
+  function handleSelectedPeerGroupStateChange(selectedPeerGroupState){
+    setSelectedPeerGroupState(selectedPeerGroupState)
   }
 
   const handleSpecializationParamChange = e => {
@@ -110,6 +144,11 @@ const UBPR = () => {
   }
 
   const getUbprBankData = async () => {
+    // make sure search params are present
+    if(selectedBanks.length === 0 && selectedAssetOption === null && selectedPeerGroupState === null){
+      setShowAlert(true)
+      setAlertMessage("You must select at least one bank or a peer group")
+    }
     // get basic bank information
     const bankEndpoint = `/api/get_ubpr_institution`
     const bankIdParam = selectedBanks.map(bank => bank.value)
@@ -165,6 +204,7 @@ const UBPR = () => {
 
     if(selectedUbprs.length > 0 && (startingQuarter === undefined || endingQuarter === undefined)) {
       setShowAlert(true)
+      setAlertMessage("You must select both starting and ending quarters")
     }
 
     if(selectedUbprs.length > 0 && startingQuarter && endingQuarter){
@@ -208,12 +248,26 @@ const UBPR = () => {
         handleEndingQuarterChange={handleEndingQuarterChange}
         endingQuarter={endingQuarter}
         showAlert={showAlert}
+        alertMessage={alertMessage}
         closeAlert={closeAlert}
         rconOptionsList={rconSelectOptions}
         ubprOptionsList={ubprSelectOptions}
         bankNameOptions={bankNames}
         selectedBanks={selectedBanks}
         handleSelectedBankChange={handleSelectedBankChange}
+        peerGroupAssetOptions={peerGroupAssetOptions}
+        selectedAssetOption={selectedAssetOption}
+        handlePeerGroupAssetOptionChange={handlePeerGroupAssetOptionChange}
+        peerGroupHighOfficesOptions={peerGroupHighOfficesOptions}
+        peerGroupLowOfficesOptions={peerGroupLowOfficesOptions}
+        selectedNumberOfOffices={selectedNumberOfOffices}
+        handleNumberOfOfficesChange={handleNumberOfOfficesChange}
+        peerGroupLocationOptions={peerGroupLocationOptions}
+        selectedLocation={selectedLocation}
+        handleSelectedLocationChange={handleSelectedLocationChange}
+        peerGroupStateOptions={peerGroupStateOptions}
+        selectedPeerGroupState={selectedPeerGroupState}
+        handleSelectedPeerGroupStateChange={handleSelectedPeerGroupStateChange}
       />
       <section className="m-4 space-y-10">
         {ubprBankData &&
