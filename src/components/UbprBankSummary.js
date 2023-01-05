@@ -13,14 +13,20 @@ const UbprBankSummary = ({bankData}) => {
           <address>
             <p>{bankData.ADDRESS}</p>
             <p><span>{bankData.CITY}, </span><span>{bankData.STNAME}</span><span> {bankData.ZIP}</span></p>
-            <a href={`https://${(bankData.WEBADDR).replace(/^[^w]*/, '')}`} target="_blank">{(bankData.WEBADDR).replace(/^[^w]*/, '')}</a>
+            {bankData.WEBADDR &&
+              <a href={`https://${(bankData.WEBADDR).replace(/^[^w]*/, '')}`} target="_blank">{(bankData.WEBADDR).replace(/^[^w]*/, '')}</a>
+            }
           </address>
           <h2>FDIC Region</h2>
           <p>{bankData.FDICREGN}</p>
           <h2>Banking Class</h2>
           <p>{bankData.BKCLASS}</p>
-          <h2>Specialization</h2>
-          <p>{(bankData.SPECGRPN).replace(' Specialization', '')}</p>
+          {bankData.SPECGRPN &&
+            <>
+              <h2>Specialization</h2>
+              <p>{(bankData.SPECGRPN).replace(' Specialization', '')}</p>
+            </>
+          }
         </div>
         <div className="financial-card">
           <div>

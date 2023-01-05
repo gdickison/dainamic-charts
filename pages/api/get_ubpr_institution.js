@@ -3,15 +3,22 @@ import pool from "../../src/client";
 export default async function queryUbprInstitution(req, res){
   const client = await pool.connect()
 
+  const bankIdQuery = req.body.selectedBanksParam.length > 0 ? `AND "BANK_ID" IN (${req.body.selectedBanksParam})` : ``
+  const assetQuery = req.body.selectedAssetOption !== null ? `AND "ASSET_INT" ${req.body.selectedAssetOption.value}` : ``
+  const numOfficesQuery = req.body.selectedNumberOfOffices !== null ? `AND "OFFICES" ${req.body.selectedNumberOfOffices.value}` : ``
+  const locationQuery = req.body.selectedLocation !== null ? `AND ${req.body.selectedLocation.value}` : ``
+  const peerGroupStateQuery = req.body.selectedPeerGroupState !== null ? `AND "STNAME" = '${req.body.selectedPeerGroupState.value}'` : ``
+
   await client
     .query(`SELECT
         *
       FROM banking_app.ubpr_institution
-      WHERE "BANK_ID" IN (${req.body.bankIdParam})
-        AND LOWER("SPECGRPN") LIKE LOWER('%${req.body.specializationParam}%')
-        AND LOWER("STNAME") LIKE LOWER('%${req.body.stateParam}%')
-        AND LOWER("FDICREGN") LIKE LOWER('%${req.body.fdicRegionParam}%')
-        AND LOWER("CITY") LIKE LOWER('%${req.body.cityParam}%')
+      WHERE "INSCOML" = 1
+        ${bankIdQuery}
+        ${assetQuery}
+        ${numOfficesQuery}
+        ${locationQuery}
+        ${peerGroupStateQuery}
       ORDER BY "BANK_ID"`)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())

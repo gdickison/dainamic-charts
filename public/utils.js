@@ -701,11 +701,11 @@ const peerGroupLowOfficesOptions = [
 
 const peerGroupLocationOptions = [
   {
-    value: "MSA != ''",
+    value: `"MSA" != ''`,
     label: "Metropolitan area"
   },
   {
-    value: "MSA = ''",
+    value: `"MSA" = ''`,
     label: "Non-metropolitan area"
   }
 ]
