@@ -13,5 +13,5 @@ export default async function queryUbprRcon(req, res){
       ORDER BY "BANK_ID", "QUARTER"`)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
-    .catch(error => console.log("There was an error gettting the ubpr data: ", error))
+    .catch(error => console.log("There was an error gettting the rcon data: ", error))
 }

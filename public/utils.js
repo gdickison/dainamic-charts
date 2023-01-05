@@ -642,6 +642,277 @@ const ubprSelectOptions = [
   }
 ]
 
+const peerGroupAssetOptions = [
+  {
+    value: "> 100000000",
+    label: "In excess of $100 billion"
+  },
+  {
+    value: "BETWEEN 10000000 AND 100000000",
+    label: "Between $10 billion and $100 billion"
+  },
+  {
+    value: "BETWEEN 3000000 AND 10000000",
+    label: "Between $3 billion and $10 billion"
+  },
+  {
+    value: "BETWEEN 1000000 AND 3000000",
+    label: "Between $1 billion and $3 billion"
+  },
+  {
+    value: "BETWEEN 300000 AND 1000000",
+    label: "Between $300 million and $1 billion"
+  },
+  {
+    value: "BETWEEN 100000 AND 300000",
+    label: "Between $100 million and $300 million"
+  },
+  {
+    value: "BETWEEN 50000 AND 100000",
+    label: "Between $50 million and $100 million"
+  },
+  {
+    value: "< 50000",
+    label: "Less than $50 million"
+  }
+]
+
+const peerGroupHighOfficesOptions = [
+  {
+    value: ">= 3",
+    label: "3 or more"
+  },
+  {
+    value: "<= 2",
+    label: "2 or fewer"
+  }
+]
+
+const peerGroupLowOfficesOptions = [
+  {
+    value: ">= 2",
+    label: "2 or more"
+  },
+  {
+    value: "= 1",
+    label: "1"
+  }
+]
+
+const peerGroupLocationOptions = [
+  {
+    value: `"MSA" != ''`,
+    label: "Metropolitan area"
+  },
+  {
+    value: `"MSA" = ''`,
+    label: "Non-metropolitan area"
+  }
+]
+
+const peerGroupStateOptions = [
+  {
+    value: "Alabama",
+    label: "Alabama"
+  },
+  {
+    value: "Alaska",
+    label: "Alaska"
+  },
+  {
+    value: "Arizona",
+    label: "Arizona"
+  },
+  {
+    value: "Arkansas",
+    label: "Arkansas"
+  },
+  {
+    value: "California",
+    label: "California"
+  },
+  {
+    value: "Colorado",
+    label: "Colorado"
+  },
+  {
+    value: "Connecticut",
+    label: "Connecticut"
+  },
+  {
+    value: "Delaware",
+    label: "Delaware"
+  },
+  {
+    value: "Florida",
+    label: "Florida"
+  },
+  {
+    value: "Georgia",
+    label: "Georgia"
+  },
+  {
+    value: "Hawaii",
+    label: "Hawaii"
+  },
+  {
+    value: "Idaho",
+    label: "Idaho"
+  },
+  {
+    value: "Illinois",
+    label: "Illinois"
+  },
+  {
+    value: "Indiana",
+    label: "Indiana"
+  },
+  {
+    value: "Iowa",
+    label: "Iowa"
+  },
+  {
+    value: "Kansas",
+    label: "Kansas"
+  },
+  {
+    value: "Kentucky",
+    label: "Kentucky"
+  },
+  {
+    value: "Louisiana",
+    label: "Louisiana"
+  },
+  {
+    value: "Maine",
+    label: "Maine"
+  },
+  {
+    value: "Maryland",
+    label: "Maryland"
+  },
+  {
+    value: "Massachusetts",
+    label: "Massachusetts"
+  },
+  {
+    value: "Michigan",
+    label: "Michigan"
+  },
+  {
+    value: "Minnesota",
+    label: "Minnesota"
+  },
+  {
+    value: "Mississippi",
+    label: "Mississippi"
+  },
+  {
+    value: "Missouri",
+    label: "Missouri"
+  },
+  {
+    value: "Montana",
+    label: "Montana"
+  },
+  {
+    value: "Nebraska",
+    label: "Nebraska"
+  },
+  {
+    value: "Nevada",
+    label: "Nevada"
+  },
+  {
+    value: "New Hampshire",
+    label: "New Hampshire"
+  },
+  {
+    value: "New Jersey",
+    label: "New Jersey"
+  },
+  {
+    value: "New Mexico",
+    label: "New Mexico"
+  },
+  {
+    value: "New York",
+    label: "New York"
+  },
+  {
+    value: "North Carolina",
+    label: "North Carolina"
+  },
+  {
+    value: "North Dakota",
+    label: "North Dakota"
+  },
+  {
+    value: "Ohio",
+    label: "Ohio"
+  },
+  {
+    value: "Oklahoma",
+    label: "Oklahoma"
+  },
+  {
+    value: "Oregon",
+    label: "Oregon"
+  },
+  {
+    value: "Pennsylvania",
+    label: "Pennsylvania"
+  },
+  {
+    value: "Rhode Island",
+    label: "Rhode Island"
+  },
+  {
+    value: "South Carolina",
+    label: "South Carolina"
+  },
+  {
+    value: "South Dakota",
+    label: "South Dakota"
+  },
+  {
+    value: "Tennessee",
+    label: "Tennessee"
+  },
+  {
+    value: "Texas",
+    label: "Texas"
+  },
+  {
+    value: "Utah",
+    label: "Utah"
+  },
+  {
+    value: "Vermont",
+    label: "Vermont"
+  },
+  {
+    value: "Virginia",
+    label: "Virginia"
+  },
+  {
+    value: "Washington",
+    label: "Washington"
+  },
+  {
+    value: "West Virginia",
+    label: "West Virginia"
+  },
+  {
+    value: "Wisconsin",
+    label: "Wisconsin"
+  },
+  {
+    value: "Wyoming",
+    label: "Wyoming"
+  }
+]
+
 export {
   getAverage,
   getPercentage,
@@ -657,5 +928,10 @@ export {
   pointStyles,
   regressionLineColor,
   rconSelectOptions,
-  ubprSelectOptions
+  ubprSelectOptions,
+  peerGroupAssetOptions,
+  peerGroupHighOfficesOptions,
+  peerGroupLowOfficesOptions,
+  peerGroupLocationOptions,
+  peerGroupStateOptions
 }

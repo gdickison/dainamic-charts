@@ -7,7 +7,7 @@
   flex-wrap: wrap;
   border: 2px solid #9ca3af;
   margin-inline: 1.5rem;
-  padding-inline: 1.5rem;
+  /* padding-inline: 1.5rem; */
   padding-block: 2rem;
   justify-content: flex-start;
 }
@@ -30,13 +30,14 @@
 }
 
 .metric-input {
-  width: 50%;
+  width: 48%;
   margin: 1.5rem;
-  padding-inline: 1.5rem;
+  padding-inline: 0.75rem;
   padding-block: 2rem;
   border: 2px solid #9ca3af;
   display: flex;
   flex-direction: column;
+  flex: 1 2;
 }
 
 .metric-input h1 {
