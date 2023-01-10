@@ -170,7 +170,9 @@ const UbprFormInputs = ({
           </div>
         </form>
         {(selectedBanksByName.length > 0 || selectedAssetOption !== null || selectedPeerGroupState !== null) &&
-          <button className="w-52 my-2 mx-6 rounded-md p-2 px-6 bg-blue-600 hover:bg-blue-800 text-gray-100 text-[1.7vw] 3xl:text-3xl" onClick={getData}>See Results</button>
+          <div className="flex justify-center mt-6 mb-2">
+            <button className="w-96 rounded-md p-2 px-6 bg-blue-600 hover:bg-blue-800 text-gray-100 text-lg 3xl:text-3xl" onClick={getData}>See Results</button>
+          </div>
         }
       </div>
       {showAlert &&
