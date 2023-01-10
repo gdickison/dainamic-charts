@@ -343,7 +343,7 @@ const UBPR = () => {
         {selectedInstitutionsData &&
           selectedInstitutionsData.map((bank, i) => {
             return (
-              <div className="border-2 border-gray-400" key={i}>
+              <div className="shadow-xl rounded-b-md" key={i}>
                 <UbprBankSummary
                   bankData={bank}
                 />

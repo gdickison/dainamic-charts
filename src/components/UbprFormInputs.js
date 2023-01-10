@@ -42,9 +42,9 @@ const UbprFormInputs = ({
             <div className="metric-input">
               <label htmlFor="bankName">Bank Name</label>
               <Select
-                className="mx-4"
+                className="mx-4 text-sm"
                 options={bankNameOptions}
-                placeholder="Search for one or more banks by name"
+                placeholder="Select one or more banks by name"
                 value={selectedBanksByName}
                 onChange={handleSelectedBanksByNameChange}
                 isSearchable
@@ -56,9 +56,9 @@ const UbprFormInputs = ({
             <div className="metric-input">
               <label htmlFor="peerGroup">Peer Group by Assets</label>
               <Select
-                className="mx-4"
+                className="mx-4 text-sm"
                 options={peerGroupAssetOptions}
-                placeholder="Select insured commercial banks by assets"
+                placeholder="Select banks by peer group"
                 value={selectedAssetOption}
                 onChange={handlePeerGroupAssetOptionChange}
                 isSearchable
@@ -66,36 +66,33 @@ const UbprFormInputs = ({
               />
               {selectedAssetOption && (selectedAssetOption.value === "BETWEEN 100000 AND 300000" || selectedAssetOption.value === "BETWEEN 50000 AND 100000") &&
                 <Select
-                  className="mx-4"
+                  className="mx-4 text-sm"
                   options={peerGroupHighOfficesOptions}
                   placeholder="Select number of offices (required)"
                   value={selectedNumberOfOffices}
                   onChange={handleNumberOfOfficesChange}
                   isSearchable
-                  // isClearable
                 />
               }
               {selectedAssetOption && selectedAssetOption.value === "< 50000" &&
                 <Select
-                  className="mx-4"
+                  className="mx-4 text-sm"
                   options={peerGroupLowOfficesOptions}
                   placeholder="Select number of offices (required)"
                   value={selectedNumberOfOffices}
                   onChange={handleNumberOfOfficesChange}
                   isSearchable
-                  // isClearable
                   required
                 />
               }
               {selectedAssetOption && (selectedAssetOption.value === "BETWEEN 100000 AND 300000" || selectedAssetOption.value === "BETWEEN 50000 AND 100000" || selectedAssetOption.value === "< 50000") &&
                 <Select
-                  className="mx-4"
+                  className="mx-4 text-sm"
                   options={peerGroupLocationOptions}
                   placeholder="Select location (required)"
                   value={selectedLocation}
                   onChange={handleSelectedLocationChange}
                   isSearchable
-                  // isClearable
                   required
                 />
               }
@@ -104,9 +101,9 @@ const UbprFormInputs = ({
             <div className="metric-input">
               <label htmlFor="peerGroup">Peer Group by State</label>
               <Select
-                className="mx-4"
+                className="mx-4 text-sm"
                 options={peerGroupStateOptions}
-                placeholder="Select all insured commercial banks in..."
+                placeholder="Select banks by state"
                 value={selectedPeerGroupState}
                 onChange={handleSelectedPeerGroupStateChange}
                 isSearchable

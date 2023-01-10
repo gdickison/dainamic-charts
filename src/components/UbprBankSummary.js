@@ -1,15 +1,16 @@
 const UbprBankSummary = ({bankData}) => {
   return (
     <div>
-      <div className="name-address">
+      <div className="name-address bg-gradient-to-r from-yellow-200 to-yellow-50 rounded-t-md">
         <div className="name-id">
           <h1>{bankData.NAME}</h1>
           <p>I.D. {bankData.BANK_ID}</p>
         </div>
       </div>
       <div className="classification-card-container">
-        <div className="classification-card">
-          <h2>Location</h2>
+        <div className="classification-card space-y-2">
+          {/* <h2>Location</h2> */}
+          {/* <p>I.D. {bankData.BANK_ID}</p> */}
           <address>
             <p>{bankData.ADDRESS}</p>
             <p><span>{bankData.CITY}, </span><span>{bankData.STNAME}</span><span> {bankData.ZIP}</span></p>
@@ -17,6 +18,8 @@ const UbprBankSummary = ({bankData}) => {
               <a href={`https://${(bankData.WEBADDR).replace(/^[^w]*/, '')}`} target="_blank">{(bankData.WEBADDR).replace(/^[^w]*/, '')}</a>
             }
           </address>
+        </div>
+        {/* <div className="classification-card">
           <h2>FDIC Region</h2>
           <p>{bankData.FDICREGN}</p>
           <h2>Banking Class</h2>
@@ -27,12 +30,20 @@ const UbprBankSummary = ({bankData}) => {
               <p>{(bankData.SPECGRPN).replace(' Specialization', '')}</p>
             </>
           }
+        </div> */}
+        <div className="financial-card">
+          <div>
+            <h2>FDIC Region</h2>
+            <p>{bankData.FDICREGN}</p>
+          </div>
         </div>
         <div className="financial-card">
           <div>
             <h2>Deposits</h2>
             <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.DEP * 1000)}</p>
           </div>
+        </div>
+        <div className="financial-card">
           <div>
             <h2>Net Income</h2>
             <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.NETINC * 1000)}</p>
@@ -44,6 +55,8 @@ const UbprBankSummary = ({bankData}) => {
             <h2>Equity</h2>
             <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.EQ * 1000)}</p>
           </div>
+        </div>
+        <div className="financial-card">
           <div>
             <h2>Return on Equity</h2>
             <p>{new Intl.NumberFormat('defalut', {style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2}).format(bankData.ROE / 100)}</p>
@@ -54,6 +67,8 @@ const UbprBankSummary = ({bankData}) => {
             <h2>Assets</h2>
             <p>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(bankData.ASSET * 1000)}</p>
           </div>
+        </div>
+        <div className="financial-card">
           <div>
             <h2>Return on Assets</h2>
             <p>{new Intl.NumberFormat('defalut', {style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2}).format(bankData.ROA / 100)}</p>

@@ -37,18 +37,19 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
     }]
   }
 
-  const chartTitle = selectedMetric.label
+  const titleCode = selectedMetric.label.split(' - ')[0]
+  const titleText = selectedMetric.label.split(' - ')[1].match(/.{50}\w*\W*|.*/g)
 
   const barChartOptions = {
     responsive: true,
-    aspectRatio: 2.5,
+    aspectRatio: 1.5,
     interaction: {
       intersect: false
     },
     plugins: {
       title: {
         display: true,
-        text: `${chartTitle}`,
+        text: [titleCode,"", ...titleText],
         font: {
           size: 16,
           weight: 'normal'
