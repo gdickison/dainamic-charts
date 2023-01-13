@@ -6,6 +6,7 @@ export default async function queryUbprRcon(req, res){
   const rcons = `"${req.body.rconCodes.join('","')}"`
   await client
     .query(`SELECT
+        "BANK_ID",
         "QUARTER",
         ${rcons}
       FROM banking_app.upbr_rcci_rcon

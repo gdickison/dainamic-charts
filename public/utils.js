@@ -112,7 +112,7 @@ const pointStyles = [
 
 const regressionLineColor = '#94A3B8'
 
-const rconSelectOptions = [
+const rconOptionsList = [
   {
     value: "RCON1288",
     label:	"RCON1288 - LOANS TO DEPOSITORY INSTITUTIONS"
@@ -503,7 +503,7 @@ const rconSelectOptions = [
   }
 ]
 
-const ubprSelectOptions = [
+const ubprOptionsList = [
   {
     value: "UBPRD490",
     label: "UBPRD490 - LOANS TO FINANCE CONSTRUCTION AND DEVELOPMENT AS A PERCENT OF TOTAL RISK-BASED CAPITAL"
@@ -642,272 +642,359 @@ const ubprSelectOptions = [
   }
 ]
 
-const peerGroupAssetOptions = [
+const peerGroupOptionsList = [
   {
-    value: "> 100000000",
-    label: "In excess of $100 billion"
+    "id": 1,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" > 100000000`,
+    label: "1 - In excess of $100 billion"
   },
   {
-    value: "BETWEEN 10000000 AND 100000000",
-    label: "Between $10 billion and $100 billion"
+    "id": 2,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" BETWEEN 10000000 AND 100000000`,
+    label: "2 - Between $10 billion and $100 billion"
   },
   {
-    value: "BETWEEN 3000000 AND 10000000",
-    label: "Between $3 billion and $10 billion"
+    "id": 3,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" BETWEEN 3000000 AND 10000000`,
+    label: "3 - Between $3 billion and $10 billion"
   },
   {
-    value: "BETWEEN 1000000 AND 3000000",
-    label: "Between $1 billion and $3 billion"
+    "id": 4,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" BETWEEN 1000000 AND 3000000`,
+    label: "4 - Between $1 billion and $3 billion"
   },
   {
-    value: "BETWEEN 300000 AND 1000000",
-    label: "Between $300 million and $1 billion"
+    "id": 5,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" BETWEEN 300000 AND 1000000`,
+    label: "5 - Between $300 million and $1 billion"
   },
   {
-    value: "BETWEEN 100000 AND 300000",
-    label: "Between $100 million and $300 million"
+    "id": 6,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" BETWEEN 100000 AND 300000 AND "OFFICES" >= 3 AND "MSA" != ''`,
+    label: "6 - Between $100 million and $300 million, with 3 or more offices, in a Metropolitan area"
   },
   {
-    value: "BETWEEN 50000 AND 100000",
-    label: "Between $50 million and $100 million"
+    "id": 7,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" BETWEEN 100000 AND 300000 AND "OFFICES" >= 3 AND "MSA" = ''`,
+    label: "7 - Between $100 million and $300 million, with 3 or more offices, in a Non-metropolitan area"
   },
   {
-    value: "< 50000",
-    label: "Less than $50 million"
+    "id": 8,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" BETWEEN 100000 AND 300000 AND "OFFICES" <= 2 AND "MSA" != ''`,
+    label: "8 - Between $100 million and $300 million, with 2 or fewer offices, in a Metropolitan area"
+  },
+  {
+    "id": 9,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" BETWEEN 100000 AND 300000 AND "OFFICES" <= 2 AND "MSA" = ''`,
+    label: "9 - Between $100 million and $300 million, with 2 or fewer offices, in a Non-metropolitan area"
+  },
+  {
+    "id": 10,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" BETWEEN 50000 AND 100000 AND "OFFICES" >= 3 AND "MSA" != ''`,
+    label: "10 - Between $50 million and $100 million, with 3 or more offices, in a Metropolitan area"
+  },
+  {
+    "id": 11,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" BETWEEN 50000 AND 100000 AND "OFFICES" >= 3 AND "MSA" = ''`,
+    label: "11 - Between $50 million and $100 million, with 3 or more offices, in a Non-metropolitan area"
+  },
+  {
+    "id": 12,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" BETWEEN 50000 AND 100000 AND "OFFICES" <= 2 AND "MSA" != ''`,
+    label: "12 - Between $50 million and $100 million, with 2 or fewer offices, in a Metropolitan area"
+  },
+  {
+    "id": 13,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" BETWEEN 50000 AND 100000 AND "OFFICES" <= 2 AND "MSA" = ''`,
+    label: "13 - Between $50 million and $100 million, with 2 or fewer offices, in a Non-metropolitan area"
+  },
+  {
+    "id": 14,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" < 50000 AND "OFFICES" >= 2 AND "MSA" != ''`,
+    label: "14 - Less than $50 million, with 2 or more offices, in a Metropolitan area"
+  },
+  {
+    "id": 15,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" < 50000 AND "OFFICES" >= 2 AND "MSA" = ''`,
+    label: "15 - Less than $50 million, with 2 or more offices, in a Non-metropolitan area"
+  },
+  {
+    "id": 16,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" < 50000 AND "OFFICES" = 1 AND "MSA" != ''`,
+    label: "16 - Less than $50 million, with 1 office, in a Metropolitan area"
+  },
+  {
+    "id": 17,
+    metric: "peer_group",
+    value: `AND "ASSET_INT" < 50000 AND "OFFICES" = 1 AND "MSA" = ''`,
+    label: "17 - Less than $50 million, with 1 office, in a Non-metropolitan area"
   }
 ]
 
-const peerGroupHighOfficesOptions = [
+const peerGroupStateOptionsList = [
   {
-    value: ">= 3",
-    label: "3 or more"
-  },
-  {
-    value: "<= 2",
-    label: "2 or fewer"
-  }
-]
-
-const peerGroupLowOfficesOptions = [
-  {
-    value: ">= 2",
-    label: "2 or more"
-  },
-  {
-    value: "= 1",
-    label: "1"
-  }
-]
-
-const peerGroupLocationOptions = [
-  {
-    value: `"MSA" != ''`,
-    label: "Metropolitan area"
-  },
-  {
-    value: `"MSA" = ''`,
-    label: "Non-metropolitan area"
-  }
-]
-
-const peerGroupStateOptions = [
-  {
+    metric: "state",
     value: "Alabama",
     label: "Alabama"
   },
   {
+    metric: "state",
     value: "Alaska",
     label: "Alaska"
   },
   {
+    metric: "state",
     value: "Arizona",
     label: "Arizona"
   },
   {
+    metric: "state",
     value: "Arkansas",
     label: "Arkansas"
   },
   {
+    metric: "state",
     value: "California",
     label: "California"
   },
   {
+    metric: "state",
     value: "Colorado",
     label: "Colorado"
   },
   {
+    metric: "state",
     value: "Connecticut",
     label: "Connecticut"
   },
   {
+    metric: "state",
     value: "Delaware",
     label: "Delaware"
   },
   {
+    metric: "state",
     value: "Florida",
     label: "Florida"
   },
   {
+    metric: "state",
     value: "Georgia",
     label: "Georgia"
   },
   {
+    metric: "state",
     value: "Hawaii",
     label: "Hawaii"
   },
   {
+    metric: "state",
     value: "Idaho",
     label: "Idaho"
   },
   {
+    metric: "state",
     value: "Illinois",
     label: "Illinois"
   },
   {
+    metric: "state",
     value: "Indiana",
     label: "Indiana"
   },
   {
+    metric: "state",
     value: "Iowa",
     label: "Iowa"
   },
   {
+    metric: "state",
     value: "Kansas",
     label: "Kansas"
   },
   {
+    metric: "state",
     value: "Kentucky",
     label: "Kentucky"
   },
   {
+    metric: "state",
     value: "Louisiana",
     label: "Louisiana"
   },
   {
+    metric: "state",
     value: "Maine",
     label: "Maine"
   },
   {
+    metric: "state",
     value: "Maryland",
     label: "Maryland"
   },
   {
+    metric: "state",
     value: "Massachusetts",
     label: "Massachusetts"
   },
   {
+    metric: "state",
     value: "Michigan",
     label: "Michigan"
   },
   {
+    metric: "state",
     value: "Minnesota",
     label: "Minnesota"
   },
   {
+    metric: "state",
     value: "Mississippi",
     label: "Mississippi"
   },
   {
+    metric: "state",
     value: "Missouri",
     label: "Missouri"
   },
   {
+    metric: "state",
     value: "Montana",
     label: "Montana"
   },
   {
+    metric: "state",
     value: "Nebraska",
     label: "Nebraska"
   },
   {
+    metric: "state",
     value: "Nevada",
     label: "Nevada"
   },
   {
+    metric: "state",
     value: "New Hampshire",
     label: "New Hampshire"
   },
   {
+    metric: "state",
     value: "New Jersey",
     label: "New Jersey"
   },
   {
+    metric: "state",
     value: "New Mexico",
     label: "New Mexico"
   },
   {
+    metric: "state",
     value: "New York",
     label: "New York"
   },
   {
+    metric: "state",
     value: "North Carolina",
     label: "North Carolina"
   },
   {
+    metric: "state",
     value: "North Dakota",
     label: "North Dakota"
   },
   {
+    metric: "state",
     value: "Ohio",
     label: "Ohio"
   },
   {
+    metric: "state",
     value: "Oklahoma",
     label: "Oklahoma"
   },
   {
+    metric: "state",
     value: "Oregon",
     label: "Oregon"
   },
   {
+    metric: "state",
     value: "Pennsylvania",
     label: "Pennsylvania"
   },
   {
+    metric: "state",
     value: "Rhode Island",
     label: "Rhode Island"
   },
   {
+    metric: "state",
     value: "South Carolina",
     label: "South Carolina"
   },
   {
+    metric: "state",
     value: "South Dakota",
     label: "South Dakota"
   },
   {
+    metric: "state",
     value: "Tennessee",
     label: "Tennessee"
   },
   {
+    metric: "state",
     value: "Texas",
     label: "Texas"
   },
   {
+    metric: "state",
     value: "Utah",
     label: "Utah"
   },
   {
+    metric: "state",
     value: "Vermont",
     label: "Vermont"
   },
   {
+    metric: "state",
     value: "Virginia",
     label: "Virginia"
   },
   {
+    metric: "state",
     value: "Washington",
     label: "Washington"
   },
   {
+    metric: "state",
     value: "West Virginia",
     label: "West Virginia"
   },
   {
+    metric: "state",
     value: "Wisconsin",
     label: "Wisconsin"
   },
   {
+    metric: "state",
     value: "Wyoming",
     label: "Wyoming"
   }
@@ -927,11 +1014,8 @@ export {
   cexSolidColors,
   pointStyles,
   regressionLineColor,
-  rconSelectOptions,
-  ubprSelectOptions,
-  peerGroupAssetOptions,
-  peerGroupHighOfficesOptions,
-  peerGroupLowOfficesOptions,
-  peerGroupLocationOptions,
-  peerGroupStateOptions
+  rconOptionsList,
+  ubprOptionsList,
+  peerGroupOptionsList,
+  peerGroupStateOptionsList
 }

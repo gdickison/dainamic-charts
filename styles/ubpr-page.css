@@ -1,33 +1,33 @@
-.ubpr-charts {
+.banking-charts {
   display: flex;
   flex-direction: row;
 }
 
 @media screen and (max-width: 1200px){
-  .ubpr-charts {
+  .banking-charts {
     flex-direction: column;
   }
 }
 
 @media screen and (min-width: 1201px){
-  .ubpr-charts-col {
+  .banking-charts-col {
     width: 50%;
   }
 }
 
 @media screen and (max-width: 1200px) {
-  .ubpr-charts-col {
+  .banking-charts-col {
     width: 100%;
   }
 }
 
-.ubpr-charts h1 {
+.banking-charts h1 {
   text-align: center;
   font-size: 2rem;
 }
 
 @media screen and (max-width: 1600px) {
-  .ubpr-charts h1 {
+  .banking-charts h1 {
     font-size: 2vw;
   }
 }

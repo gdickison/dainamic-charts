@@ -10,5 +10,5 @@ export default async function queryUbprInstitution(req, res){
       ORDER BY "NAME"`)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
-    .catch(error => console.log("There was an error getting ubpr data: ", error))
+    .catch(error => console.log("There was an error getting bank names: ", error))
 }

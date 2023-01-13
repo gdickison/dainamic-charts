@@ -6,6 +6,7 @@ export default async function queryUbprRcon(req, res){
   const ubprs = `"${req.body.ubprCodes.join('","')}"`
   await client
     .query(`SELECT
+        "BANK_ID",
         "QUARTER",
         ${ubprs}
       FROM banking_app.ubpr_credit_concentrations
