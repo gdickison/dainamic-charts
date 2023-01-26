@@ -102,7 +102,7 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
         },
         ticks: {
           callback: function(value){
-            return `${this.getLabelForValue(value)}`
+            return `${this.getLabelForValue(value).split('T')[0]}`
           },
           font: {
             size: 12

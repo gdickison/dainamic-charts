@@ -60,8 +60,8 @@ const UBPR = () => {
 
     quartersResponse = quartersResponse.response.map(row => {
       return ({
-        value: row.QUARTER,
-        label: row.QUARTER
+        value: row.QUARTER.split('T')[0],
+        label: row.QUARTER.split('T')[0]
       })
     })
 
@@ -157,15 +157,15 @@ const UBPR = () => {
       const bankIdParam = bankData.length > 0 ? bankData.map(bank => bank.BANK_ID) : []
       const rconCodes = selectedRcons.map(rcon => rcon.value)
 
-      if(selectedRcons.length > 0){
+      if(selectedRcons.length > 0 && startingQuarter && endingQuarter){
         let rcon = await fetch(
-          '/api/get_bank_rcon_data',
+          '/api/get_ubpr_rcci_data',
           {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ bankIdParam, rconCodes })
+            body: JSON.stringify({ bankIdParam, startingQuarter, endingQuarter, rconCodes })
           }).then(response => response.json())
         rcon = rcon.response
         const rconData = spliceIntoChunks(rcon, rcon.length / bankData.length)
@@ -174,11 +174,10 @@ const UBPR = () => {
       }
     }
 
-    if(selectedBankNames.length > 0 || selectedPeerGroup || selectedPeerGroupState)
-    {
+    if(selectedBankNames.length > 0 || selectedPeerGroup || selectedPeerGroupState){
       getBankRconData()
     }
-  }, [bankData, selectedRcons])
+  }, [bankData, selectedRcons, startingQuarter, endingQuarter])
 
   useEffect(() => {
     async function getBankUbprData(){
@@ -187,7 +186,7 @@ const UBPR = () => {
 
       if(selectedUbprs.length > 0 && startingQuarter && endingQuarter){
         let creditConcentration = await fetch(
-          '/api/get_bank_ubpr_data',
+          '/api/get_ubpr_ratios_coc_data',
           {
             method: 'POST',
             headers: {
@@ -247,35 +246,39 @@ const UBPR = () => {
                     }
                     {bankRconData.length > 0 &&
                       selectedRcons.map((rcon) => {
-                        return (
-                          <div key={rcon.value} className="">
-                            <UbprBarChart
-                              bankData={bank}
-                              dataFlag={"rcon"}
-                              statsData={bankRconData[0]}
-                              selectedMetric={rcon}
-                            />
-                          </div>
-                        )
+                        if(typeof bankRconData[i] !== 'undefined'){
+                          return (
+                            <div key={rcon.value} className="">
+                              <UbprBarChart
+                                bankData={bank}
+                                dataFlag={"rcon"}
+                                statsData={bankRconData[i]}
+                                selectedMetric={rcon}
+                              />
+                            </div>
+                          )
+                        }
                       })
                     }
                   </div>
                   <div className="banking-charts-col">
                     {bankUbprData.length > 0 && selectedUbprs.length > 0 &&
-                      <h1>Credit Concetrations (UBPR)</h1>
+                      <h1>Credit Concentrations (UBPR)</h1>
                     }
                     {bankUbprData.length > 0 &&
                       selectedUbprs.map((rcon) => {
-                        return (
-                          <div key={rcon.value} className="">
-                            <UbprBarChart
-                              bankData={bank}
-                              dataFlag={"ubpr"}
-                              statsData={bankUbprData[0]}
-                              selectedMetric={rcon}
-                            />
-                          </div>
-                        )
+                        if(typeof bankUbprData[i] !== 'undefined'){
+                          return (
+                            <div key={rcon.value} className="">
+                              <UbprBarChart
+                                bankData={bank}
+                                dataFlag={"ubpr"}
+                                statsData={bankUbprData[i]}
+                                selectedMetric={rcon}
+                              />
+                            </div>
+                          )
+                        }
                       })
                     }
                   </div>

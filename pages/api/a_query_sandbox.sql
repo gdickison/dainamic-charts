@@ -367,3 +367,4 @@ SELECT
   "UBPRNL33"
 FROM data_import.ubpr_credit_concentrations
 ORDER BY "BANK_ID";
+

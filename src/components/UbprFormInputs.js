@@ -71,61 +71,60 @@ const UbprFormInputs = ({
           </div>
           {(selectedBankNames.length > 0 || selectedPeerGroup || selectedPeerGroupState) &&
             <div className="metric-input-group">
-              <div className="metric-input space-y-2">
-                <h1>Loans and Leases (RCON)</h1>
-                <div className="pr-4 space-y-4">
-                  <Select
-                    className="mx-4"
-                    options={rconOptions}
-                    placeholder="Search for one or more RCON codes or keywords"
-                    value={selectedRcons}
-                    onChange={handleSelectedRconChange}
-                    isSearchable
-                    isMulti
-                  />
+              <div className="flex">
+                <div className="metric-input space-y-2">
+                  <h1>Loans and Leases (RCON)</h1>
+                  <div className="pr-4 space-y-4">
+                    <Select
+                      className="mx-4"
+                      options={rconOptions}
+                      placeholder="Search for one or more RCON codes or keywords"
+                      value={selectedRcons}
+                      onChange={handleSelectedRconChange}
+                      isSearchable
+                      isMulti
+                    />
+                  </div>
                 </div>
-                <div className="h-full flex justify-center items-center">
-                  <p>Data is currently available for Q1 and Q2 of 2021 and 2022</p>
+                <div className="metric-input space-y-2">
+                  <h1>Credit Concentrations (UBPR)</h1>
+                  <div className="pr-4 space-y-4">
+                    <Select
+                      className="mx-4"
+                      options={ubprOptions}
+                      placeholder="Search for one or more UBPR codes or keywords"
+                      value={selectedUbprs}
+                      onChange={handleSelectedUbprChange}
+                      isSearchable
+                      isMulti
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="metric-input space-y-2">
-                <h1>Credit Concentrations (UBPR)</h1>
-                <div className="pr-4 space-y-4">
+              <div className="flex">
+                <div className="metric-input space-y-2">
+                  <label htmlFor="rcon">Select Starting Quarter</label>
                   <Select
                     className="mx-4"
-                    options={ubprOptions}
-                    placeholder="Search for one or more UBPR codes or keywords"
-                    value={selectedUbprs}
-                    onChange={handleSelectedUbprChange}
+                    options={quartersOptions}
+                    defaultValue={quartersOptions[quartersOptions.length - 4]}
+                    placeholder="Select starting quarter"
+                    value={startingQuarter}
+                    onChange={handleStartingQuarterChange}
                     isSearchable
-                    isMulti
                   />
                 </div>
-                <div className="flex">
-                  <div className="pr-4 space-y-4 w-1/2">
-                    <label htmlFor="rcon">Select Starting Quarter</label>
-                    <Select
-                      className="mx-4"
-                      options={quartersOptions}
-                      defaultValue={quartersOptions[quartersOptions.length - 4]}
-                      placeholder="Select starting quarter"
-                      value={startingQuarter}
-                      onChange={handleStartingQuarterChange}
-                      isSearchable
-                    />
-                  </div>
-                  <div className="pr-4 space-y-4 w-1/2">
-                    <label htmlFor="rcon">Select Ending Quarter</label>
-                    <Select
-                      className="mx-4"
-                      options={quartersOptions}
-                      defaultValue={quartersOptions[quartersOptions.length - 1]}
-                      placeholder="Select ending quarter"
-                      value={endingQuarter}
-                      onChange={handleEndingQuarterChange}
-                      isSearchable
-                    />
-                  </div>
+                <div className="metric-input space-y-2">
+                  <label htmlFor="rcon">Select Ending Quarter</label>
+                  <Select
+                    className="mx-4"
+                    options={quartersOptions}
+                    defaultValue={quartersOptions[quartersOptions.length - 1]}
+                    placeholder="Select ending quarter"
+                    value={endingQuarter}
+                    onChange={handleEndingQuarterChange}
+                    isSearchable
+                  />
                 </div>
               </div>
             </div>

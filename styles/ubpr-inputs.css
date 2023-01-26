@@ -28,11 +28,12 @@
 
 .metric-input-group {
   display: flex;
+  flex-direction: column;
 }
 
 .metric-input {
   width: 48%;
-  margin: 0.5rem 1.5rem;
+  margin-inline: 1.5rem;
   padding-inline: 0.75rem;
   padding-block: 2rem;
   display: flex;

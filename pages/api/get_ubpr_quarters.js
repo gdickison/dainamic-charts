@@ -6,7 +6,7 @@ export default async function queryDateOptions(req, res) {
 
   await client
     .query(`SELECT DISTINCT "QUARTER"
-      FROM banking_app.ubpr_credit_concentrations
+      FROM banking_app.ubpr_ratios_coc
       WHERE "QUARTER" IS NOT NULL
       ORDER BY "QUARTER";`)
     .then(response => res.status(200).json({response: response.rows}))
