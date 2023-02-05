@@ -1,0 +1,89 @@
+{
+  "peerGroupOptionsList": [
+    {
+      "value": 1,
+      "metric": "peer_group",
+      "label": "1 - In excess of $100 billion"
+    },
+    {
+      "value": 2,
+      "metric": "peer_group",
+      "label": "2 - Between $10 billion and $100 billion"
+    },
+    {
+      "value": 3,
+      "metric": "peer_group",
+      "label": "3 - Between $3 billion and $10 billion"
+    },
+    {
+      "value": 4,
+      "metric": "peer_group",
+      "label": "4 - Between $1 billion and $3 billion"
+    },
+    {
+      "value": 5,
+      "metric": "peer_group",
+      "label": "5 - Between $300 million and $1 billion"
+    },
+    {
+      "value": 6,
+      "metric": "peer_group",
+      "label": "6 - Between $100 million and $300 million, with 3 or more offices, in a Metropolitan area"
+    },
+    {
+      "value": 7,
+      "metric": "peer_group",
+      "label": "7 - Between $100 million and $300 million, with 3 or more offices, in a Non-metropolitan area"
+    },
+    {
+      "value": 8,
+      "metric": "peer_group",
+      "label": "8 - Between $100 million and $300 million, with 2 or fewer offices, in a Metropolitan area"
+    },
+    {
+      "value": 9,
+      "metric": "peer_group",
+      "label": "9 - Between $100 million and $300 million, with 2 or fewer offices, in a Non-metropolitan area"
+    },
+    {
+      "value": 10,
+      "metric": "peer_group",
+      "label": "10 - Between $50 million and $100 million, with 3 or more offices, in a Metropolitan area"
+    },
+    {
+      "value": 11,
+      "metric": "peer_group",
+      "label": "11 - Between $50 million and $100 million, with 3 or more offices, in a Non-metropolitan area"
+    },
+    {
+      "value": 12,
+      "metric": "peer_group",
+      "label": "12 - Between $50 million and $100 million, with 2 or fewer offices, in a Metropolitan area"
+    },
+    {
+      "value": 13,
+      "metric": "peer_group",
+      "label": "13 - Between $50 million and $100 million, with 2 or fewer offices, in a Non-metropolitan area"
+    },
+    {
+      "value": 14,
+      "metric": "peer_group",
+      "label": "14 - Less than $50 million, with 2 or more offices, in a Metropolitan area"
+    },
+    {
+      "value": 15,
+      "metric": "peer_group",
+      "label": "15 - Less than $50 million, with 2 or more offices, in a Non-metropolitan area"
+    },
+    {
+      "value": 16,
+      "metric": "peer_group",
+      "label": "16 - Less than $50 million, with 1 office, in a Metropolitan area"
+    },
+    {
+      "value": 17,
+      "metric": "peer_group",
+      "label": "17 - Less than $50 million, with 1 office, in a Non-metropolitan area"
+    }
+  ]
+}

@@ -3,12 +3,11 @@ import UbprFormInputs from "../src/components/UbprFormInputs"
 import UbprBarChart from "../src/components/UbprBarChart"
 import UbprBankSummary from "../src/components/UbprBankSummary"
 
-import {
-  rconOptionsList,
-  ubprOptionsList,
-  peerGroupOptionsList,
-  peerGroupStateOptionsList
- } from "../public/utils"
+import { peerGroupOptionsList } from "../src/data/peer_group_options_list.json"
+import { rconOptionsList } from "../src/data/rcon_options_list.json"
+import { ubprOptionsList } from "../src/data/ubpr_options_list.json"
+import { peerGroupStateOptionsList } from "../src/data/peer_group_states.json"
+import { pdnrlaOptions } from "../src/data/pdnrla_options.json"
 
 const UBPR = () => {
   const [bankNameOptionsList, setBankNameOptionsList] = useState()
@@ -22,10 +21,12 @@ const UBPR = () => {
   const [selectedBanks, setSelectedBanks] = useState()
   const [selectedRcons, setSelectedRcons] = useState([])
   const [selectedUbprs, setSelectedUbprs] = useState([])
+  const [selectedPdnrla, setSelectedPdnrla] = useState([])
 
   const [bankData, setBankData] = useState([])
   const [bankRconData, setBankRconData] = useState([])
   const [bankUbprData, setBankUbprData] = useState([])
+  const [pndrlaData, setPndrlaData] = useState([])
 
   // get the bank names/codes and available quarters to populate the select inputs
   async function getBankNames(){
@@ -104,6 +105,10 @@ const UBPR = () => {
 
   function handleSelectedUbprChange (data) {
     setSelectedUbprs(data)
+  }
+
+  function handleSelectedPdnrlaChange (data) {
+    setSelectedPdnrla(data)
   }
 
   function handleStartingQuarterChange (startingQuarter) {
@@ -205,6 +210,35 @@ const UBPR = () => {
     }
   }, [bankData, selectedUbprs, startingQuarter, endingQuarter])
 
+  useEffect(() => { // currently this data exist only for Lineage Bank
+    if(bankData.length === 1 && bankData[0].BANK_ID === 321152){
+      async function getPdnrlaData(){
+        const bankIdParam = bankData.length > 0 ? bankData.map(bank => bank.BANK_ID) : []
+        const pdnrlaCodes = selectedPdnrla.map(pdnrla => pdnrla.value)
+
+        if(selectedPdnrla.length > 0 && startingQuarter && endingQuarter){
+          let pdnrlaThingy = await fetch(
+            '/api/get_ubpr_ratios_pdnrla_data',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ bankIdParam, pdnrlaCodes, startingQuarter, endingQuarter })
+            }
+          ).then(response => response.json())
+          pdnrlaThingy = pdnrlaThingy.response
+          const pdnrlaData = spliceIntoChunks(pdnrlaThingy, pdnrlaThingy.length / bankData.length)
+          setPndrlaData(pdnrlaData)
+        }
+      }
+
+      if(selectedBankNames.length > 0 || selectedPeerGroup || selectedPeerGroupState){
+        getPdnrlaData()
+      }
+    }
+  }, [bankData, selectedPdnrla, startingQuarter, endingQuarter])
+
   return (
     <div className="max-w-[1600px] mx-auto">
       <UbprFormInputs
@@ -213,6 +247,7 @@ const UBPR = () => {
         peerGroupStateOptions={peerGroupStateOptionsList}
         rconOptions={rconOptionsList}
         ubprOptions={ubprOptionsList}
+        pdnrlaOptions={pdnrlaOptions}
         quartersOptions={quartersOptionsList}
 
         selectedBankNames={selectedBankNames}
@@ -220,6 +255,7 @@ const UBPR = () => {
         selectedPeerGroupState={selectedPeerGroupState}
         selectedRcons={selectedRcons}
         selectedUbprs={selectedUbprs}
+        selectedPdnrla={selectedPdnrla}
         startingQuarter={startingQuarter}
         endingQuarter={endingQuarter}
 
@@ -228,6 +264,7 @@ const UBPR = () => {
         handleSelectedPeerGroupStateChange={handleSelectedPeerGroupStateChange}
         handleSelectedRconChange={handleSelectedRconChange}
         handleSelectedUbprChange={handleSelectedUbprChange}
+        handleSelectedPdnrlaChange={handleSelectedPdnrlaChange}
         handleStartingQuarterChange={handleStartingQuarterChange}
         handleEndingQuarterChange={handleEndingQuarterChange}
       />
@@ -274,6 +311,28 @@ const UBPR = () => {
                                 bankData={bank}
                                 dataFlag={"ubpr"}
                                 statsData={bankUbprData[i]}
+                                selectedMetric={rcon}
+                              />
+                            </div>
+                          )
+                        }
+                      })
+                    }
+                  </div>
+                  <div className="banking-charts-col">
+                    {pndrlaData.length > 0 && selectedPdnrla.length > 0 &&
+                      <h1>PNDRLA</h1>
+                    }
+                    {console.log('pndrlaData', pndrlaData)}
+                    {pndrlaData.length > 0 &&
+                      selectedPdnrla.map((rcon) => {
+                        if(typeof pndrlaData[i] !== 'undefined'){
+                          return (
+                            <div key={rcon.value} className="">
+                              <UbprBarChart
+                                bankData={bank}
+                                dataFlag={"ubpr"}
+                                statsData={pndrlaData[i]}
                                 selectedMetric={rcon}
                               />
                             </div>

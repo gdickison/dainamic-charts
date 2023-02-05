@@ -2,6 +2,7 @@ import { memo } from "react";
 import { Bar } from "react-chartjs-2";
 
 const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
+console.log('statsData', statsData)
   const rawChartData = statsData
   const labels = rawChartData.map(bank => {
     return bank.QUARTER
@@ -38,7 +39,7 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
   }
 
   const titleCode = selectedMetric.label.split(' - ')[0]
-  const titleText = selectedMetric.label.split(' - ')[1].match(/.{50}\w*\W*|.*/g)
+  const titleText = selectedMetric.label.split(' - ').length > 1 ? selectedMetric.label.split(' - ')[1].match(/.{50}\w*\W*|.*/g) : ''
 
   const barChartOptions = {
     responsive: true,

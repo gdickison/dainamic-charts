@@ -3,19 +3,33 @@ import pool from "../../src/client";
 export default async function queryBankData(req, res){
   const client = await pool.connect()
 
-  const bankParam = req.body.selectedBanksParam.metric === "peer_group"
-    ? `${req.body.selectedBanksParam.value}`
+  const bankQuery = req.body.selectedBanksParam.metric === "peer_group"
+    ? `SELECT
+        a."BANK_ID",
+        a."PEER_GROUP",
+        b.*
+      FROM banking_app.ubpr_peer_groups a
+        JOIN banking_app.ubpr_institution b
+        ON a."BANK_ID" = b."BANK_ID"
+      WHERE b."INSCOML" = 1
+        AND a."PEER_GROUP" = ${req.body.selectedBanksParam.value}
+      ORDER BY b."NAME"`
     : req.body.selectedBanksParam.metric === "state"
-      ? `AND "STNAME" = '${req.body.selectedBanksParam.value}'`
-      : `AND "BANK_ID" IN (${req.body.selectedBanksParam})`
+      ? `SELECT
+          *
+        FROM banking_app.ubpr_institution
+        WHERE "INSCOML" = 1
+          AND "STNAME" = '${req.body.selectedBanksParam.value}'
+        ORDER BY "BANK_ID"`
+      : `SELECT
+           *
+         FROM banking_app.ubpr_institution
+         WHERE "INSCOML" = 1
+           AND "BANK_ID" IN (${req.body.selectedBanksParam})
+         ORDER BY "BANK_ID"`
 
   await client
-    .query(`SELECT
-        *
-      FROM banking_app.ubpr_institution
-      WHERE "INSCOML" = 1
-        ${bankParam}
-      ORDER BY "BANK_ID"`)
+    .query(bankQuery)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
     .catch(error => console.log("There was an error getting bank data: ", error))

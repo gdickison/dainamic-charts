@@ -6,6 +6,7 @@ const UbprFormInputs = ({
   peerGroupStateOptions,
   rconOptions,
   ubprOptions,
+  pdnrlaOptions,
   quartersOptions,
 
   selectedBankNames,
@@ -13,6 +14,7 @@ const UbprFormInputs = ({
   selectedPeerGroupState,
   selectedRcons,
   selectedUbprs,
+  selectedPdnrla,
   startingQuarter,
   endingQuarter,
 
@@ -21,6 +23,7 @@ const UbprFormInputs = ({
   handleSelectedPeerGroupStateChange,
   handleSelectedRconChange,
   handleSelectedUbprChange,
+  handleSelectedPdnrlaChange,
   handleStartingQuarterChange,
   handleEndingQuarterChange
 }) => {
@@ -95,6 +98,22 @@ const UbprFormInputs = ({
                       placeholder="Search for one or more UBPR codes or keywords"
                       value={selectedUbprs}
                       onChange={handleSelectedUbprChange}
+                      isSearchable
+                      isMulti
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex">
+              <div className="metric-input space-y-2">
+                  <h1>PDNRLA</h1>
+                  <div className="pr-4 space-y-4">
+                    <Select
+                      className="mx-4"
+                      options={pdnrlaOptions}
+                      placeholder="Search for one or more RCON codes or keywords"
+                      value={selectedPdnrla}
+                      onChange={handleSelectedPdnrlaChange}
                       isSearchable
                       isMulti
                     />
