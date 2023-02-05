@@ -2,14 +2,14 @@ import { memo } from "react";
 import { Bar } from "react-chartjs-2";
 
 const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
-console.log('statsData', statsData)
+
   const rawChartData = statsData
   const labels = rawChartData.map(bank => {
     return bank.QUARTER
   })
 
   const dataArray = rawChartData.map(bank => {
-    return dataFlag === "rcon" ? bank[selectedMetric.value] : bank[selectedMetric.value]/10
+    return dataFlag === "rcon" || selectedMetric.format === "count" ? bank[selectedMetric.value] : bank[selectedMetric.value]/10
   })
 
   function nullData(arr){
@@ -67,7 +67,7 @@ console.log('statsData', statsData)
             return ''
           },
           label: function(context){
-            return `${Number(context.raw).toLocaleString()}${dataFlag === "rcon" ? '' : '%'}`
+            return `${Number(context.raw).toLocaleString()}${dataFlag === "rcon" || selectedMetric.format === "count" ? '' : '%'}`
           }
         },
         boxPadding: 6,
@@ -82,7 +82,7 @@ console.log('statsData', statsData)
         },
         ticks: {
           callback: function(value){
-            return `${value.toLocaleString()}${dataFlag === "rcon" ? '' : '%'}`
+            return `${value.toLocaleString()}${dataFlag === "rcon" || selectedMetric.format === "count" ? '' : '%'}`
           },
           font: {
             size: 12

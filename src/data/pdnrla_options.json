@@ -2,295 +2,368 @@
   "pdnrlaOptions": [
     {
       "value": "UBPR1400",
-      "label": "UBPR1400"
+      "label": "UBPR1400 - The sum of loans and leases past due over 90 days and still accruing interest and loans on nonaccrual",
+      "format": "count"
     },
     {
       "value": "UBPR1616",
-      "label": "UBPR1616"
+      "label": "UBPR1616 - Other restructured loan and leases still current by their restructured terms",
+      "format": "count"
     },
     {
       "value": "UBPR1658",
-      "label": "UBPR1658"
+      "label": "UBPR1658 - Restructured loans and leases past due 30 through 89 days and still accruing interest",
+      "format": "count"
     },
     {
       "value": "UBPR1661",
-      "label": "UBPR1661"
+      "label": "UBPR1661 - Restructured loans and leases on which interest is no longer being accrued",
+      "format": "count"
     },
     {
       "value": "UBPR2150",
-      "label": "UBPR2150"
+      "label": "UBPR2150 - All other real estate owned. Excludes direct and indirect investments in real estate",
+      "format": "count"
     },
     {
       "value": "UBPR5615",
-      "label": "UBPR5615"
+      "label": "UBPR5615 - The portion of loans and leases past due 30-89 days that are wholly or partially guaranteed by the U.S. Government and loans and leases covered by loss-sharing agreements with the FDIC",
+      "format": "ratio"
     },
     {
       "value": "UBPR5616",
-      "label": "UBPR5616"
+      "label": "UBPR5616 - The portion of loans and leases past due over 90 days and still accruing interest that are wholly or partially guaranteed by the U.S. Government and loans and leases covered by loss-sharing agreements with the FDIC",
+      "format": "ratio"
     },
     {
       "value": "UBPR5617",
-      "label": "UBPR5617"
+      "label": "UBPR5617 - The portion of loans and leases on nonaccrual status that are wholly or partially guaranteed by the U.S. Government and loans and leases covered by loss-sharing agreements with the FDIC",
+      "format": "ratio"
     },
     {
       "value": "UBPRD667",
-      "label": "UBPRD667"
+      "label": "UBPRD667 - Loans and leases past due over 90 days and still accruing",
+      "format": "count"
     },
     {
       "value": "UBPRD668",
-      "label": "UBPRD668"
+      "label": "UBPRD668 - Loans and leases past due 30 through 80 days and still accruing interest",
+      "format": "count"
     },
     {
       "value": "UBPRD669",
-      "label": "UBPRD669"
+      "label": "UBPRD669 - Loans and leases on which interest is no longer being accrued",
+      "format": "count"
     },
     {
       "value": "UBPRD673",
-      "label": "UBPRD673"
+      "label": "UBPRD673 - Total Loans and Leases Restructured",
+      "format": "count"
     },
     {
       "value": "UBPRE473",
-      "label": "UBPRE473"
+      "label": "UBPRE473 - Loans secured by real estate that are 90 days or more past due and still accruing interest divided by total real estate loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE474",
-      "label": "UBPRE474"
+      "label": "UBPRE474 - Loans secured by real estate that are on nonaccrual divided by total real estate loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE475",
-      "label": "UBPRE475"
+      "label": "UBPRE475 - The sum of loans secured by real estate that are 90 days or more past-due and still accruing interest and loans secured by real estate that are on nonaccrual divided by total real estate loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE476",
-      "label": "UBPRE476"
+      "label": "UBPRE476 - Loans secured by real estate that are 30-89 days past due divided by total real estate loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE477",
-      "label": "UBPRE477"
+      "label": "UBPRE477 - Loans for the purpose of financing commercial real estate that are 90 days or more past due and still accruing interest divided by total loans to finance commercial real estate",
+      "format": "ratio"
     },
     {
       "value": "UBPRE478",
-      "label": "UBPRE478"
+      "label": "UBPRE478 - Loans for the purpose of financing commerical real estate that are on nonaccrual status divided by total loans to finance commercial real estate",
+      "format": "ratio"
     },
     {
       "value": "UBPRE479",
-      "label": "UBPRE479"
+      "label": "UBPRE479 - The sum of loans for the purpose of financing commerical real estate that are 90 days or more past due and still accruing interest and loans for the purpose of financing commercial real estate that are on nonaccrual status divided by total loans to finance commercial real estate",
+      "format": "ratio"
     },
     {
       "value": "UBPRE480",
-      "label": "UBPRE480"
+      "label": "UBPRE480 - Loans for the purpose of financing commercial real estate that are 30-89 days past due divided by total loans to finance commerical real estate",
+      "format": "ratio"
     },
     {
       "value": "UBPRE481",
-      "label": "UBPRE481"
+      "label": "UBPRE481 - Loans secured by real estate for the purpose of construction and land development that are 90 days or more past due and still accruing interest divided by total construction and land development loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE482",
-      "label": "UBPRE482"
+      "label": "UBPRE482 - Loans secured by real estate for the purpose of construction and land development that are on nonaccrual status divided by total construction and land development loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE483",
-      "label": "UBPRE483"
+      "label": "UBPRE483 - The sum of loans secured by real estate for the purpose of construction and land development that are 90 days or more past due and still accruing interest and loans secured by real estate for the purpose of construction and land development that are on nonaccrual status divided by total construction and land development loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE484",
-      "label": "UBPRE484"
+      "label": "UBPRE484 - Loans secured by real estate for the purpose of construction and land development that are 30-89 days past due divided by total construction and land development loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE485",
-      "label": "UBPRE485"
+      "label": "UBPRE485 - Loans secured by mortgages secured by 1-4 family properties that are 90 days or more past due and still accruing interest divided by total single family mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRE486",
-      "label": "UBPRE486"
+      "label": "UBPRE486 - Loans secured by mortgages secured by 1-4 family properties that are on nonaccrual status divided by total single family mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRE487",
-      "label": "UBPRE487"
+      "label": "UBPRE487 - The sum of loans secured by mortgages secured by 1-4 family properties that are 90 days or more past due and still accruing interest and loans secured by mortgages secured by 1-4 family properties that are on nonaccrual status divided by total single family mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRE488",
-      "label": "UBPRE488"
+      "label": "UBPRE488 - Loans secured by mortgages secured by 1-4 family properties that are 30-89 days past due divided by total single family mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRE489",
-      "label": "UBPRE489"
+      "label": "UBPRE489 - Loans secured by mortgages on non-farm, non-residential property that are 90 days or more past due and still accruing interest divided by total non-farm non-residential mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRE490",
-      "label": "UBPRE490"
+      "label": "UBPRE490 - Loans secured by mortgages on non-farm, non-residential property that are on nonaccrual status divided by total non-farm non-residential mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRE491",
-      "label": "UBPRE491"
+      "label": "UBPRE491 - The sum of loans secured by mortgages on non-farm, non-residential property that are 90 days or more past due and still accruing interest and loans secured by mortgages on non-farm, non-residential property that are on nonaccrual status divided by total non-farm non-residential mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRE492",
-      "label": "UBPRE492"
+      "label": "UBPRE492 - Loans secured by mortgages on non-farm, non-residential property that are 30-89 days past due divided by total non-farm non-residential mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRE493",
-      "label": "UBPRE493"
+      "label": "UBPRE493 - RE LNS FOR OFF 90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
     },
     {
       "value": "UBPRE494",
-      "label": "UBPRE494"
+      "label": "UBPRE494 - RE LNS FOR OFF NONACCRUAL/PCT OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
     },
     {
       "value": "UBPRE495",
-      "label": "UBPRE495"
+      "label": "UBPRE495 - RE LNS FOR OFF -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
     },
     {
       "value": "UBPRE496",
-      "label": "UBPRE496"
+      "label": "UBPRE496 - RE LNS FOR OFF 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
     },
     {
       "value": "UBPRE505",
-      "label": "UBPRE505"
+      "label": "UBPRE505 - Construction loans secured by 1-4 family properties that are 90 days or more past due and still accruing interest divided by total 1-4 family construction loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE506",
-      "label": "UBPRE506"
+      "label": "UBPRE506 - Construction loans secured by 1-4 family properties that are on nonaccrual status divided by total construction and land development loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE507",
-      "label": "UBPRE507"
+      "label": "UBPRE507 - The sum of construction loans secured by 1-4 family properties that are 90 days or more past due and still accruing interest and construction loans secured by 1-4 family properties that are on nonaccrual status divided by total construction and land development loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE508",
-      "label": "UBPRE508"
+      "label": "UBPRE508 - Construction loans secured by 1-4 family properties that are 30-89 days or past due divided by total 1-4 family construction loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE509",
-      "label": "UBPRE509"
+      "label": "UBPRE509 - Construction loans secured by other real estate properties 90 days or more past due and still accruing interest divided by total other construction loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE510",
-      "label": "UBPRE510"
+      "label": "UBPRE510 - Construction loans secured by other real estate properties on nonaccrual status divided by total other construction loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE511",
-      "label": "UBPRE511"
+      "label": "UBPRE511 - The sum of construction loans secured by other real estate properties 90 days or more past due and still accruing interest and construction loans secured by other real estate properties on nonaccrual status divided by total other construction loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE512",
-      "label": "UBPRE512"
+      "label": "UBPRE512 - Construction loans secured by other real estate properties 30-89 days past due divided by total other construction loans",
+      "format": "ratio"
     },
     {
       "value": "UBPRE513",
-      "label": "UBPRE513"
+      "label": "UBPRE513 - Loans secured by owner occupied non-farm non-residential properties that are 90 days or more past due and still accruing interest divided by total owner occupied non-farm non-residential mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRE514",
-      "label": "UBPRE514"
+      "label": "UBPRE514 - Loans secured by owner occupied non-farm non-residential properties that are on nonaccrual status divided by total owner occupied non-farm non-residential mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRE515",
-      "label": "UBPRE515"
+      "label": "UBPRE515 - The sum of loans secured by owner occupied non-farm non-residential properties that are 90 days or more past due and still accruing interest and loans secured by owner occupied non-farm non-residential properties that are on nonaccrual status divided by total owner occupied non-farm non-residential mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRE516",
-      "label": "UBPRE516"
+      "label": "UBPRE516 - Loans secured by owner occupied non-farm non-residential properties that are 30-39 days past due divided by total owner occupied non-farm non-residential mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRE517",
-      "label": "UBPRE517"
+      "label": "UBPRE517 - Loans secured by other non-farm non-residential mortgages that are 90 days or more past due and still accruing interest divided by total other non-farm non-residential mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRE518",
-      "label": "UBPRE518"
+      "label": "UBPRE518 - Loans secured by other non-farm non-residential mortgages that are on nonaccrual status divided by total other non-farm non-residential mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRE519",
-      "label": "UBPRE519"
+      "label": "UBPRE519 - The sum of loans secured by other non-farm non-residential mortgages that are 90 days or more past due and still accruing interest and loans secured by other non-farm non-residential mortgages that are on nonaccrual status divided by total other non-farm non-residential mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRE520",
-      "label": "UBPRE520"
+      "label": "UBPRE520 - Loans secured by other non-farm non-residential mortgages that are 30-89 days past due divided by total other non-farm non-residential mortgages",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB84",
-      "label": "UBPRFB84"
+      "label": "UBPRFB84 - SECURED BY FARMLAND 90+ DAYS PD RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB85",
-      "label": "UBPRFB85"
+      "label": "UBPRFB85 - SECURED BY FARMLAND NONACCRUAL RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB86",
-      "label": "UBPRFB86"
+      "label": "UBPRFB86 - SECURED BY FARMLAND TOTAL DLNQT RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB87",
-      "label": "UBPRFB87"
+      "label": "UBPRFB87 - SECURED BY FARMLAND 30-89 DAYS PD RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB88",
-      "label": "UBPRFB88"
+      "label": "UBPRFB88 - HOME EQUITY 90+ DAYS PD RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB89",
-      "label": "UBPRFB89"
+      "label": "UBPRFB89 - HOME EQUITY NONACCRUAL RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB90",
-      "label": "UBPRFB90"
+      "label": "UBPRFB90 - HOME EQUITY TOTAL DLNQT RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB91",
-      "label": "UBPRFB91"
+      "label": "UBPRFB91 - HOME EQUITY 30-89 DAYS PD RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB92",
-      "label": "UBPRFB92"
+      "label": "UBPRFB92 - 1-4 FAMILY 1ST LIEN 90+ DAYS PD RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB93",
-      "label": "UBPRFB93"
+      "label": "UBPRFB93 - 1-4 FAM 1ST LIEN NACCR RTO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB94",
-      "label": "UBPRFB94"
+      "label": "UBPRFB94 - 1-4 FAMILY 1ST LIEN TOTAL DLNQT RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB95",
-      "label": "UBPRFB95"
+      "label": "UBPRFB95 - 1-4 FAMILY 1ST LIEN 30-89 DAYS PD RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB96",
-      "label": "UBPRFB96"
+      "label": "UBPRFB96 - 1-4 FAMILY JR LIEN 90+ DAYS PD RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB97",
-      "label": "UBPRFB97"
+      "label": "UBPRFB97 - 1-4 FAMILY JR LIEN NONACCRUAL RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB98",
-      "label": "UBPRFB98"
+      "label": "UBPRFB98 - 1-4 FAMILY JR LIEN TOTAL DLNQT RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFB99",
-      "label": "UBPRFB99"
+      "label": "UBPRFB99 - 1-4 FAMILY JR LIEN 30-89 DAYS PD RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFC00",
-      "label": "UBPRFC00"
+      "label": "UBPRFC00 - MULTIFAMILY 90+ DAYS PD RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFC01",
-      "label": "UBPRFC01"
+      "label": "UBPRFC01 - MULTIFAMILY NONACCRUAL RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFC02",
-      "label": "UBPRFC02"
+      "label": "UBPRFC02 - MULTIFAMILY TOTAL DLNQT RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRFC03",
-      "label": "UBPRFC03"
+      "label": "UBPRFC03 - MULTIFAMILY 30-89 DAYS PD RATIO",
+      "format": "ratio"
     },
     {
       "value": "UBPRJ239",
-      "label": "UBPRJ239"
+      "label": "UBPRJ239 - Restructured loans and leases past due 90 or more days and still accruing interest",
+      "format": "count"
     }
   ]
 }

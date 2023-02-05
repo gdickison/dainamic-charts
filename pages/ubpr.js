@@ -210,7 +210,7 @@ const UBPR = () => {
     }
   }, [bankData, selectedUbprs, startingQuarter, endingQuarter])
 
-  useEffect(() => { // currently this data exist only for Lineage Bank
+  useEffect(() => { // currently this data exist only for Lineage Bank - remove if/else when there is more data
     if(bankData.length === 1 && bankData[0].BANK_ID === 321152){
       async function getPdnrlaData(){
         const bankIdParam = bankData.length > 0 ? bankData.map(bank => bank.BANK_ID) : []
@@ -236,6 +236,8 @@ const UBPR = () => {
       if(selectedBankNames.length > 0 || selectedPeerGroup || selectedPeerGroupState){
         getPdnrlaData()
       }
+    } else {
+      setPndrlaData([]) // currently this data exist only for Lineage Bank
     }
   }, [bankData, selectedPdnrla, startingQuarter, endingQuarter])
 
@@ -321,9 +323,8 @@ const UBPR = () => {
                   </div>
                   <div className="banking-charts-col">
                     {pndrlaData.length > 0 && selectedPdnrla.length > 0 &&
-                      <h1>PNDRLA</h1>
+                      <h1>Past Due, Nonaccrual & Restructured Loans</h1>
                     }
-                    {console.log('pndrlaData', pndrlaData)}
                     {pndrlaData.length > 0 &&
                       selectedPdnrla.map((rcon) => {
                         if(typeof pndrlaData[i] !== 'undefined'){
