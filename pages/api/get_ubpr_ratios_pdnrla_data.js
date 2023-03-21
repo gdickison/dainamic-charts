@@ -6,14 +6,15 @@ export default async function queryUbprRcon(req, res){
   const codes = `"${req.body.pdnrlaCodes.join('","')}"`
   await client
     .query(`SELECT
-        "BANK_ID",
+        "peer_group_description",
+        "peer_group",
         "QUARTER",
         ${codes}
-      FROM banking_app.ubpr_ratios_pdnrla
-      WHERE ("BANK_ID") IN (${req.body.bankIdParam})
+      FROM banking_app.ubpr_stats_pdnrl
+      WHERE peer_group IN (${req.body.peerGroupParam})
         AND "QUARTER" BETWEEN '${req.body.startingQuarter.value}' AND '${req.body.endingQuarter.value}'
-      ORDER BY "BANK_ID", "QUARTER"`)
+      ORDER BY "peer_group", "QUARTER"`)
     .then(response => res.status(200).json({response: response.rows}))
     .then(client.release())
-    .catch(error => console.log("There was an error gettting the ubpr data: ", error))
+    .catch(error => console.log("There was an error gettting the pdnrl data: ", error))
 }

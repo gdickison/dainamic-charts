@@ -104,22 +104,24 @@ const UbprFormInputs = ({
                   </div>
                 </div>
               </div>
-              <div className="flex">
-              <div className="metric-input space-y-2">
-                  <h1>Past Due, Nonaccrual & Restructured Loans</h1>
-                  <div className="pr-4 space-y-4">
-                    <Select
-                      className="mx-4"
-                      options={pdnrlaOptions}
-                      placeholder="Search for one or more RCON codes or keywords"
-                      value={selectedPdnrla}
-                      onChange={handleSelectedPdnrlaChange}
-                      isSearchable
-                      isMulti
-                    />
+              {selectedBankNames.length > 0 &&
+                <div className="flex">
+                  <div className="metric-input space-y-2">
+                    <h1>Past Due, Nonaccrual & Restructured Loans</h1>
+                    <div className="pr-4 space-y-4">
+                      <Select
+                        className="mx-4"
+                        options={pdnrlaOptions}
+                        placeholder="Search for one or more RCON codes or keywords"
+                        value={selectedPdnrla}
+                        onChange={handleSelectedPdnrlaChange}
+                        isSearchable
+                        isMulti
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
+              }
               <div className="flex">
                 <div className="metric-input space-y-2">
                   <label htmlFor="rcon">Select Starting Quarter</label>

@@ -22,10 +22,13 @@ export default async function queryBankData(req, res){
           AND "STNAME" = '${req.body.selectedBanksParam.value}'
         ORDER BY "BANK_ID"`
       : `SELECT
-           *
-         FROM banking_app.ubpr_institution
-         WHERE "INSCOML" = 1
-           AND "BANK_ID" IN (${req.body.selectedBanksParam})
+           t1.*,
+           t2."PEER_GROUP"
+         FROM banking_app.ubpr_institution t1
+          JOIN banking_app.ubpr_peer_groups t2
+          ON t1."BANK_ID" = t2."BANK_ID"
+         WHERE t1."INSCOML" = 1
+           AND t1."BANK_ID" IN (${req.body.selectedBanksParam})
          ORDER BY "BANK_ID"`
 
   await client

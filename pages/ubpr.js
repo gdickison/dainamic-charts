@@ -7,7 +7,7 @@ import { peerGroupOptionsList } from "../src/data/peer_group_options_list.json"
 import { rconOptionsList } from "../src/data/rcon_options_list.json"
 import { ubprOptionsList } from "../src/data/ubpr_options_list.json"
 import { peerGroupStateOptionsList } from "../src/data/peer_group_states.json"
-import { pdnrlaOptions } from "../src/data/pdnrla_options.json"
+import { pdnrlOptions } from "../src/data/pdnrl_options.json"
 
 const UBPR = () => {
   const [bankNameOptionsList, setBankNameOptionsList] = useState()
@@ -211,9 +211,9 @@ const UBPR = () => {
   }, [bankData, selectedUbprs, startingQuarter, endingQuarter])
 
   useEffect(() => { // currently this data exist only for Lineage Bank - remove if/else when there is more data
-    if(bankData.length === 1 && bankData[0].BANK_ID === 321152){
-      async function getPdnrlaData(){
-        const bankIdParam = bankData.length > 0 ? bankData.map(bank => bank.BANK_ID) : []
+    if(bankData.length > 0){
+      async function getPdnrlData(){
+        const peerGroupParam = bankData.length > 0 ? bankData.map(bank => bank.PEER_GROUP) : []
         const pdnrlaCodes = selectedPdnrla.map(pdnrla => pdnrla.value)
 
         if(selectedPdnrla.length > 0 && startingQuarter && endingQuarter){
@@ -224,7 +224,7 @@ const UBPR = () => {
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ bankIdParam, pdnrlaCodes, startingQuarter, endingQuarter })
+              body: JSON.stringify({ peerGroupParam, pdnrlaCodes, startingQuarter, endingQuarter })
             }
           ).then(response => response.json())
           pdnrlaThingy = pdnrlaThingy.response
@@ -234,7 +234,7 @@ const UBPR = () => {
       }
 
       if(selectedBankNames.length > 0 || selectedPeerGroup || selectedPeerGroupState){
-        getPdnrlaData()
+        getPdnrlData()
       }
     } else {
       setPndrlaData([]) // currently this data exist only for Lineage Bank
@@ -249,7 +249,7 @@ const UBPR = () => {
         peerGroupStateOptions={peerGroupStateOptionsList}
         rconOptions={rconOptionsList}
         ubprOptions={ubprOptionsList}
-        pdnrlaOptions={pdnrlaOptions}
+        pdnrlaOptions={pdnrlOptions}
         quartersOptions={quartersOptionsList}
 
         selectedBankNames={selectedBankNames}
@@ -321,27 +321,29 @@ const UBPR = () => {
                       })
                     }
                   </div>
-                  <div className="banking-charts-col">
-                    {pndrlaData.length > 0 && selectedPdnrla.length > 0 &&
-                      <h1>Past Due, Nonaccrual & Restructured Loans</h1>
-                    }
-                    {pndrlaData.length > 0 &&
-                      selectedPdnrla.map((rcon) => {
-                        if(typeof pndrlaData[i] !== 'undefined'){
-                          return (
-                            <div key={rcon.value} className="">
-                              <UbprBarChart
-                                bankData={bank}
-                                dataFlag={"ubpr"}
-                                statsData={pndrlaData[i]}
-                                selectedMetric={rcon}
-                              />
-                            </div>
-                          )
-                        }
-                      })
-                    }
-                  </div>
+                  {selectedBankNames.length > 0 &&
+                    <div className="banking-charts-col">
+                      {pndrlaData.length > 0 && selectedPdnrla.length > 0 &&
+                        <h1>Past Due, Nonaccrual & Restructured Loans</h1>
+                      }
+                      {pndrlaData.length > 0 &&
+                        selectedPdnrla.map((rcon) => {
+                          if(typeof pndrlaData[i] !== 'undefined'){
+                            return (
+                              <div key={rcon.value} className="">
+                                <UbprBarChart
+                                  bankData={bank}
+                                  dataFlag={"ubpr"}
+                                  statsData={pndrlaData[i]}
+                                  selectedMetric={rcon}
+                                />
+                              </div>
+                            )
+                          }
+                        })
+                      }
+                    </div>
+                  }
                 </div>
               </div>
             )

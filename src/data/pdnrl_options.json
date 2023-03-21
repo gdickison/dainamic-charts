@@ -1,0 +1,589 @@
+{
+  "pdnrlOptions": [
+    {
+      "value": "ubpse473",
+      "label": "UBPSE473 - REAL ESTATE LNS-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse474",
+      "label": "UBPSE474 - REAL ESTATE LNS-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse475",
+      "label": "UBPSE475 - REAL ESTATE LNS-TOTAL/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse476",
+      "label": "UBPSE476 - REAL ESTATE LNS 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse477",
+      "label": "UBPSE477 - LNS FIN COML RE-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse478",
+      "label": "UBPSE478 - LNS FIN COML RE-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse479",
+      "label": "UBPSE479 - LNS FIN COML RE -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse480",
+      "label": "UBPSE480 - LNS FIN COML RE 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse481",
+      "label": "UBPSE481 - CONST & LAND DEV-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse482",
+      "label": "UBPSE482 - CONST & LAND DEV-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse483",
+      "label": "UBPSE483 - CONST & LAND DEV-TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse484",
+      "label": "UBPSE484 - CONST & LAND DEV 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse485",
+      "label": "UBPSE485 - SINGLE & MULTI MTG-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse486",
+      "label": "UBPSE486 - SINGLE & MULTI MTG-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse487",
+      "label": "UBPSE487 - SINGLE & MULTI MTG -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse488",
+      "label": "UBPSE488 - SINGLE & MULTI MTG 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse489",
+      "label": "UBPSE489 - NON-FARM/RESI MTG-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse490",
+      "label": "UBPSE490 - NON-FARM/RESI MTG-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse491",
+      "label": "UBPSE491 - NON-FARM/RESI MTG -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse492",
+      "label": "UBPSE492 - NON-FARM/RESI MTG 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse493",
+      "label": "UBPSE493 - RE LNS FOR OFF 90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse494",
+      "label": "UBPSE494 - RE LNS FOR OFF NONACCRUAL/PCT OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse495",
+      "label": "UBPSE495 - RE LNS FOR OFF -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse496",
+      "label": "UBPSE496 - RE LNS FOR OFF 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse505",
+      "label": "UBPSE505 - 1-4 FAM CONS & L. DEV 90+ DAYS/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse506",
+      "label": "UBPSE506 - 1-4 FAM CONS & L. DEV -NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse507",
+      "label": "UBPSE507 - 1-4 FAM CONS & L. DEV -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse508",
+      "label": "UBPSE508 - 1-4 FAM CONS & L. DEV 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse509",
+      "label": "UBPSE509 - OTHER CONST & LAND DEV 90+ DAYS/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse510",
+      "label": "UBPSE510 - OTHER CONST & LAND DEV-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse511",
+      "label": "UBPSE511 - OTHER CONST & LAND DEV-TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse512",
+      "label": "UBPSE512 - OTHER CONST & LAND DEV 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse513",
+      "label": "UBPSE513 - OWN OCC NFARM NONRE 90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse514",
+      "label": "UBPSE514 - OWN OCC NFARM NONRE -NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse515",
+      "label": "UBPSE515 - OWN OCC NFARM NONRE -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse516",
+      "label": "UBPSE516 - OWN OCC NFARM NONRE 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse517",
+      "label": "UBPSE517 - OTH NONFARM NONRES 90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse518",
+      "label": "UBPSE518 - OTH NONFARM NONRES-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse519",
+      "label": "UBPSE519 - OTH NONFARM NONRES -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse520",
+      "label": "UBPSE520 - OTH NONFARM NONRES 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb84",
+      "label": "UBPSFB84 - SECURED BY FARMLAND 90+ DAYS PD RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb85",
+      "label": "UBPSFB85 - SECURED BY FARMLAND NONACCRUAL RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb86",
+      "label": "UBPSFB86 - SECURED BY FARMLAND TOTAL DLNQT RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb87",
+      "label": "UBPSFB87 - SECURED BY FARMLAND 30-89 DAYS PD RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb88",
+      "label": "UBPSFB88 - HOME EQUITY 90+ DAYS PD RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb89",
+      "label": "UBPSFB89 - HOME EQUITY NONACCRUAL RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb90",
+      "label": "UBPSFB90 - HOME EQUITY TOTAL DLNQT RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb91",
+      "label": "UBPSFB91 - HOME EQUITY 30-89 DAYS PD RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb92",
+      "label": "UBPSFB92 - 1-4 FAMILY 1ST LIEN 90+ DAYS PD RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb93",
+      "label": "UBPSFB93 - 1-4 FAMILY 1ST LIEN NONACCRUAL RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb94",
+      "label": "UBPSFB94 - 1-4 FAMILY 1ST LIEN TOTAL DLNQT RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb95",
+      "label": "UBPSFB95 - 1-4 FAMILY 1ST LIEN 30-89 DAYS PD RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb96",
+      "label": "UBPSFB96 - 1-4 FAMILY JR LIEN 90+ DAYS PD RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb97",
+      "label": "UBPSFB97 - 1-4 FAMILY JR LIEN NONACCRUAL RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb98",
+      "label": "UBPSFB98 - 1-4 FAMILY JR LIEN TOTAL DLNQT RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfb99",
+      "label": "UBPSFB99 - 1-4 FAMILY JR LIEN 30-89 DAYS PD RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc00",
+      "label": "UBPSFC00 - MULTIFAMILY 90+ DAYS PD RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc01",
+      "label": "UBPSFC01 - MULTIFAMILY NONACCRUAL RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc02",
+      "label": "UBPSFC02 - MULTIFAMILY TOTAL DLNQT RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc03",
+      "label": "UBPSFC03 - MULTIFAMILY 30-89 DAYS PD RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubps7414",
+      "label": "UBPS7414 - NONCURRENT ASSETS AS PERCENT OF TOTAL LOANS AND LEASES",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse026",
+      "label": "UBPSE026 - RESTR+NONAC+RE ACQ TO EQCAP+ALL",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse497",
+      "label": "UBPSE497 - COML & INDUST LNS-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse498",
+      "label": "UBPSE498 - COML & INDUST LNS-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse499",
+      "label": "UBPSE499 - COML & INDUST LNS -TOTAL/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse500",
+      "label": "UBPSE500 - COML & INDUST LNS 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse501",
+      "label": "UBPSE501 - LOANS TO INDIVDLS-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse502",
+      "label": "UBPSE502 - LOANS TO INDIVDLS -NONACCRUAL/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse503",
+      "label": "UBPSE503 - LOANS TO INDIVDLS -TOTAL/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse504",
+      "label": "UBPSE504 - LOANS TO INDIVDLS 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse521",
+      "label": "UBPSE521 - CREDIT CARD PLANS-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse522",
+      "label": "UBPSE522 - CREDIT CARD PLANS-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse523",
+      "label": "UBPSE523 - CREDIT CARD PLANS -TOTAL/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse524",
+      "label": "UBPSE524 - CREDIT CARD PLANS 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse529",
+      "label": "UBPSE529 - LEASE FINANCING-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse530",
+      "label": "UBPSE530 - LEASE FINANCING -NONACCRUAL/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse531",
+      "label": "UBPSE531 - LEASE FINANCING -TOTAL/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse532",
+      "label": "UBPSE532 - LEASE FINANCING 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse533",
+      "label": "UBPSE533 - AGRICULTURAL LNS-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse534",
+      "label": "UBPSE534 - AGRICULTURAL LNS -NONACCRUAL/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse535",
+      "label": "UBPSE535 - AGRICULTURAL LNS-TOTAL/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse536",
+      "label": "UBPSE536 - AGRICULTURAL LNS 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse537",
+      "label": "UBPSE537 - OTHER LN&LS-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse538",
+      "label": "UBPSE538 - OTHER LN&LS -NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse539",
+      "label": "UBPSE539 - OTHER LN&LS -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse540",
+      "label": "UBPSE540 - OTHER LN&LS 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse541",
+      "label": "UBPSE541 - GROSS LN&LS-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse542",
+      "label": "UBPSE542 - GROSS LN&LS -NONACCRUAL/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse544",
+      "label": "UBPSE544 - GROSS LN&LS 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse545",
+      "label": "UBPSE545 - NON-CUR LN&LS TO-LN&LS ALLOWANCE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse546",
+      "label": "UBPSE546 - NON-CUR LN&LS TO-EQUITY CAPITAL",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse547",
+      "label": "UBPSE547 - %TOTAL P/D LN&LS-INCL NONACCRUAL",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse549",
+      "label": "UBPSE549 - NON-CURR LNS+OREO TO LNS+ORE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse550",
+      "label": "UBPSE550 - NON-CURR RESTRUCT DEBT/GR LN&L",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse551",
+      "label": "UBPSE551 - CURR+NON-CURR RESTRUCT/GR LN&L",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpse552",
+      "label": "UBPSE552 - CURRENT RESTRUCT LN&LS",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsf896",
+      "label": "UBPSF896 - LOANS SECURED BY 1-4 FAMILY REAL ESTATE LOANS IN FORECLOSURE AS PERCENT OF TOTAL LOANS SECURED BY 1-4 FAMILY",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc07",
+      "label": "UBPSFC07 - FINANCIAL INSTITUTION LOANS 90+ DAYS PD RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc08",
+      "label": "UBPSFC08 - FINANCIAL INSTITUTION LOANS NONACCRUAL RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc09",
+      "label": "UBPSFC09 - FINANCIAL INSTITUTION LOANS TOTAL DLNQT RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc10",
+      "label": "UBPSFC10 - FINANCIAL INSTITUTION LOANS 30-89 DAYS PD RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc11",
+      "label": "UBPSFC11 - AUTO LOANS 90+ DAYS PD RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc12",
+      "label": "UBPSFC12 - AUTO LOANS NONACCRUAL RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc13",
+      "label": "UBPSFC13 - AUTO LOANS TOTAL DLNQT RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc14",
+      "label": "UBPSFC14 - AUTO LOANS 30-89 DAYS PD RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc15",
+      "label": "UBPSFC15 - LEASES TO INDIVIDUALS 90+ DAYS RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc16",
+      "label": "UBPSFC16 - LEASES TO INDIVIDUALS NONACCRUAL RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc17",
+      "label": "UBPSFC17 - LEASES TO INDIVIDUALS TOTAL DLNQT RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc18",
+      "label": "UBPSFC18 - LEASES TO INDIVIDUALS 30-89 DAYS RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc19",
+      "label": "UBPSFC19 - ALL OTHER LEASES 90+ DAYS RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc20",
+      "label": "UBPSFC20 - ALL OTHER LEASES NONACCRUAL RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc21",
+      "label": "UBPSFC21 - ALL OTHER LEASES TOTAL DLNQT RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsfc22",
+      "label": "UBPSFC22 - ALL OTHER LEASES 30-89 DAYS RATIO",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsk264",
+      "label": "UBPSK264 - GUARANTEED PORTION OF LOANS AND LEASES 90 DAYS OR MORE PAST DUE AS A PERCENT OF TOTAL LOANS AND LEASES 90 OR MORE DAYS PAST DUE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsk265",
+      "label": "UBPSK265 - GUARANTEED PORTION OF LOANS AND LEASES ON NONACCRUAL AS A PERCENT OF TOTAL NONACCRUAL LOANS AND LEASES",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsk266",
+      "label": "UBPSK266 - GUARANTEED PORTION OF LOANS AND LEASES 30 THROUGH 89 DAYS PAST DUE AS A PERCENT OF TOTAL LOANS AND LEASES 30 THROUGH 89 DAYS PAST DUE",
+      "format": "ratio"
+    },
+    {
+      "value": "ubpsnc98",
+      "label": "UBPSNC98 - Non-Current Loans and leases and all other real estate owned divided by Tier 1 Capital plus ALL",
+      "format": "ratio"
+    }
+  ]
+}
