@@ -9,7 +9,7 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
   })
 
   const dataArray = rawChartData.map(bank => {
-    return dataFlag === "rcon" || selectedMetric.format === "count" ? bank[selectedMetric.value] : bank[selectedMetric.value]/10
+    return dataFlag === "rcon" || selectedMetric.format === "count" || selectedMetric.format === 'pct' ? bank[selectedMetric.value] : bank[selectedMetric.value]/10
   })
 
   function nullData(arr){
@@ -159,28 +159,32 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
         : zeroData(dataArray)
           ? <div className="ubpr-no-data">
               <h1 className="text-center">{barChartOptions.plugins.title.text}</h1>
-              <h2 className="text-center">This institution does not have loans in this category</h2>
+              <h2 className="text-center">This {dataFlag === 'pndrl' ? 'peer group' : 'institution'} does not have loans in this category</h2>
             </div>
           : <div className="ubpr-bar-chart">
               <Bar data={chartData} options={barChartOptions}/>
             </div>
       }
       <table id='exportTable' className="hidden">
-        <tr>
-          <th>{selectedMetric.label}</th>
-        </tr>
-        <tr>
-          <th>Quarter</th>
-          <th>Amount</th>
-        </tr>
-        {chartData.labels.map((label, i) => {
-          return (
-            <tr>
-              <td>{label.split('T')[0]}</td>
-              <td>{chartData.datasets[0].data[i]}</td>
-            </tr>
-          )
-        })}
+        <thead>
+          <tr>
+            <th>{selectedMetric.label}</th>
+          </tr>
+          <tr>
+            <th>Quarter</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {chartData.labels.map((label, i) => {
+            return (
+              <tr key={label.split('T')[0]}>
+                <td>{label.split('T')[0]}</td>
+                <td>{chartData.datasets[0].data[i]}</td>
+              </tr>
+            )
+          })}
+        </tbody>
       </table>
       <button onClick={exportTableToExcel}>Download Data</button>
     </div>

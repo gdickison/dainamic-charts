@@ -4,13 +4,12 @@ const UbprBankSummary = ({bankData}) => {
       <div className="name-address bg-gradient-to-r from-yellow-200 to-yellow-50 rounded-t-md">
         <div className="name-id">
           <h1>{bankData.NAME}</h1>
-          <p>I.D. {bankData.BANK_ID}</p>
+          <p className="text-2xl">I.D. {bankData.BANK_ID}</p>
+          <p className="text-lg italic">Peer Group: {bankData.DESCRIPTION}</p>
         </div>
       </div>
       <div className="classification-card-container">
         <div className="classification-card space-y-2">
-          {/* <h2>Location</h2> */}
-          {/* <p>I.D. {bankData.BANK_ID}</p> */}
           <address>
             <p>{bankData.ADDRESS}</p>
             <p><span>{bankData.CITY}, </span><span>{bankData.STNAME}</span><span> {bankData.ZIP}</span></p>
@@ -19,18 +18,6 @@ const UbprBankSummary = ({bankData}) => {
             }
           </address>
         </div>
-        {/* <div className="classification-card">
-          <h2>FDIC Region</h2>
-          <p>{bankData.FDICREGN}</p>
-          <h2>Banking Class</h2>
-          <p>{bankData.BKCLASS}</p>
-          {bankData.SPECGRPN &&
-            <>
-              <h2>Specialization</h2>
-              <p>{(bankData.SPECGRPN).replace(' Specialization', '')}</p>
-            </>
-          }
-        </div> */}
         <div className="financial-card">
           <div>
             <h2>FDIC Region</h2>

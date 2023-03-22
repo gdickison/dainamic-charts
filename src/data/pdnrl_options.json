@@ -1,589 +1,589 @@
 {
-  "pdnrlOptions": [
+  "pdnrlOptionsList": [
     {
       "value": "ubpse473",
-      "label": "UBPSE473 - REAL ESTATE LNS-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "label": "UBPSE473 - Loans secured by real estate that are 90 days or more past due and still accruing interest divided by total real estate loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse474",
-      "label": "UBPSE474 - REAL ESTATE LNS-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "label": "UBPSE474 - Loans secured by real estate that are on nonaccrual divided by total real estate loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse475",
-      "label": "UBPSE475 - REAL ESTATE LNS-TOTAL/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "label": "UBPSE475 - The sum of loans secured by real estate that are 90 days or more past-due and still accruing interest and loans secured by real estate that are on nonaccrual divided by total real estate loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse476",
-      "label": "UBPSE476 - REAL ESTATE LNS 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE476 - Loans secured by real estate that are 30-89 days past due divided by total real estate loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse477",
-      "label": "UBPSE477 - LNS FIN COML RE-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE477 - Loans for the purpose of financing commercial real estate that are 90 days or more past due and still accruing interest divided by total loans to finance commercial real estate.",
+      "format": "pct"
     },
     {
       "value": "ubpse478",
-      "label": "UBPSE478 - LNS FIN COML RE-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE478 - Loans for the purpose of financing commerical real estate that are on nonaccrual status divided by total loans to finance commercial real estate.",
+      "format": "pct"
     },
     {
       "value": "ubpse479",
-      "label": "UBPSE479 - LNS FIN COML RE -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE479 - The sum of loans for the purpose of financing commerical real estate that are 90 days or more past due and still accruing interest and loans for the purpose of financing commercial real estate that are on nonaccrual status divided by total loans to finance commercial real estate.",
+      "format": "pct"
     },
     {
       "value": "ubpse480",
-      "label": "UBPSE480 - LNS FIN COML RE 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE480 - Loans for the purpose of financing commercial real estate that are 30-89 days past due divided by total loans to finance commerical real estate.",
+      "format": "pct"
     },
     {
       "value": "ubpse481",
-      "label": "UBPSE481 - CONST & LAND DEV-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE481 - Loans secured by real estate for the purpose of construction and land development that are 90 days or more past due and still accruing interest divided by total construction and land development loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse482",
-      "label": "UBPSE482 - CONST & LAND DEV-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE482 - Loans secured by real estate for the purpose of construction and land development that are on nonaccrual status divided by total construction and land development loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse483",
-      "label": "UBPSE483 - CONST & LAND DEV-TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE483 - The sum of loans secured by real estate for the purpose of construction and land development that are 90 days or more past due and still accruing interest and loans secured by real estate for the purpose of construction and land development that are on nonaccrual status divided by total construction and land development loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse484",
-      "label": "UBPSE484 - CONST & LAND DEV 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE484 - Loans secured by real estate for the purpose of construction and land development that are 30-89 days past due divided by total construction and land development loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse485",
-      "label": "UBPSE485 - SINGLE & MULTI MTG-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE485 - Loans secured by mortgages secured by 1-4 family properties that are 90 days or more past due and still accruing interest divided by total single family mortgages.",
+      "format": "pct"
     },
     {
       "value": "ubpse486",
-      "label": "UBPSE486 - SINGLE & MULTI MTG-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE486 - Loans secured by mortgages secured by 1-4 family properties that are on nonaccrual status divided by total single family mortgages.",
+      "format": "pct"
     },
     {
       "value": "ubpse487",
-      "label": "UBPSE487 - SINGLE & MULTI MTG -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE487 - The sum of loans secured by mortgages secured by 1-4 family properties that are 90 days or more past due and still accruing interest and loans secured by mortgages secured by 1-4 family properties that are on nonaccrual status divided by total single family mortgages.",
+      "format": "pct"
     },
     {
       "value": "ubpse488",
-      "label": "UBPSE488 - SINGLE & MULTI MTG 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE488 - Loans secured by mortgages secured by 1-4 family properties that are 30-89 days past due divided by total single family mortgages",
+      "format": "pct"
     },
     {
       "value": "ubpse489",
-      "label": "UBPSE489 - NON-FARM/RESI MTG-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE489 - Loans secured by mortgages on non-farm, non-residential property that are 90 days or more past due and still accruing interest divided by total non-farm non-residential mortgages.",
+      "format": "pct"
     },
     {
       "value": "ubpse490",
-      "label": "UBPSE490 - NON-FARM/RESI MTG-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE490 - Loans secured by mortgages on non-farm, non-residential property that are on nonaccrual status divided by total non-farm non-residential mortgages.",
+      "format": "pct"
     },
     {
       "value": "ubpse491",
-      "label": "UBPSE491 - NON-FARM/RESI MTG -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE491 - The sum of loans secured by mortgages on non-farm, non-residential property that are 90 days or more past due and still accruing interest and loans secured by mortgages on non-farm, non-residential property that are on nonaccrual status divided by total non-farm non-residential mortgages.",
+      "format": "pct"
     },
     {
       "value": "ubpse492",
-      "label": "UBPSE492 - NON-FARM/RESI MTG 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE492 - Loans secured by mortgages on non-farm, non-residential property that are 30-89 days past due divided by total non-farm non-residential mortgages.",
+      "format": "pct"
     },
     {
       "value": "ubpse493",
       "label": "UBPSE493 - RE LNS FOR OFF 90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse494",
       "label": "UBPSE494 - RE LNS FOR OFF NONACCRUAL/PCT OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse495",
       "label": "UBPSE495 - RE LNS FOR OFF -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse496",
       "label": "UBPSE496 - RE LNS FOR OFF 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse505",
-      "label": "UBPSE505 - 1-4 FAM CONS & L. DEV 90+ DAYS/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE505 - Construction loans secured by 1-4 family properties that are 90 days or more past due and still accruing interest divided by total 1-4 family construction loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse506",
-      "label": "UBPSE506 - 1-4 FAM CONS & L. DEV -NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE506 - Construction loans secured by 1-4 family properties that are on nonaccrual status divided by total construction and land development loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse507",
-      "label": "UBPSE507 - 1-4 FAM CONS & L. DEV -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE507 - The sum of construction loans secured by 1-4 family properties that are 90 days or more past due and still accruing interest and construction loans secured by 1-4 family properties that are on nonaccrual status divided by total construction and land development loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse508",
-      "label": "UBPSE508 - 1-4 FAM CONS & L. DEV 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE508 - Construction loans secured by 1-4 family properties that are 30-89 days or past due divided by total 1-4 family construction loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse509",
-      "label": "UBPSE509 - OTHER CONST & LAND DEV 90+ DAYS/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE509 - Construction loans secured by other real estate properties 90 days or more past due and still accruing interest divided by total other construction loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse510",
-      "label": "UBPSE510 - OTHER CONST & LAND DEV-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE510 - Construction loans secured by other real estate properties on nonaccrual status divided by total other construction loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse511",
-      "label": "UBPSE511 - OTHER CONST & LAND DEV-TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE511 - The sum of construction loans secured by other real estate properties 90 days or more past due and still accruing interest and construction loans secured by other real estate properties on nonaccrual status divided by total other construction loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse512",
-      "label": "UBPSE512 - OTHER CONST & LAND DEV 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE512 - Construction loans secured by other real estate properties 30-89 days past due divided by total other construction loans.",
+      "format": "pct"
     },
     {
       "value": "ubpse513",
-      "label": "UBPSE513 - OWN OCC NFARM NONRE 90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE513 - Loans secured by owner occupied non-farm non-residential properties that are 90 days or more past due and still accruing interest divided by total owner occupied non-farm non-residential mortgages.",
+      "format": "pct"
     },
     {
       "value": "ubpse514",
-      "label": "UBPSE514 - OWN OCC NFARM NONRE -NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE514 - Loans secured by owner occupied non-farm non-residential properties that are on nonaccrual status divided by total owner occupied non-farm non-residential mortgages.",
+      "format": "pct"
     },
     {
       "value": "ubpse515",
-      "label": "UBPSE515 - OWN OCC NFARM NONRE -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE515 - The sum of loans secured by owner occupied non-farm non-residential properties that are 90 days or more past due and still accruing interest and loans secured by owner occupied non-farm non-residential properties that are on nonaccrual status divided by total owner occupied non-farm non-residential mortgages.",
+      "format": "pct"
     },
     {
       "value": "ubpse516",
-      "label": "UBPSE516 - OWN OCC NFARM NONRE 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE516 - Loans secured by owner occupied non-farm non-residential properties that are 30-39 days past due divided by total owner occupied non-farm non-residential mortgages.",
+      "format": "pct"
     },
     {
       "value": "ubpse517",
-      "label": "UBPSE517 - OTH NONFARM NONRES 90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE517 - Loans secured by other non-farm non-residential mortgages that are 90 days or more past due and still accruing interest divided by total other non-farm non-residential mortgages.",
+      "format": "pct"
     },
     {
       "value": "ubpse518",
-      "label": "UBPSE518 - OTH NONFARM NONRES-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE518 - Loans secured by other non-farm non-residential mortgages that are on nonaccrual status divided by total other non-farm non-residential mortgages.",
+      "format": "pct"
     },
     {
       "value": "ubpse519",
-      "label": "UBPSE519 - OTH NONFARM NONRES -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE519 - The sum of loans secured by other non-farm non-residential mortgages that are 90 days or more past due and still accruing interest and loans secured by other non-farm non-residential mortgages that are on nonaccrual status divided by total other non-farm non-residential mortgages.",
+      "format": "pct"
     },
     {
       "value": "ubpse520",
-      "label": "UBPSE520 - OTH NONFARM NONRES 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "label": "UBPSE520 - Loans secured by other non-farm non-residential mortgages that are 30-89 days past due divided by total other non-farm non-residential mortgages.",
+      "format": "pct"
     },
     {
       "value": "ubpsfb84",
       "label": "UBPSFB84 - SECURED BY FARMLAND 90+ DAYS PD RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfb85",
       "label": "UBPSFB85 - SECURED BY FARMLAND NONACCRUAL RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfb86",
       "label": "UBPSFB86 - SECURED BY FARMLAND TOTAL DLNQT RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfb87",
       "label": "UBPSFB87 - SECURED BY FARMLAND 30-89 DAYS PD RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfb88",
       "label": "UBPSFB88 - HOME EQUITY 90+ DAYS PD RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfb89",
       "label": "UBPSFB89 - HOME EQUITY NONACCRUAL RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfb90",
       "label": "UBPSFB90 - HOME EQUITY TOTAL DLNQT RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfb91",
       "label": "UBPSFB91 - HOME EQUITY 30-89 DAYS PD RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfb92",
       "label": "UBPSFB92 - 1-4 FAMILY 1ST LIEN 90+ DAYS PD RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfb93",
       "label": "UBPSFB93 - 1-4 FAMILY 1ST LIEN NONACCRUAL RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfb94",
       "label": "UBPSFB94 - 1-4 FAMILY 1ST LIEN TOTAL DLNQT RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfb95",
       "label": "UBPSFB95 - 1-4 FAMILY 1ST LIEN 30-89 DAYS PD RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfb96",
       "label": "UBPSFB96 - 1-4 FAMILY JR LIEN 90+ DAYS PD RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfb97",
       "label": "UBPSFB97 - 1-4 FAMILY JR LIEN NONACCRUAL RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfb98",
       "label": "UBPSFB98 - 1-4 FAMILY JR LIEN TOTAL DLNQT RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfb99",
       "label": "UBPSFB99 - 1-4 FAMILY JR LIEN 30-89 DAYS PD RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc00",
       "label": "UBPSFC00 - MULTIFAMILY 90+ DAYS PD RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc01",
       "label": "UBPSFC01 - MULTIFAMILY NONACCRUAL RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc02",
       "label": "UBPSFC02 - MULTIFAMILY TOTAL DLNQT RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc03",
       "label": "UBPSFC03 - MULTIFAMILY 30-89 DAYS PD RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubps7414",
       "label": "UBPS7414 - NONCURRENT ASSETS AS PERCENT OF TOTAL LOANS AND LEASES",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse026",
       "label": "UBPSE026 - RESTR+NONAC+RE ACQ TO EQCAP+ALL",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse497",
       "label": "UBPSE497 - COML & INDUST LNS-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse498",
       "label": "UBPSE498 - COML & INDUST LNS-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse499",
       "label": "UBPSE499 - COML & INDUST LNS -TOTAL/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse500",
       "label": "UBPSE500 - COML & INDUST LNS 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse501",
       "label": "UBPSE501 - LOANS TO INDIVDLS-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse502",
       "label": "UBPSE502 - LOANS TO INDIVDLS -NONACCRUAL/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse503",
       "label": "UBPSE503 - LOANS TO INDIVDLS -TOTAL/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse504",
       "label": "UBPSE504 - LOANS TO INDIVDLS 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse521",
       "label": "UBPSE521 - CREDIT CARD PLANS-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse522",
       "label": "UBPSE522 - CREDIT CARD PLANS-NONACCRUAL/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse523",
       "label": "UBPSE523 - CREDIT CARD PLANS -TOTAL/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse524",
       "label": "UBPSE524 - CREDIT CARD PLANS 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse529",
       "label": "UBPSE529 - LEASE FINANCING-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse530",
       "label": "UBPSE530 - LEASE FINANCING -NONACCRUAL/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse531",
       "label": "UBPSE531 - LEASE FINANCING -TOTAL/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse532",
       "label": "UBPSE532 - LEASE FINANCING 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse533",
       "label": "UBPSE533 - AGRICULTURAL LNS-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse534",
       "label": "UBPSE534 - AGRICULTURAL LNS -NONACCRUAL/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse535",
       "label": "UBPSE535 - AGRICULTURAL LNS-TOTAL/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse536",
       "label": "UBPSE536 - AGRICULTURAL LNS 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse537",
       "label": "UBPSE537 - OTHER LN&LS-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse538",
       "label": "UBPSE538 - OTHER LN&LS -NONACCRUAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse539",
       "label": "UBPSE539 - OTHER LN&LS -TOTAL/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse540",
       "label": "UBPSE540 - OTHER LN&LS 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYPE",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse541",
       "label": "UBPSE541 - GROSS LN&LS-90+ DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse542",
       "label": "UBPSE542 - GROSS LN&LS -NONACCRUAL/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse544",
       "label": "UBPSE544 - GROSS LN&LS 30-89 DAYS P/D/% OF NON-CURR LN&LS BY LN TYP",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse545",
       "label": "UBPSE545 - NON-CUR LN&LS TO-LN&LS ALLOWANCE",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse546",
       "label": "UBPSE546 - NON-CUR LN&LS TO-EQUITY CAPITAL",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse547",
       "label": "UBPSE547 - %TOTAL P/D LN&LS-INCL NONACCRUAL",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse549",
       "label": "UBPSE549 - NON-CURR LNS+OREO TO LNS+ORE",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse550",
       "label": "UBPSE550 - NON-CURR RESTRUCT DEBT/GR LN&L",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse551",
       "label": "UBPSE551 - CURR+NON-CURR RESTRUCT/GR LN&L",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpse552",
       "label": "UBPSE552 - CURRENT RESTRUCT LN&LS",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsf896",
       "label": "UBPSF896 - LOANS SECURED BY 1-4 FAMILY REAL ESTATE LOANS IN FORECLOSURE AS PERCENT OF TOTAL LOANS SECURED BY 1-4 FAMILY",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc07",
       "label": "UBPSFC07 - FINANCIAL INSTITUTION LOANS 90+ DAYS PD RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc08",
       "label": "UBPSFC08 - FINANCIAL INSTITUTION LOANS NONACCRUAL RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc09",
       "label": "UBPSFC09 - FINANCIAL INSTITUTION LOANS TOTAL DLNQT RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc10",
       "label": "UBPSFC10 - FINANCIAL INSTITUTION LOANS 30-89 DAYS PD RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc11",
       "label": "UBPSFC11 - AUTO LOANS 90+ DAYS PD RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc12",
       "label": "UBPSFC12 - AUTO LOANS NONACCRUAL RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc13",
       "label": "UBPSFC13 - AUTO LOANS TOTAL DLNQT RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc14",
       "label": "UBPSFC14 - AUTO LOANS 30-89 DAYS PD RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc15",
       "label": "UBPSFC15 - LEASES TO INDIVIDUALS 90+ DAYS RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc16",
       "label": "UBPSFC16 - LEASES TO INDIVIDUALS NONACCRUAL RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc17",
       "label": "UBPSFC17 - LEASES TO INDIVIDUALS TOTAL DLNQT RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc18",
       "label": "UBPSFC18 - LEASES TO INDIVIDUALS 30-89 DAYS RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc19",
       "label": "UBPSFC19 - ALL OTHER LEASES 90+ DAYS RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc20",
       "label": "UBPSFC20 - ALL OTHER LEASES NONACCRUAL RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc21",
       "label": "UBPSFC21 - ALL OTHER LEASES TOTAL DLNQT RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsfc22",
       "label": "UBPSFC22 - ALL OTHER LEASES 30-89 DAYS RATIO",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsk264",
       "label": "UBPSK264 - GUARANTEED PORTION OF LOANS AND LEASES 90 DAYS OR MORE PAST DUE AS A PERCENT OF TOTAL LOANS AND LEASES 90 OR MORE DAYS PAST DUE",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsk265",
       "label": "UBPSK265 - GUARANTEED PORTION OF LOANS AND LEASES ON NONACCRUAL AS A PERCENT OF TOTAL NONACCRUAL LOANS AND LEASES",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsk266",
       "label": "UBPSK266 - GUARANTEED PORTION OF LOANS AND LEASES 30 THROUGH 89 DAYS PAST DUE AS A PERCENT OF TOTAL LOANS AND LEASES 30 THROUGH 89 DAYS PAST DUE",
-      "format": "ratio"
+      "format": "pct"
     },
     {
       "value": "ubpsnc98",
       "label": "UBPSNC98 - Non-Current Loans and leases and all other real estate owned divided by Tier 1 Capital plus ALL",
-      "format": "ratio"
+      "format": "pct"
     }
   ]
 }

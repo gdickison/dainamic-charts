@@ -13,10 +13,6 @@
   font-size: 3rem;
 }
 
-.name-id > p {
-  font-size: 1.5rem;
-}
-
 .classification-card-container {
   display: flex;
   flex-wrap: wrap;

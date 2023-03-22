@@ -7,6 +7,7 @@ export default async function queryBankData(req, res){
     ? `SELECT
         a."BANK_ID",
         a."PEER_GROUP",
+        a."DESCRIPTION",
         b.*
       FROM banking_app.ubpr_peer_groups a
         JOIN banking_app.ubpr_institution b
@@ -16,14 +17,18 @@ export default async function queryBankData(req, res){
       ORDER BY b."NAME"`
     : req.body.selectedBanksParam.metric === "state"
       ? `SELECT
-          *
-        FROM banking_app.ubpr_institution
-        WHERE "INSCOML" = 1
-          AND "STNAME" = '${req.body.selectedBanksParam.value}'
-        ORDER BY "BANK_ID"`
+          t1.*,
+          t2."DESCRIPTION"
+        FROM banking_app.ubpr_institution t1
+          JOIN banking_app.ubpr_peer_groups t2
+          ON t1."BANK_ID" = t2."BANK_ID"
+        WHERE t1."INSCOML" = 1
+          AND t1."STNAME" = '${req.body.selectedBanksParam.value}'
+        ORDER BY t1."BANK_ID"`
       : `SELECT
            t1.*,
-           t2."PEER_GROUP"
+           t2."PEER_GROUP",
+           t2."DESCRIPTION"
          FROM banking_app.ubpr_institution t1
           JOIN banking_app.ubpr_peer_groups t2
           ON t1."BANK_ID" = t2."BANK_ID"

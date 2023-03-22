@@ -3,11 +3,11 @@ import UbprFormInputs from "../src/components/UbprFormInputs"
 import UbprBarChart from "../src/components/UbprBarChart"
 import UbprBankSummary from "../src/components/UbprBankSummary"
 
-import { peerGroupOptionsList } from "../src/data/peer_group_options_list.json"
-import { rconOptionsList } from "../src/data/rcon_options_list.json"
-import { ubprOptionsList } from "../src/data/ubpr_options_list.json"
-import { peerGroupStateOptionsList } from "../src/data/peer_group_states.json"
-import { pdnrlOptions } from "../src/data/pdnrl_options.json"
+import peerGroupOptions from "../src/data/peer_group_options_list.json"
+import rconOptions from "../src/data/rcon_options_list.json"
+import ubprOptions from "../src/data/ubpr_options_list.json"
+import peerGroupStates from "../src/data/peer_group_states.json"
+import pdnrlOptions from "../src/data/pdnrl_options.json"
 
 const UBPR = () => {
   const [bankNameOptionsList, setBankNameOptionsList] = useState()
@@ -210,25 +210,25 @@ const UBPR = () => {
     }
   }, [bankData, selectedUbprs, startingQuarter, endingQuarter])
 
-  useEffect(() => { // currently this data exist only for Lineage Bank - remove if/else when there is more data
-    if(bankData.length > 0){
+  useEffect(() => {
       async function getPdnrlData(){
+        const bankIdParam = bankData.length > 0 ? bankData.map(bank => bank.BANK_ID) : []
         const peerGroupParam = bankData.length > 0 ? bankData.map(bank => bank.PEER_GROUP) : []
         const pdnrlaCodes = selectedPdnrla.map(pdnrla => pdnrla.value)
 
         if(selectedPdnrla.length > 0 && startingQuarter && endingQuarter){
-          let pdnrlaThingy = await fetch(
+          let pdnrlaResponse = await fetch(
             '/api/get_ubpr_ratios_pdnrla_data',
             {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ peerGroupParam, pdnrlaCodes, startingQuarter, endingQuarter })
+              body: JSON.stringify({ bankIdParam, peerGroupParam, pdnrlaCodes, startingQuarter, endingQuarter })
             }
           ).then(response => response.json())
-          pdnrlaThingy = pdnrlaThingy.response
-          const pdnrlaData = spliceIntoChunks(pdnrlaThingy, pdnrlaThingy.length / bankData.length)
+          pdnrlaResponse = pdnrlaResponse.response
+          const pdnrlaData = spliceIntoChunks(pdnrlaResponse, pdnrlaResponse.length / bankData.length)
           setPndrlaData(pdnrlaData)
         }
       }
@@ -236,20 +236,17 @@ const UBPR = () => {
       if(selectedBankNames.length > 0 || selectedPeerGroup || selectedPeerGroupState){
         getPdnrlData()
       }
-    } else {
-      setPndrlaData([]) // currently this data exist only for Lineage Bank
-    }
   }, [bankData, selectedPdnrla, startingQuarter, endingQuarter])
 
   return (
     <div className="max-w-[1600px] mx-auto">
       <UbprFormInputs
         bankNameOptions={bankNameOptionsList}
-        peerGroupOptions={peerGroupOptionsList}
-        peerGroupStateOptions={peerGroupStateOptionsList}
-        rconOptions={rconOptionsList}
-        ubprOptions={ubprOptionsList}
-        pdnrlaOptions={pdnrlOptions}
+        peerGroupOptions={peerGroupOptions.peerGroupOptionsList}
+        peerGroupStateOptions={peerGroupStates.peerGroupStateOptionsList}
+        rconOptions={rconOptions.rconOptionsList}
+        ubprOptions={ubprOptions.ubprOptionsList}
+        pdnrlaOptions={pdnrlOptions.pdnrlOptionsList}
         quartersOptions={quartersOptionsList}
 
         selectedBankNames={selectedBankNames}
@@ -333,7 +330,7 @@ const UBPR = () => {
                               <div key={rcon.value} className="">
                                 <UbprBarChart
                                   bankData={bank}
-                                  dataFlag={"ubpr"}
+                                  dataFlag={"pndrl"}
                                   statsData={pndrlaData[i]}
                                   selectedMetric={rcon}
                                 />
