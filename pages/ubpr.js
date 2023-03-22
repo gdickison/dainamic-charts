@@ -373,36 +373,40 @@ const UBPR = () => {
                         })
                       }
                       {pndrlaData.length > 0 &&
-                        <table id="exportBigTable" className="hidden">
-                          <thead>
-                            <tr>
-                              <th>Quarter</th>
-                              {selectedPdnrla.sort((a, b) => a.value > b.value).map(code => {
+                        <>
+                          <table id="exportBigTable" className="hidden">
+                            <thead>
+                              <tr>
+                                <th>Quarter</th>
+                                {selectedPdnrla.sort((a, b) => a.value > b.value).map(code => {
+                                  return (
+                                    <th>{code.label}</th>
+                                  )
+                                })}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {pndrlaData[0].map(obj => {
                                 return (
-                                  <th>{code.label}</th>
+                                  <tr>
+                                    <td>{obj.QUARTER.split('T')[0]}</td>
+                                    {selectedPdnrla.map(item => {
+                                      return (
+                                        <td>{obj[item.value]}</td>
+                                      )
+                                    })}
+                                  </tr>
                                 )
                               })}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {pndrlaData[0].map(obj => {
-                              return (
-                                <tr>
-                                  <td>{obj.QUARTER.split('T')[0]}</td>
-                                  {selectedPdnrla.map(item => {
-                                    return (
-                                      <td>{obj[item.value]}</td>
-                                    )
-                                  })}
-                                </tr>
-                              )
-                            })}
-                          </tbody>
-                        </table>
+                            </tbody>
+                          </table>
+                          {selectedPdnrla.length > 0 &&
+                            <div className="flex justify-center">
+                              <button className="mx-auto py-2 px-6 border-2 border-blue-500 bg-blue-500 hover:bg-blue-600 text-blue-50 rounded-md" onClick={exportBigTableToExcel}>Download CSV</button>
+                            </div>
+                          }
+                        </>
                       }
-                      <div className="flex justify-center">
-                        <button className="mx-auto py-2 px-6 border-2 border-blue-500 bg-blue-500 hover:bg-blue-600 text-blue-50 rounded-md" onClick={exportBigTableToExcel}>Download CSV</button>
-                      </div>
                     </div>
                   }
                 </div>
