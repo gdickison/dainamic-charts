@@ -20,38 +20,38 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
     return arr.every(element => element === "0" || element === 0)
   }
 
-  function exportTableToExcel(){
-    if(document.getElementById('exportTable') !== null) {
-      var downloadLink;
-      var dataType = 'application/vnd.ms-excel';
-      var tableSelect = document.getElementById('exportTable');
-      var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-      // Specify file name
-      // filename = filename?filename+'.xls':'excel_data.xls';
-      const filename = 'download.xls'
+  // function exportTableToExcel(){
+  //   if(document.getElementById('exportTable') !== null) {
+  //     var downloadLink;
+  //     var dataType = 'application/vnd.ms-excel';
+  //     var tableSelect = document.getElementById('exportTable');
+  //     var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+  //     // Specify file name
+  //     // filename = filename?filename+'.xls':'excel_data.xls';
+  //     const filename = 'download.xls'
       
-      // Create download link element
-      downloadLink = document.createElement("a");
+  //     // Create download link element
+  //     downloadLink = document.createElement("a");
       
-      document.body.appendChild(downloadLink);
+  //     document.body.appendChild(downloadLink);
       
-      if(navigator.msSaveOrOpenBlob){
-          var blob = new Blob(['\ufeff', tableHTML], {
-              type: dataType
-          });
-          navigator.msSaveOrOpenBlob( blob, filename);
-      }else{
-          // Create a link to the file
-          downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+  //     if(navigator.msSaveOrOpenBlob){
+  //         var blob = new Blob(['\ufeff', tableHTML], {
+  //             type: dataType
+  //         });
+  //         navigator.msSaveOrOpenBlob( blob, filename);
+  //     }else{
+  //         // Create a link to the file
+  //         downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
       
-          // Setting the file name
-          downloadLink.download = filename;
+  //         // Setting the file name
+  //         downloadLink.download = filename;
           
-          //triggering the function
-          downloadLink.click()
-      }
-    }
-}
+  //         //triggering the function
+  //         downloadLink.click()
+  //     }
+  //   }
+  // }
 
   const backgroundColor = dataFlag === "rcon" ? 'rgba(255, 99, 132, 0.3)' : 'rgba(54, 162, 235, 0.3)'
   const borderColor = dataFlag === "rcon" ? 'rgb(255, 99, 132)' : 'rgb(54, 162, 235)'
@@ -165,7 +165,7 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
               <Bar data={chartData} options={barChartOptions}/>
             </div>
       }
-      <table id='exportTable' className="hidden">
+      {/* <table id='exportTable' className="hidden">
         <thead>
           <tr>
             <th>{selectedMetric.label}</th>
@@ -186,7 +186,7 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
           })}
         </tbody>
       </table>
-      <button onClick={exportTableToExcel}>Download Data</button>
+      <button onClick={exportTableToExcel}>Download Data</button> */}
     </div>
   )
 }

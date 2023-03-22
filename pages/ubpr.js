@@ -238,6 +238,39 @@ const UBPR = () => {
       }
   }, [bankData, selectedPdnrla, startingQuarter, endingQuarter])
 
+  function exportBigTableToExcel(){
+    if(document.getElementById('exportBigTable') !== null) {
+      var downloadLink;
+      var dataType = 'application/vnd.ms-excel';
+      var tableSelect = document.getElementById('exportBigTable');
+      var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+      // Specify file name
+      // filename = filename?filename+'.xls':'excel_data.xls';
+      const filename = 'download.xls'
+
+      // Create download link element
+      downloadLink = document.createElement("a");
+
+      document.body.appendChild(downloadLink);
+
+      if(navigator.msSaveOrOpenBlob){
+          var blob = new Blob(['\ufeff', tableHTML], {
+              type: dataType
+          });
+          navigator.msSaveOrOpenBlob( blob, filename);
+      }else{
+          // Create a link to the file
+          downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+          // Setting the file name
+          downloadLink.download = filename;
+
+          //triggering the function
+          downloadLink.click()
+      }
+    }
+  }
+
   return (
     <div className="max-w-[1600px] mx-auto">
       <UbprFormInputs
@@ -276,7 +309,7 @@ const UBPR = () => {
                   bankData={bank}
                 />
                 <div className="banking-charts">
-                  <div className="banking-charts-col">
+                  <div className="banking-charts-col mb-4">
                     {bankRconData.length > 0 && selectedRcons.length > 0 &&
                       <h1>Loans & Leases (RCON)</h1>
                     }
@@ -297,7 +330,7 @@ const UBPR = () => {
                       })
                     }
                   </div>
-                  <div className="banking-charts-col">
+                  <div className="banking-charts-col mb-4">
                     {bankUbprData.length > 0 && selectedUbprs.length > 0 &&
                       <h1>Credit Concentrations (UBPR)</h1>
                     }
@@ -319,7 +352,7 @@ const UBPR = () => {
                     }
                   </div>
                   {selectedBankNames.length > 0 &&
-                    <div className="banking-charts-col">
+                    <div className="banking-charts-col mb-4">
                       {pndrlaData.length > 0 && selectedPdnrla.length > 0 &&
                         <h1>Past Due, Nonaccrual & Restructured Loans</h1>
                       }
@@ -339,6 +372,37 @@ const UBPR = () => {
                           }
                         })
                       }
+                      {pndrlaData.length > 0 &&
+                        <table id="exportBigTable" className="hidden">
+                          <thead>
+                            <tr>
+                              <th>Quarter</th>
+                              {selectedPdnrla.sort((a, b) => a.value > b.value).map(code => {
+                                return (
+                                  <th>{code.label}</th>
+                                )
+                              })}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {pndrlaData[0].map(obj => {
+                              return (
+                                <tr>
+                                  <td>{obj.QUARTER.split('T')[0]}</td>
+                                  {selectedPdnrla.map(item => {
+                                    return (
+                                      <td>{obj[item.value]}</td>
+                                    )
+                                  })}
+                                </tr>
+                              )
+                            })}
+                          </tbody>
+                        </table>
+                      }
+                      <div className="flex justify-center">
+                        <button className="mx-auto py-2 px-6 border-2 border-blue-500 bg-blue-500 hover:bg-blue-600 text-blue-50 rounded-md" onClick={exportBigTableToExcel}>Download CSV</button>
+                      </div>
                     </div>
                   }
                 </div>
