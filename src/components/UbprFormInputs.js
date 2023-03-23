@@ -108,6 +108,7 @@ const UbprFormInputs = ({
                 <div className="flex">
                   <div className="metric-input space-y-2">
                     <h1>Past Due, Nonaccrual & Restructured Loans</h1>
+                    <p className="mx-4">Peer group only</p>
                     <div className="pr-4 space-y-4">
                       <Select
                         className="mx-4"
