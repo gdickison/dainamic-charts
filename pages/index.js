@@ -35,6 +35,12 @@ const Home = () => {
                 icon="/bank.svg"
                 description="Based on the FFIEC Uniform Banking Performance Report"
               />
+              <NavCard
+                title="Call Data"
+                page="/cecl_scale"
+                icon="/ffiec-logo.webp"
+                description="Based on the FFIEC Call Reports"
+              />
             </div>
           </main>
         </>

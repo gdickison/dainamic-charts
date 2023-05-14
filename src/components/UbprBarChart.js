@@ -2,14 +2,17 @@ import { memo } from "react";
 import { Bar } from "react-chartjs-2";
 
 const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
-
   const rawChartData = statsData
   const labels = rawChartData.map(bank => {
     return bank.QUARTER
   })
 
   const dataArray = rawChartData.map(bank => {
-    return dataFlag === "rcon" || selectedMetric.format === "count" || selectedMetric.format === 'pct' ? bank[selectedMetric.value] : bank[selectedMetric.value]/10
+    if(dataFlag === 'rcon'){
+      return bank[selectedMetric.value] * 1000
+    } else {
+      return selectedMetric.format === "count" || selectedMetric.format === 'pct' ? bank[selectedMetric.value] : bank[selectedMetric.value]/10
+    }
   })
 
   function nullData(arr){
@@ -100,7 +103,11 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
             return ''
           },
           label: function(context){
-            return `${Number(context.raw).toLocaleString()}${dataFlag === "rcon" || selectedMetric.format === "count" ? '' : '%'}`
+            if(dataFlag === 'rcon'){
+              return `${new Intl.NumberFormat("us-US", {style: "currency", currency: "USD", maximumFractionDigits: 0}).format(Number(context.raw))}`
+            } else {
+              return `${Number(context.raw).toLocaleString()}${selectedMetric.format === "count" ? '' : '%'}`
+            }
           }
         },
         boxPadding: 6,
@@ -115,7 +122,11 @@ const UbprBarChart = ({bankData, dataFlag, statsData, selectedMetric}) => {
         },
         ticks: {
           callback: function(value){
-            return `${value.toLocaleString()}${dataFlag === "rcon" || selectedMetric.format === "count" ? '' : '%'}`
+            if(dataFlag === 'rcon'){
+              return `${new Intl.NumberFormat("us-US", {style: "currency", currency: "USD", maximumFractionDigits: 0}).format(value)}`
+            } else {
+              return `${value.toLocaleString()}${selectedMetric.format === "count" ? '' : '%'}`
+            }
           },
           font: {
             size: 12
