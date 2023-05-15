@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "-": "^0.0.1",
+    "@supabase/supabase-js": "^2.22.0",
     "chart.js": "^3.7.1",
     "chartjs-plugin-annotation": "^2.0.0",
     "chartjs-plugin-datalabels": "^2.0.0",

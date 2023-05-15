@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react"
 import Select from "react-select"
+import { supabase } from '../src/utils/supabase';
 
-export default function SCALE () {
+export default function SCALE ({ ratiosDummyData }) {
+  console.log('ratiosDummyData', ratiosDummyData)
   const [statsData, setStatsData] = useState(null)
   const [ratioData, setRatioData] = useState(null)
   const [peerOptions, setPeerOptions] = useState()
   const [selectedPeerGroup, setSelectedPeerGroup] = useState(null)
-
   async function getPeerOptions () {
     let peerOptionsData = await fetch(
       'api/get_peer_options',
@@ -31,40 +32,48 @@ export default function SCALE () {
     setSelectedPeerGroup(selectedPeerGroup.value)
   }
 
-  async function getDummyRatiosData () {
-    let ratiosDummyData = await fetch(
-      '/api/get_dummy_ratios',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    ).then(response => response.json())
+  // async function getDummyRatiosData () {
+  //   let ratiosDummyData = await fetch(
+  //     '/api/get_dummy_ratios',
+  //     {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       }
+  //     }
+  //   ).then(response => response.json())
 
-    setRatioData(ratiosDummyData.response)
-  }
+  //   setRatioData(ratiosDummyData.response)
+  // }
 
   async function getDummyStatsData () {
     const selectedPeerParam = selectedPeerGroup ? selectedPeerGroup : 'TNCOM'
-    let statsDummyData = await fetch(
-      '/api/get_dummy_stats',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({selectedPeerParam})
-      }
-    ).then(response => response.json())
-
-    setStatsData(statsDummyData.response)
+    let statsDummyData = await supabase.from(
+      'ubpr_stats_dummy_ubpse019'
+    ).select().like('period', '%12-31%').match({peercode: selectedPeerParam}).order('period', {ascending: false})
+console.log('statsDummyData', statsDummyData)
+    setStatsData(statsDummyData.data)
   }
+  // async function getDummyStatsData () {
+  //   const selectedPeerParam = selectedPeerGroup ? selectedPeerGroup : 'TNCOM'
+  //   let statsDummyData = await fetch(
+  //     '/api/get_dummy_stats',
+  //     {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify({selectedPeerParam})
+  //     }
+  //   ).then(response => response.json())
+
+  //   setStatsData(statsDummyData.response)
+  // }
 
   useEffect(() => {
     getPeerOptions()
     getDummyStatsData()
-    getDummyRatiosData()
+    // getDummyRatiosData()
   }, [])
 
   useEffect(() => {
@@ -110,8 +119,8 @@ export default function SCALE () {
         <div className="w-96 flex flex-col items-center">
           <h1 className="text-center text-xl">SCALE - TAB-4 - INSTITUTION</h1>
           <div className="h-[38px] my-2"></div>
-          {ratioData &&
-            ratioData.map(row => {
+          {ratiosDummyData &&
+            ratiosDummyData.map(row => {
               return (
                 <div key={row.id} className="p-4 border-2 border-gray-300 rounded-md my-2 w-96 h-36 flex flex-col justify-center items-center">
                   {Object.entries(row).map(([key, value]) => {
@@ -166,7 +175,7 @@ export default function SCALE () {
             </tr>
           </thead>
           <tbody>
-            {ratioData && ratioData.map(row => {
+            {ratiosDummyData && ratiosDummyData.map(row => {
               return (
                 <tr key={row.id}>
                   <td>{row.period.split('-')[0]}</td>
@@ -190,4 +199,14 @@ export default function SCALE () {
       </div>
     </>
   )
+}
+
+export async function getServerSideProps() {
+  let { data } = await supabase.from('ubpr_ratios_dummy_ubpre019').select().like('period', '%12-31%')
+
+  return {
+    props: {
+     ratiosDummyData: data
+    },
+  }
 }
